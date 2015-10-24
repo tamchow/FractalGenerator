@@ -4,6 +4,11 @@
  *  @author http://melting.fortunecity.com/trinity/660
  *  @version JDK1.0, AWT Version 
  */
+ /**
+  * I thought I would use this for reference, but its just an artifact now.
+  * My fractal generator operates nothing like the one depicted here.
+  * Its here, with due credit to the original authors, for anyone else who may want references from it.  * 
+  * /
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.image.*;
