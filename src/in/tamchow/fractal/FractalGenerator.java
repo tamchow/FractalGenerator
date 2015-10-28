@@ -33,6 +33,7 @@ public class FractalGenerator {
     Complex[][]argand_map;
     int center_x, center_y;
     int[] random_palette, gradient_palette;
+    private boolean alreadyCreated;
 
     public long getMaxiter() {
         return maxiter;
@@ -57,18 +58,8 @@ public class FractalGenerator {
         setColor_mode(colorizer);
         setColor_density(color_density);
         setNum_colors(num_colors);
-        random_palette = new int[num_colors];
-        random_palette[0] = 0x000000;
-        gradient_palette = new int[num_colors];
-        gradient_palette[0] = 0x000000;
-        for (int pidx = 0x1; pidx < num_colors; pidx++) {
-            random_palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
-            if (colorizer == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_1) {
-                gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff / (color_density << num_colors));
-            } else if (colorizer == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_2) {
-                gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >> num_colors);
-            }
-        }
+        alreadyCreated=false;
+        create_colors();
         setBoundary_condition(boundary_condition);
         setMode(mode);
         if (mode == MODE_MANDELBROT) {
@@ -81,6 +72,40 @@ public class FractalGenerator {
         argand_map=new Complex[argand.getHeight()][argand.getWidth()];
         poupulateMap();
     }
+
+    private void create_colors() {
+        if(!alreadyCreated) {
+            random_palette = new int[num_colors];
+            random_palette[0] = 0x000000;
+            gradient_palette = new int[num_colors];
+            gradient_palette[0] = 0x000000;
+            for (int pidx = 0x1; pidx < num_colors; pidx++) {
+                random_palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
+                if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_1) {
+                    gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff / (color_density << num_colors));
+                } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_2) {
+                    gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >> num_colors);
+                }
+            }
+            alreadyCreated=true;
+        }else{
+            int[] randtmp=new int[random_palette.length],gradtmp=new int[gradient_palette.length];
+            random_palette = new int[num_colors];
+            System.arraycopy(randtmp,0,random_palette,0,random_palette.length);
+            gradient_palette = new int[num_colors];
+            System.arraycopy(gradtmp,0,gradient_palette,0,gradient_palette.length);
+            for (int pidx = randtmp.length; pidx < num_colors; pidx++) {
+                random_palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
+                if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_1) {
+                    gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff / (color_density << num_colors));
+                } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_2) {
+                    gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >> num_colors);
+                }
+            }
+            alreadyCreated=true;
+        }
+    }
+
     public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts) {
         initFractal(width,height,zoom,zoom_factor,base_precision,colorizer,num_colors,color_density,mode,boundary_condition,function,consts);
     }
@@ -100,6 +125,7 @@ public class FractalGenerator {
 
     public void setColor_density(int color_density) {
         this.color_density = color_density;
+        if(alreadyCreated)create_colors();
     }
 
     public int getNum_colors() {
@@ -108,6 +134,7 @@ public class FractalGenerator {
 
     public void setNum_colors(int num_colors) {
         this.num_colors = num_colors;
+        if(alreadyCreated)create_colors();
     }
 
     public double getBoundary_condition() {

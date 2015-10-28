@@ -56,6 +56,16 @@ public class ImageData {
         this.path = path;
     }
 
+    public void setSize(int height, int width){
+        int[][]tmp=new int[pixdata.length][pixdata[0].length];
+        for (int i = 0; i < this.pixdata.length; i++) {
+            System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);
+        }
+        this.pixdata = new int[height][width];
+        for (int i = 0; i < this.pixdata.length; i++) {
+            System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
+        }
+    }
     public int getHeight() {
         return pixdata.length;
     }
