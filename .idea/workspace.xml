@@ -6,16 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Made the code protect the image arrays during resize&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/CyclicShift.java" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\Config.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\FractalConfig.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\FractalInitParams.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\FractalParams.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\FractalRunParams.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\ImageConfig.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\imgutils\ImageParams.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Programming\Projects\FractalGenerator\out\production\FractalGenerator\in\tamchow\fractal\platform_tools\ConfigReader.class" afterPath="" />
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/FractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/FractalGenerator.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/FractalGenerator_jar/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/artifacts/FractalGenerator_jar/FractalGenerator.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" />
@@ -23,19 +14,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/Image_ImageData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/Image_ImageData.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/Image_ImageData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/Image_ImageData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\Config.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\FractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/FractalConfig.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\FractalInitParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/FractalInitParams.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\FractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/FractalParams.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\FractalRunParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/FractalRunParams.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\ImageConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\ImageParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" />
-      <change type="MOVED" beforePath="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\platform_tools\ConfigReader.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -74,7 +53,7 @@
       <file leaf-file-name="ImageDisplay.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.7261307" vertical-offset="1295" max-vertical-offset="3604">
+            <state vertical-scroll-proportion="1.7874794" vertical-offset="1295" max-vertical-offset="3604">
               <caret line="159" column="16" selection-start-line="159" selection-start-column="16" selection-end-line="159" selection-end-column="16" />
               <folding />
             </state>
@@ -729,7 +708,7 @@
       <workItem from="1446041520500" duration="2929000" />
       <workItem from="1446182032405" duration="628000" />
       <workItem from="1446473966285" duration="584000" />
-      <workItem from="1446546634886" duration="4934000" />
+      <workItem from="1446546634886" duration="5128000" />
     </task>
     <task id="LOCAL-00001" summary="Corrected the documentation comment&#10;">
       <created>1445706310136</created>
@@ -743,20 +722,26 @@
       <option name="project" value="LOCAL" />
       <updated>1446043727977</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;">
+      <created>1446551825975</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1446551825975</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139249000" />
+    <option name="totallyTimeSpent" value="139443000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32913387" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913387" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -805,7 +790,8 @@
     <MESSAGE value="Corrected the documentation comment&#10;" />
     <MESSAGE value="Switched some packages to organize code better; Main class now takes commandline input, Image_ImageData is made more flexible, optimized ImageDisplay; 1 miscelaneous class for doing 1-charcter cyclic shifts for strings included" />
     <MESSAGE value="Made the code protect the image arrays during resize&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made the code protect the image arrays during resize&#10;" />
+    <MESSAGE value="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1188,7 +1174,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.7261307" vertical-offset="1295" max-vertical-offset="3604">
+        <state vertical-scroll-proportion="1.7874794" vertical-offset="1295" max-vertical-offset="3604">
           <caret line="159" column="16" selection-start-line="159" selection-start-column="16" selection-end-line="159" selection-end-column="16" />
           <folding />
         </state>
