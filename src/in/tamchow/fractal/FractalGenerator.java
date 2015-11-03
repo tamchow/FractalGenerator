@@ -32,6 +32,7 @@ public class FractalGenerator {
     ImageData argand;
     String function;
     String[][] consts;
+    int[][] escapedata;
     Complex[][]argand_map;
     int center_x, center_y;
     int[] random_palette, gradient_palette;
@@ -78,6 +79,7 @@ public class FractalGenerator {
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map=new Complex[argand.getHeight()][argand.getWidth()];
         poupulateMap();
+        escapedata = new int[argand.getHeight()][argand.getWidth()];
     }
 
     private void create_colors() {
@@ -311,6 +313,7 @@ public class FractalGenerator {
                     }
                     ctr++;
                 }
+                escapedata[i][j] = c;
                 argand.setPixel(i, j, getColor(c, z, degree, escape_radius));
             }
         }
@@ -343,6 +346,7 @@ public class FractalGenerator {
                     }
                     ctr++;
                 }
+                escapedata[i][j] = c;
                 argand.setPixel(i, j, getColor(c, z, degree, escape_radius));
             }
         }
