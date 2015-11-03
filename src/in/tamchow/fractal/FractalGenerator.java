@@ -313,7 +313,7 @@ public class FractalGenerator {
                     }
                     ctr++;
                 }
-                escapedata[i][j] = c;
+                escapedata[i][j] = c - 1;
                 argand.setPixel(i, j, getColor(c, z, degree, escape_radius));
             }
         }
@@ -346,7 +346,7 @@ public class FractalGenerator {
                     }
                     ctr++;
                 }
-                escapedata[i][j] = c;
+                escapedata[i][j] = c - 1;
                 argand.setPixel(i, j, getColor(c, z, degree, escape_radius));
             }
         }
