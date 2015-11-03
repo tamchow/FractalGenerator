@@ -1,4 +1,6 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config.imageconfig;
+
+import in.tamchow.fractal.imgutils.ImageData;
 
 /**
  * Parameters for configuring an image

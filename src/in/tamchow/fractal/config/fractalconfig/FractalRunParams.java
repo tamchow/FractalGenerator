@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config.fractalconfig;
 
 /**
  * Parameters for configuring the generation of a fractal

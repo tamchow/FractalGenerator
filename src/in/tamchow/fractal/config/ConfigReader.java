@@ -1,6 +1,9 @@
-package in.tamchow.fractal.platform_tools;
+package in.tamchow.fractal.config;
 
-import in.tamchow.fractal.imgutils.*;
+import in.tamchow.fractal.config.fractalconfig.FractalConfig;
+import in.tamchow.fractal.config.fractalconfig.FractalParams;
+import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.config.imageconfig.ImageParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,12 +15,34 @@ import java.util.Scanner;
  * Reads the configuration of fractals or images from a file
  */
 public class ConfigReader {
+
+    public static boolean isFileImageConfig(File file) throws FileNotFoundException {
+        Scanner in = new Scanner(file);
+        if (!in.nextLine().equals("[ImageConfig]")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFileFractalConfig(File file) throws FileNotFoundException {
+        Scanner in = new Scanner(file);
+        if (!in.nextLine().equals("[FractalConfig]")) {
+            return true;
+        }
+        return false;
+    }
     public static ImageConfig getImageConfigFromFile(File cfgfile)throws FileNotFoundException{
         Scanner in=new Scanner(cfgfile);
         ArrayList<String> lines=new ArrayList<>();
+        if (!in.nextLine().equals("[ImageConfig]")) {
+            return null;
+        }
         while (in.hasNext()){
             String line=in.nextLine();
             if(!line.startsWith("#")){
+                if (line.contains("#")) {
+                    line = line.substring(0, line.indexOf("#")).trim();
+                }
                 lines.add(line);
             }
         }
@@ -34,9 +59,15 @@ public class ConfigReader {
     public static FractalConfig getFractalConfigFromFile(File cfgfile)throws FileNotFoundException{
         Scanner in=new Scanner(cfgfile);
         ArrayList<String> lines=new ArrayList<>();
+        if (!in.nextLine().equals("[FractalConfig]")) {
+            return null;
+        }
         while (in.hasNext()){
             String line=in.nextLine();
             if(!line.startsWith("#")){
+                if (line.contains("#")) {
+                    line = line.substring(0, line.indexOf("#")).trim();
+                }
                 lines.add(line);
             }
         }
@@ -49,7 +80,8 @@ public class ConfigReader {
         fractalConfig.setParams(fractalParams);
         return fractalConfig;
     }
-    private static FractalParams getParamFromFile(File paramfile)throws FileNotFoundException{
+
+    public static FractalParams getParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in=new Scanner(paramfile);
         ArrayList<String> lines=new ArrayList<>();
         while (in.hasNext()){

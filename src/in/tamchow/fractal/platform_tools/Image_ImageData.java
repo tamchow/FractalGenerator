@@ -10,8 +10,12 @@ import java.awt.image.BufferedImage;
  */
 public class Image_ImageData {
     public static ImageData toImageData(Image img) {
-        BufferedImage buf = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
-        buf.getGraphics().drawImage(img, 0, 0, null);
+        return toImageData(img, 0, 0, img.getWidth(null), img.getHeight(null));
+    }
+
+    public static ImageData toImageData(Image img, int startx, int starty, int endx, int endy) {
+        BufferedImage buf = new BufferedImage(endx - startx, endy - starty, BufferedImage.TYPE_INT_RGB);
+        buf.getGraphics().drawImage(img, 0, 0, buf.getWidth(), buf.getHeight(), startx, starty, endx, endy, null);
         ImageData imageData = new ImageData(buf.getWidth(), buf.getHeight());
         for (int i = 0; i < imageData.getHeight(); i++) {
             for (int j = 0; j < imageData.getWidth(); j++) {
@@ -22,10 +26,17 @@ public class Image_ImageData {
     }
 
     public static BufferedImage toImage(ImageData img) {
-        BufferedImage buf = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
-        for (int i = 0; i < img.getHeight(); i++) {
-            for (int j = 0; j < img.getWidth(); j++) {
-                buf.setRGB(j, i, img.getPixel(i, j));
+        return toImage(img, 0, 0, img.getWidth(), img.getHeight());
+    }
+
+    public static BufferedImage toImage(ImageData img, int startx, int starty, int endx, int endy) {
+        BufferedImage buf = new BufferedImage(endx - startx, endy - starty, BufferedImage.TYPE_INT_RGB);
+        for (int i = 0; i < buf.getHeight(); i++) {
+            for (int j = 0; j < buf.getWidth(); j++) {
+                if ((j + startx) > endx || (i + starty) > endy) {
+                    break;
+                }
+                buf.setRGB(j, i, img.getPixel(starty + i, startx + j));
             }
         }
         return buf;

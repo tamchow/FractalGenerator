@@ -1,10 +1,10 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config;
 
 /**
  * Superclass for set configurations
  */
 public class Config {
-    int fps, transtime, wait;
+    public int fps, transtime, wait;
 
     public int getWait() {
         return wait;

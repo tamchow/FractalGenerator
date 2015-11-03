@@ -1,6 +1,7 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config.fractalconfig;
 
 import in.tamchow.fractal.FractalGenerator;
+import in.tamchow.fractal.imgutils.ColorMode;
 
 /**
  * Parameters for configuring the initialization of a fractal

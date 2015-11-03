@@ -1,7 +1,11 @@
 package in.tamchow.fractal.platform_tools;
 
 import in.tamchow.fractal.FractalGenerator;
-import in.tamchow.fractal.imgutils.*;
+import in.tamchow.fractal.config.Config;
+import in.tamchow.fractal.config.fractalconfig.FractalConfig;
+import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.imgutils.Animation;
+import in.tamchow.fractal.imgutils.Transition;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -135,13 +139,6 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                     Thread.sleep(1000 * imgconf.getWait());
                 } catch (InterruptedException ignored) {
                 }
-                if (i == img.length - 1 && running) {
-                    ctr = 0;
-                    i = ctr;
-                    continue;
-                }
-                i++;
-
             } else {
                 if(!zoomedin) {
                     current = new FractalGenerator(fracconf.getParams()[i]);
@@ -154,13 +151,13 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                     Thread.sleep(1000 * fracconf.getWait());
                 } catch (InterruptedException ignored) {
                 }
-                if (i == img.length - 1 && running) {
-                    ctr = 0;
-                    i = ctr;
-                    continue;
-                }
-                i++;
             }
+            if (i == img.length - 1 && running) {
+                ctr = 0;
+                i = ctr;
+                continue;
+            }
+            i++;
         }
     }
 

@@ -1,4 +1,7 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config.imageconfig;
+
+import in.tamchow.fractal.config.Config;
+import in.tamchow.fractal.imgutils.ImageData;
 
 import java.util.Arrays;
 

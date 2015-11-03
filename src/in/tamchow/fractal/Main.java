@@ -1,23 +1,65 @@
 package in.tamchow.fractal;
 
+import in.tamchow.fractal.config.ConfigReader;
+import in.tamchow.fractal.config.fractalconfig.FractalConfig;
 import in.tamchow.fractal.imgutils.ColorMode;
 import in.tamchow.fractal.platform_tools.Image_ImageData;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 
 /**
- * Test class, to be removed once Swing app for fractal display is completed
+ * Main class, handles CMDLINE input.
  */
 public class Main {
     public static void main(String[] args) {
         String func = "z ^ 2 + c";
         String[][] consts = {{"c", "-0.8,+0.156i"}};
+        int resx = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 540, colmode = ColorMode.COLOR_GRAYSCALE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
+        double bound = 2.0, escrad = 2.0, deg = 2.0;
+        boolean fromFile = false;
+        FractalConfig fccfg = new FractalConfig(0, 0, 0);
+        if (args.length > 1) {
+            func = args[0];
+            consts[0][0] = args[1].substring(0, args[1].indexOf(':'));
+            consts[0][1] = args[1].substring(args[1].indexOf(':') + 1, args[1].length());
+            resx = Integer.valueOf(args[2]);
+            resy = Integer.valueOf(args[3]);
+            zoom = Integer.valueOf(args[4]);
+            zoompow = Integer.valueOf(args[5]);
+            baseprec = Integer.valueOf(args[6]);
+            colmode = Integer.valueOf(args[7]);
+            numcol = Integer.valueOf(args[8]);
+            coldens = Integer.valueOf(args[9]);
+            fracmode = Integer.valueOf(args[10]);
+            bound = Double.valueOf(args[11]);
+            iter = Integer.valueOf(args[12]);
+            escrad = Double.valueOf(args[13]);
+            deg = Double.valueOf(args[14]);
+            fromFile = false;
+        } else if (args.length == 1) {
+            try {
+                fccfg = ConfigReader.getFractalConfigFromFile(new File(args[0]));
+                fromFile = true;
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
         long inittime = System.currentTimeMillis();
-        FractalGenerator jgen = new FractalGenerator(1921, 1081, 10, 0, 540, ColorMode.COLOR_DIVIDE, 32, 256, FractalGenerator.MODE_JULIA, 2, func, consts);
+        FractalGenerator jgen;
+        if (!fromFile) {
+            jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, colmode, numcol, coldens, fracmode, bound, func, consts);
+        } else {
+            jgen = new FractalGenerator(fccfg.getParams()[0]);
+        }
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
-        jgen.generate(32, 2.0, 2.0);
+        if (!fromFile) {
+            jgen.generate(iter, escrad, deg);
+        } else {
+            jgen.generate(fccfg.getParams()[0]);
+        }
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         //System.out.println(jgen.boundary_points.get(0));

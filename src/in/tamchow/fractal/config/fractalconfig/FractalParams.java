@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config.fractalconfig;
 
 /**
  * Encapsulates @code FractalInitParams and @code FractalRunParams

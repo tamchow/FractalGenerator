@@ -2,7 +2,9 @@ package in.tamchow.fractal;
 
 import in.tamchow.fractal.complex.Complex;
 import in.tamchow.fractal.complex.FunctionEvaluator;
-import in.tamchow.fractal.imgutils.*;
+import in.tamchow.fractal.config.fractalconfig.FractalParams;
+import in.tamchow.fractal.imgutils.ColorMode;
+import in.tamchow.fractal.imgutils.ImageData;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,14 @@ public class FractalGenerator {
     int[] random_palette, gradient_palette;
     private boolean alreadyCreated;
 
+    public FractalGenerator(FractalParams params) {
+        initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.color_mode, params.initParams.num_colors, params.initParams.color_density, params.initParams.fractal_mode, params.initParams.boundary_condition, params.initParams.function, params.initParams.consts);
+    }
+
+    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts) {
+        initFractal(width, height, zoom, zoom_factor, base_precision, colorizer, num_colors, color_density, mode, boundary_condition, function, consts);
+    }
+
     public long getMaxiter() {
         return maxiter;
     }
@@ -43,9 +53,6 @@ public class FractalGenerator {
         this.maxiter = maxiter;
     }
 
-    public FractalGenerator(FractalParams params){
-        initFractal(params.initParams.width,params.initParams.height,params.initParams.zoom,params.initParams.zoom_factor,params.initParams.base_precision,params.initParams.color_mode,params.initParams.num_colors,params.initParams.color_density,params.initParams.fractal_mode,params.initParams.boundary_condition,params.initParams.function,params.initParams.consts);
-    }
     private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts) {
         setZoom(zoom);
         setZoom_factor(zoom_factor);
@@ -105,11 +112,6 @@ public class FractalGenerator {
             alreadyCreated=true;
         }
     }
-
-    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts) {
-        initFractal(width,height,zoom,zoom_factor,base_precision,colorizer,num_colors,color_density,mode,boundary_condition,function,consts);
-    }
-
 
     private void poupulateMap() {
         for (int i=0;i<argand.getHeight();i++){
