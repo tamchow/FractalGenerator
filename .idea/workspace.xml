@@ -6,7 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;">
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="minor corrections">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/FractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/FractalGenerator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/FractalGenerator_jar/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/artifacts/FractalGenerator_jar/FractalGenerator.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$1.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/Image_ImageData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/Image_ImageData.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -37,7 +44,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="239" max-vertical-offset="1700">
+            <state vertical-scroll-proportion="0.0" vertical-offset="289" max-vertical-offset="1666">
               <caret line="17" column="52" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -49,8 +56,18 @@
       <file leaf-file-name="FractalGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14168039" vertical-offset="4776" max-vertical-offset="6681">
-              <caret line="342" column="24" selection-start-line="342" selection-start-column="24" selection-end-line="342" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.2800659" vertical-offset="4811" max-vertical-offset="6732">
+              <caret line="349" column="85" selection-start-line="349" selection-start-column="85" selection-end-line="349" selection-end-column="85" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColorMode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+              <caret line="6" column="208" selection-start-line="6" selection-start-column="208" selection-end-line="6" selection-end-column="208" />
               <folding />
             </state>
           </provider>
@@ -80,7 +97,6 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/JuliaGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/complex/ComplexOperations.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/complex/FunctionEvaluator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/Transition.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/Animation.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/ImageDisplay.java" />
@@ -103,6 +119,7 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/CyclicShift.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" />
       </list>
     </option>
@@ -142,7 +159,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -361,6 +377,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -709,7 +726,8 @@
       <workItem from="1446552483168" duration="197000" />
       <workItem from="1446552751758" duration="55000" />
       <workItem from="1446567766685" duration="79000" />
-      <workItem from="1446569296025" duration="500000" />
+      <workItem from="1446569296025" duration="548000" />
+      <workItem from="1446599014491" duration="409000" />
     </task>
     <task id="LOCAL-00001" summary="Corrected the documentation comment&#10;">
       <created>1445706310136</created>
@@ -741,11 +759,17 @@
       <option name="project" value="LOCAL" />
       <updated>1446552672505</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="minor corrections">
+      <created>1446569818370</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1446569818370</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="140562000" />
+    <option name="totallyTimeSpent" value="141019000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -804,7 +828,8 @@
     <MESSAGE value="Switched some packages to organize code better; Main class now takes commandline input, Image_ImageData is made more flexible, optimized ImageDisplay; 1 miscelaneous class for doing 1-charcter cyclic shifts for strings included" />
     <MESSAGE value="Made the code protect the image arrays during resize&#10;" />
     <MESSAGE value="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed packages to organize code better;&#10;Main Class now accepts commandline input;&#10;Image_ImageData is now more flexible in rendering images;&#10;ImageDisplay has been optimized (moved common conditional);&#10;Miscellaneous class for doing 1-character cyclic shifts in Strings is new;" />
+    <MESSAGE value="minor corrections" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor corrections" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1159,14 +1184,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
-          <caret line="6" column="179" selection-start-line="6" selection-start-column="179" selection-end-line="6" selection-end-column="179" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="239" max-vertical-offset="1700">
@@ -1177,10 +1194,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ColorMode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+          <caret line="6" column="208" selection-start-line="6" selection-start-column="208" selection-end-line="6" selection-end-column="208" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14168039" vertical-offset="4776" max-vertical-offset="6681">
-          <caret line="342" column="24" selection-start-line="342" selection-start-column="24" selection-end-line="342" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.2800659" vertical-offset="4811" max-vertical-offset="6732">
+          <caret line="349" column="85" selection-start-line="349" selection-start-column="85" selection-end-line="349" selection-end-column="85" />
           <folding />
         </state>
       </provider>

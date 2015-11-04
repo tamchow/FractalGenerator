@@ -314,7 +314,7 @@ public class FractalGenerator {
                     ctr++;
                 }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, z, degree, escape_radius));
+                argand.setPixel(i, j, getColor(c, z, degree, escape_radius, iterations));
             }
         }
     }
@@ -347,12 +347,12 @@ public class FractalGenerator {
                     ctr++;
                 }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, z, degree, escape_radius));
+                argand.setPixel(i, j, getColor(c, z, degree, escape_radius, iterations));
             }
         }
     }
 
-    public int getColor(int val, Complex z, double degree, double escape_radius) {
+    public int getColor(int val, Complex z, double degree, double escape_radius, int iterations) {
         int color = 0x0, color1 = 0x0, color2 = 0x0;
         double renormalized = ((val + 1) - (Math.log(Math.log(z.modulus() / Math.log(escape_radius)) / Math.log(degree))));
         switch (color_mode) {
@@ -361,7 +361,10 @@ public class FractalGenerator {
                 color2 = (int) (0xffffff / (renormalized + 1));
                 color = interpolate(color1, color2, renormalized - ((int) renormalized));
                 break;
-            case ColorMode.COLOR_MULTIPLY:
+            case ColorMode.COLOR_MULTIPLY_1:
+                color = (iterations * val) << 16 | (iterations * val) << 8 | (iterations * val);
+                break;
+            case ColorMode.COLOR_MULTIPLY_2:
                 color1 = (int) renormalized << 16 | (int) renormalized << 8 | (int) renormalized;
                 color2 = (int) (renormalized + 1) << 16 | (int) (renormalized + 1) << 8 | (int) (renormalized + 1);
                 color = interpolate(color1, color2, renormalized - ((int) renormalized));
