@@ -9,12 +9,8 @@ import in.tamchow.fractal.imgutils.ImageData;
 import java.util.ArrayList;
 
 /**
- * The actual Julia Set plotter program.
- * Not really sure about the zoom function, let's see if it works.
- * TODO:
- * Zoom works,but it is damn slow. Got no idea as to how to make it faster. Maybe prerender zooms on a separate thread?
- * NOTE:
- * Extended to do Mandelbrot set too.
+ * The actual fractal plotter for Julia and Mandelbrot Sets using an iterative algorithm.
+ * Various (7) Coloring modes (2 have been commented out as they produce output similar to an enabled option)
  */
 public class FractalGenerator {
     public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1;
@@ -90,9 +86,9 @@ public class FractalGenerator {
             gradient_palette[0] = 0x000000;
             for (int pidx = 0x1; pidx < num_colors; pidx++) {
                 random_palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
-                if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_1) {
+                if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_1) {
                     gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff / (color_density << num_colors));
-                } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_2) {
+                } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_2) {
                     gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >> num_colors);
                 }
             }
@@ -105,9 +101,9 @@ public class FractalGenerator {
             System.arraycopy(gradtmp,0,gradient_palette,0,gradient_palette.length);
             for (int pidx = randtmp.length; pidx < num_colors; pidx++) {
                 random_palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
-                if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_1) {
+                if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_1) {
                     gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff / (color_density << num_colors));
-                } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_2) {
+                } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_2) {
                     gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >> num_colors);
                 }
             }
@@ -157,7 +153,7 @@ public class FractalGenerator {
         this.mode = mode;
     }
 
-    public int[] start_end_coordinates(int nx, int ix, int iy, int ny) {
+    public int[] start_end_coordinates(int nx, int ix, int iy, int ny) {//for multithreading purposes, may be implemented later
         int start_x, end_x, start_y, end_y;
         int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
         if (ix == (nx - 1)) {
@@ -372,19 +368,19 @@ public class FractalGenerator {
             case ColorMode.COLOR_GRAYSCALE:
                 color = val << 16 | val << 8 | val;
                 break;
-            /*case ColorMode.COLOR_MULTIPLY_MODE_2:
+            /*case ColorMode.COLOR_MULTIPLY_3:
                 color1=((int)renormalized<<16)<<16|((int)renormalized<<8)<<8|(int)renormalized;
                 color2=((int)(renormalized+1)<<16)<<16|((int)(renormalized+1)<<8)<<8|(int)(renormalized+1);
                 color=interpolate(color1,color2,renormalized-((int)renormalized));
                 break;
-            case ColorMode.COLOR_MULTIPLY_MODE_3:
+            case ColorMode.COLOR_MULTIPLY_4:
                 color1=((int)renormalized)<<16|((int)renormalized<<8)<<8|((int)renormalized<<16);
                 color2=((int)(renormalized+1))<<16|((int)(renormalized+1)<<8)<<8|((int)(renormalized+1)<<16);
                 color=interpolate(color1,color2,renormalized-((int)renormalized));
                 break;
                 */
-            case ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_1:
-            case ColorMode.COLOR_GRADIENT_DIVERGENT_MODE_2:
+            case ColorMode.COLOR_GRADIENT_DIVERGENT_1:
+            case ColorMode.COLOR_GRADIENT_DIVERGENT_2:
                 color1 = gradient_palette[(int) ((renormalized * color_density) % num_colors)];
                 color2 = color1 + 1;
                 color = interpolate(color1, color2, renormalized - (int) (renormalized));

@@ -29,48 +29,15 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
     private boolean running,fractal_mode,zoomedin;
     private int zoomin;
 
+    public ImageDisplay(Config config, int width, int height) {
+        initDisplay(config, width, height);
+    }
+
     public ImageDisplay(Config config) {
         if (config instanceof ImageConfig) {
-            try {
-                ImageConfig imageConfig = (ImageConfig) config;
-                this.width = imageConfig.getImages()[0].getWidth();
-                this.height = imageConfig.getImages()[0].getHeight();
-                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-                imgconf = imageConfig;
-                img = new BufferedImage[imageConfig.getImages().length];
-                rimg = new Image[imageConfig.getImages().length];
-                ctr = 0;
-                subctr = 0;
-                for (int i = 0; i < img.length; i++) {
-                    if (imageConfig.getImages()[i].getPixdata() == null) {
-                        img[i] = ImageIO.read(new File(imageConfig.getImages()[i].getPath()));
-                        rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
-                    } else {
-                        img[i] = Image_ImageData.toImage(imageConfig.getImages()[i]);
-                        rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
-                    }
-                }
-                fractal_mode=false;
-            } catch (Exception e) {
-                System.err.print("Image read error: " + e.getMessage());
-            }
-        }
-        else if(config instanceof FractalConfig){
-            try{
-                FractalConfig fractalConfig = (FractalConfig) config;
-                this.width = fractalConfig.getParams()[0].initParams.width;
-                this.height = fractalConfig.getParams()[0].initParams.height;
-                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-                fracconf = fractalConfig;
-                img = new BufferedImage[fractalConfig.getParams().length];
-                rimg = new Image[fractalConfig.getParams().length];
-                ctr = 0;
-                subctr = 0;
-                zoomin=1;
-                fractal_mode=true;
-            }catch (Exception e) {
-                System.err.print("Image read error: " + e.getMessage());
-            }
+            initDisplay(config, ((ImageConfig) config).getImages()[0].getWidth(), ((ImageConfig) config).getImages()[0].getHeight());
+        } else if (config instanceof FractalConfig) {
+            initDisplay(config, ((FractalConfig) config).getParams()[0].initParams.width, ((FractalConfig) config).getParams()[0].initParams.height);
         }
     }
 
@@ -94,6 +61,50 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
         thread.start();
     }
 
+    private void initDisplay(Config config, int width, int height) {
+        if (config instanceof ImageConfig) {
+            try {
+                ImageConfig imageConfig = (ImageConfig) config;
+                this.width = width;
+                this.height = height;
+                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                imgconf = imageConfig;
+                img = new BufferedImage[imageConfig.getImages().length];
+                rimg = new Image[imageConfig.getImages().length];
+                ctr = 0;
+                subctr = 0;
+                for (int i = 0; i < img.length; i++) {
+                    if (imageConfig.getImages()[i].getPixdata() == null) {
+                        img[i] = ImageIO.read(new File(imageConfig.getImages()[i].getPath()));
+                        rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
+                    } else {
+                        img[i] = Image_ImageData.toImage(imageConfig.getImages()[i]);
+                        rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
+                    }
+                }
+                fractal_mode = false;
+            } catch (Exception e) {
+                System.err.print("Image read error: " + e.getMessage());
+            }
+        } else if (config instanceof FractalConfig) {
+            try {
+                FractalConfig fractalConfig = (FractalConfig) config;
+                this.width = fractalConfig.getParams()[0].initParams.width;
+                this.height = fractalConfig.getParams()[0].initParams.height;
+                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                fracconf = fractalConfig;
+                img = new BufferedImage[fractalConfig.getParams().length];
+                rimg = new Image[fractalConfig.getParams().length];
+                ctr = 0;
+                subctr = 0;
+                zoomin = 1;
+                fractal_mode = true;
+            } catch (Exception e) {
+                System.err.print("Image read error: " + e.getMessage());
+            }
+        }
+    }
+
     public void paint(Graphics g) {
         g.drawImage(todraw, 0, 0, null);
     }
@@ -110,7 +121,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                     todraw = rimg[i];
                     paint(this.getGraphics());
                     if (!running) {
-                        ctr = i;
+                        ctr = i - 1;
                         break;
                     }
                 } else {
@@ -125,7 +136,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                         todraw = Image_ImageData.toImage(anim.getFrame(j));
                         paint(this.getGraphics());
                         if (!running) {
-                            ctr = i;
+                            ctr = i - 1;
                             subctr = j;
                             break;
                         }

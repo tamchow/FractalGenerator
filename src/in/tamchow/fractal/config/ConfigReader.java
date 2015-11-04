@@ -71,11 +71,12 @@ public class ConfigReader {
                 lines.add(line);
             }
         }
-        FractalConfig fractalConfig=new FractalConfig(Integer.valueOf(lines.get(0)),Integer.valueOf(lines.get(1)),Integer.valueOf(lines.get(2)));
-        lines.remove(0);lines.remove(1);lines.remove(2);
-        FractalParams[] fractalParams=new FractalParams[lines.size()];
+        List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
+        List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        FractalConfig fractalConfig = new FractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
+        FractalParams[] fractalParams = new FractalParams[specCfg.size()];
         for (int i=0;i<fractalParams.length;i++){
-            fractalParams[i]=getParamFromFile(new File(lines.get(i)));
+            fractalParams[i] = getParamFromFile(new File(specCfg.get(i)));
         }
         fractalConfig.setParams(fractalParams);
         return fractalConfig;
@@ -87,13 +88,16 @@ public class ConfigReader {
         while (in.hasNext()){
             String line=in.nextLine();
             if(!line.startsWith("#")){
+                if (line.contains("#")) {
+                    line = line.substring(0, line.indexOf("#")).trim();
+                }
                 lines.add(line);
             }
         }
         List<String> initConfig=lines.subList(lines.indexOf("[Initconfig]")+1,lines.indexOf("[EndInitconfig]"));
         String[] init=new String[initConfig.size()];
         initConfig.toArray(init);
-        List<String> runConfig=lines.subList(lines.indexOf("[Runconfig]")+1,lines.indexOf("EndRunconfig]"));
+        List<String> runConfig = lines.subList(lines.indexOf("[Runconfig]") + 1, lines.indexOf("[EndRunconfig]"));
         String[] run=new String[runConfig.size()];
         initConfig.toArray(run);
         FractalParams fractalParams=new FractalParams();
