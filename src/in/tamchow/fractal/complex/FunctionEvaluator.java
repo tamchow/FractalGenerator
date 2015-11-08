@@ -14,6 +14,17 @@ public class FunctionEvaluator {
         this.constdec = varconst;
     }
 
+    public static double getDegree(String function) {
+        double degree = 0;
+        int idx = 0;
+        while (function.indexOf('^', idx) != -1) {
+            idx = function.indexOf('^', idx) + 1;
+            double nextDegree = Double.valueOf(function.substring(idx + 1, function.indexOf(' ', idx + 1)));
+            degree = (nextDegree > degree) ? nextDegree : degree;
+        }
+        return degree;
+    }
+
     public String getZ_value() {
         return z_value;
     }

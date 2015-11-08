@@ -16,8 +16,8 @@ public class Main {
     public static void main(String[] args) {
         String func = "z ^ 2 + c";
         String[][] consts = {{"c", "-0.8,+0.156i"}};
-        int resx = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 540, colmode = ColorMode.COLOR_GRAYSCALE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
-        double bound = 2.0, escrad = 2.0, deg = 2.0;
+        int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_GRAYSCALE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
+        double bound = 2.0, escrad = 2.0;
         boolean fromFile = false;
         FractalConfig fccfg = new FractalConfig(0, 0, 0);
         if (args.length > 1) {
@@ -36,7 +36,6 @@ public class Main {
             bound = Double.valueOf(args[11]);
             iter = Integer.valueOf(args[12]);
             escrad = Double.valueOf(args[13]);
-            deg = Double.valueOf(args[14]);
             fromFile = false;
         } else if (args.length == 1) {
             try {
@@ -56,7 +55,7 @@ public class Main {
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (!fromFile) {
-            jgen.generate(iter, escrad, deg);
+            jgen.generate(iter, escrad);
         } else {
             jgen.generate(fccfg.getParams()[0]);
         }

@@ -21,7 +21,7 @@ public class FractalGenerator {
     int scale;
     int color_mode;
     int num_colors;
-    double boundary_condition;
+    double boundary_condition, degree;
     long maxiter;
     int mode;
     int color_density;
@@ -76,6 +76,7 @@ public class FractalGenerator {
         argand_map=new Complex[argand.getHeight()][argand.getWidth()];
         poupulateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
+        degree = FunctionEvaluator.getDegree(function);
     }
 
     private void create_colors() {
@@ -262,25 +263,26 @@ public class FractalGenerator {
 
     public void generate(FractalParams params){
         if (params.runParams.fully_configured){
-            generate(params.runParams.start_x,params.runParams.end_x,params.runParams.start_y,params.runParams.end_y,params.runParams.iterations,params.runParams.escape_radius,params.runParams.degree);
+            generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, params.runParams.iterations, params.runParams.escape_radius);
         }else{
-            generate(params.runParams.iterations,params.runParams.escape_radius,params.runParams.degree);
+            generate(params.runParams.iterations, params.runParams.escape_radius);
         }
     }
-    public void generate(int iterations, double escape_radius, double degree) {
-        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, degree);
+
+    public void generate(int iterations, double escape_radius) {
+        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius);
     }
 
-    public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, double degree) {
+    public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         setMaxiter(argand.getHeight() * argand.getHeight() * iterations);
         if (mode == MODE_MANDELBROT) {
-            mandelbrotGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius, degree);
+            mandelbrotGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius);
         } else if (mode == MODE_JULIA) {
-            juliaGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius, degree);
+            juliaGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius);
         }
     }
 
-    public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, double degree) {
+    public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
         FunctionEvaluator fe = new FunctionEvaluator("0,+0i", consts);
         long ctr = 0;
@@ -310,12 +312,12 @@ public class FractalGenerator {
                     ctr++;
                 }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, z, degree, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, z, escape_radius, iterations));
             }
         }
     }
 
-    public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, double degree) {
+    public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
         FunctionEvaluator fe = new FunctionEvaluator("0,+0i", consts);
         long ctr = 0;
@@ -343,12 +345,12 @@ public class FractalGenerator {
                     ctr++;
                 }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, z, degree, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, z, escape_radius, iterations));
             }
         }
     }
 
-    public int getColor(int val, Complex z, double degree, double escape_radius, int iterations) {
+    public int getColor(int val, Complex z, double escape_radius, int iterations) {
         int color = 0x0, color1 = 0x0, color2 = 0x0;
         double renormalized = ((val + 1) - (Math.log(Math.log(z.modulus() / Math.log(escape_radius)) / Math.log(degree))));
         switch (color_mode) {
