@@ -17,6 +17,9 @@ public class FunctionEvaluator {
     public static double getDegree(String function) {
         double degree = 0;
         int idx = 0;
+        if (function.contains("z") && (!function.contains("^"))) {
+            degree = 1;
+        }
         while (function.indexOf('^', idx) != -1) {
             idx = function.indexOf('^', idx) + 1;
             double nextDegree = Double.valueOf(function.substring(idx + 1, function.indexOf(' ', idx + 1)));

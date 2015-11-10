@@ -1,0 +1,93 @@
+package in.tamchow.fractal.math;
+
+/**
+ * Holds one term of a polynomial
+ */
+public class Term {
+    public String coefficient;
+    public String exponent;
+    public String variable;
+    public String constval;
+    private boolean constant;
+
+    public Term(String coefficient, String exponent, String variable) {
+        setVariable(variable);
+        setCoefficient(coefficient);
+        setExponent(exponent);
+    }
+
+    public Term(String constval) {
+        setConstval(constval);
+        setConstant(true);
+    }
+
+    public static Term fromString(String term) {
+        term = term.substring(1, term.length() - 1);//remove leading and trailing braces
+        String[] parts = term.split(",");
+        if (parts.length == 0 || parts.length == 1) {
+            Term constant = new Term(term.trim());
+        }
+        return new Term(parts[0], parts[2], parts[1]);
+    }
+
+    public String getConstval() {
+        return constval;
+    }
+
+    public void setConstval(String constval) {
+        this.constval = constval;
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    public String getCoefficient() {
+        return coefficient;
+    }
+
+    public void setCoefficient(String coefficient) {
+        this.coefficient = coefficient;
+        if (this.coefficient.equals("") || this.coefficient == null) {
+            setCoefficient("1");
+        }
+    }
+
+    public String getExponent() {
+        return exponent;
+    }
+
+    public void setExponent(String exponent) {
+        this.exponent = exponent;
+        if (this.exponent.equals("0") || this.exponent == null) {
+            setConstant(true);
+        }
+    }
+
+    public boolean isConstant() {
+        return constant;
+    }
+
+    public void setConstant(boolean constant) {
+        this.constant = constant;
+    }
+
+    public String derivative() {
+        Term deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - 1", this.variable);
+        if (isConstant()) {
+            return "";
+        }
+        return deriv.toString();
+    }
+
+    public String toString() {
+        if (constant) {
+            return constval;
+        }
+        return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + " ( " + exponent + " ) ) )";
+    }
+}
