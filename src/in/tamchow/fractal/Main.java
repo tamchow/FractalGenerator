@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) {
-        String func = "z ^ 2 + c";
+        String func = "z ^ 2 + c", variableCode = "z";
         String[][] consts = {{"c", "-0.8,+0.156i"}};
         int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_GRAYSCALE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
         double bound = 2.0, escrad = 2.0;
@@ -24,18 +24,19 @@ public class Main {
             func = args[0];
             consts[0][0] = args[1].substring(0, args[1].indexOf(':'));
             consts[0][1] = args[1].substring(args[1].indexOf(':') + 1, args[1].length());
-            resx = Integer.valueOf(args[2]);
-            resy = Integer.valueOf(args[3]);
-            zoom = Integer.valueOf(args[4]);
-            zoompow = Integer.valueOf(args[5]);
-            baseprec = Integer.valueOf(args[6]);
-            colmode = Integer.valueOf(args[7]);
-            numcol = Integer.valueOf(args[8]);
-            coldens = Integer.valueOf(args[9]);
-            fracmode = Integer.valueOf(args[10]);
-            bound = Double.valueOf(args[11]);
-            iter = Integer.valueOf(args[12]);
-            escrad = Double.valueOf(args[13]);
+            variableCode = args[2];
+            resx = Integer.valueOf(args[3]);
+            resy = Integer.valueOf(args[4]);
+            zoom = Integer.valueOf(args[5]);
+            zoompow = Integer.valueOf(args[6]);
+            baseprec = Integer.valueOf(args[7]);
+            colmode = Integer.valueOf(args[8]);
+            numcol = Integer.valueOf(args[9]);
+            coldens = Integer.valueOf(args[10]);
+            fracmode = Integer.valueOf(args[11]);
+            bound = Double.valueOf(args[12]);
+            iter = Integer.valueOf(args[13]);
+            escrad = Double.valueOf(args[14]);
             fromFile = false;
         } else if (args.length == 1) {
             try {
@@ -48,7 +49,7 @@ public class Main {
         long inittime = System.currentTimeMillis();
         FractalGenerator jgen;
         if (!fromFile) {
-            jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, colmode, numcol, coldens, fracmode, bound, func, consts);
+            jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, colmode, numcol, coldens, fracmode, bound, func, consts, variableCode);
         } else {
             jgen = new FractalGenerator(fccfg.getParams()[0]);
         }
@@ -59,6 +60,7 @@ public class Main {
         } else {
             jgen.generate(fccfg.getParams()[0]);
         }
+
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         //System.out.println(jgen.boundary_points.get(0));

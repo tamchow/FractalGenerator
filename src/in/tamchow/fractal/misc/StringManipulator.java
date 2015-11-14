@@ -1,9 +1,9 @@
 package in.tamchow.fractal.misc;
 
 /**
- * Miscellaneous: Implementation of a cyclic shifting algorithm for strings.
+ * Miscellaneous: String Manipulation.
  */
-public class CyclicShift {
+public class StringManipulator {
     public static String doCyclicShift(String input) {
         char[] processor = input.toCharArray();
         for (int i = 1; i < processor.length; i++) {
@@ -12,5 +12,15 @@ public class CyclicShift {
             processor[0] = tmp;
         }
         return new String(processor);
+    }
+
+    private int count_char(char c, String str) {
+        int ctr = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (c == str.charAt(ctr)) {
+                ctr++;
+            }
+        }
+        return ctr;
     }
 }

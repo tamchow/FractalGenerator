@@ -1,12 +1,13 @@
 package in.tamchow.fractal;
 
-import in.tamchow.fractal.complex.Complex;
-import in.tamchow.fractal.complex.FunctionEvaluator;
 import in.tamchow.fractal.config.fractalconfig.FractalParams;
 import in.tamchow.fractal.imgutils.ColorMode;
 import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.math.complex.FunctionEvaluator;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * The actual fractal plotter for Julia and Mandelbrot Sets using an iterative algorithm.
@@ -33,13 +34,14 @@ public class FractalGenerator {
     int center_x, center_y;
     int[] random_palette, gradient_palette;
     private boolean alreadyCreated;
+    private String variableCode;
 
     public FractalGenerator(FractalParams params) {
-        initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.color_mode, params.initParams.num_colors, params.initParams.color_density, params.initParams.fractal_mode, params.initParams.boundary_condition, params.initParams.function, params.initParams.consts);
+        initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.color_mode, params.initParams.num_colors, params.initParams.color_density, params.initParams.fractal_mode, params.initParams.boundary_condition, params.initParams.function, params.initParams.consts, params.initParams.variableCode);
     }
 
-    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts) {
-        initFractal(width, height, zoom, zoom_factor, base_precision, colorizer, num_colors, color_density, mode, boundary_condition, function, consts);
+    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode) {
+        initFractal(width, height, zoom, zoom_factor, base_precision, colorizer, num_colors, color_density, mode, boundary_condition, function, consts, variableCode);
     }
 
     public long getMaxiter() {
@@ -50,7 +52,15 @@ public class FractalGenerator {
         this.maxiter = maxiter;
     }
 
-    private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts) {
+    public String getVariableCode() {
+        return variableCode;
+    }
+
+    public void setVariableCode(String variableCode) {
+        this.variableCode = variableCode;
+    }
+
+    private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode) {
         setZoom(zoom);
         setZoom_factor(zoom_factor);
         setFunction(function);
@@ -77,6 +87,7 @@ public class FractalGenerator {
         poupulateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         degree = FunctionEvaluator.getDegree(function);
+        setVariableCode(variableCode);
     }
 
     private void create_colors() {
@@ -284,7 +295,8 @@ public class FractalGenerator {
 
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
-        FunctionEvaluator fe = new FunctionEvaluator("0,+0i", consts);
+        Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator("0,+0i", variableCode, consts);
         long ctr = 0;
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -298,6 +310,7 @@ public class FractalGenerator {
                 int c = 0x1;
                 while (c <= iterations && z.modulus() < escape_radius) {
                     Complex ztmp = fe.evaluate(function);
+                    last.push(ztmp);
                     if (ztmp.equals(z)) {
                         c = iterations + 1;
                         break;
@@ -312,14 +325,17 @@ public class FractalGenerator {
                     ctr++;
                 }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, z, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, new Complex[]{last.pop(), last.pop(), last.pop()}, escape_radius, iterations));
+                last.clear();
             }
         }
     }
 
+
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
-        FunctionEvaluator fe = new FunctionEvaluator("0,+0i", consts);
+        Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator("0,+0i", variableCode, consts);
         long ctr = 0;
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -331,6 +347,7 @@ public class FractalGenerator {
                 fe.setZ_value(z.toString());
                 while (c <= iterations && z.modulus() < escape_radius) {
                     Complex ztmp = fe.evaluate(function);
+                    last.push(ztmp);
                     if (ztmp.equals(z)) {
                         c = iterations + 1;
                         break;
@@ -345,14 +362,15 @@ public class FractalGenerator {
                     ctr++;
                 }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, z, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, new Complex[]{last.pop(), last.pop(), last.pop()}, escape_radius, iterations));
+                last.clear();
             }
         }
     }
 
-    public int getColor(int val, Complex z, double escape_radius, int iterations) {
+    public int getColor(int val, Complex[] last, double escape_radius, int iterations) {
         int color = 0x0, color1 = 0x0, color2 = 0x0;
-        double renormalized = ((val + 1) - (Math.log(Math.log(z.modulus() / Math.log(escape_radius)) / Math.log(degree))));
+        double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / Math.log(degree))));
         switch (color_mode) {
             case ColorMode.COLOR_DIVIDE:
                 color1 = (int) (0xffffff / renormalized);
@@ -384,13 +402,12 @@ public class FractalGenerator {
             case ColorMode.COLOR_GRADIENT_DIVERGENT_1:
             case ColorMode.COLOR_GRADIENT_DIVERGENT_2:
                 color1 = gradient_palette[(int) ((renormalized * color_density) % num_colors)];
-                color2 = color1 + 1;
+                color2 = gradient_palette[(int) (((renormalized + 1) * color_density) % num_colors)];
                 color = interpolate(color1, color2, renormalized - (int) (renormalized));
                 break;
             case ColorMode.COLOR_RANDOM_DIVERGENT:
-                renormalized = ((val + 1) - (Math.log(Math.log(z.modulus() / Math.log(escape_radius)) / Math.log(degree))));
                 color1 = random_palette[(int) ((renormalized * color_density) % num_colors)];
-                color2 = color1 + 1;
+                color2 = random_palette[(int) (((renormalized + 1) * color_density) % num_colors)];
                 color = interpolate(color1, color2, renormalized - (int) (renormalized));
                 break;
             default:

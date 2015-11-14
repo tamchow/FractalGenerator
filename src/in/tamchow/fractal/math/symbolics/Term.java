@@ -1,4 +1,4 @@
-package in.tamchow.fractal.math;
+package in.tamchow.fractal.math.symbolics;
 
 /**
  * Holds one term of a polynomial
@@ -65,6 +65,7 @@ public class Term {
         this.exponent = exponent;
         if (this.exponent.equals("0") || this.exponent == null) {
             setConstant(true);
+            constval = this.coefficient;
         }
     }
 
@@ -76,18 +77,18 @@ public class Term {
         this.constant = constant;
     }
 
-    public String derivative() {
+    public Term derivative() {
         Term deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - 1", this.variable);
         if (isConstant()) {
-            return "";
+            deriv = new Term("0");
         }
-        return deriv.toString();
+        return deriv;
     }
 
     public String toString() {
         if (constant) {
             return constval;
         }
-        return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + " ( " + exponent + " ) ) )";
+        return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
     }
 }

@@ -1,9 +1,11 @@
 package in.tamchow.fractal.config;
 
+import java.io.Serializable;
+
 /**
  * Superclass for set configurations
  */
-public class Config {
+public class Config implements Serializable {
     public int fps, transtime, wait;
 
     public int getWait() {

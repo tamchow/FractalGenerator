@@ -1,9 +1,11 @@
 package in.tamchow.fractal.config.fractalconfig;
 
+import java.io.Serializable;
+
 /**
  * Encapsulates @code FractalInitParams and @code FractalRunParams
  */
-public class FractalParams {
+public class FractalParams implements Serializable {
     public FractalRunParams runParams;
     public FractalInitParams initParams;
 

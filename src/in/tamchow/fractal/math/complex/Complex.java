@@ -1,4 +1,4 @@
-package in.tamchow.fractal.complex;
+package in.tamchow.fractal.math.complex;
 
 import java.io.Serializable;
 import java.math.RoundingMode;
@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
  */
-public class Complex implements Serializable {
+public class Complex implements Serializable, Comparable<Complex> {
     public static final Complex i = new Complex(0, 1);
     private double a, ib;
     private int precision;
@@ -56,16 +56,6 @@ public class Complex implements Serializable {
         precision = 25;
     }
 
-    private int count_char(char c, String str) {
-        int ctr = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (c == str.charAt(ctr)) {
-                ctr++;
-            }
-        }
-        return ctr;
-    }
-
     public int getPrecision() {
         return precision;
     }
@@ -81,6 +71,9 @@ public class Complex implements Serializable {
         } else return a + ",+" + ib + "i";
     }
 
+    public int compareTo(Complex complex) {
+        return (int) (this.modulus() - complex.modulus());
+    }
     public boolean equals(Object complex) {
         if (complex instanceof Complex) {
             if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {

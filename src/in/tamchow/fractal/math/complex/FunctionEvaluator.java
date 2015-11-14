@@ -1,33 +1,48 @@
-package in.tamchow.fractal.complex;
+package in.tamchow.fractal.math.complex;
+
+import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import java.util.StringTokenizer;
 
 /**
- * Implements an iterative parser for functions described in ComplexOperations, makes heavy use of string replacement;
+ * Implements an iterative parser for functions described in ComplexOperations, making heavy use of string replacement;
  */
 public class FunctionEvaluator {
     private String[][] constdec;
     private String z_value;
+    private String variableCode;
 
-    public FunctionEvaluator(String z_value, String[][] varconst) {
-        this.z_value = z_value;
-        this.constdec = varconst;
+    public FunctionEvaluator(String variable, String variableCode, String[][] varconst) {
+        setZ_value(variable);
+        setConstdec(varconst);
+        setVariableCode(variableCode);
     }
 
-    public static double getDegree(String function) {
+    public String getVariableCode() {
+        return variableCode;
+    }
+
+    public void setVariableCode(String variableCode) {
+        this.variableCode = variableCode;
+    }
+
+    public double getDegree(String function) {
         double degree = 0;
         int idx = 0;
-        if (function.contains("z") && (!function.contains("^"))) {
+        if (function.contains(variableCode) && (!function.contains("^"))) {
             degree = 1;
         }
         while (function.indexOf('^', idx) != -1) {
             idx = function.indexOf('^', idx) + 1;
-            double nextDegree = Double.valueOf(function.substring(idx + 1, function.indexOf(' ', idx + 1)));
+            double nextDegree = new Complex(function.substring(idx + 1, function.indexOf(' ', idx + 1))).modulus();
             degree = (nextDegree > degree) ? nextDegree : degree;
         }
         return degree;
     }
 
+    public double getDegree(Polynomial polynomial) {
+        return getDegree(limitedEvaluate(polynomial + "", polynomial.countVariableTerms() * 2));
+    }
     public String getZ_value() {
         return z_value;
     }
@@ -53,16 +68,35 @@ public class FunctionEvaluator {
             ztmp = eval(process(subexpr));
             if (!(subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
                 subexpr = subexpr.replace(subexpr.substring((subexpr.lastIndexOf('(')), subexpr.indexOf(')', subexpr.lastIndexOf('(') + 1) + 1), "" + ztmp);
-            }
-            if ((subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
+            } else {
                 ++flag;
             }
         } while (flag <= 1);
         return ztmp;
     }
 
+    protected String limitedEvaluate(String expr, int depth) {
+        String subexpr = substitute(expr);
+        Complex ztmp;
+        new Complex(z_value);
+        int flag = 0, ctr = 0;
+        do {
+            ztmp = eval(process(subexpr));
+            if (!(subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
+                subexpr = subexpr.replace(subexpr.substring((subexpr.lastIndexOf('(')), subexpr.indexOf(')', subexpr.lastIndexOf('(') + 1) + 1), "" + ztmp);
+                ctr++;
+            } else {
+                ++flag;
+            }
+        } while (flag <= 1 && ctr <= depth);
+        return subexpr;
+    }
+
     private Complex eval(String[] processed) {
         Complex ztmp = new Complex(0, 0);
+        if (processed.length == 1) {
+            return new Complex(processed[0]);
+        }
         for (int i = 0; i < processed.length - 1; i++) {
             try {
                 switch (processed[i]) {
@@ -166,7 +200,7 @@ public class FunctionEvaluator {
         int i = 0;
         while (tokens.hasMoreTokens()) {
             mod[i] = tokens.nextToken();
-            if (mod[i].equals("z")) {
+            if (mod[i].equals(variableCode)) {
                 mod[i] = "" + z_value;
             } else if (getConstant(mod[i]) != null) {
                 mod[i] = getConstant(mod[i]);

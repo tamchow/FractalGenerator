@@ -1,9 +1,11 @@
 package in.tamchow.fractal.config.fractalconfig;
 
+import java.io.Serializable;
+
 /**
  * Parameters for configuring the generation of a fractal
  */
-public class FractalRunParams {
+public class FractalRunParams implements Serializable {
     public int iterations, start_x, end_x, start_y, end_y;
     public double escape_radius;
     public boolean fully_configured;

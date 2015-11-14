@@ -1,4 +1,4 @@
-package in.tamchow.fractal.complex;
+package in.tamchow.fractal.math.complex;
 
 /**
  * Provides Utility methods for handling complex numbers

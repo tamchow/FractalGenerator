@@ -1,4 +1,4 @@
-package in.tamchow.fractal.math;
+package in.tamchow.fractal.math.symbolics;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -32,14 +32,42 @@ public class Polynomial {
         return poly;
     }
 
-    public String derivative() {
-        String deriv = "";
-        for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-            deriv += " " + signs.get(j) + " " + terms.get(i).derivative();
-        }
-        return deriv.trim();
+    public ArrayList<String> getSigns() {
+        return signs;
     }
 
+    public void setSigns(ArrayList<String> signs) {
+        this.signs.clear();
+        this.signs.addAll(signs);
+    }
+
+    public ArrayList<Term> getTerms() {
+        return terms;
+    }
+
+    public void setTerms(ArrayList<Term> terms) {
+        this.terms.clear();
+        this.terms.addAll(terms);
+    }
+
+    public Polynomial derivative() {
+        Polynomial deriv = new Polynomial();
+        deriv.setSigns(this.signs);
+        for (int i = 0; i < terms.size(); i++) {
+            deriv.terms.add(terms.get(i).derivative());
+        }
+        return deriv;
+    }
+
+    public int countVariableTerms() {
+        int ctr = 0;
+        for (Term term : terms) {
+            if (!term.isConstant()) {
+                ctr++;
+            }
+        }
+        return ctr;
+    }
     public String toString() {
         String polynomial = "";
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
