@@ -18,18 +18,12 @@ public class ConfigReader {
 
     public static boolean isFileImageConfig(File file) throws FileNotFoundException {
         Scanner in = new Scanner(file);
-        if (!in.nextLine().equals("[ImageConfig]")) {
-            return true;
-        }
-        return false;
+        return !in.nextLine().equals("[ImageConfig]");
     }
 
     public static boolean isFileFractalConfig(File file) throws FileNotFoundException {
         Scanner in = new Scanner(file);
-        if (!in.nextLine().equals("[FractalConfig]")) {
-            return true;
-        }
-        return false;
+        return !in.nextLine().equals("[FractalConfig]");
     }
     public static ImageConfig getImageConfigFromFile(File cfgfile)throws FileNotFoundException{
         Scanner in=new Scanner(cfgfile);

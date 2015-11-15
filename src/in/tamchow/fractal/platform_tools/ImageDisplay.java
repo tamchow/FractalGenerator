@@ -78,7 +78,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                         img[i] = ImageIO.read(new File(imageConfig.getImages()[i].getPath()));
                         rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
                     } else {
-                        img[i] = Image_ImageData.toImage(imageConfig.getImages()[i]);
+                        img[i] = ImageConverter.toImage(imageConfig.getImages()[i]);
                         rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
                     }
                 }
@@ -129,11 +129,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                     if (i == rimg.length - 1) {
                         k = 0;
                     }
-                    Transition transition = new Transition(imgconf.getTransitions()[i], Image_ImageData.toImageData(rimg[i]), Image_ImageData.toImageData(rimg[k]), imgconf.getFps(), imgconf.getTranstime());
+                    Transition transition = new Transition(imgconf.getTransitions()[i], ImageConverter.toImageData(rimg[i]), ImageConverter.toImageData(rimg[k]), imgconf.getFps(), imgconf.getTranstime());
                     transition.doTransition();
                     Animation anim = transition.getFrames();
                     for (int j = subctr; j < anim.getNumFrames(); j++) {
-                        todraw = Image_ImageData.toImage(anim.getFrame(j));
+                        todraw = ImageConverter.toImage(anim.getFrame(j));
                         paint(this.getGraphics());
                         if (!running) {
                             ctr = i - 1;
@@ -155,7 +155,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                     current = new FractalGenerator(fracconf.getParams()[i]);
                 }
                 current.generate(fracconf.getParams()[i]);
-                todraw=Image_ImageData.toImage(current.getArgand());
+                todraw = ImageConverter.toImage(current.getArgand());
                 zoomedin=false;
                 paint(this.getGraphics());
                 try {

@@ -1,7 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig;
 
 import in.tamchow.fractal.FractalGenerator;
-import in.tamchow.fractal.imgutils.ColorMode;
+import in.tamchow.fractal.config.color.ColorMode;
 
 import java.io.Serializable;
 

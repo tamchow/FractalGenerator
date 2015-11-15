@@ -1,7 +1,7 @@
 package in.tamchow.fractal;
 
+import in.tamchow.fractal.config.color.ColorMode;
 import in.tamchow.fractal.config.fractalconfig.FractalParams;
-import in.tamchow.fractal.imgutils.ColorMode;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
@@ -86,7 +86,7 @@ public class FractalGenerator {
         argand_map=new Complex[argand.getHeight()][argand.getWidth()];
         poupulateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
-        degree = FunctionEvaluator.getDegree(function);
+        degree = new FunctionEvaluator(variableCode, consts).getDegree(function);
         setVariableCode(variableCode);
     }
 
@@ -107,7 +107,9 @@ public class FractalGenerator {
             alreadyCreated=true;
         }else{
             int[] randtmp=new int[random_palette.length],gradtmp=new int[gradient_palette.length];
+            System.arraycopy(random_palette, 0, randtmp, 0, random_palette.length);
             random_palette = new int[num_colors];
+            System.arraycopy(gradient_palette, 0, gradtmp, 0, gradient_palette.length);
             System.arraycopy(randtmp,0,random_palette,0,random_palette.length);
             gradient_palette = new int[num_colors];
             System.arraycopy(gradtmp,0,gradient_palette,0,gradient_palette.length);
@@ -116,7 +118,7 @@ public class FractalGenerator {
                 if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_1) {
                     gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff / (color_density << num_colors));
                 } else if (color_mode == ColorMode.COLOR_GRADIENT_DIVERGENT_2) {
-                    gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >> num_colors);
+                    gradient_palette[pidx] = gradient_palette[pidx - 1] + (0xfffff >>> num_colors);
                 }
             }
             alreadyCreated=true;
@@ -165,7 +167,7 @@ public class FractalGenerator {
         this.mode = mode;
     }
 
-    public int[] start_end_coordinates(int nx, int ix, int iy, int ny) {//for multithreading purposes, may be implemented later
+    public int[] start_end_coordinates(int nx, int ix, int iy, int ny) {//for multithreading purposes, which may be implemented later
         int start_x, end_x, start_y, end_y;
         int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
         if (ix == (nx - 1)) {

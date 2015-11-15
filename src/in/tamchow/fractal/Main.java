@@ -1,9 +1,9 @@
 package in.tamchow.fractal;
 
 import in.tamchow.fractal.config.ConfigReader;
+import in.tamchow.fractal.config.color.ColorMode;
 import in.tamchow.fractal.config.fractalconfig.FractalConfig;
-import in.tamchow.fractal.imgutils.ColorMode;
-import in.tamchow.fractal.platform_tools.Image_ImageData;
+import in.tamchow.fractal.platform_tools.ImageConverter;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -67,7 +67,7 @@ public class Main {
         File pic = new File("D:/Fractal.jpg");
         //File zoompic = new File("D:/Fractal_zoom.png");
         try {
-            ImageIO.write(Image_ImageData.toImage(jgen.getArgand()), "jpg", pic);
+            ImageIO.write(ImageConverter.toImage(jgen.getArgand()), "jpg", pic);
         } catch (Exception e) {
             e.printStackTrace();
         }

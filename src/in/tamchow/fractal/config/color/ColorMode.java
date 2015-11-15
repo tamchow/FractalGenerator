@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.config.color;
 
 /**
  * A few constant values for coloring modes

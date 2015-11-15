@@ -18,6 +18,10 @@ public class FunctionEvaluator {
         setVariableCode(variableCode);
     }
 
+    public FunctionEvaluator(String variableCode, String[][] varconst) {
+        setConstdec(varconst);
+        setVariableCode(variableCode);
+    }
     public String getVariableCode() {
         return variableCode;
     }
@@ -60,7 +64,7 @@ public class FunctionEvaluator {
     }
 
     public Complex evaluate(String expr) {
-        String subexpr = substitute(expr);
+        String subexpr = substitute(expr, false);
         Complex ztmp;
         new Complex(z_value);
         int flag = 0;
@@ -76,7 +80,7 @@ public class FunctionEvaluator {
     }
 
     protected String limitedEvaluate(String expr, int depth) {
-        String subexpr = substitute(expr);
+        String subexpr = substitute(expr, true);
         Complex ztmp;
         new Complex(z_value);
         int flag = 0, ctr = 0;
@@ -193,14 +197,14 @@ public class FunctionEvaluator {
         return val;
     }
 
-    private String substitute(String expr) {
+    private String substitute(String expr, boolean isSymbolic) {
         StringTokenizer tokens = new StringTokenizer(expr, " ", false);
         String[] mod = new String[tokens.countTokens()];
         String sub = "";
         int i = 0;
         while (tokens.hasMoreTokens()) {
             mod[i] = tokens.nextToken();
-            if (mod[i].equals(variableCode)) {
+            if (mod[i].equals(variableCode) && (!isSymbolic)) {
                 mod[i] = "" + z_value;
             } else if (getConstant(mod[i]) != null) {
                 mod[i] = getConstant(mod[i]);

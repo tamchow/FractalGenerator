@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 /**
  * Handles platform conversions
  */
-public class Image_ImageData {
+public class ImageConverter {
     public static ImageData toImageData(Image img) {
         return toImageData(img, 0, 0, img.getWidth(null), img.getHeight(null));
     }
