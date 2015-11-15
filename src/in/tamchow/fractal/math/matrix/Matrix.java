@@ -11,19 +11,19 @@ public class Matrix {
         initMatrix(matrixData.length, matrixData[0].length, matrixData);
     }
 
-    public int getRows() {
+    public int getNumRows() {
         return rows;
     }
 
-    public void setRows(int rows) {
+    public void setNumRows(int rows) {
         this.rows = rows;
     }
 
-    public int getColumns() {
+    public int getNumColumns() {
         return columns;
     }
 
-    public void setColumns(int columns) {
+    public void setNumColumns(int columns) {
         this.columns = columns;
     }
 
@@ -40,8 +40,8 @@ public class Matrix {
 
     private void initMatrix(int rows, int columns, double[][] matrixData) {
         setMatrixData(matrixData);
-        setRows(rows);
-        setColumns(columns);
+        setNumRows(rows);
+        setNumColumns(columns);
     }
 
     public double get(int i, int j) {
