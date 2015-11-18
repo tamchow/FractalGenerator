@@ -7,10 +7,6 @@ public class ColorConfig {
     public int basecolor, step, color_density, num_colors;
     public int[] palette;
 
-    public ColorConfig(int color_density, int num_colors, int basecolor, int step, int[] palette) {
-        initColorConfig(color_density, num_colors, basecolor, step, palette);
-    }
-
     public ColorConfig(int color_density, int num_colors, int basecolor) {
         initColorConfig(color_density, num_colors, basecolor);
     }
@@ -74,12 +70,22 @@ public class ColorConfig {
         }
     }
 
-    private void initColorConfig(int color_density, int num_colors, int basecolor, int step, int[] palette) {
-        setColor_density(color_density);
-        setNum_colors(num_colors);
-        setBasecolor(basecolor);
-        setPalette(palette, false);
-        setStep(step);
+    public void initGradientPalette() {
+        palette = new int[num_colors];
+        int baseidx = num_colors / 2;
+        for (int i = 0; i < baseidx; i++) {
+            palette[i] = ((basecolor - step) < 0) ? Math.abs(basecolor - step) : basecolor - step;
+        }
+        for (int i = baseidx; i < num_colors; i++) {
+            palette[i] = basecolor + step;
+        }
+    }
+
+    public void initGrayScalePalette(int max) {
+        palette = new int[max];
+        for (int i = 0; i < palette.length; i++) {
+            palette[i] = i << 16 | i << 8 | i;
+        }
     }
 
     private void initColorConfig(int color_density, int num_colors, int basecolor, int step) {
@@ -87,6 +93,7 @@ public class ColorConfig {
         setNum_colors(num_colors);
         setBasecolor(basecolor);
         setStep(step);
+        initGradientPalette();
     }
 
     private void initColorConfig(int color_density, int num_colors, int basecolor) {
@@ -94,6 +101,11 @@ public class ColorConfig {
         setNum_colors(num_colors);
         setBasecolor(basecolor);
         calcStep();
+        initGradientPalette();
+    }
+
+    private void initColorConfig(int num_colors) {
+        initRandomPalette(num_colors, false);
     }
 
     private void calcStep() {
@@ -138,10 +150,6 @@ public class ColorConfig {
                     throw new IllegalArgumentException("Unsupoorted Input");
             }
         }
-    }
-
-    private void initColorConfig(int num_colors) {
-        initRandomPalette(num_colors, false);
     }
 
     public boolean noCustomPalette() {

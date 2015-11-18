@@ -32,12 +32,13 @@ public class FunctionEvaluator {
 
     public double getDegree(String function) {
         double degree = 0;
-        int idx = 0;
+        int idx = 0, varidx = 0;
         if (function.contains(variableCode) && (!function.contains("^"))) {
             degree = 1;
         }
         while (function.indexOf('^', idx) != -1) {
-            idx = function.indexOf('^', idx) + 1;
+            varidx = function.indexOf(variableCode, varidx) + 1;
+            idx = function.indexOf('^', varidx) + 1;
             double nextDegree = new Complex(function.substring(idx + 1, function.indexOf(' ', idx + 1))).modulus();
             degree = (nextDegree > degree) ? nextDegree : degree;
         }
