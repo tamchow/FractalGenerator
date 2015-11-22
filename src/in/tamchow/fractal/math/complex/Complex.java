@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
  */
 public class Complex implements Serializable, Comparable<Complex> {
-    public static final Complex i = new Complex(0, 1);
+    public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0);
     private double a, ib;
     private int precision;
 

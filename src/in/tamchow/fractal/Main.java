@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) {
-        String func = "z ^ 2 + c", variableCode = "z";
-        String[][] consts = {{"c", "-0.8,+0.156i"}};
-        int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_GRAYSCALE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
+        String func = "( z ^ 3 ) + ( d * z ) + c", variableCode = "z";
+        String[][] consts = {{"c", "-0.8,+0.156i"}, {"d", "-0.7198,+0.911i"}};
+        int resx = 801, resy = 801, zoom = 10, zoompow = 0, baseprec = 250, colmode = ColorMode.COLOR_DIVIDE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
         double bound = 2.0, escrad = 2.0;
         boolean fromFile = false;
         FractalConfig fccfg = new FractalConfig(0, 0, 0);

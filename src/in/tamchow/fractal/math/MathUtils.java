@@ -12,7 +12,7 @@ public class MathUtils {
     public static boolean approxEquals(Complex a, Complex b, double tolerance) {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }
-    
+
     public static double weightedRandom(double[] values, double[] weights) {
         int factor = 0, pidx = 0;
         double sum = 0.0;

@@ -167,7 +167,14 @@ public class FractalGenerator {
         this.mode = mode;
     }
 
-    public int[] start_end_coordinates(int nx, int ix, int iy, int ny) {//for multithreading purposes, which may be implemented later
+    /**
+     * @param nx:No.   of threads horizontally
+     * @param ix:Index of thread horizontally
+     * @param ny:No.   of threads vertically
+     * @param iy:Index of thread vertically
+     * @return
+     */
+    public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {//for multithreading purposes, which may be implemented later
         int start_x, end_x, start_y, end_y;
         int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
         if (ix == (nx - 1)) {
@@ -298,11 +305,11 @@ public class FractalGenerator {
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
         Stack<Complex> last = new Stack<>();
-        FunctionEvaluator fe = new FunctionEvaluator("0,+0i", variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         long ctr = 0;
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z = new Complex("0,+0i");
+                Complex z = new Complex(Complex.ZERO);
                 consts[0][1] = argand_map[i][j].toString();
                 if (argand_map[i][j].modulus() == boundary_condition) {
                     boundary_points.add(argand_map[i][j]);
@@ -310,6 +317,7 @@ public class FractalGenerator {
                 fe.setZ_value(z.toString());
                 fe.setConstdec(consts);
                 int c = 0x1;
+                last.push(z);
                 while (c <= iterations && z.modulus() < escape_radius) {
                     Complex ztmp = fe.evaluate(function);
                     last.push(ztmp);
@@ -326,8 +334,17 @@ public class FractalGenerator {
                     }
                     ctr++;
                 }
+                Complex[] pass = new Complex[3];
+                for (int k = 0; k < last.size() && k < pass.length; k++) {
+                    pass[k] = last.pop();
+                }
+                if (last.size() < 3) {
+                    for (int m = last.size(); m < pass.length; m++) {
+                        pass[m] = new Complex(Complex.ZERO);
+                    }
+                }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, new Complex[]{last.pop(), last.pop(), last.pop()}, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
                 last.clear();
             }
         }
@@ -337,7 +354,7 @@ public class FractalGenerator {
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
         Stack<Complex> last = new Stack<>();
-        FunctionEvaluator fe = new FunctionEvaluator("0,+0i", variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         long ctr = 0;
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -347,6 +364,7 @@ public class FractalGenerator {
                 }
                 int c = 0x1;
                 fe.setZ_value(z.toString());
+                last.push(z);
                 while (c <= iterations && z.modulus() < escape_radius) {
                     Complex ztmp = fe.evaluate(function);
                     last.push(ztmp);
@@ -363,8 +381,17 @@ public class FractalGenerator {
                     }
                     ctr++;
                 }
+                Complex[] pass = new Complex[3];
+                for (int k = 0; k < last.size() && k < pass.length; k++) {
+                    pass[k] = last.pop();
+                }
+                if (last.size() < 3) {
+                    for (int m = last.size(); m < pass.length; m++) {
+                        pass[m] = new Complex(Complex.ZERO);
+                    }
+                }
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, new Complex[]{last.pop(), last.pop(), last.pop()}, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
                 last.clear();
             }
         }
