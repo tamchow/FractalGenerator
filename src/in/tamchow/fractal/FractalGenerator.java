@@ -8,6 +8,7 @@ import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -15,35 +16,27 @@ import java.util.Stack;
  * The actual fractal plotter for Julia and Mandelbrot Sets using an iterative algorithm.
  * Various (7) Coloring modes (2 have been commented out as they produce output similar to an enabled option)
  */
-public class FractalGenerator {
+public class FractalGenerator implements Serializable {
     public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2;
     ArrayList<Complex> boundary_points;
-    int zoom;
-    int zoom_factor;
-    int base_precision;
-    int scale;
-    int color_mode;
-    int num_colors;
-    double boundary_condition, degree;
+    int zoom, zoom_factor, base_precision, scale, color_mode, num_colors, center_x, center_y, mode, color_density;
+    double boundary_condition, degree, tolerance;
     long maxiter;
-    int mode;
-    int color_density;
     ImageData argand;
     String function;
     String[][] consts;
     int[][] escapedata;
     Complex[][]argand_map;
-    int center_x, center_y;
     int[] random_palette, gradient_palette;
     private boolean alreadyCreated;
     private String variableCode;
 
     public FractalGenerator(FractalParams params) {
-        initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.color_mode, params.initParams.num_colors, params.initParams.color_density, params.initParams.fractal_mode, params.initParams.boundary_condition, params.initParams.function, params.initParams.consts, params.initParams.variableCode);
+        initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.color_mode, params.initParams.num_colors, params.initParams.color_density, params.initParams.fractal_mode, params.initParams.boundary_condition, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance);
     }
 
-    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode) {
-        initFractal(width, height, zoom, zoom_factor, base_precision, colorizer, num_colors, color_density, mode, boundary_condition, function, consts, variableCode);
+    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode, double tolerance) {
+        initFractal(width, height, zoom, zoom_factor, base_precision, colorizer, num_colors, color_density, mode, boundary_condition, function, consts, variableCode, tolerance);
     }
 
     public long getMaxiter() {
@@ -62,7 +55,62 @@ public class FractalGenerator {
         this.variableCode = variableCode;
     }
 
-    private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode) {
+    public int[][] getEscapedata() {
+        return escapedata;
+    }
+
+    public ArrayList<Complex> getBoundary_points() {
+        return boundary_points;
+    }
+
+    public void setBoundary_points(ArrayList<Complex> boundary_points) {
+        this.boundary_points.clear();
+        this.boundary_points.addAll(boundary_points);
+    }
+
+    public double getDegree() {
+        return degree;
+    }
+
+    public void setDegree(double degree) {
+        this.degree = degree;
+    }
+
+    public double getTolerance() {
+        return tolerance;
+    }
+
+    public void setTolerance(double tolerance) {
+        this.tolerance = tolerance;
+    }
+
+    public Complex[][] getArgand_map() {
+        return argand_map;
+    }
+
+    public void setArgand_map(Complex[][] argand_map) {
+        this.argand_map = new Complex[argand_map.length][argand_map[0].length];
+        for (int i = 0; i < argand_map.length; i++) {
+            for (int j = 0; j < argand_map[0].length; j++) {
+                this.argand_map[i][j] = new Complex(argand_map[i][j]);
+            }
+        }
+    }
+
+    public int[] getRandom_palette() {
+        return random_palette;
+    }
+
+    public int[] getGradient_palette() {
+        return gradient_palette;
+    }
+
+    public void setGradient_palette(int[] gradient_palette) {
+        this.gradient_palette = new int[gradient_palette.length];
+        System.arraycopy(gradient_palette, 0, this.gradient_palette, 0, this.gradient_palette.length);
+    }
+
+    private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode, double tolerance) {
         setZoom(zoom);
         setZoom_factor(zoom_factor);
         setFunction(function);
@@ -92,6 +140,7 @@ public class FractalGenerator {
             degree = new FunctionEvaluator(variableCode, consts).getDegree(function);
         }
         setVariableCode(variableCode);
+        setTolerance(tolerance);
     }
 
     private void create_colors() {
@@ -395,7 +444,7 @@ public class FractalGenerator {
                         c = iterations;
                         break;
                     }
-                    if (ComplexOperations.distance_squared(z, ztmp) < 0.0001) {
+                    if (ComplexOperations.distance_squared(z, ztmp) < tolerance) {
                         break;
                     }
                     z = new Complex(ztmp);
@@ -449,7 +498,7 @@ public class FractalGenerator {
                         c = iterations;
                         break;
                     }
-                    if (ComplexOperations.distance_squared(z, ztmp) < 0.0001) {
+                    if (ComplexOperations.distance_squared(z, ztmp) < tolerance) {
                         break;
                     }
                     z = new Complex(ztmp);

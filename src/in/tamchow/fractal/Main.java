@@ -19,7 +19,7 @@ public class Main {
         String poly = "{1,z,3};+;{d,z,1};+;{c,z,0}";
         String[][] consts = {{"c", "-0.8,+0.156i"}, {"d", "-0.7198,+0.911i"}};
         int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_MULTIPLY_2, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_NEWTON, iter = 128;
-        double bound = 2.0, escrad = 2.0;
+        double bound = 2.0, escrad = 2.0, tolerance = 1e-5;
         Complex constant = null;
         func = poly;
         boolean fromFile = false;
@@ -41,8 +41,11 @@ public class Main {
             bound = Double.valueOf(args[12]);
             iter = Integer.valueOf(args[13]);
             escrad = Double.valueOf(args[14]);
-            if (args.length == 16) {
-                constant = new Complex(args[15]);
+            if (args.length >= 16) {
+                tolerance = Double.valueOf(args[15]);
+            }
+            if (args.length == 17) {
+                constant = new Complex(args[16]);
             }
             fromFile = false;
         } else if (args.length == 1) {
@@ -56,7 +59,7 @@ public class Main {
         long inittime = System.currentTimeMillis();
         FractalGenerator jgen;
         if (!fromFile) {
-            jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, colmode, numcol, coldens, fracmode, bound, func, consts, variableCode);
+            jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, colmode, numcol, coldens, fracmode, bound, func, consts, variableCode, tolerance);
         } else {
             jgen = new FractalGenerator(fccfg.getParams()[0]);
         }

@@ -23,9 +23,15 @@ public class Term {
 
     public static Term fromString(String term) {
         term = term.substring(1, term.length() - 1);//remove leading and trailing braces
+        /*term.replace(",^,",",");
+        term.replace(",*,",",");*/
         String[] parts = term.split(",");
-        if (parts.length == 0 || parts.length == 1) {
+        if (parts.length == 0) {
+            return new Term("0", "0", "0");
+        }
+        if (parts.length == 1) {
             Term constant = new Term(term.trim());
+            return constant;
         }
         return new Term(parts[0], parts[2], parts[1]);
     }
