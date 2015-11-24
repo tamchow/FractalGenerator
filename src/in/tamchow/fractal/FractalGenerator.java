@@ -327,6 +327,7 @@ public class FractalGenerator {
         Stack<Complex> last = new Stack<>();
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         long ctr = 0;
+        outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = new Complex(Complex.ZERO);
@@ -350,7 +351,7 @@ public class FractalGenerator {
                     System.out.println(ctr+" iterations of "+maxiter);
                     c++;
                     if(ctr>maxiter){
-                        break;
+                        break outer;
                     }
                     ctr++;
                 }
@@ -378,6 +379,7 @@ public class FractalGenerator {
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         degree = fe.getDegree(polynomial);
         long ctr = 0;
+        outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j];
@@ -387,18 +389,25 @@ public class FractalGenerator {
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
-                while (c <= iterations && z.modulus() < 0.0001/*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
+                while (c <= iterations) {
                     Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
+                    if (z.equals(Complex.ZERO)) {
+                        c = iterations;
+                        break;
+                    }
+                    if (ComplexOperations.distance_squared(z, ztmp) < 0.0001) {
+                        break;
+                    }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
                     System.out.println(ctr + " iterations of " + maxiter);
                     c++;
                     if (ctr > maxiter) {
-                        break;
+                        break outer;
                     }
                     ctr++;
                 }
-                double escape_radius = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
                     pass[k] = last.pop();
@@ -408,8 +417,9 @@ public class FractalGenerator {
                         pass[m] = new Complex(Complex.ZERO);
                     }
                 }
+                pass[0] = new Complex(argand_map[i][j]);
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
                 last.clear();
             }
         }
@@ -423,6 +433,7 @@ public class FractalGenerator {
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         degree = polynomial.getDegree();
         long ctr = 0;
+        outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j];
@@ -432,18 +443,25 @@ public class FractalGenerator {
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
-                while (c <= iterations && z.modulus() < 0.0001/*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
+                while (c <= iterations) {
                     Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
+                    if (z.equals(Complex.ZERO)) {
+                        c = iterations;
+                        break;
+                    }
+                    if (ComplexOperations.distance_squared(z, ztmp) < 0.0001) {
+                        break;
+                    }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
                     System.out.println(ctr + " iterations of " + maxiter);
                     c++;
                     if (ctr > maxiter) {
-                        break;
+                        break outer;
                     }
                     ctr++;
                 }
-                double escape_radius = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
                     pass[k] = last.pop();
@@ -453,8 +471,9 @@ public class FractalGenerator {
                         pass[m] = new Complex(Complex.ZERO);
                     }
                 }
+                pass[0] = new Complex(argand_map[i][j]);
                 escapedata[i][j] = c - 1;
-                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
                 last.clear();
             }
         }
@@ -464,6 +483,7 @@ public class FractalGenerator {
         Stack<Complex> last = new Stack<>();
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         long ctr = 0;
+        outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j];
@@ -485,7 +505,7 @@ public class FractalGenerator {
                     System.out.println(ctr+" iterations of "+maxiter);
                     c++;
                     if(ctr>maxiter){
-                        break;
+                        break outer;
                     }
                     ctr++;
                 }

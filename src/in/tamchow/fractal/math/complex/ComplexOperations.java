@@ -79,4 +79,8 @@ public class ComplexOperations {
         double r = z.modulus();
         return new Complex(Math.log(r), z.arg());
     }
+
+    public static double distance_squared(Complex z1, Complex z2) {
+        return Math.sqrt((Math.pow(z1.real() - z2.real(), 2) + Math.pow(z1.imaginary() - z2.imaginary(), 2)));
+    }
 }
