@@ -583,10 +583,10 @@ public class FractalGenerator implements Serializable {
                 color2 = (int) (0xffffff / (renormalized + 1));
                 color = interpolate(color1, color2, renormalized - ((int) renormalized));
                 break;
-            case ColorMode.COLOR_MULTIPLY_1:
+            case ColorMode.COLOR_HIGH_CONTRAST:
                 color = (iterations * val) << 16 | (iterations * val) << 8 | (iterations * val);
                 break;
-            case ColorMode.COLOR_MULTIPLY_2:
+            case ColorMode.COLOR_MULTIPLY:
                 color1 = (int) renormalized << 16 | (int) renormalized << 8 | (int) renormalized;
                 color2 = (int) (renormalized + 1) << 16 | (int) (renormalized + 1) << 8 | (int) (renormalized + 1);
                 color = interpolate(color1, color2, renormalized - ((int) renormalized));
