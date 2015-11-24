@@ -4,7 +4,9 @@ import in.tamchow.fractal.config.color.ColorMode;
 import in.tamchow.fractal.config.fractalconfig.FractalParams;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
+import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -14,7 +16,7 @@ import java.util.Stack;
  * Various (7) Coloring modes (2 have been commented out as they produce output similar to an enabled option)
  */
 public class FractalGenerator {
-    public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1;
+    public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2;
     ArrayList<Complex> boundary_points;
     int zoom;
     int zoom_factor;
@@ -86,7 +88,9 @@ public class FractalGenerator {
         argand_map=new Complex[argand.getHeight()][argand.getWidth()];
         poupulateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
-        degree = new FunctionEvaluator(variableCode, consts).getDegree(function);
+        if (mode != MODE_NEWTON) {
+            degree = new FunctionEvaluator(variableCode, consts).getDegree(function);
+        }
         setVariableCode(variableCode);
     }
 
@@ -283,22 +287,38 @@ public class FractalGenerator {
 
     public void generate(FractalParams params){
         if (params.runParams.fully_configured){
-            generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, params.runParams.iterations, params.runParams.escape_radius);
+            generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         }else{
-            generate(params.runParams.iterations, params.runParams.escape_radius);
+            generate(params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         }
     }
 
-    public void generate(int iterations, double escape_radius) {
-        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius);
+    public void generate(int iterations, double escape_radius, Complex constant) {
+        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, constant);
     }
 
-    public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
+    public void generate(int iterations, double escape_radius) {
+        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, null);
+    }
+
+    public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter(argand.getHeight() * argand.getHeight() * iterations);
-        if (mode == MODE_MANDELBROT) {
+        switch (mode) {
+            case MODE_MANDELBROT:
             mandelbrotGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius);
-        } else if (mode == MODE_JULIA) {
+                break;
+            case MODE_JULIA:
             juliaGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius);
+                break;
+            case MODE_NEWTON:
+                if (constant == null) {
+                    newtonGenerate(start_x, end_x, start_y, end_y, iterations);
+                } else {
+                    newtonGenerate(start_x, end_x, start_y, end_y, iterations, constant);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown fractal render mode");
         }
     }
 
@@ -351,6 +371,94 @@ public class FractalGenerator {
     }
 
 
+    public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
+        boundary_points.clear();
+        Polynomial polynomial = Polynomial.fromString(function);
+        Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        degree = fe.getDegree(polynomial);
+        long ctr = 0;
+        for (int i = start_y; i < end_y; i++) {
+            for (int j = start_x; j < end_x; j++) {
+                Complex z = argand_map[i][j];
+                if (z.modulus() == boundary_condition) {
+                    boundary_points.add(z);
+                }
+                int c = 0x1;
+                fe.setZ_value(z.toString());
+                last.push(z);
+                while (c <= iterations && (!z.equals(Complex.ZERO))/*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
+                    Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
+                    z = new Complex(ztmp);
+                    fe.setZ_value(z.toString());
+                    System.out.println(ctr + " iterations of " + maxiter);
+                    c++;
+                    if (ctr > maxiter) {
+                        break;
+                    }
+                    ctr++;
+                }
+                double escape_radius = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                Complex[] pass = new Complex[3];
+                for (int k = 0; k < last.size() && k < pass.length; k++) {
+                    pass[k] = last.pop();
+                }
+                if (last.size() < 3) {
+                    for (int m = last.size(); m < pass.length; m++) {
+                        pass[m] = new Complex(Complex.ZERO);
+                    }
+                }
+                escapedata[i][j] = c - 1;
+                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                last.clear();
+            }
+        }
+    }
+
+    public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
+        boundary_points.clear();
+        Polynomial polynomial = Polynomial.fromString(function);
+        function = polynomial.toString();
+        Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        degree = polynomial.getDegree();
+        long ctr = 0;
+        for (int i = start_y; i < end_y; i++) {
+            for (int j = start_x; j < end_x; j++) {
+                Complex z = argand_map[i][j];
+                if (z.modulus() == boundary_condition) {
+                    boundary_points.add(z);
+                }
+                int c = 0x1;
+                fe.setZ_value(z.toString());
+                last.push(z);
+                while (c <= iterations && (!z.equals(Complex.ZERO)) /*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
+                    Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
+                    z = new Complex(ztmp);
+                    fe.setZ_value(z.toString());
+                    System.out.println(ctr + " iterations of " + maxiter);
+                    c++;
+                    if (ctr > maxiter) {
+                        break;
+                    }
+                    ctr++;
+                }
+                double escape_radius = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                Complex[] pass = new Complex[3];
+                for (int k = 0; k < last.size() && k < pass.length; k++) {
+                    pass[k] = last.pop();
+                }
+                if (last.size() < 3) {
+                    for (int m = last.size(); m < pass.length; m++) {
+                        pass[m] = new Complex(Complex.ZERO);
+                    }
+                }
+                escapedata[i][j] = c - 1;
+                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                last.clear();
+            }
+        }
+    }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
         Stack<Complex> last = new Stack<>();

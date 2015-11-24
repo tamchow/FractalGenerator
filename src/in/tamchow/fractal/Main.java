@@ -3,6 +3,7 @@ package in.tamchow.fractal;
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.color.ColorMode;
 import in.tamchow.fractal.config.fractalconfig.FractalConfig;
+import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 
 import javax.imageio.ImageIO;
@@ -15,9 +16,12 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         String func = "( z ^ 3 ) + ( d * z ) + c", variableCode = "z";
+        String poly = "{1,z,3};+;{d,z,1};+;{c,z,0}";
         String[][] consts = {{"c", "-0.8,+0.156i"}, {"d", "-0.7198,+0.911i"}};
-        int resx = 801, resy = 801, zoom = 10, zoompow = 0, baseprec = 250, colmode = ColorMode.COLOR_DIVIDE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
+        int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_DIVIDE, numcol = 32, coldens = 256, fracmode = FractalGenerator.MODE_JULIA, iter = 128;
         double bound = 2.0, escrad = 2.0;
+        Complex constant = null;
+        //func=poly;
         boolean fromFile = false;
         FractalConfig fccfg = new FractalConfig(0, 0, 0);
         if (args.length > 1) {
@@ -37,6 +41,9 @@ public class Main {
             bound = Double.valueOf(args[12]);
             iter = Integer.valueOf(args[13]);
             escrad = Double.valueOf(args[14]);
+            if (args.length == 16) {
+                constant = new Complex(args[15]);
+            }
             fromFile = false;
         } else if (args.length == 1) {
             try {
@@ -56,7 +63,11 @@ public class Main {
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (!fromFile) {
-            jgen.generate(iter, escrad);
+            if (constant != null) {
+                jgen.generate(iter, escrad, constant);
+            } else {
+                jgen.generate(iter, escrad);
+            }
         } else {
             jgen.generate(fccfg.getParams()[0]);
         }

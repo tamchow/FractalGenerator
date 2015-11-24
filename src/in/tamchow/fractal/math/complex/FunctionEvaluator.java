@@ -46,7 +46,7 @@ public class FunctionEvaluator {
     }
 
     public double getDegree(Polynomial polynomial) {
-        return getDegree(limitedEvaluate(polynomial + "", polynomial.countVariableTerms() * 2));
+        return getDegree(limitedEvaluate(polynomial + "", polynomial.countVariableTerms() * 2 + polynomial.countConstantTerms()));
     }
     public String getZ_value() {
         return z_value;

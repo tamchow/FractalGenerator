@@ -1,5 +1,7 @@
 package in.tamchow.fractal.math.symbolics;
 
+import in.tamchow.fractal.math.complex.Complex;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -63,6 +65,27 @@ public class Polynomial {
         int ctr = 0;
         for (Term term : terms) {
             if (!term.isConstant()) {
+                ctr++;
+            }
+        }
+        return ctr;
+    }
+
+    public double getDegree() {
+        Complex degree = new Complex(Complex.ZERO);
+        for (Term term : terms) {
+            Complex vardeg = new Complex(term.exponent);
+            if (vardeg.compareTo(degree) > 0) {
+                degree = new Complex(vardeg);
+            }
+        }
+        return degree.modulus();
+    }
+
+    public int countConstantTerms() {
+        int ctr = 0;
+        for (Term term : terms) {
+            if (term.isConstant()) {
                 ctr++;
             }
         }
