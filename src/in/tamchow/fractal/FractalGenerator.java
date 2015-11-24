@@ -387,7 +387,7 @@ public class FractalGenerator {
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
-                while (c <= iterations && (!z.equals(Complex.ZERO))/*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
+                while (c <= iterations && z.modulus() < 0.0001/*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
                     Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
@@ -432,7 +432,7 @@ public class FractalGenerator {
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
-                while (c <= iterations && (!z.equals(Complex.ZERO)) /*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
+                while (c <= iterations && z.modulus() < 0.0001/*(!MathUtils.approxEquals(z,Complex.ZERO,0.00000001))*/) {
                     Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
