@@ -48,6 +48,19 @@ public class ImageData {
         }*/
     }
 
+    public ImageData getPostProcessed() {
+        ImageData processed = new ImageData(this);
+        for (int i = 1; i < processed.getPixdata().length - 1; i++) {
+            for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {
+                int left = pixdata[i][j - 1], right = pixdata[i][j + 1], top = pixdata[i - 1][j], bottom = pixdata[i + 1][j];
+                int top_left = pixdata[i - 1][j - 1], top_right = pixdata[i - 1][j + 1], bottom_left = pixdata[i + 1][j - 1], bottom_right = pixdata[i + 1][j + 1];
+                double average = (top_left + top + top_right + left + right + bottom_left + bottom + bottom_right) / 8;
+                processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2));
+            }
+        }
+        return processed;
+    }
+
     public String getPath() {
         return path;
     }

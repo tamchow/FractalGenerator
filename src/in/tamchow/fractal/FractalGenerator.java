@@ -605,6 +605,12 @@ public class FractalGenerator implements Serializable {
                 color=interpolate(color1,color2,renormalized-((int)renormalized));
                 break;
                 */
+            case ColorMode.COLOR_NEWTON_1:
+                color = interpolate(random_palette[(((int) escape_radius * color_density) % num_colors)], 0xffffff, ((double) val / iterations));
+                break;
+            case ColorMode.COLOR_NEWTON_2:
+                color = interpolate(random_palette[(((int) escape_radius * color_density) % num_colors)], 0xffffff, renormalized - ((int) renormalized));
+                break;
             case ColorMode.COLOR_GRADIENT_DIVERGENT_1:
             case ColorMode.COLOR_GRADIENT_DIVERGENT_2:
                 color1 = gradient_palette[(int) ((renormalized * color_density) % num_colors)];
