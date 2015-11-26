@@ -19,6 +19,7 @@ import java.util.Stack;
 public class FractalGenerator implements Serializable {
     public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2;
     ArrayList<Complex> boundary_points;
+    ArrayList<Complex> roots;
     int zoom, zoom_factor, base_precision, scale, color_mode, num_colors, center_x, center_y, mode, color_density;
     double boundary_condition, degree, tolerance;
     long maxiter;
@@ -30,13 +31,16 @@ public class FractalGenerator implements Serializable {
     int[] random_palette, gradient_palette;
     private boolean alreadyCreated;
     private String variableCode;
-
     public FractalGenerator(FractalParams params) {
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.color_mode, params.initParams.num_colors, params.initParams.color_density, params.initParams.fractal_mode, params.initParams.boundary_condition, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance);
     }
 
     public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int colorizer, int num_colors, int color_density, int mode, double boundary_condition, String function, String[][] consts, String variableCode, double tolerance) {
         initFractal(width, height, zoom, zoom_factor, base_precision, colorizer, num_colors, color_density, mode, boundary_condition, function, consts, variableCode, tolerance);
+    }
+
+    public ArrayList<Complex> getRoots() {
+        return roots;
     }
 
     public long getMaxiter() {
@@ -141,6 +145,7 @@ public class FractalGenerator implements Serializable {
         }
         setVariableCode(variableCode);
         setTolerance(tolerance);
+        roots = new ArrayList<>();
     }
 
     private void create_colors() {
@@ -182,6 +187,9 @@ public class FractalGenerator implements Serializable {
         for (int i=0;i<argand.getHeight();i++){
             for (int j=0;j<argand.getWidth();j++){
                 argand_map[i][j]=fromCooordinates(j,i);
+                if (argand_map[i][j].modulus() == boundary_condition) {
+                    boundary_points.add(argand_map[i][j]);
+                }
             }
         }
     }
@@ -381,9 +389,6 @@ public class FractalGenerator implements Serializable {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = new Complex(Complex.ZERO);
                 consts[0][1] = argand_map[i][j].toString();
-                if (argand_map[i][j].modulus() == boundary_condition) {
-                    boundary_points.add(argand_map[i][j]);
-                }
                 fe.setZ_value(z.toString());
                 fe.setConstdec(consts);
                 int c = 0x1;
@@ -432,9 +437,6 @@ public class FractalGenerator implements Serializable {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j];
-                if (z.modulus() == boundary_condition) {
-                    boundary_points.add(z);
-                }
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
@@ -456,6 +458,9 @@ public class FractalGenerator implements Serializable {
                     }
                     ctr++;
                 }
+                if (!containsRoot(z)) {
+                    roots.add(z);
+                }
                 double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
@@ -466,7 +471,7 @@ public class FractalGenerator implements Serializable {
                         pass[m] = new Complex(Complex.ZERO);
                     }
                 }
-                pass[0] = new Complex(argand_map[i][j]);
+                pass[0] = new Complex(z);
                 escapedata[i][j] = c - 1;
                 argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
                 last.clear();
@@ -486,9 +491,6 @@ public class FractalGenerator implements Serializable {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j];
-                if (z.modulus() == boundary_condition) {
-                    boundary_points.add(z);
-                }
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
@@ -510,6 +512,9 @@ public class FractalGenerator implements Serializable {
                     }
                     ctr++;
                 }
+                if (!containsRoot(z)) {
+                    roots.add(z);
+                }
                 double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
@@ -520,12 +525,30 @@ public class FractalGenerator implements Serializable {
                         pass[m] = new Complex(Complex.ZERO);
                     }
                 }
-                pass[0] = new Complex(argand_map[i][j]);
+                pass[0] = new Complex(z);
                 escapedata[i][j] = c - 1;
                 argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
                 last.clear();
             }
         }
+    }
+
+    private boolean containsRoot(Complex z) {
+        for (Complex c : roots) {
+            if (ComplexOperations.distance_squared(c, z) < tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int indexOfRoot(Complex z) {
+        for (int i = 0; i < roots.size(); i++) {
+            if (ComplexOperations.distance_squared(roots.get(i), z) < tolerance) {
+                return i;
+            }
+        }
+        return -1;
     }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         boundary_points.clear();
@@ -536,9 +559,6 @@ public class FractalGenerator implements Serializable {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j];
-                if (z.modulus() == boundary_condition) {
-                    boundary_points.add(z);
-                }
                 int c = 0x1;
                 fe.setZ_value(z.toString());
                 last.push(z);
@@ -606,10 +626,14 @@ public class FractalGenerator implements Serializable {
                 break;
                 */
             case ColorMode.COLOR_NEWTON_1:
-                color = interpolate(random_palette[(((int) escape_radius * color_density) % num_colors)], 0xffffff, ((double) val / iterations));
+                /*if(indexOfRoot(last[0])>0) {*/
+                color = interpolate(0xffffff, random_palette[(indexOfRoot(last[0]) * color_density) % num_colors], ((double) val / iterations));
+                /*}else {
+                color = interpolate(0xffffff,random_palette[(((int) escape_radius * color_density) % num_colors)],((double) val / iterations));
+                }*/
                 break;
             case ColorMode.COLOR_NEWTON_2:
-                color = interpolate(random_palette[(((int) escape_radius * color_density) % num_colors)], 0xffffff, renormalized - ((int) renormalized));
+                color = interpolate(0xffffff, random_palette[(((int) escape_radius * color_density) % num_colors)], renormalized - ((int) renormalized));
                 break;
             case ColorMode.COLOR_GRADIENT_DIVERGENT_1:
             case ColorMode.COLOR_GRADIENT_DIVERGENT_2:

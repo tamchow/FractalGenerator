@@ -15,11 +15,10 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) {
-        String func = "( z ^ 3 ) + ( d * z ) + c", variableCode = "z";
-        String poly = "{1,z,3};+;{d,z,1};+;{c,z,0}";
+        String func = "( z ^ 3 ) + ( d * z ) + c", variableCode = "z", poly = "{1,z,3};+;{d,z,1};+;{c,z,0}";
         String[][] consts = {{"c", "-0.8,+0.156i"}, {"d", "-0.7198,+0.911i"}};
-        int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_NEWTON_1, numcol = 32, coldens = 1024, fracmode = FractalGenerator.MODE_NEWTON, iter = 128;
-        double bound = 2.0, escrad = 2.0, tolerance = 1e-5;
+        int resx = 401, resy = 401, zoom = 10, zoompow = 0, baseprec = 150, colmode = ColorMode.COLOR_NEWTON_1, numcol = 32, coldens = 125, fracmode = FractalGenerator.MODE_NEWTON, iter = 8;
+        double bound = 2.0, escrad = 2.0, tolerance = 1e-1;
         Complex constant = null;
         func = poly;
         boolean fromFile = false;
@@ -77,12 +76,11 @@ public class Main {
 
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
-        //System.out.println(jgen.boundary_points.get(0));
         File pic = new File("D:/Fractal.jpg");
-        File postpic = new File("D:/Fractal_processed.png");
+        File postpic = new File("D:/Fractal_processed.jpg");
         try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand()), "jpg", pic);
-            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed()), "jpg", postpic);
+            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getColorAveraged()), "jpg", postpic);
         } catch (Exception e) {
             e.printStackTrace();
         }

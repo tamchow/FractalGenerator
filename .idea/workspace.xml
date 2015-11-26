@@ -6,11 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Better documentation, refer /.idea/description.html">
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="2 New coloring Modes, color averaging applied by default">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/FractalGenerator_jar/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/artifacts/FractalGenerator_jar/FractalGenerator.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/FractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/FractalGenerator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorMode.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorMode.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
@@ -33,18 +36,7 @@
     <favorites_list name="FractalGenerator" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.5242966">
-              <caret line="20" column="139" selection-start-line="20" selection-start-column="139" selection-end-line="20" selection-end-column="139" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -119,9 +111,9 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
         <option value="$PROJECT_DIR$/.idea/description.html" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorMode.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorMode.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
       </list>
     </option>
@@ -165,6 +157,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -487,7 +480,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -1026,7 +1018,9 @@
       <workItem from="1448351283617" duration="3713000" />
       <workItem from="1448360023030" duration="123000" />
       <workItem from="1448375400334" duration="5869000" />
-      <workItem from="1448465319582" duration="2302000" />
+      <workItem from="1448465319582" duration="2468000" />
+      <workItem from="1448525024271" duration="1161000" />
+      <workItem from="1448533640815" duration="3342000" />
     </task>
     <task id="LOCAL-00001" summary="Corrected the documentation comment&#10;">
       <created>1445706310136</created>
@@ -1166,15 +1160,21 @@
       <option name="project" value="LOCAL" />
       <updated>1448382872826</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="2 New coloring Modes, color averaging applied by default">
+      <created>1448467682503</created>
+      <option name="number" value="00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1448467682503</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="188600000" />
+    <option name="totallyTimeSpent" value="193269000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1183,7 +1183,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32913387" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33911672" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33911672" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1830161" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1240,7 +1240,8 @@
     <MESSAGE value="Newton Mode implemented, compiles and runs, output is OK.&#10;&#10;Colors are a hack" />
     <MESSAGE value="Custom Tolerance level support" />
     <MESSAGE value="Better documentation, refer /.idea/description.html" />
-    <option name="LAST_COMMIT_MESSAGE" value="Better documentation, refer /.idea/description.html" />
+    <MESSAGE value="2 New coloring Modes, color averaging applied by default" />
+    <option name="LAST_COMMIT_MESSAGE" value="2 New coloring Modes, color averaging applied by default" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1501,14 +1502,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/MathUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1589,34 +1582,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="55" column="135" selection-start-line="55" selection-start-column="135" selection-end-line="55" selection-end-column="135" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorMode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="236" selection-start-line="6" selection-start-column="236" selection-end-line="6" selection-end-column="236" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/color/ColorConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39641944">
+          <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.73913044">
+          <caret line="70" column="54" selection-start-line="70" selection-start-column="54" selection-end-line="70" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/FractalGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5473146">
-          <caret line="607" column="41" selection-start-line="607" selection-start-column="41" selection-end-line="607" selection-end-column="41" />
-          <folding />
+        <state vertical-scroll-proportion="0.64961636">
+          <caret line="630" column="48" selection-start-line="630" selection-start-column="48" selection-end-line="630" selection-end-column="48" />
+          <folding>
+            <element signature="e#915#916#0" expanded="true" />
+            <element signature="e#943#944#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.5242966">
-          <caret line="20" column="139" selection-start-line="20" selection-start-column="139" selection-end-line="20" selection-end-column="139" />
+        <state vertical-scroll-proportion="2.2327366">
+          <caret line="77" column="107" selection-start-line="77" selection-start-column="107" selection-end-line="77" selection-end-column="107" />
           <folding />
         </state>
       </provider>
