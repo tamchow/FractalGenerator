@@ -13,6 +13,14 @@ public class EncryptDecryptFile {
             args = new String[1];
             args[0] = "File.txt";
         }
+        byte[] key = null;
+        if (args.length == 2) {
+            String[] keys = args[1].split(",");
+            key = new byte[keys.length];
+            for (int i = 0; i < key.length; i++) {
+                key[i] = Byte.valueOf(keys[i]);
+            }
+        }
         File input = new File(args[0]);
         if (!input.exists()) {
             throw new FileNotFoundException("Specified file does not exist");
@@ -37,6 +45,9 @@ public class EncryptDecryptFile {
             toprocess[i] = intermediate.get(i);
         }
         RC4 manip = new RC4();
+        if (key != null) {
+            manip = new RC4(key);
+        }
         byte[] processed = manip.process(toprocess);
         DataOutputStream dos = new DataOutputStream(new FileOutputStream(output));
         dos.write(processed, 0, processed.length);
