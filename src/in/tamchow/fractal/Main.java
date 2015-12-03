@@ -19,9 +19,9 @@ public class Main {
     public static void main(String[] args) {
         String func = "( z ^ 2 ) + c", variableCode = "z", poly = "{1,z,3};+;{d,z,1};+;{c,z,0}";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}};
-        int resx = 801, resy = 801, zoom = 10, zoompow = 0, baseprec = 100, fracmode = FractalGenerator.MODE_JULIA, iter = 8;
+        int resx = 2561, resy = 1601, zoom = 10, zoompow = 0, baseprec = 500, fracmode = FractalGenerator.MODE_JULIA, iter = 32;
         double escrad = 2.0, tolerance = 1e-1;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY, 8, 32);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 32);
         Complex constant = null;
         //func = poly;
         boolean def = (args.length == 0);

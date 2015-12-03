@@ -14,6 +14,12 @@ public class StringManipulator {
         return new String(processor);
     }
 
+    public static long doCyclicShift(long num) {
+        int digits = Long.valueOf(num).toString().length();
+        long one = num % 10;
+        long other = num / 10;
+        return (long) (one * Math.pow(10, digits)) + other;
+    }
     private int count_char(char c, String str) {
         int ctr = 0;
         for (int i = 0; i < str.length(); i++) {
