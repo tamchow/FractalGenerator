@@ -9,16 +9,16 @@ import java.util.Scanner;
  * A PBrain interpreter
  */
 public class PBrainer {
-    private static final int SIZE = 65536;
     String code, codebackup;
     int[] procidx, operand;
-    int ptr, proctr, itmp;
+    int ptr, proctr, itmp, size;
 
     public PBrainer() {
         code = "";
         codebackup = code;
-        procidx = new int[SIZE];
-        operand = new int[SIZE];
+        size = 65536;
+        procidx = new int[size];
+        operand = new int[size];
         for (int i = 0; i < operand.length; i++) {
             operand[i] = -1;
         }
@@ -32,20 +32,33 @@ public class PBrainer {
         if (args.length == 0) {
             throw new IllegalArgumentException("Nothing to interpret");
         }
-        File input = new File(args[0]);
-        if (!input.exists()) {
-            System.err.println("File not found, interpreting input");
-            executor.code = args[0];
+        if (args[0].equalsIgnoreCase("-s")) {
+            executor.size = Integer.parseInt(args[1]);
+            if (args[2].equalsIgnoreCase("-f")) {
+                executor.readFile(args[3]);
+            } else {
+                executor.code = args[2];
+            }
+        } else {
+            if (args[0].equalsIgnoreCase("-f")) {
+                executor.readFile(args[1]);
+            } else {
+                executor.code = args[0];
+            }
         }
+        executor.execute();
+    }
+
+    void readFile(String path) {
+        File input = new File(path);
         try {
             Scanner sc = new Scanner(input);
             while (sc.hasNextLine()) {
-                executor.code += sc.nextLine();
+                code += sc.nextLine();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        executor.execute();
     }
 
     public void execute() {
@@ -57,31 +70,40 @@ public class PBrainer {
                     proctr++;
                     break;
                 case '[':
+                    if (code.indexOf(']') == -1) {
+                        System.err.println("Unmatched [ at " + i);
+                    }
                     if (operand[ptr] == 0) {
                         i = code.indexOf(']', i + 1);
                     }
                     continue outer;
                 case ']':
+                    if (code.indexOf('[') == -1) {
+                        System.err.println("Unmatched ] at " + i);
+                    }
                     i = code.lastIndexOf('[', i - 1);
                     continue outer;
                 case ':':
-                    itmp = i + 1;
                     codebackup = code;
-                    code = codebackup.substring(procidx[operand[ptr]], codebackup.indexOf(')', procidx[operand[ptr]]));
+                    itmp = codebackup.indexOf(')', procidx[operand[ptr]]) + 1;
+                    if (itmp - 1 == -1) {
+                        System.err.println("Unmatched ) at " + i);
+                    }
+                    code = codebackup.substring(procidx[operand[ptr]], codebackup.indexOf(')', itmp - 1));
                     execute();
                     i = itmp;
                     code = codebackup;
                     continue outer;
                 case '<':
                     if (ptr - 1 < 0) {
-                        ptr = 0;
+                        ptr = size - 1;
                     } else {
                         --ptr;
                     }
                     break;
                 case '>':
-                    if (ptr + 1 > SIZE) {
-                        ptr = SIZE;
+                    if (ptr + 1 > size) {
+                        ptr = 0;
                     } else {
                         ++ptr;
                     }
@@ -96,7 +118,7 @@ public class PBrainer {
                     try {
                         operand[ptr] = System.in.read();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.err.print("Input error: " + e.getMessage());
                     }
                     break;
                 case '.':

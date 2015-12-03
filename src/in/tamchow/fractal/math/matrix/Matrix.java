@@ -11,6 +11,19 @@ public class Matrix {
         initMatrix(matrixData.length, matrixData[0].length, matrixData);
     }
 
+    public void fromString(String matrix) {
+        matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
+        String[] rows = matrix.split(";");
+        this.rows = rows.length;
+        this.columns = rows[0].substring(1, rows[0].length() - 1).split(",").length;
+        matrixData = new double[this.rows][this.columns];
+        for (int i = 0; i < matrixData.length && i < rows.length; i++) {
+            String[] columns = rows[i].substring(1, rows[i].length() - 1).split(",");
+            for (int j = 0; j < matrixData[i].length && j < columns.length; j++) {
+                matrixData[i][j] = Double.valueOf(columns[j]);
+            }
+        }
+    }
     public int getNumRows() {
         return rows;
     }

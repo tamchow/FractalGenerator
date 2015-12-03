@@ -1,8 +1,6 @@
 package in.tamchow.fractal.math.complex;
 
 import java.io.Serializable;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
@@ -81,19 +79,6 @@ public class Complex implements Serializable, Comparable<Complex> {
             }
         }
         return false;
-    }
-
-    public void round() {
-        try {
-            DecimalFormat df = new DecimalFormat("00.000000");
-            df.setRoundingMode(RoundingMode.HALF_UP);
-            System.out.println(df.format(ib));
-            ib = df.parse(df.format(ib)).doubleValue();
-            System.out.println(df.format(a));
-            a = df.parse(df.format(a)).doubleValue();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public double arg() {

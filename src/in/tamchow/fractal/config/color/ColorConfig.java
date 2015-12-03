@@ -4,20 +4,77 @@ package in.tamchow.fractal.config.color;
  * Holds colour configuration for  custom palettes
  */
 public class ColorConfig {
-    public int basecolor, step, color_density, num_colors;
+    public int basecolor, step, color_density, num_colors, mode, palette_type;
     public int[] palette;
+    boolean colors_corrected;
 
-    public ColorConfig(int color_density, int num_colors, int basecolor) {
-        initColorConfig(color_density, num_colors, basecolor);
+    public ColorConfig(int mode, int color_density, int num_colors, int basecolor) {
+        initColorConfig(mode, color_density, num_colors, basecolor);
     }
 
+    public ColorConfig(int mode, int color_density, int num_colors, int basecolor, int step) {
+        initColorConfig(mode, color_density, num_colors, basecolor, step);
+    }
     public ColorConfig(int[] palette) {
         setPalette(palette, false);
     }
 
+    public ColorConfig(int mode, int color_density, int num_colors) {
+        initColorConfig(mode, num_colors);
+        setColor_density(color_density);
+    }
+
     public ColorConfig() {
         palette = null;
+        setPalette_type(Colors.PALETTE.RANDOM);
         initColorConfig(0, 0, 0x0, 0);
+    }
+
+    public ColorConfig(ColorConfig old) {
+        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep());
+        setPalette(old.getPalette(), false);
+        colors_corrected = old.colors_corrected;
+    }
+
+    public int createIndex(double val, double min, double max) {
+        return (int) Math.abs(((((val - min) / (max - min))) * color_density) % num_colors);
+    }
+
+    public int getColor(int index) {
+        return palette[index];
+    }
+
+    public int splineInterpolated(int index, double bias) {
+        if ((!colors_corrected) && num_colors < 4) {
+            num_colors = 4;
+            setBasecolor(basecolor);
+            setColor_density(color_density);
+            setMode(mode);
+            setNum_colors(num_colors);
+            setStep(step);
+            if (palette_type == Colors.PALETTE.RANDOM) {
+                initRandomPalette(num_colors, true);
+            } else {
+                initGradientPalette();
+            }
+            colors_corrected = true;
+        }
+        double h0 = 0.5 * ((bias * bias) * (bias - 1)),
+                h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
+                h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
+                h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
+        int i1 = ((index - 1) < 0) ? num_colors - 1 : index - 1, i2 = ((index - 2) < 0) ? num_colors - 2 : index - 2, i3 = ((index - 3) < 0) ? num_colors - 3 : index - 3;
+        double color = (h0 * palette[index] + h1 * palette[i1] + h2 * palette[i2] + h3 * palette[i3]);
+        color = (color < 0) ? -color : color;
+        return (int) color;
+    }
+
+    public int getPalette_type() {
+        return palette_type;
+    }
+
+    public void setPalette_type(int palette_type) {
+        this.palette_type = palette_type;
     }
 
     public int getBasecolor() {
@@ -54,6 +111,7 @@ public class ColorConfig {
     }
 
     public void initRandomPalette(int num_colors, boolean preserve) {
+        setPalette_type(Colors.PALETTE.RANDOM);
         if (!preserve) {
             palette = new int[num_colors];
             for (int pidx = 0; pidx < num_colors; pidx++) {
@@ -71,6 +129,7 @@ public class ColorConfig {
     }
 
     public void initGradientPalette() {
+        setPalette_type(Colors.PALETTE.CUSTOM);
         palette = new int[num_colors];
         int baseidx = num_colors / 2;
         for (int i = 0; i < baseidx; i++) {
@@ -81,31 +140,32 @@ public class ColorConfig {
         }
     }
 
-    public void initGrayScalePalette(int max) {
-        palette = new int[max];
-        for (int i = 0; i < palette.length; i++) {
-            palette[i] = i << 16 | i << 8 | i;
-        }
-    }
-
-    private void initColorConfig(int color_density, int num_colors, int basecolor, int step) {
+    private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, int step) {
+        colors_corrected = false;
         setColor_density(color_density);
         setNum_colors(num_colors);
         setBasecolor(basecolor);
         setStep(step);
         initGradientPalette();
+        setMode(mode);
     }
 
-    private void initColorConfig(int color_density, int num_colors, int basecolor) {
+
+    private void initColorConfig(int mode, int color_density, int num_colors, int basecolor) {
+        colors_corrected = false;
         setColor_density(color_density);
         setNum_colors(num_colors);
         setBasecolor(basecolor);
         calcStep();
         initGradientPalette();
+        setMode(mode);
     }
 
-    private void initColorConfig(int num_colors) {
+    private void initColorConfig(int mode, int num_colors) {
+        colors_corrected = false;
+        setNum_colors(num_colors);
         initRandomPalette(num_colors, false);
+        setMode(mode);
     }
 
     private void calcStep() {
@@ -128,31 +188,40 @@ public class ColorConfig {
         this.num_colors = num_colors;
     }
 
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
     public void colorsFromString(String[] colors) {
-        if (colors[0].startsWith("0x")) {
+        mode = Integer.parseInt(colors[0]);
+        if (colors[1].startsWith("0x")) {
             int[] palette = new int[colors.length];
-            for (int i = 0; i < colors.length; i++) {
+            for (int i = 1; i < colors.length; i++) {
                 palette[i] = Integer.parseInt(colors[i], 16);
             }
             setPalette(palette, false);
         } else {
             switch (colors.length) {
-                case 1:
-                    initColorConfig(Integer.parseInt(colors[0]));
-                    break;
-                case 3:
-                    initColorConfig(Integer.parseInt(colors[0]), Integer.parseInt(colors[1]), Integer.parseInt(colors[2], 16));
+                case 2:
+                    initColorConfig(mode, Integer.parseInt(colors[1]));
                     break;
                 case 4:
-                    initColorConfig(Integer.parseInt(colors[0]), Integer.parseInt(colors[1]), Integer.parseInt(colors[3], 16), Integer.parseInt(colors[2]));
+                    initColorConfig(mode, Integer.parseInt(colors[1]), Integer.parseInt(colors[2]), Integer.parseInt(colors[3], 16));
+                    break;
+                case 5:
+                    initColorConfig(mode, Integer.parseInt(colors[1]), Integer.parseInt(colors[2]), Integer.parseInt(colors[4], 16), Integer.parseInt(colors[3]));
                     break;
                 default:
-                    throw new IllegalArgumentException("Unsupoorted Input");
+                    throw new IllegalArgumentException("Unsupported Input");
             }
         }
     }
 
     public boolean noCustomPalette() {
-        return palette.length == 0 || palette == null;
+        return (palette_type == Colors.PALETTE.RANDOM) || (palette.length == 0) || (palette == null);
     }
 }
