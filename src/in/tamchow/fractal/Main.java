@@ -41,7 +41,6 @@ public class Main {
         } else {
             jgen = new FractalGenerator(fccfg.getParams()[0]);
         }
-        jgen.setDegree(2.0);
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
