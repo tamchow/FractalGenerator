@@ -113,7 +113,7 @@ public class Polynomial {
             try {
                 vardeg = new Complex(term.exponent);
             } catch (IllegalArgumentException iae) {
-                FunctionEvaluator fe = new FunctionEvaluator(z_value, variableCode, constdec);
+                FunctionEvaluator fe = new FunctionEvaluator(z_value, variableCode, constdec, false);
                 vardeg = fe.evaluate(term.exponent);
             }
             if (vardeg.compareTo(degree) > 0) {

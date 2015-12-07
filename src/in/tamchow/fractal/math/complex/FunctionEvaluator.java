@@ -11,18 +11,31 @@ public class FunctionEvaluator {
     private String z_value;
     private String variableCode;
     private boolean hasBeenSubstituted;
-    public FunctionEvaluator(String variable, String variableCode, String[][] varconst) {
+    private boolean advancedDegree;
+
+    public FunctionEvaluator(String variable, String variableCode, String[][] varconst, boolean advancedDegree) {
         setZ_value(variable);
         setConstdec(varconst);
         setVariableCode(variableCode);
         hasBeenSubstituted = false;
+        setAdvancedDegree(advancedDegree);
     }
 
-    public FunctionEvaluator(String variableCode, String[][] varconst) {
+    public FunctionEvaluator(String variableCode, String[][] varconst, boolean advancedDegree) {
         setConstdec(varconst);
         setVariableCode(variableCode);
         hasBeenSubstituted = false;
+        setAdvancedDegree(advancedDegree);
     }
+
+    public boolean isAdvancedDegree() {
+        return advancedDegree;
+    }
+
+    public void setAdvancedDegree(boolean advancedDegree) {
+        this.advancedDegree = advancedDegree;
+    }
+
     public String getVariableCode() {
         return variableCode;
     }
@@ -37,7 +50,7 @@ public class FunctionEvaluator {
             String function2 = function.replace(function.substring(function.indexOf("exp"), function.indexOf(')', function.indexOf("exp")) + 1), "");
             return getDegree(function2);
         }
-        if (function.contains("*") || function.contains("/")) {
+        if ((function.contains("*") || function.contains("/")) && advancedDegree) {
             for (int i = 0; i < function.length(); i++) {
                 if (function.charAt(i) == '*' || function.charAt(i) == '/') {
                     double dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));

@@ -17,9 +17,9 @@ import java.util.Random;
  */
 public class Main {
     public static void main(String[] args) {
-        String func = "( z ^ 4 ) + 1", variableCode = "z", poly = "{1,z,4};+;{1,z,0}";
+        String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + c", variableCode = "z", poly = "{1,z,4};+;{1,z,0}";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
-        int resx = 1921, resy = 1921, zoom = 10, zoompow = 0, baseprec = 600, fracmode = FractalGenerator.MODE_JULIA, iter = 8;
+        int resx = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 600, fracmode = FractalGenerator.MODE_MANDELBROT, iter = 32;
         double escrad = 2.0, tolerance = 1e-3;
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 4, 65536, 0x0f0f00, 0xff0000);
         //cfg.setPalette(new int[]{0xff0000,0x00ff00,0x0000ff},false);

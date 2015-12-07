@@ -30,13 +30,23 @@ public class FractalGenerator implements Serializable {
     int[][] escapedata;
     Complex[][]argand_map;
     Complex centre_offset;
+    boolean advancedDegree;
     private String variableCode;
+
     public FractalGenerator(FractalParams params) {
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance, params.initParams.color);
     }
 
     public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, color);
+    }
+
+    public boolean isAdvancedDegree() {
+        return advancedDegree;
+    }
+
+    public void setAdvancedDegree(boolean advancedDegree) {
+        this.advancedDegree = advancedDegree;
     }
 
     public ArrayList<Complex> getRoots() {
@@ -124,6 +134,8 @@ public class FractalGenerator implements Serializable {
         setTolerance(tolerance);
         roots = new ArrayList<>();
         setColor(color);
+        setDegree(-1);
+        setAdvancedDegree(true);
     }
 
     private void populateMap() {
@@ -266,8 +278,8 @@ public class FractalGenerator implements Serializable {
 
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter(argand.getHeight() * argand.getHeight() * iterations);
-        if (mode != MODE_NEWTON) {
-            degree = new FunctionEvaluator(variableCode, consts).getDegree(function);
+        if (mode != MODE_NEWTON && degree == -1) {
+            degree = new FunctionEvaluator(variableCode, consts, advancedDegree).getDegree(function);
         }
         switch (mode) {
             case MODE_MANDELBROT:
@@ -290,7 +302,7 @@ public class FractalGenerator implements Serializable {
 
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         Stack<Complex> last = new Stack<>();
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         Polynomial poly;
         String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
@@ -298,7 +310,7 @@ public class FractalGenerator implements Serializable {
             function = poly.toString();
             functionderiv = poly.derivative().toString();
         }
-        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
@@ -362,13 +374,13 @@ public class FractalGenerator implements Serializable {
         Polynomial polynomial = Polynomial.fromString(function);
         function = polynomial.toString();
         Stack<Complex> last = new Stack<>();
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             functionderiv = polynomial.derivative().toString();
         }
-        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
@@ -435,13 +447,13 @@ public class FractalGenerator implements Serializable {
         Polynomial polynomial = Polynomial.fromString(function);
         function = polynomial.toString();
         Stack<Complex> last = new Stack<>();
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             functionderiv = polynomial.derivative().toString();
         }
-        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
@@ -523,7 +535,7 @@ public class FractalGenerator implements Serializable {
     }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         Stack<Complex> last = new Stack<>();
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         Polynomial poly;
         String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
@@ -531,7 +543,7 @@ public class FractalGenerator implements Serializable {
             function = poly.toString();
             functionderiv = poly.derivative().toString();
         }
-        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
