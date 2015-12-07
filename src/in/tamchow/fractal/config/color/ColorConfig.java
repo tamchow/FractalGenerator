@@ -15,8 +15,10 @@ public class ColorConfig {
     public ColorConfig(int mode, int color_density, int num_colors, int basecolor, int step) {
         initColorConfig(mode, color_density, num_colors, basecolor, step);
     }
-    public ColorConfig(int[] palette) {
+
+    public ColorConfig(int mode, int[] palette) {
         setPalette(palette, false);
+        setMode(mode);
     }
 
     public ColorConfig(int mode, int color_density, int num_colors) {
@@ -133,7 +135,7 @@ public class ColorConfig {
         palette = new int[num_colors];
         int baseidx = num_colors / 2;
         for (int i = 0; i < baseidx; i++) {
-            palette[i] = ((basecolor - step) < 0) ? Math.abs(basecolor - step) : basecolor - step;
+            palette[i] = (basecolor - step) < 0 ? -(basecolor - step) : basecolor - step;
         }
         for (int i = baseidx; i < num_colors; i++) {
             palette[i] = basecolor + step;

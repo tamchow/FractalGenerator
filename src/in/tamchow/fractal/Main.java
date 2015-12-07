@@ -17,12 +17,13 @@ import java.util.Random;
  */
 public class Main {
     public static void main(String[] args) {
-        String func = "( z ^ 2 ) + c", variableCode = "z", poly = "{1,z,3};+;{d,z,1};+;{c,z,0}";
-        String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}};
-        int resx = 2561, resy = 1601, zoom = 10, zoompow = 0, baseprec = 500, fracmode = FractalGenerator.MODE_JULIA, iter = 32;
-        double escrad = 2.0, tolerance = 1e-1;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 32);
-        Complex constant = null;
+        String func = "( z ^ 2 ) + e", variableCode = "z", poly = "{1,z,4};+;{1,z,0}";
+        String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
+        int resx = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 600, fracmode = FractalGenerator.MODE_JULIA, iter = 32;
+        double escrad = 2.0, tolerance = 1e-3;
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 32, 0x00ff00, 0xfff000);
+        //cfg.setPalette(new int[]{0xff0000,0x00ff00,0x0000ff},false);
+        Complex constant = null;//new Complex("-0.5,+0.0i");
         //func = poly;
         boolean def = (args.length == 0);
         FractalConfig fccfg = new FractalConfig(0, 0, 0);
@@ -40,6 +41,7 @@ public class Main {
         } else {
             jgen = new FractalGenerator(fccfg.getParams()[0]);
         }
+        jgen.setDegree(2.0);
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {

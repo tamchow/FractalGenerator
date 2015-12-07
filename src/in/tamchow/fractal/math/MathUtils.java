@@ -16,10 +16,10 @@ public class MathUtils {
     public static double weightedRandom(double[] values, double[] weights) {
         int factor = 0, pidx = 0;
         double sum = 0.0;
-        for (int i = 0; i < weights.length; i++) {
-            int afterpoint = (weights[i] + "".substring((weights[i] + "").indexOf('.') + 1)).length();
+        for (double weight : weights) {
+            int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
             factor = ((afterpoint > factor) ? afterpoint : factor);
-            sum += weights[i];
+            sum += weight;
         }
         if (values.length != weights.length || sum != 1.0) {
             throw new IllegalArgumentException("Illegal Parameters");
@@ -40,10 +40,10 @@ public class MathUtils {
     public static int weightedRandom(double[] weights) {
         int factor = 0, pidx = 0;
         double sum = 0.0;
-        for (int i = 0; i < weights.length; i++) {
-            int afterpoint = (weights[i] + "".substring((weights[i] + "").indexOf('.') + 1)).length();
+        for (double weight : weights) {
+            int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
             factor = ((afterpoint > factor) ? afterpoint : factor);
-            sum += weights[i];
+            sum += weight;
         }
         if (sum != 1.0) {
             throw new IllegalArgumentException("Illegal Parameters");

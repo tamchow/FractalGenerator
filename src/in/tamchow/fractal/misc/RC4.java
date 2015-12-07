@@ -58,8 +58,8 @@ public class RC4 {
         }
         byte[] processed = process(toprocess);
         String output = "";
-        for (int i = 0; i < processed.length; i++) {
-            output += (char) ((int) processed[i]);
+        for (byte aProcessed : processed) {
+            output += (char) ((int) aProcessed);
         }
         return output;
     }

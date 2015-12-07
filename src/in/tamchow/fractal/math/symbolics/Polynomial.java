@@ -1,9 +1,9 @@
 package in.tamchow.fractal.math.symbolics;
 
 import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.math.complex.FunctionEvaluator;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 /**
  * Represents a polynomial and provides standard methods
@@ -11,6 +11,15 @@ import java.util.StringTokenizer;
 public class Polynomial {
     ArrayList<Term> terms;
     ArrayList<String> signs;
+    String[][] constdec;
+    String z_value;
+    String variableCode;
+
+    public Polynomial(String variable, String variableCode, String[][] varconst) {
+        setZ_value(variable);
+        setConstdec(varconst);
+        setVariableCode(variableCode);
+    }
 
     public Polynomial() {
         terms = new ArrayList<>();
@@ -19,9 +28,8 @@ public class Polynomial {
 
     public static Polynomial fromString(String polynomial) {
         Polynomial poly = new Polynomial();
-        StringTokenizer tokenizer = new StringTokenizer(polynomial.trim(), ";", false);
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
+        String[] tokens = polynomial.split(";");
+        for (String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
@@ -32,6 +40,33 @@ public class Polynomial {
             poly.signs.add(0, "+");
         }
         return poly;
+    }
+
+    public String getZ_value() {
+        return z_value;
+    }
+
+    public void setZ_value(String z_value) {
+        this.z_value = z_value;
+    }
+
+    public String[][] getConstdec() {
+        return constdec;
+    }
+
+    public void setConstdec(String[][] constdec) {
+        this.constdec = new String[constdec.length][constdec[0].length];
+        for (int i = 0; i < this.constdec.length; i++) {
+            System.arraycopy(constdec[i], 0, this.constdec[i], 0, this.constdec[i].length);
+        }
+    }
+
+    public String getVariableCode() {
+        return variableCode;
+    }
+
+    public void setVariableCode(String variableCode) {
+        this.variableCode = variableCode;
     }
 
     public ArrayList<String> getSigns() {
@@ -74,7 +109,13 @@ public class Polynomial {
     public double getDegree() {
         Complex degree = new Complex(Complex.ZERO);
         for (Term term : terms) {
-            Complex vardeg = new Complex(term.exponent);
+            Complex vardeg;
+            try {
+                vardeg = new Complex(term.exponent);
+            } catch (IllegalArgumentException iae) {
+                FunctionEvaluator fe = new FunctionEvaluator(z_value, variableCode, constdec);
+                vardeg = fe.evaluate(term.exponent);
+            }
             if (vardeg.compareTo(degree) > 0) {
                 degree = new Complex(vardeg);
             }

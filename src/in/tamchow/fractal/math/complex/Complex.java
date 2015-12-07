@@ -30,15 +30,15 @@ public class Complex implements Serializable, Comparable<Complex> {
 
     public Complex(String complex) {
         try {
-            if (complex.indexOf('i') == -1) {
+            if (complex.lastIndexOf('i') == -1) {
                 a = Double.parseDouble(complex);
                 ib = 0.0;
-            } else if ((!complex.contains(",")) && complex.indexOf("i") > 0) {
+            } else if ((!complex.contains(",")) && complex.lastIndexOf("i") > 0) {
                 a = 0.0;
                 ib = Double.parseDouble(complex.substring(0, complex.length()));
             } else {
                 String a = complex.substring(0, complex.indexOf(","));
-                String ib = complex.substring(complex.indexOf(",") + 1, complex.indexOf("i"));
+                String ib = complex.substring(complex.indexOf(",") + 1, complex.lastIndexOf("i"));
                 if (a.startsWith("+")) {
                     a = a.substring(1, a.length());
                 }

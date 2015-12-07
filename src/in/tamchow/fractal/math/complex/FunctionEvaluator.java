@@ -1,6 +1,7 @@
 package in.tamchow.fractal.math.complex;
 
 import in.tamchow.fractal.math.symbolics.Polynomial;
+import in.tamchow.fractal.misc.StringManipulator;
 
 import java.util.StringTokenizer;
 
@@ -11,16 +12,18 @@ public class FunctionEvaluator {
     private String[][] constdec;
     private String z_value;
     private String variableCode;
-
+    private boolean hasBeenSubstituted;
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst) {
         setZ_value(variable);
         setConstdec(varconst);
         setVariableCode(variableCode);
+        hasBeenSubstituted = false;
     }
 
     public FunctionEvaluator(String variableCode, String[][] varconst) {
         setConstdec(varconst);
         setVariableCode(variableCode);
+        hasBeenSubstituted = false;
     }
     public String getVariableCode() {
         return variableCode;
@@ -32,8 +35,30 @@ public class FunctionEvaluator {
 
     public double getDegree(String function) {
         double degree = 0;
+        if (function.contains("exp") || function.contains("log")) {
+            String function2 = function.replace(function.substring(function.indexOf("exp"), function.indexOf(')', function.indexOf("exp")) + 1), "");
+            return getDegree(function2);
+        }
+        for (int i = 0; i < function.length(); i++) {
+            if (function.charAt(i) == '*' || function.charAt(i) == '/') {
+                double dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));
+                double dr = getDegree(function.substring(function.indexOf('(', i), function.indexOf(')', i) + 1));
+                double tmpdegree = 0;
+                if (function.charAt(i) == '*') {
+                    tmpdegree = dl + dr;
+                } else if (function.charAt(i) == '/') {
+                    tmpdegree = dl - dr;
+                }
+                String function2 = function.replace(function.substring(StringManipulator.indexOfBackwards(function, i, '('), function.indexOf(')', i) + 1), "z ^ " + tmpdegree);
+                return getDegree(function2);
+            }
+        }
+        if (!hasBeenSubstituted) {
+            hasBeenSubstituted = true;
+            return getDegree(substitute(function, true));
+        }
         int idx = 0, varidx = 0;
-        if (function.contains(variableCode) && (!function.contains("^"))) {
+        if ((function.contains(variableCode) && (!function.contains("^")))) {
             degree = 1;
         }
         while (function.indexOf('^', idx) != -1) {
@@ -171,24 +196,18 @@ public class FunctionEvaluator {
     }
 
     private String[] process(String subexpr) {
-        String expr = "";
+        String expr;
         if (subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1) {
             expr = subexpr;
         } else {
             expr = subexpr.substring(subexpr.lastIndexOf('(') + 1, subexpr.indexOf(')', subexpr.lastIndexOf('(') + 1));
         }
-        StringTokenizer tokens = new StringTokenizer(expr, " ", false);
-        String[] mod = new String[tokens.countTokens()];
-        int i = 0;
-        while (tokens.hasMoreTokens()) {
-            mod[i] = tokens.nextToken();
-            i++;
-        }
-        return mod;
+        expr = expr.trim();
+        return expr.split(" ");
     }
 
     private String getConstant(String totry) {
-        String val = null;
+        String val = "";
         for (String[] aConstdec : constdec) {
             if (aConstdec[0].equals(totry)) {
                 val = aConstdec[1];

@@ -30,8 +30,7 @@ public class Term {
             return new Term("0", "0", "0");
         }
         if (parts.length == 1) {
-            Term constant = new Term(term.trim());
-            return constant;
+            return new Term(term.trim());
         }
         return new Term(parts[0], parts[2], parts[1]);
     }
@@ -84,9 +83,9 @@ public class Term {
     }
 
     public Term derivative() {
-        Term deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - 1", this.variable);
-        if (isConstant()) {
-            deriv = new Term("0");
+        Term deriv = new Term("0");
+        if (!isConstant()) {
+            deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - 1", this.variable);
         }
         return deriv;
     }
