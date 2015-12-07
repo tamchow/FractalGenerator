@@ -3,8 +3,6 @@ package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 import in.tamchow.fractal.misc.StringManipulator;
 
-import java.util.StringTokenizer;
-
 /**
  * Implements an iterative parser for functions described in ComplexOperations, making heavy use of string replacement;
  */
@@ -39,18 +37,20 @@ public class FunctionEvaluator {
             String function2 = function.replace(function.substring(function.indexOf("exp"), function.indexOf(')', function.indexOf("exp")) + 1), "");
             return getDegree(function2);
         }
-        for (int i = 0; i < function.length(); i++) {
-            if (function.charAt(i) == '*' || function.charAt(i) == '/') {
-                double dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));
-                double dr = getDegree(function.substring(function.indexOf('(', i), function.indexOf(')', i) + 1));
-                double tmpdegree = 0;
-                if (function.charAt(i) == '*') {
-                    tmpdegree = dl + dr;
-                } else if (function.charAt(i) == '/') {
-                    tmpdegree = dl - dr;
+        if (function.contains("*") || function.contains("/")) {
+            for (int i = 0; i < function.length(); i++) {
+                if (function.charAt(i) == '*' || function.charAt(i) == '/') {
+                    double dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));
+                    double dr = getDegree(function.substring(function.indexOf('(', i), function.indexOf(')', i) + 1));
+                    double tmpdegree = 0;
+                    if (function.charAt(i) == '*') {
+                        tmpdegree = dl + dr;
+                    } else if (function.charAt(i) == '/') {
+                        tmpdegree = dl - dr;
+                    }
+                    String function2 = function.replace(function.substring(StringManipulator.indexOfBackwards(function, i, '('), function.indexOf(')', i) + 1), "z ^ " + tmpdegree);
+                    return getDegree(function2);
                 }
-                String function2 = function.replace(function.substring(StringManipulator.indexOfBackwards(function, i, '('), function.indexOf(')', i) + 1), "z ^ " + tmpdegree);
-                return getDegree(function2);
             }
         }
         if (!hasBeenSubstituted) {
@@ -207,7 +207,7 @@ public class FunctionEvaluator {
     }
 
     private String getConstant(String totry) {
-        String val = "";
+        String val = null;
         for (String[] aConstdec : constdec) {
             if (aConstdec[0].equals(totry)) {
                 val = aConstdec[1];
@@ -218,18 +218,14 @@ public class FunctionEvaluator {
     }
 
     private String substitute(String expr, boolean isSymbolic) {
-        StringTokenizer tokens = new StringTokenizer(expr, " ", false);
-        String[] mod = new String[tokens.countTokens()];
+        String[] mod = expr.split(" ");
         String sub = "";
-        int i = 0;
-        while (tokens.hasMoreTokens()) {
-            mod[i] = tokens.nextToken();
+        for (int i = 0; i < mod.length; i++) {
             if (mod[i].equals(variableCode) && (!isSymbolic)) {
                 mod[i] = "" + z_value;
             } else if (getConstant(mod[i]) != null) {
                 mod[i] = getConstant(mod[i]);
             }
-            i++;
         }
         for (String aMod : mod) {
             sub += aMod + " ";
