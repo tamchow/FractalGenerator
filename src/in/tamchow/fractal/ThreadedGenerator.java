@@ -40,11 +40,16 @@ public class ThreadedGenerator {
                 idx++;
             }
         }
-        while (!allComplete()) {
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted:" + e.getMessage());
+        }
+        /*while (!allComplete()) {
             for (idx = 0; idx < progress.length; idx++) {
                 //System.out.println("Thread "+idx+" has completed:"+progress[idx]);
             }
-        }
+        }*/
     }
     boolean allComplete() {
         for (boolean progression : progress) {
@@ -78,11 +83,6 @@ public class ThreadedGenerator {
         void onCompletion() {
             System.out.println("Thread " + index + " has completed");
             progress[index] = true;
-            try {
-                join();
-            } catch (InterruptedException e) {
-                System.out.println("Interrupted:" + e.getMessage());
-            }
         }
     }
 }

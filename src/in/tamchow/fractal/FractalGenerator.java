@@ -86,7 +86,7 @@ public class FractalGenerator implements Serializable {
     public long getMaxiter() {
         return maxiter;
     }
-    public void setMaxiter(long maxiter) {
+    public synchronized void setMaxiter(long maxiter) {
         this.maxiter = maxiter;
     }
     public String getVariableCode() {
@@ -101,7 +101,7 @@ public class FractalGenerator implements Serializable {
     public double getDegree() {
         return degree;
     }
-    public void setDegree(double degree) {
+    public synchronized void setDegree(double degree) {
         this.degree = degree;
     }
     public double getTolerance() {
@@ -159,9 +159,6 @@ public class FractalGenerator implements Serializable {
         }
         return new int[]{start_x, end_x, start_y, end_y};
     }
-    private int interpolate(int color1, int color2, double bias) {
-        return (int) (color1 * bias + color2 * (1 - bias));
-    }
     public int getScale() {
         return scale;
     }
@@ -201,7 +198,7 @@ public class FractalGenerator implements Serializable {
     public String[][] getConsts() {
         return consts;
     }
-    public void setConsts(String[][] consts) {
+    public synchronized void setConsts(String[][] consts) {
         this.consts = new String[consts.length][consts[0].length];
         for (int i = 0; i < consts.length; i++) {
             System.arraycopy(consts[i], 0, this.consts[i], 0, consts[i].length);
@@ -283,12 +280,12 @@ public class FractalGenerator implements Serializable {
             for (int j = start_x; j < end_x; j++) {
                 Complex z  = new Complex(Complex.ZERO);
                 Complex zd = new Complex(Complex.ZERO);
-                consts[0][1] = argand_map[i][j].toString();
+                setFirstConstant(this.consts[0][0], argand_map[i][j].toString());
                 fe.setZ_value(z.toString());
-                fe.setConstdec(consts);
+                fe.setConstdec(this.consts);
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                     fed.setZ_value(zd.toString());
-                    fed.setConstdec(consts);
+                    fed.setConstdec(this.consts);
                 }
                 int c = 0x0;
                 last.push(z);
@@ -337,6 +334,10 @@ public class FractalGenerator implements Serializable {
                 last.clear();
             }
         }
+    }
+    public synchronized void setFirstConstant(String name, String value) {
+        this.consts[0][0] = name;
+        this.consts[0][1] = value;
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
         Polynomial polynomial = Polynomial.fromString(function);
@@ -493,7 +494,7 @@ public class FractalGenerator implements Serializable {
             }
         }
     }
-    private boolean containsRoot(Complex z) {
+    private synchronized boolean containsRoot(Complex z) {
         for (Complex c : roots) {
             if (ComplexOperations.distance_squared(c, z) < tolerance) {
                 return true;
@@ -501,7 +502,7 @@ public class FractalGenerator implements Serializable {
         }
         return false;
     }
-    private int indexOfRoot(Complex z) {
+    private synchronized int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {
             if (ComplexOperations.distance_squared(roots.get(i), z) < tolerance) {
                 return i;
@@ -584,7 +585,7 @@ public class FractalGenerator implements Serializable {
     public void setColor(ColorConfig color) {
         this.color = new ColorConfig(color);
     }
-    public int getColor(int val, Complex[] last, double escape_radius, int iterations) {
+    public synchronized int getColor(int val, Complex[] last, double escape_radius, int iterations) {
         int    colortmp, color1, color2;
         double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / Math.log(degree))));
         double lbnd, ubnd, calc;
@@ -592,7 +593,7 @@ public class FractalGenerator implements Serializable {
             case Colors.CALCULATIONS.COLOR_DIVIDE:
                 color1 = (int) (0xffffff / renormalized);
                 color2 = (int) (0xffffff / (renormalized + 1));
-                colortmp = interpolate(color1, color2, renormalized - ((int) renormalized));
+                colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized));
                 break;
             case Colors.CALCULATIONS.COLOR_HIGH_CONTRAST:
                 colortmp = (iterations * val) << 16 | (iterations * val) << 8 | (iterations * val);
@@ -600,7 +601,7 @@ public class FractalGenerator implements Serializable {
             case Colors.CALCULATIONS.COLOR_MULTIPLY:
                 color1 = (int) renormalized << 16 | (int) renormalized << 8 | (int) renormalized;
                 color2 = (int) (renormalized + 1) << 16 | (int) (renormalized + 1) << 8 | (int) (renormalized + 1);
-                colortmp = interpolate(color1, color2, renormalized - ((int) renormalized));
+                colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized));
                 break;
             case Colors.CALCULATIONS.COLOR_GRAYSCALE:
                 colortmp = val << 16 | val << 8 | val;
@@ -612,24 +613,24 @@ public class FractalGenerator implements Serializable {
             /*case ColorMode.COLOR_MULTIPLY_3:
                 color1=((int)renormalized<<16)<<16|((int)renormalized<<8)<<8|(int)renormalized;
                 color2=((int)(renormalized+1)<<16)<<16|((int)(renormalized+1)<<8)<<8|(int)(renormalized+1);
-                color=interpolate(color1,color2,renormalized-((int)renormalized));
+                color=ColorConfig.linearInterpolated(color1,color2,renormalized-((int)renormalized));
                 break;
             case ColorMode.COLOR_MULTIPLY_4:
                 color1=((int)renormalized)<<16|((int)renormalized<<8)<<8|((int)renormalized<<16);
                 color2=((int)(renormalized+1))<<16|((int)(renormalized+1)<<8)<<8|((int)(renormalized+1)<<16);
-                color=interpolate(color1,color2,renormalized-((int)renormalized));
+                color=ColorConfig.linearInterpolated(color1,color2,renormalized-((int)renormalized));
                 break;
                 */
             case Colors.CALCULATIONS.COLOR_NEWTON_1:
                 /*if(indexOfRoot(last[0])>0) {*/
-                colortmp = interpolate(0xffffff, color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations));
+                colortmp = ColorConfig.linearInterpolated(0xffffff, color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations));
                 /*}else {
-                color = interpolate(0xffffff,random_palette[(((int) escape_radius * color_density) % num_colors)],(
+                color = ColorConfig.linearInterpolated(0xffffff,random_palette[(((int) escape_radius * color_density) % num_colors)],(
                 (double) val / iterations));
                 }*/
                 break;
             case Colors.CALCULATIONS.COLOR_NEWTON_2:
-                colortmp = interpolate(0xffffff, color.getColor((int) (escape_radius * color.color_density) % color.num_colors), renormalized - ((int) renormalized));
+                colortmp = ColorConfig.linearInterpolated(0xffffff, color.getColor((int) (escape_radius * color.color_density) % color.num_colors), renormalized - ((int) renormalized));
                 break;
             case Colors.CALCULATIONS.CURVATURE_AVERAGE:
                 lbnd = -Math.PI;

@@ -21,13 +21,32 @@ public class ColorConfig {
     public void initGradientPalette() {
         setPalette_type(Colors.PALETTE.CUSTOM);
         palette = new int[num_colors];
+        if (step == 0) {
+            initShadePalette();
+            return;
+        }
         int baseidx = num_colors / 2;
         for (int i = 0; i < baseidx; i++) {
-            palette[i] = (basecolor - step) < 0 ? -(basecolor - step) : basecolor - step;
+            palette[i] = Math.abs(basecolor - step);
         }
         for (int i = baseidx; i < num_colors; i++) {
             palette[i] = basecolor + step;
         }
+    }
+    private void initShadePalette() {
+        int baseidx = num_colors / 2;
+        for (int i = 0; i < baseidx; i++) {
+            palette[i] = linearInterpolated(basecolor, 0xffffff, Math.abs(baseidx - i), baseidx);
+        }
+        for (int i = baseidx; i < num_colors; i++) {
+            palette[i] = linearInterpolated(basecolor, 0x000000, Math.abs(baseidx - i), baseidx);
+        }
+    }
+    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue) {
+        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue);
+    }
+    public static int linearInterpolated(int fromcolor, int tocolor, double bias) {
+        return (int) (fromcolor * (1 - bias) + tocolor * (bias));
     }
     private void calcStep() {
         setStep((0xfffff / (color_density << num_colors)));
