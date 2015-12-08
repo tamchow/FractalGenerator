@@ -77,6 +77,11 @@ public class ThreadedGenerator {
         void onCompletion() {
             System.out.println("Thread " + index + " has completed");
             progress[index] = true;
+            try {
+                join();
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted:" + e.getMessage());
+            }
         }
 
         public void run() {
