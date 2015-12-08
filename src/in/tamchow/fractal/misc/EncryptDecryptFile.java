@@ -1,8 +1,6 @@
 package in.tamchow.fractal.misc;
-
 import java.io.*;
 import java.util.ArrayList;
-
 /**
  * Does file encryption/decryption using the RC4 class
  */
@@ -34,7 +32,7 @@ public class EncryptDecryptFile {
         } else {
             output = new File(input.getCanonicalPath() + "_encrypted");
         }
-        DataInputStream dis = new DataInputStream(new FileInputStream(input));
+        DataInputStream dis          = new DataInputStream(new FileInputStream(input));
         ArrayList<Byte> intermediate = new ArrayList<>();
         while (dis.available() > 0) {
             intermediate.add(dis.readByte());
@@ -48,8 +46,8 @@ public class EncryptDecryptFile {
         if (key != null) {
             manip = new RC4(key);
         }
-        byte[] processed = manip.process(toprocess);
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(output));
+        byte[]           processed = manip.process(toprocess);
+        DataOutputStream dos       = new DataOutputStream(new FileOutputStream(output));
         dos.write(processed, 0, processed.length);
         dos.flush();
         dos.close();

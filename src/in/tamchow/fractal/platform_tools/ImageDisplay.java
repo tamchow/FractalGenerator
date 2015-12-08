@@ -1,5 +1,4 @@
 package in.tamchow.fractal.platform_tools;
-
 import in.tamchow.fractal.FractalGenerator;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.fractalconfig.FractalConfig;
@@ -13,54 +12,22 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 /**
  * Swing app to display images
  */
-public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseListener {
-
+public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener {
     BufferedImage[] img;
-    Image[] rimg;
-    Image todraw;
-    int width, height, ctr, subctr;
-    ImageConfig imgconf;
-    FractalConfig fracconf;
+    Image[]         rimg;
+    Image           todraw;
+    int             width, height, ctr, subctr;
+    ImageConfig      imgconf;
+    FractalConfig    fracconf;
     FractalGenerator current;
-    private boolean running,fractal_mode,zoomedin;
+    private boolean running, fractal_mode, zoomedin;
     private int zoomin;
-
     public ImageDisplay(Config config, int width, int height) {
         initDisplay(config, width, height);
     }
-
-    public ImageDisplay(Config config) {
-        if (config instanceof ImageConfig) {
-            initDisplay(config, ((ImageConfig) config).getImages()[0].getWidth(), ((ImageConfig) config).getImages()[0].getHeight());
-        } else if (config instanceof FractalConfig) {
-            initDisplay(config, ((FractalConfig) config).getParams()[0].initParams.width, ((FractalConfig) config).getParams()[0].initParams.height);
-        }
-    }
-
-    public static void show(Config config, String title) {
-        ImageDisplay id = new ImageDisplay(config);
-        JScrollPane scrollPane = new JScrollPane(id);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        JFrame disp = new JFrame(title);
-        disp.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        disp.addKeyListener(id);
-        disp.add(scrollPane);
-        disp.pack();
-        id.running = true;
-        disp.setVisible(true);
-        Thread thread = new Thread(id);
-        thread.start();
-    }
-
     private void initDisplay(Config config, int width, int height) {
         if (config instanceof ImageConfig) {
             try {
@@ -104,15 +71,32 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
             }
         }
     }
-
-    public void paint(Graphics g) {
-        g.drawImage(todraw, 0, 0, null);
+    public ImageDisplay(Config config) {
+        if (config instanceof ImageConfig) {
+            initDisplay(config, ((ImageConfig) config).getImages()[0].getWidth(), ((ImageConfig) config).getImages()[0].getHeight());
+        } else if (config instanceof FractalConfig) {
+            initDisplay(config, ((FractalConfig) config).getParams()[0].initParams.width, ((FractalConfig) config).getParams()[0].initParams.height);
+        }
     }
-
-    public Dimension getPreferredSize() {
-        return new Dimension(width, height);
+    public static void show(Config config, String title) {
+        ImageDisplay id         = new ImageDisplay(config);
+        JScrollPane  scrollPane = new JScrollPane(id);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        JFrame disp = new JFrame(title);
+        disp.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        disp.addKeyListener(id);
+        disp.add(scrollPane);
+        disp.pack();
+        id.running = true;
+        disp.setVisible(true);
+        Thread thread = new Thread(id);
+        thread.start();
     }
-
     @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {
@@ -151,12 +135,12 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
                 } catch (InterruptedException ignored) {
                 }
             } else {
-                if(!zoomedin) {
+                if (!zoomedin) {
                     current = new FractalGenerator(fracconf.getParams()[i]);
                 }
                 current.generate(fracconf.getParams()[i]);
                 todraw = ImageConverter.toImage(current.getArgand());
-                zoomedin=false;
+                zoomedin = false;
                 paint(this.getGraphics());
                 try {
                     Thread.sleep(1000 * fracconf.getWait());
@@ -171,67 +155,59 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener,MouseL
             i++;
         }
     }
-
+    public void paint(Graphics g) {
+        g.drawImage(todraw, 0, 0, null);
+    }
+    public Dimension getPreferredSize() {
+        return new Dimension(width, height);
+    }
     @Override
     public void keyTyped(KeyEvent e) {
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         System.out.println("Key pressed:" + e.getKeyChar());
         if (e.getKeyChar() == ' ') {
             running = (!running);
-        }
-        else if (e.getKeyChar() == 's' || e.getKeyChar() == 'S') {
-            JFileChooser fileChooser=new JFileChooser();
+        } else if (e.getKeyChar() == 's' || e.getKeyChar() == 'S') {
+            JFileChooser fileChooser = new JFileChooser();
             fileChooser.showSaveDialog(this);
-            try{
+            try {
                 BufferedImage buf = new BufferedImage(todraw.getWidth(null), todraw.getHeight(null), BufferedImage.TYPE_INT_RGB);
                 buf.getGraphics().drawImage(todraw, 0, 0, null);
-                ImageIO.write(buf,"jpg",fileChooser.getSelectedFile());
-            }catch (Exception ex){
+                ImageIO.write(buf, "jpg", fileChooser.getSelectedFile());
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
-
     }
-
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(fractal_mode){
+        if (fractal_mode) {
             try {
-                running=false;
-                zoomedin=true;
-                current.zoom(e.getX(),e.getY(),zoomin);
+                running = false;
+                zoomedin = true;
+                current.zoom(e.getX(), e.getY(), zoomin);
                 zoomin++;
-                running=true;
+                running = true;
             } catch (Exception ie) {
                 ie.printStackTrace();
             }
         }
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
-
     }
-
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 }

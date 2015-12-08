@@ -1,5 +1,4 @@
 package in.tamchow.fractal.misc;
-
 /**
  * Miscellaneous: String Manipulation.
  */
@@ -13,14 +12,12 @@ public class StringManipulator {
         }
         return new String(processor);
     }
-
     public static long doCyclicShift(long num) {
-        int digits = Long.valueOf(num).toString().length();
-        long one = num % 10;
-        long other = num / 10;
+        int  digits = Long.valueOf(num).toString().length();
+        long one    = num % 10;
+        long other  = num / 10;
         return (long) (one * Math.pow(10, digits)) + other;
     }
-
     public static int indexOfBackwards(String search, int startindex, char tosearch) {
         for (int i = startindex; i > 0; i--) {
             if (search.charAt(i) == tosearch) {
@@ -29,7 +26,6 @@ public class StringManipulator {
         }
         return -1;
     }
-
     public static int indexOfBetweenBackwards(String search, int startindex, int endindex, char tosearch) {
         for (int i = startindex; i > endindex; i--) {
             if (search.charAt(i) == tosearch) {
@@ -38,7 +34,6 @@ public class StringManipulator {
         }
         return -1;
     }
-
     public static int indexOfBetween(String search, int startindex, int endindex, char tosearch) {
         for (int i = startindex; i < endindex; i++) {
             if (search.charAt(i) == tosearch) {
@@ -47,7 +42,6 @@ public class StringManipulator {
         }
         return -1;
     }
-
     private int count_char(char c, String str) {
         int ctr = 0;
         for (int i = 0; i < str.length(); i++) {

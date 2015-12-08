@@ -1,5 +1,4 @@
 package in.tamchow.fractal;
-
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.color.ColorConfig;
 import in.tamchow.fractal.config.color.Colors;
@@ -11,21 +10,20 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
 /**
  * Main class, handles CMDLINE input.
  */
 public class Main {
     public static void main(String[] args) {
-        String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + c", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
-        String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
-        int resx = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 600, fracmode = FractalGenerator.MODE_MANDELBROT, iter = 32;
-        double escrad = 2.0, tolerance = 1e-3;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 4, 65536, 0x0f0f00, 0xff0000);
+        String      func   = "( z ^ 3 ) + ( ( d ) * ( z ) ) + c", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
+        String[][]  consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
+        int         resx   = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 600, fracmode = FractalGenerator.MODE_MANDELBROT, iter = 32;
+        double      escrad = 2.0, tolerance = 1e-3;
+        ColorConfig cfg    = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 4, 65536, 0x0f0f00, 0xff0000);
         //cfg.setPalette(new int[]{0xff0000,0x00ff00,0x0000ff},false);
         Complex constant = null;//new Complex("-0.5,+0.0i");
         //func = poly;
-        boolean def = (args.length == 0);
+        boolean       def   = (args.length == 0);
         FractalConfig fccfg = new FractalConfig(0, 0, 0);
         if (!def) {
             try {
@@ -34,7 +32,7 @@ public class Main {
                 ioe.printStackTrace();
             }
         }
-        long inittime = System.currentTimeMillis();
+        long             inittime = System.currentTimeMillis();
         FractalGenerator jgen;
         if (def) {
             jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg);
@@ -56,7 +54,7 @@ public class Main {
         }
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
-        File pic = new File("D:/Fractal.jpg");
+        File pic     = new File("D:/Fractal.jpg");
         File postpic = new File("D:/Fractal_processed.jpg");
         try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand()), "jpg", pic);

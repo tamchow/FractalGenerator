@@ -1,10 +1,8 @@
 package in.tamchow.fractal.misc;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-
 /**
  * A PBrain interpreter
  */
@@ -12,7 +10,6 @@ public class PBrainer {
     String code, codebackup;
     int[] procidx, operand;
     int ptr, proctr, itmp, size;
-
     public PBrainer() {
         code = "";
         codebackup = code;
@@ -26,7 +23,6 @@ public class PBrainer {
         proctr = 0;
         itmp = 0;
     }
-
     public static void main(String[] args) {
         PBrainer executor = new PBrainer();
         if (args.length == 0) {
@@ -48,7 +44,6 @@ public class PBrainer {
         }
         executor.execute();
     }
-
     void readFile(String path) {
         File input = new File(path);
         try {
@@ -60,7 +55,6 @@ public class PBrainer {
             e.printStackTrace();
         }
     }
-
     public void execute() {
         outer:
         for (int i = 0; i < code.length(); ) {

@@ -1,34 +1,29 @@
 package in.tamchow.fractal.math.symbolics;
-
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 
 import java.util.ArrayList;
-
 /**
  * Represents a polynomial and provides standard methods
  */
 public class Polynomial {
-    ArrayList<Term> terms;
+    ArrayList<Term>   terms;
     ArrayList<String> signs;
-    String[][] constdec;
-    String z_value;
-    String variableCode;
-
+    String[][]        constdec;
+    String            z_value;
+    String            variableCode;
     public Polynomial(String variable, String variableCode, String[][] varconst) {
         setZ_value(variable);
         setConstdec(varconst);
         setVariableCode(variableCode);
     }
-
     public Polynomial() {
         terms = new ArrayList<>();
         signs = new ArrayList<>();
     }
-
     public static Polynomial fromString(String polynomial) {
-        Polynomial poly = new Polynomial();
-        String[] tokens = polynomial.split(";");
+        Polynomial poly   = new Polynomial();
+        String[]   tokens = polynomial.split(";");
         for (String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
@@ -41,52 +36,41 @@ public class Polynomial {
         }
         return poly;
     }
-
     public String getZ_value() {
         return z_value;
     }
-
     public void setZ_value(String z_value) {
         this.z_value = z_value;
     }
-
     public String[][] getConstdec() {
         return constdec;
     }
-
     public void setConstdec(String[][] constdec) {
         this.constdec = new String[constdec.length][constdec[0].length];
         for (int i = 0; i < this.constdec.length; i++) {
             System.arraycopy(constdec[i], 0, this.constdec[i], 0, this.constdec[i].length);
         }
     }
-
     public String getVariableCode() {
         return variableCode;
     }
-
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-
     public ArrayList<String> getSigns() {
         return signs;
     }
-
     public void setSigns(ArrayList<String> signs) {
         this.signs.clear();
         this.signs.addAll(signs);
     }
-
     public ArrayList<Term> getTerms() {
         return terms;
     }
-
     public void setTerms(ArrayList<Term> terms) {
         this.terms.clear();
         this.terms.addAll(terms);
     }
-
     public Polynomial derivative() {
         Polynomial deriv = new Polynomial();
         deriv.setSigns(this.signs);
@@ -95,7 +79,6 @@ public class Polynomial {
         }
         return deriv;
     }
-
     public int countVariableTerms() {
         int ctr = 0;
         for (Term term : terms) {
@@ -105,7 +88,6 @@ public class Polynomial {
         }
         return ctr;
     }
-
     public double getDegree() {
         Complex degree = new Complex(Complex.ZERO);
         for (Term term : terms) {
@@ -122,7 +104,6 @@ public class Polynomial {
         }
         return degree.modulus();
     }
-
     public int countConstantTerms() {
         int ctr = 0;
         for (Term term : terms) {
