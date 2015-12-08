@@ -1,33 +1,27 @@
 package in.tamchow.fractal.math.complex;
-
 import java.io.Serializable;
-
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
  */
-public class Complex implements Serializable, Comparable<Complex> {
+public class Complex extends Number implements Serializable, Comparable<Complex> {
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0);
     private double a, ib;
     private int precision;
-
     public Complex(Complex old) {
         this.a = old.real();
         this.ib = old.imaginary();
         precision = old.getPrecision();
     }
-
     public Complex(double a, double ib) {
         this.a = a;
         this.ib = ib;
         precision = 25;
     }
-
     public Complex(double arg) {
         a = Math.cos(arg);
         ib = Math.sin(arg);
         precision = 25;
     }
-
     public Complex(String complex) {
         try {
             if (complex.lastIndexOf('i') == -1) {
@@ -53,22 +47,18 @@ public class Complex implements Serializable, Comparable<Complex> {
         }
         precision = 25;
     }
-
     public int getPrecision() {
         return precision;
     }
-
     public void setPrecision(int precision) {
         this.precision = precision;
     }
-
     public String toString() {
         //round();
         if (ib < 0) {
             return a + ",-" + (-ib) + "i";
         } else return a + ",+" + ib + "i";
     }
-
     public int compareTo(Complex complex) {
         return (int) (this.modulus() - complex.modulus());
     }
@@ -80,7 +70,6 @@ public class Complex implements Serializable, Comparable<Complex> {
         }
         return false;
     }
-
     public double arg() {
         if (a > 0) return Math.atan((ib / a));
         else if (a < 0 && ib >= 0) return Math.atan((ib / a)) + Math.PI;
@@ -89,25 +78,40 @@ public class Complex implements Serializable, Comparable<Complex> {
         else if (a == 0 && ib < 0) return -Math.PI / 2;
         else return Double.NaN;
     }
-
     public Complex conjugate() {
         return new Complex(this.a, -this.ib);
     }
-
     public double modulus() {
         return Math.sqrt((a * a) + (ib * ib));
     }
-
     public double real() {
         return a;
     }
-
     public double imaginary() {
         return ib;
     }
-
     public Complex inverse() {
         double c = a * a + ib * ib;
         return new Complex((a / c), (-(ib / c)));
+    }
+
+    @Override
+    public int intValue() {
+        return (int) modulus();
+    }
+
+    @Override
+    public long longValue() {
+        return (long) modulus();
+    }
+
+    @Override
+    public float floatValue() {
+        return (float) modulus();
+    }
+
+    @Override
+    public double doubleValue() {
+        return modulus();
     }
 }

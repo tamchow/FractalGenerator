@@ -25,7 +25,9 @@ Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symm
 <p>
    There is also an included image viewer, which can also display fractals.
     There is support for elementary image transitions from top,bottom,left and right.
+    
     NOTE:
+    
     Both are supported now in code but are untested.
     
     This has been implemented, and is integrated into the main program, with a fractal configuration file path being the only accepted argument.

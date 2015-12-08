@@ -1,47 +1,60 @@
 <html>
-<head>A <b>Java</b> fractal generator (currently without an input/configuration ui, soon through a .ini file),
-that implements display of custom functions,
-with constant declaration processing, in both Mandelbrot and Julia modes.
-There are 6 different colouring schemes, 5 of which use iteration renormalization with linear interpolation for emphasis on outer regions,
-and 1 which renders in grayscale for emphasis on inner regions.
-Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.</head>
+<head>
+    A <b>Java</b> fractal generator (currently UI-silent, with configuration through a file),
+    that implements display of custom functions,
+    with constant declaration processing, in Mandelbrot, Newton and Julia modes.
+
+    There are 10 different colouring schemes, 5 of which use iteration renormalization with linear interpolation
+    and 3 using spline interpolation for emphasis on outer regions, and 2 which render in grayscale for emphasis on inner regions.
+
+    Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
+</head>
 <body>
 <p>
-    Supported modes: Julia, Mandelbrot, Newton.
+    Supported modes: Julia, Mandelbrot, Newton, with Buddhabrot technique variations available for each.
+
     Newton fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a different input format:
-    {coefficient,variable,exponent}+{coefficient,variable,exponent}-{coefficient,variable,exponent},etc.
+    {coefficient:variable:exponent};+;{coefficient:variable:exponent};-;{coefficient:variable:exponent},etc.
+
     Colors currently available are based on:
-    Division of 0xffffff by fractional iteration count (interpolation available)
-    Bit-shift mode with results similar to division by fractional iteration count (interpolation available)
-    High contrast mode
-    Grayscale Mode
-    Light blue palette mode by fractional iteration count (interpolation available)
-    Deep blue palette mode by fractional iteration count (interpolation available)
-    Randomized palette mode by fractional iteration count (interpolation available)
+    <ol>
+    <li>Division of 0xffffff by fractional iteration count (interpolation available)</li>
+    <li>Bit-shift mode with results similar to division by fractional iteration count (interpolation available)</li>
+    <li>High contrast mode</li>
+    <li>Grayscale Mode</li>
+    <li>Full custom or base-step gradient palette mode by fractional iteration count (interpolation available)</li>
+    <li>Randomized palette mode by fractional iteration count (interpolation available)</li>
+    </ol>
 
     Support for L-system fractals (IFS Affine Transform models such as the fern) has the framework in place and is scheduled for a future update.
 
-    Multithreading -- I have an idea about how to go about it, I'll see what I can do
+    Multithreading -- A class enabling multithreaded fractal generation has been included, but there is no output.
+    Will have to be debugged later
 
-    More standard coloring methods are incoming, such as:
-    Triangle Area Inequality
-    Curvature Average
-    Stripe Average
+    More standard coloring methods are there, such as:
+    <ol>
+    <li>Triangle Area Inequality</li>
+    <li>Curvature Average</li>
+    <li>Stripe Average</li>
+    </ol>
+    Also, these modes support Catmull-Rom Spline interpolation.
 
-    Also, support is planned for Catmull-Rom Spline interpolation.
+    Distance Estimation has been included, but as it involves differentiation and so uses the same backend as Newton Fractals, it is subject to
+    the same constraints on polynomials and style of input. This method produces black and white images by design.
 
     These coloring methods will affect only the palette-based methods of colouring.
 </p>
 
 <p>
     NOTES:
-    The fractal generator has the basic framework for being extensible and being multithreaded, but it is currently single-threaded since I'm not
-    really sure about how well or correctly I can handle multithreading.
+    The fractal generator has the basic framework for being extensible and being multithreaded,
+    but it is currently single-threaded since multithreaded generation has some issues which need to be fleshed out.
 
-    Also,there is full support for zoom, but renders after zoom are slow if the input resolution is higher than 401x401 and very slow above 801x801.
-    Not really sure about threaded prerenders, will have to ask someone for help with it.
+
+    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results. Also, total scaling beyond 10<sup>4</sup> might not produce very detailed output, but then I haven't done very extensive tests.
 
     Default debug and progress is output to console, and the final image is saved as D:\Fractal.jpg.
+
     Please ensure that a writable D: drive is present in the system before running this program,
     as the only way to change the output location is to edit the source code of <code>Main</code> and rebuild the project.
 
@@ -56,9 +69,18 @@ Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symm
     due to overhead concerns.
 
     However, saving of the fractal image and zooming in the viewer are both supported but untested.
-    All input to the application is currently handled by editing the source of the Main test class,or through a file, or through the command line
-    (last 2 methods are untested).
-    Image & Fractal display configuration files are a stickler for format, but are pretty much ready.
+    All input to the application is currently handled by:
+
+    <ol>
+    <li>Editing the source of the Main test class</li>
+    <li>Through a configuration file, whose path can be specified as an argument while running the application</li>
+    </ol>
+
+Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in .ini files.
+</p>
+
+<p>
+    I did not have time to put in documenting comments. I'll start putting them in and updating files as they get ready.
 </p>
 </body>
 </html>

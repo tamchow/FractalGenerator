@@ -105,7 +105,6 @@ public class FunctionEvaluator {
     public Complex evaluate(String expr) {
         String subexpr = substitute(expr, false);
         Complex ztmp;
-        new Complex(z_value);
         int flag = 0;
         do {
             ztmp = eval(process(subexpr));
@@ -121,7 +120,6 @@ public class FunctionEvaluator {
     protected String limitedEvaluate(String expr, int depth) {
         String subexpr = substitute(expr, true);
         Complex ztmp;
-        new Complex(z_value);
         int flag = 0, ctr = 0;
         do {
             ztmp = eval(process(subexpr));

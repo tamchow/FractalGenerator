@@ -12,13 +12,13 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
-
 /**
- * The actual fractal plotter for Julia and Mandelbrot Sets using an iterative algorithm.
- * Various (7) Coloring modes (2 have been commented out as they produce output similar to an enabled option)
+ * The actual fractal plotter for Julia, Newton and Mandelbrot Sets using an iterative algorithm.
+ * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
+ * Various (10) Coloring modes (2 have been commented out as they produce output similar to an enabled option)
  */
 public class FractalGenerator implements Serializable {
-    public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2;
+    public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2, MODE_BUDDHABROT = 3, MODE_NEWTONBROT = 4, MODE_JULIABROT = 5;
     ColorConfig color;
     ArrayList<Complex> roots;
     int zoom, zoom_factor, base_precision, scale, center_x, center_y, mode;
@@ -32,67 +32,51 @@ public class FractalGenerator implements Serializable {
     Complex centre_offset;
     boolean advancedDegree;
     private String variableCode;
-
     public FractalGenerator(FractalParams params) {
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance, params.initParams.color);
     }
-
     public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, color);
     }
-
     public boolean isAdvancedDegree() {
         return advancedDegree;
     }
-
     public void setAdvancedDegree(boolean advancedDegree) {
         this.advancedDegree = advancedDegree;
     }
-
     public ArrayList<Complex> getRoots() {
         return roots;
     }
-
     public long getMaxiter() {
         return maxiter;
     }
-
     public void setMaxiter(long maxiter) {
         this.maxiter = maxiter;
     }
-
     public String getVariableCode() {
         return variableCode;
     }
-
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-
     public int[][] getEscapedata() {
         return escapedata;
     }
-
     public double getDegree() {
         return degree;
     }
-
     public void setDegree(double degree) {
         this.degree = degree;
     }
-
     public double getTolerance() {
         return tolerance;
     }
-
     public void setTolerance(double tolerance) {
         this.tolerance = tolerance;
     }
-
     public Complex[][] getArgand_map() {
         return argand_map;
     }
-
     public void setArgand_map(Complex[][] argand_map) {
         this.argand_map = new Complex[argand_map.length][argand_map[0].length];
         for (int i = 0; i < argand_map.length; i++) {
@@ -101,15 +85,12 @@ public class FractalGenerator implements Serializable {
             }
         }
     }
-
     public Complex getCentre_offset() {
         return centre_offset;
     }
-
     public void setCentre_offset(Complex centre_offset) {
         this.centre_offset = new Complex(centre_offset);
     }
-
     private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         setZoom(zoom);
         setZoom_factor(zoom_factor);
@@ -137,7 +118,6 @@ public class FractalGenerator implements Serializable {
         setDegree(-1);
         setAdvancedDegree(true);
     }
-
     private void populateMap() {
         for (int i=0;i<argand.getHeight();i++){
             for (int j=0;j<argand.getWidth();j++){
@@ -145,15 +125,12 @@ public class FractalGenerator implements Serializable {
             }
         }
     }
-
     public int getMode() {
         return mode;
     }
-
     public void setMode(int mode) {
         this.mode = mode;
     }
-
     /**
      * @param nx:No.   of threads horizontally
      * @param ix:Index of thread horizontally
@@ -161,7 +138,7 @@ public class FractalGenerator implements Serializable {
      * @param iy:Index of thread vertically
      * @return the start and end coordinates for a particular thread's rendering region
      */
-    public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {//for multithreading purposes, which may be implemented later
+    public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {//for multithreading purposes
         int start_x, end_x, start_y, end_y;
         int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
         if (ix == (nx - 1)) {
@@ -180,86 +157,66 @@ public class FractalGenerator implements Serializable {
         }
         return new int[]{start_x, end_x, start_y, end_y};
     }
-
     private int interpolate(int color1, int color2, double bias) {
         return (int) (color1 * bias + color2 * (1 - bias));
     }
-
     public int getScale() {
         return scale;
     }
-
     public void setScale(int scale) {
         this.scale = scale;
     }
-
     public int getZoom() {
         return zoom;
     }
-
     public void setZoom(int zoom) {
         this.zoom = zoom;
     }
-
     public int getZoom_factor() {
         return zoom_factor;
     }
-
     public void setZoom_factor(int zoom_factor) {
         this.zoom_factor = zoom_factor;
     }
-
     public String getFunction() {
         return function;
     }
-
     public void setFunction(String function) {
         this.function = function;
     }
-
     public int getBase_precision() {
         return base_precision;
     }
-
     public void setBase_precision(int base_precision) {
         this.base_precision = base_precision;
     }
-
     public ImageData getArgand() {
         return argand;
     }
-
     public void setArgand(ImageData argand) {
         this.argand = new ImageData(argand);
     }
-
     public String[][] getConsts() {
         return consts;
     }
-
     public void setConsts(String[][] consts) {
         this.consts = new String[consts.length][consts[0].length];
         for (int i = 0; i < consts.length; i++) {
             System.arraycopy(consts[i], 0, this.consts[i], 0, consts[i].length);
         }
     }
-
     public int getCenter_x() {
         return center_x;
     }
-
     public void setCenter_x(int center_x) {
         this.center_x = center_x;
     }
-
     public int getCenter_y() {
         return center_y;
     }
-
     public void setCenter_y(int center_y) {
         this.center_y = center_y;
     }
-
     public void generate(FractalParams params){
         if (params.runParams.fully_configured){
             generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
@@ -267,28 +224,28 @@ public class FractalGenerator implements Serializable {
             generate(params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         }
     }
-
     public void generate(int iterations, double escape_radius, Complex constant) {
         generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, constant);
     }
-
     public void generate(int iterations, double escape_radius) {
         generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, null);
     }
-
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
-        setMaxiter(argand.getHeight() * argand.getHeight() * iterations);
+        setMaxiter((end_x - start_x) * (end_y - start_y) * iterations);
         if (mode != MODE_NEWTON && degree == -1) {
             degree = new FunctionEvaluator(variableCode, consts, advancedDegree).getDegree(function);
         }
         switch (mode) {
             case MODE_MANDELBROT:
+            case MODE_BUDDHABROT:
             mandelbrotGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius);
                 break;
             case MODE_JULIA:
+            case MODE_JULIABROT:
             juliaGenerate(start_x, end_x, start_y, end_y, iterations, escape_radius);
                 break;
             case MODE_NEWTON:
+            case MODE_NEWTONBROT:
                 if (constant == null) {
                     newtonGenerate(start_x, end_x, start_y, end_y, iterations);
                 } else {
@@ -300,6 +257,14 @@ public class FractalGenerator implements Serializable {
         }
     }
 
+    private boolean isInBounds(Complex val) {
+        if (val.imaginary() <= argand_map[0][center_x].imaginary() && val.imaginary() >= argand_map[argand_map.length - 1][center_x].imaginary()) {
+            if (val.real() <= argand_map[center_y][argand_map[0].length - 1].real() && val.real() >= argand_map[center_y][0].real()) {
+                return true;
+            }
+        }
+        return false;
+    }
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         Stack<Complex> last = new Stack<>();
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
@@ -363,13 +328,15 @@ public class FractalGenerator implements Serializable {
                     pass[1] = new Complex(zd);
                 }
                 escapedata[i][j] = c;
-                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                if (mode == MODE_BUDDHABROT) {
+                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + getColor(c, pass, escape_radius, iterations));
+                } else {
+                    argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                }
                 last.clear();
             }
         }
     }
-
-
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
         Polynomial polynomial = Polynomial.fromString(function);
         function = polynomial.toString();
@@ -377,6 +344,9 @@ public class FractalGenerator implements Serializable {
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
+        if (constant.equals(Complex.ZERO)) {
+            constant = new Complex("" + (1 / degree));
+        }
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             functionderiv = polynomial.derivative().toString();
         }
@@ -437,12 +407,15 @@ public class FractalGenerator implements Serializable {
                     pass[1] = new Complex(zd);
                 }
                 escapedata[i][j] = c;
-                argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
+                if (mode == MODE_NEWTONBROT) {
+                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + getColor(c, pass, root_reached, iterations));
+                } else {
+                    argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
+                }
                 last.clear();
             }
         }
     }
-
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
         Polynomial polynomial = Polynomial.fromString(function);
         function = polynomial.toString();
@@ -510,12 +483,15 @@ public class FractalGenerator implements Serializable {
                     pass[1] = new Complex(zd);
                 }
                 escapedata[i][j] = c;
-                argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
+                if (mode == MODE_NEWTONBROT) {
+                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + getColor(c, pass, root_reached, iterations));
+                } else {
+                    argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
+                }
                 last.clear();
             }
         }
     }
-
     private boolean containsRoot(Complex z) {
         for (Complex c : roots) {
             if (ComplexOperations.distance_squared(c, z) < tolerance) {
@@ -524,7 +500,6 @@ public class FractalGenerator implements Serializable {
         }
         return false;
     }
-
     private int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {
             if (ComplexOperations.distance_squared(roots.get(i), z) < tolerance) {
@@ -593,20 +568,21 @@ public class FractalGenerator implements Serializable {
                     pass[1] = new Complex(zd);
                 }
                 escapedata[i][j] = c;
-                argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                if (mode == MODE_JULIABROT) {
+                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + getColor(c, pass, escape_radius, iterations));
+                } else {
+                    argand.setPixel(i, j, getColor(c, pass, escape_radius, iterations));
+                }
                 last.clear();
             }
         }
     }
-
     public ColorConfig getColor() {
         return color;
     }
-
     public void setColor(ColorConfig color) {
         this.color = new ColorConfig(color);
     }
-
     public int getColor(int val, Complex[] last, double escape_radius, int iterations) {
         int colortmp, color1, color2;
         double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / Math.log(degree))));
@@ -680,11 +656,9 @@ public class FractalGenerator implements Serializable {
         }
         return colortmp;
     }
-
     public Complex fromCooordinates(int x, int y) {
         return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
     }
-
     public int[] toCooordinates(Complex point) {
         int x=(int) ((point.real() * scale) + center_x),y=(int) (center_y - (point.imaginary() * scale));
         if (x < 0) {
@@ -693,15 +667,14 @@ public class FractalGenerator implements Serializable {
         if (y < 0) {
             y = 0;
         }
-        if (x > argand.getWidth()) {
-            x = argand.getWidth();
+        if (x >= argand.getWidth()) {
+            x = argand.getWidth() - 1;
         }
-        if (y > argand.getHeight()) {
-            y = argand.getHeight();
+        if (y >= argand.getHeight()) {
+            y = argand.getHeight() - 1;
         }
         return new int[]{x,y};
     }
-
     public void zoom(int cx, int cy, int level) {
         if (cx < 0) {
             cx = 0;
@@ -709,23 +682,21 @@ public class FractalGenerator implements Serializable {
         if (cy < 0) {
             cy = 0;
         }
-        if (cx > argand.getWidth()) {
-            cx = argand.getWidth();
+        if (cx >= argand.getWidth()) {
+            cx = argand.getWidth() - 1;
         }
-        if (cy > argand.getHeight()) {
-            cy = argand.getHeight();
+        if (cy >= argand.getHeight()) {
+            cy = argand.getHeight() - 1;
         }
         setCentre_offset(fromCooordinates(cx, cy));
         setZoom_factor(level);
         setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
         populateMap();
     }
-
     public void resetCentre() {
         setCenter_x(argand.getWidth() / 2);
         setCenter_y(argand.getHeight() / 2);
     }
-
     public void resetBasePrecision() {
         setBase_precision((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
