@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class ComplexFractalInitParams implements Serializable {
     public String function, variableCode;
     public String[][] consts;
-    public int width, height, zoom, zoom_factor, base_precision, fractal_mode;
-    public double tolerance;
+    public int width, height, fractal_mode;
+    public double tolerance, zoom, zoom_factor, base_precision;
     public ColorConfig color;
     public ComplexFractalInitParams(ComplexFractalInitParams initParams) {
         initParams(initParams.width, initParams.height, initParams.zoom, initParams.zoom_factor, initParams.base_precision, initParams.fractal_mode, initParams.function, initParams.consts, initParams.variableCode, initParams.tolerance, initParams.getColor());
@@ -22,7 +22,7 @@ public class ComplexFractalInitParams implements Serializable {
     public void setColor(ColorConfig color) {
         this.color = new ColorConfig(color);
     }
-    private void initParams(int width, int height, int zoom, int zoom_factor, int base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig colors) {
+    private void initParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig colors) {
         this.width = width;
         this.height = height;
         this.zoom = zoom;
@@ -40,7 +40,7 @@ public class ComplexFractalInitParams implements Serializable {
             System.arraycopy(consts[i], 0, this.consts[i], 0, consts[i].length);
         }
     }
-    public ComplexFractalInitParams(int width, int height, int zoom, int zoom_factor, int base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
+    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, color);
     }
     public ComplexFractalInitParams() {
@@ -61,6 +61,6 @@ public class ComplexFractalInitParams implements Serializable {
         }
         ColorConfig colorConfig = new ColorConfig();
         colorConfig.colorsFromString(colorcfg);
-        initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), Integer.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), colorConfig);
+        initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), Double.valueOf(params[4]), Integer.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), colorConfig);
     }
 }

@@ -20,7 +20,8 @@ public class ComplexFractalGenerator implements Serializable {
     public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2, MODE_BUDDHABROT = 3, MODE_NEWTONBROT = 4, MODE_JULIABROT = 5;
     ColorConfig color;
     ArrayList<Complex> roots;
-    int zoom, zoom_factor, base_precision, scale, center_x, center_y, mode;
+    double zoom, zoom_factor, base_precision, scale;
+    int center_x, center_y, mode;
     double degree, tolerance;
     long maxiter;
     ImageData argand;
@@ -34,7 +35,7 @@ public class ComplexFractalGenerator implements Serializable {
     public ComplexFractalGenerator(ComplexFractalParams params) {
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance, params.initParams.color);
     }
-    private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
+    private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         setZoom(zoom);
         setZoom_factor(zoom_factor);
         setFunction(function);
@@ -72,7 +73,7 @@ public class ComplexFractalGenerator implements Serializable {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2);
         centre_offset = new Complex(Complex.ZERO);
     }
-    public ComplexFractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, color);
     }
     public boolean isAdvancedDegree() {
@@ -160,22 +161,22 @@ public class ComplexFractalGenerator implements Serializable {
         }
         return new int[]{start_x, end_x, start_y, end_y};
     }
-    public int getScale() {
+    public double getScale() {
         return scale;
     }
-    public void setScale(int scale) {
+    public void setScale(double scale) {
         this.scale = scale;
     }
-    public int getZoom() {
+    public double getZoom() {
         return zoom;
     }
-    public void setZoom(int zoom) {
+    public void setZoom(double zoom) {
         this.zoom = zoom;
     }
-    public int getZoom_factor() {
+    public double getZoom_factor() {
         return zoom_factor;
     }
-    public void setZoom_factor(int zoom_factor) {
+    public void setZoom_factor(double zoom_factor) {
         this.zoom_factor = zoom_factor;
     }
     public String getFunction() {
@@ -184,10 +185,10 @@ public class ComplexFractalGenerator implements Serializable {
     public void setFunction(String function) {
         this.function = function;
     }
-    public int getBase_precision() {
+    public double getBase_precision() {
         return base_precision;
     }
-    public void setBase_precision(int base_precision) {
+    public void setBase_precision(double base_precision) {
         this.base_precision = base_precision;
     }
     public ImageData getArgand() {
@@ -585,6 +586,9 @@ public class ComplexFractalGenerator implements Serializable {
         double lbnd, ubnd, calc;
         switch (color.getMode()) {
             case Colors.CALCULATIONS.SIMPLE: colortmp = color.getColor((val * (iterations * color.color_density)) % color.num_colors); break;
+            case Colors.CALCULATIONS.SIMPLE_SMOOTH: color1 = color.getColor((val * (iterations * color.color_density)) % color.num_colors); color2 = color.getColor(((val + 1) * (iterations * color.color_density)) % color.num_colors);
+                //colortmp=ColorConfig.linearInterpolated(color1,color2, val, iterations);
+                colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized)); break;
             case Colors.CALCULATIONS.COLOR_DIVIDE:
                 color1 = (int) (0xffffff / renormalized);
                 color2 = (int) (0xffffff / (renormalized + 1));
@@ -620,8 +624,7 @@ public class ComplexFractalGenerator implements Serializable {
                 /*if(indexOfRoot(last[0])>0) {*/
                 color1 = color.getTint(color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) (val + 1) / iterations)); colortmp = ColorConfig.linearInterpolated(color1, color2, val, iterations);
                 /*}else {
-                color = ColorConfig.linearInterpolated(0xffffff,random_palette[(((int) escape_radius * color_density) % num_colors)],(
-                (double) val / iterations));
+                color = ColorConfig.linearInterpolated(0xffffff, color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors),((double) val / iterations));
                 }*/
                 break;
             case Colors.CALCULATIONS.COLOR_NEWTON_2:
@@ -670,7 +673,7 @@ public class ComplexFractalGenerator implements Serializable {
         }
         return new int[]{x, y};
     }
-    public void zoom(int cx, int cy, int level) {
+    public void zoom(int cx, int cy, double level) {
         if (cx < 0) {
             cx = 0;
         }
@@ -684,8 +687,7 @@ public class ComplexFractalGenerator implements Serializable {
             cy = argand.getHeight() - 1;
         }
         setCentre_offset(fromCooordinates(cx, cy));
-        setZoom_factor(level);
-        setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
+        setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
         populateMap();
     }
     public void resetBasePrecision() {

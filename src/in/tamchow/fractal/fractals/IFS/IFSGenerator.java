@@ -12,13 +12,14 @@ import java.util.Random;
 public class IFSGenerator {
     ImageData plane;
     IFSFractalParams params;
-    Matrix centre_offset;
+    Matrix centre_offset, initial;
     int center_x, center_y, scale, zoom, zoom_factor, base_precision;
     long depth;
+    boolean completion;
     public IFSGenerator(IFSFractalParams params) {
         setParams(params); plane = new ImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
-        setBase_precision(params.getBase_precision());
+        setBase_precision(params.getBase_precision()); initial = null; completion = false;
     }
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2); setCenter_y(plane.getHeight() / 2); double[][] matrixData = new double[2][1];
@@ -76,13 +77,16 @@ public class IFSGenerator {
         setBase_precision((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
     }
     public void generate() {
-        Random random = new Random();
-        Matrix initial = fromCooordinates(random.nextInt(plane.getWidth() - 1), random.nextInt(plane.getHeight() - 1));
-        Matrix point = new Matrix(initial); for (int i = 0; i <= depth; i++) {
+        if (initial == null) {
+            Random random = new Random();
+            initial = fromCooordinates(random.nextInt(plane.getWidth() - 1), random.nextInt(plane.getHeight() - 1));
+        } Matrix point = new Matrix(initial); for (int i = 0; i <= depth; i++) {
             int index = MathUtils.weightedRandom(params.getWeights()); int[] coord = toCooordinates(point);
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
-            if (point.equals(initial)) break;
+            if (point.equals(initial) || i == depth) {
+                completion = true; break;
+            }
         }
     }
     public int[] toCooordinates(Matrix point) {
@@ -96,5 +100,16 @@ public class IFSGenerator {
         } if (y >= plane.getHeight()) {
             y = plane.getHeight() - 1;
         } return new int[]{x, y};
+    }
+    public boolean isComplete() {return completion;}
+    public void generateStep() {
+        if (initial == null) {
+            Random random = new Random();
+            initial = fromCooordinates(random.nextInt(plane.getWidth() - 1), random.nextInt(plane.getHeight() - 1));
+        } Matrix point = new Matrix(initial); int index = MathUtils.weightedRandom(params.getWeights());
+        int[] coord = toCooordinates(point);
+        plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
+        point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
+        if (point.equals(initial)) completion = true;
     }
 }
