@@ -618,7 +618,7 @@ public class ComplexFractalGenerator implements Serializable {
                 */
             case Colors.CALCULATIONS.COLOR_NEWTON_1:
                 /*if(indexOfRoot(last[0])>0) {*/
-                colortmp = ColorConfig.linearInterpolated(0xffffff, color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations));
+                color1 = color.getTint(color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) (val + 1) / iterations)); colortmp = ColorConfig.linearInterpolated(color1, color2, val, iterations);
                 /*}else {
                 color = ColorConfig.linearInterpolated(0xffffff,random_palette[(((int) escape_radius * color_density) % num_colors)],(
                 (double) val / iterations));
