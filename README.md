@@ -42,9 +42,7 @@ Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symm
 </p>
 
 <p>
-To run:
-
-`java -jar FractalGenerator.jar [path-to-fractal-config-file]`
+Running:
 
 Parameter is optional, but if you have a slow PC and it is defaulted to a FullHD render,
 be ready to wait upto an hour for output. I have an Asus K55VM and on this configuration with CMD I get 30 mins.
@@ -53,6 +51,10 @@ This runs substantially faster through Idea itself (9.5 mins for me), no idea wh
 
 You're welcome to use any part of this in any way you wish, but if you acknowledge me I'll be very grateful.
 
-For further details, refer to `/.idea/description.html`.
+For further details, refer to the wiki.
+
+To run:
+
+<pre>java -jar FractalGenerator.jar [path-to-fractal-config-file]</pre>
 </p>
 </html>
