@@ -6,8 +6,8 @@ package in.tamchow.fractal.imgutils;
 public class Transition {
     private ImageData img1, img2;
     private Animation frames;
-    private int       transtype;
-    private int       transtime;
+    private int transtype;
+    private int transtime;
     public Transition(int transtype, ImageData img1, ImageData img2, int fps, int time) {
         setImg1(img1);
         setImg2(img2);
@@ -51,9 +51,7 @@ public class Transition {
     public void doTransition() {
         frames.clearFrames();
         ImageData tmp = new ImageData(img1);
-        frames.addFrame(img1);
-        int numframes  = frames.getFps() * transtime;
-        int bandwidth  = img2.getWidth() / numframes;
+        frames.addFrame(img1); int numframes = frames.getFps() * transtime; int bandwidth = img2.getWidth() / numframes;
         int bandheight = img2.getHeight() / numframes;
         switch (transtype) {
             case TransitionTypes.TOP:

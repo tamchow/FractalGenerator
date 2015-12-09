@@ -10,8 +10,7 @@ public class MathUtils {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }
     public static double weightedRandom(double[] values, double[] weights) {
-        int    factor = 0, pidx = 0;
-        double sum    = 0.0;
+        int factor = 0, pidx = 0; double sum = 0.0;
         for (double weight : weights) {
             int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
             factor = ((afterpoint > factor) ? afterpoint : factor);
@@ -33,8 +32,7 @@ public class MathUtils {
         return rand[new Random().nextInt(rand.length)];
     }
     public static int weightedRandom(double[] weights) {
-        int    factor = 0, pidx = 0;
-        double sum    = 0.0;
+        int factor = 0, pidx = 0; double sum = 0.0;
         for (double weight : weights) {
             int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
             factor = ((afterpoint > factor) ? afterpoint : factor);

@@ -7,11 +7,11 @@ import java.util.ArrayList;
  * Represents a polynomial and provides standard methods
  */
 public class Polynomial {
-    ArrayList<Term>   terms;
+    ArrayList<Term> terms;
     ArrayList<String> signs;
-    String[][]        constdec;
-    String            z_value;
-    String            variableCode;
+    String[][] constdec;
+    String z_value;
+    String variableCode;
     public Polynomial(String variable, String variableCode, String[][] varconst) {
         setZ_value(variable);
         setConstdec(varconst);
@@ -22,8 +22,7 @@ public class Polynomial {
         signs = new ArrayList<>();
     }
     public static Polynomial fromString(String polynomial) {
-        Polynomial poly   = new Polynomial();
-        String[]   tokens = polynomial.split(";");
+        Polynomial poly = new Polynomial(); String[] tokens = polynomial.split(";");
         for (String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());

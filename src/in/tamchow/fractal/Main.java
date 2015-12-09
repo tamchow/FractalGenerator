@@ -1,8 +1,9 @@
 package in.tamchow.fractal;
+import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.ConfigReader;
-import in.tamchow.fractal.config.color.ColorConfig;
-import in.tamchow.fractal.config.color.Colors;
-import in.tamchow.fractal.config.fractalconfig.FractalConfig;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
+import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 
@@ -15,34 +16,31 @@ import java.util.Random;
  */
 public class Main {
     public static void main(String[] args) {
-        String      func   = "( z ^ 3 ) + ( ( d ) * ( z ) ) + c", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
-        String[][]  consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
-        int         resx   = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 600, fracmode = FractalGenerator.MODE_MANDELBROT, iter = 32;
-        double      escrad = 2.0, tolerance = 1e-3;
-        ColorConfig cfg    = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 4, 65536, 0x0f0f00, 0xff0000);
+        String func = "z ^ 2 + e"/*"( z ^ 3 ) + ( ( d ) * ( z ) ) + c"*/, variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
+        String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
+        int resx = 1921, resy = 1081, zoom = 10, zoompow = 0, baseprec = 600, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 32;
+        double escrad = 2.0, tolerance = 1e-3;
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.SIMPLE, 167, 65536, 0xff0000, 0x000000);
         //cfg.setPalette(new int[]{0xff0000,0x00ff00,0x0000ff},false);
         Complex constant = null;//new Complex("-0.5,+0.0i");
         //func = poly;
-        boolean       def   = (args.length == 0);
-        FractalConfig fccfg = new FractalConfig(0, 0, 0);
+        boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0);
         if (!def) {
             try {
                 fccfg = ConfigReader.getFractalConfigFromFile(new File(args[0]));
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-        }
-        long             inittime = System.currentTimeMillis();
-        FractalGenerator jgen;
+        } long inittime = System.currentTimeMillis(); ComplexFractalGenerator jgen;
         if (def) {
-            jgen = new FractalGenerator(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg);
+            jgen = new ComplexFractalGenerator(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg);
         } else {
-            jgen = new FractalGenerator(fccfg.getParams()[0]);
+            jgen = new ComplexFractalGenerator(fccfg.getParams()[0]);
         }
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
-            //ThreadedGenerator tg=new ThreadedGenerator(2,2,jgen,iter,escrad,constant);
+            //ThreadedComplexFractalGenerator tg=new ThreadedComplexFractalGenerator(2,2,jgen,iter,escrad,constant);
             //tg.generate();
             if (constant != null) {
                 jgen.generate(iter, escrad, constant);
@@ -54,7 +52,7 @@ public class Main {
         }
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
-        File pic     = new File("D:/Fractal.jpg");
+        File pic = new File("D:/Fractal.jpg");
         File postpic = new File("D:/Fractal_processed.jpg");
         try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand()), "jpg", pic);

@@ -1,16 +1,16 @@
-package in.tamchow.fractal.config.fractalconfig;
+package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
 /**
  * Parameters for configuring the generation of a fractal
  */
-public class FractalRunParams implements Serializable {
+public class ComplexFractalRunParams implements Serializable {
     public int iterations, start_x, end_x, start_y, end_y;
-    public double  escape_radius;
+    public double escape_radius;
     public Complex constant;
     public boolean fully_configured;
-    public FractalRunParams(FractalRunParams runParams) {
+    public ComplexFractalRunParams(ComplexFractalRunParams runParams) {
         if (runParams.fully_configured) {
             initParams(runParams.start_x, runParams.end_x, runParams.start_y, runParams.end_y, runParams.iterations, runParams.escape_radius, runParams.constant);
             fully_configured = true;
@@ -35,7 +35,7 @@ public class FractalRunParams implements Serializable {
         this.constant = new Complex(constant);
         fully_configured = false;
     }
-    public FractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
+    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         initParams(start_x, end_x, start_y, end_y, iterations, escape_radius);
     }
     public void initParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
@@ -48,10 +48,10 @@ public class FractalRunParams implements Serializable {
         constant = null;
         fully_configured = true;
     }
-    public FractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
+    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         initParams(start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
     }
-    public FractalRunParams(int iterations, double escape_radius) {
+    public ComplexFractalRunParams(int iterations, double escape_radius) {
         initParams(iterations, escape_radius);
     }
     public void initParams(int iterations, double escape_radius) {
@@ -60,10 +60,10 @@ public class FractalRunParams implements Serializable {
         constant = null;
         fully_configured = false;
     }
-    public FractalRunParams(int iterations, double escape_radius, Complex constant) {
+    public ComplexFractalRunParams(int iterations, double escape_radius, Complex constant) {
         initParams(iterations, escape_radius, constant);
     }
-    public FractalRunParams() {
+    public ComplexFractalRunParams() {
         initParams(128, 2.0);
     }
     /**

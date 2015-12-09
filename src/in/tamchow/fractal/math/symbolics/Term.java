@@ -3,10 +3,10 @@ package in.tamchow.fractal.math.symbolics;
  * Holds one term of a polynomial
  */
 public class Term {
-    public  String  coefficient;
-    public  String  exponent;
-    public  String  variable;
-    public  String  constval;
+    public String coefficient;
+    public String exponent;
+    public String variable;
+    public String constval;
     private boolean constant;
     public Term(String coefficient, String exponent, String variable) {
         setVariable(variable);

@@ -1,19 +1,19 @@
-package in.tamchow.fractal.config.fractalconfig;
-import in.tamchow.fractal.FractalGenerator;
-import in.tamchow.fractal.config.color.ColorConfig;
-import in.tamchow.fractal.config.color.Colors;
+package in.tamchow.fractal.config.fractalconfig.complex;
+import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 
 import java.io.Serializable;
 /**
  * Parameters for configuring the initialization of a fractal
  */
-public class FractalInitParams implements Serializable {
+public class ComplexFractalInitParams implements Serializable {
     public String function, variableCode;
     public String[][] consts;
-    public int        width, height, zoom, zoom_factor, base_precision, fractal_mode;
-    public double      tolerance;
+    public int width, height, zoom, zoom_factor, base_precision, fractal_mode;
+    public double tolerance;
     public ColorConfig color;
-    public FractalInitParams(FractalInitParams initParams) {
+    public ComplexFractalInitParams(ComplexFractalInitParams initParams) {
         initParams(initParams.width, initParams.height, initParams.zoom, initParams.zoom_factor, initParams.base_precision, initParams.fractal_mode, initParams.function, initParams.consts, initParams.variableCode, initParams.tolerance, initParams.getColor());
     }
     public ColorConfig getColor() {
@@ -40,17 +40,16 @@ public class FractalInitParams implements Serializable {
             System.arraycopy(consts[i], 0, this.consts[i], 0, consts[i].length);
         }
     }
-    public FractalInitParams(int width, int height, int zoom, int zoom_factor, int base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
+    public ComplexFractalInitParams(int width, int height, int zoom, int zoom_factor, int base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, color);
     }
-    public FractalInitParams() {
-        String      func   = "z ^ 2 + c";
-        String[][]  consts = {{"c", "-0.8,+0.156i"}};
-        ColorConfig cfg    = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 32, 256, 0);
-        initParams(1921, 1081, 10, 0, 540, FractalGenerator.MODE_JULIA, func, consts, "z", 1e-5, cfg);
+    public ComplexFractalInitParams() {
+        String func = "z ^ 2 + c"; String[][] consts = {{"c", "-0.8,+0.156i"}};
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 32, 256, 0);
+        initParams(1921, 1081, 10, 0, 540, ComplexFractalGenerator.MODE_JULIA, func, consts, "z", 1e-5, cfg);
     }
     public void paramsFromString(String[] params) {
-        String[]   con    = params[9].split(";");
+        String[] con = params[9].split(";");
         String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i][0] = con[i].substring(0, con[i].indexOf(':'));

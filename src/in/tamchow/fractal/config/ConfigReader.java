@@ -1,6 +1,6 @@
 package in.tamchow.fractal.config;
-import in.tamchow.fractal.config.fractalconfig.FractalConfig;
-import in.tamchow.fractal.config.fractalconfig.FractalParams;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.config.imageconfig.ImageParams;
 
@@ -14,15 +14,13 @@ import java.util.Scanner;
  */
 public class ConfigReader {
     public static boolean isFileImageConfig(File file) throws FileNotFoundException {
-        Scanner in = new Scanner(file);
-        return !in.nextLine().equals("[ImageConfig]");
+        Scanner in = new Scanner(file); return in.nextLine().equals("[ImageConfig]");
     }
     public static boolean isFileFractalConfig(File file) throws FileNotFoundException {
-        Scanner in = new Scanner(file);
-        return !in.nextLine().equals("[FractalConfig]");
+        Scanner in = new Scanner(file); return in.nextLine().equals("[ComplexFractalConfig]");
     }
     public static ImageConfig getImageConfigFromFile(File cfgfile) throws FileNotFoundException {
-        Scanner           in    = new Scanner(cfgfile);
+        Scanner in = new Scanner(cfgfile);
         ArrayList<String> lines = new ArrayList<>();
         if (!in.nextLine().equals("[ImageConfig]")) {
             return null;
@@ -35,21 +33,19 @@ public class ConfigReader {
                 }
                 lines.add(line);
             }
-        }
-        List<String>  globalcfg   = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        List<String>  specCfg     = lines.subList(lines.indexOf("[Images]") + 1, lines.indexOf("[EndImages]"));
-        ImageConfig   imageConfig = new ImageConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
-        ImageParams[] imgparams   = new ImageParams[specCfg.size()];
+        } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
+        List<String> specCfg = lines.subList(lines.indexOf("[Images]") + 1, lines.indexOf("[EndImages]"));
+        ImageConfig imageConfig = new ImageConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
+        ImageParams[] imgparams = new ImageParams[specCfg.size()];
         for (int i = 0; i < specCfg.size(); i++) {
             imgparams[i] = new ImageParams(specCfg.get(i).substring(0, specCfg.get(i).indexOf(" ")), Integer.valueOf(specCfg.get(i).substring(specCfg.get(i).indexOf(" ") + 1, specCfg.get(i).length())));
         }
         imageConfig.readConfig(imgparams);
         return imageConfig;
     }
-    public static FractalConfig getFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
-        Scanner           in    = new Scanner(cfgfile);
-        ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[FractalConfig]")) {
+    public static ComplexFractalConfig getFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
+        Scanner in = new Scanner(cfgfile);
+        ArrayList<String> lines = new ArrayList<>(); if (!in.nextLine().equals("[ComplexFractalConfig]")) {
             return null;
         }
         while (in.hasNext()) {
@@ -60,19 +56,16 @@ public class ConfigReader {
                 }
                 lines.add(line);
             }
-        }
-        List<String>    globalcfg     = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        List<String>    specCfg       = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
-        FractalConfig   fractalConfig = new FractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
-        FractalParams[] fractalParams = new FractalParams[specCfg.size()];
-        for (int i = 0; i < fractalParams.length; i++) {
-            fractalParams[i] = getParamFromFile(new File(specCfg.get(i)));
-        }
-        fractalConfig.setParams(fractalParams);
-        return fractalConfig;
+        } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
+        List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        ComplexFractalConfig complexFractalConfig = new ComplexFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
+        ComplexFractalParams[] complexFractalParams = new ComplexFractalParams[specCfg.size()];
+        for (int i = 0; i < complexFractalParams.length; i++) {
+            complexFractalParams[i] = getParamFromFile(new File(specCfg.get(i)));
+        } complexFractalConfig.setParams(complexFractalParams); return complexFractalConfig;
     }
-    public static FractalParams getParamFromFile(File paramfile) throws FileNotFoundException {
-        Scanner           in    = new Scanner(paramfile);
+    public static ComplexFractalParams getParamFromFile(File paramfile) throws FileNotFoundException {
+        Scanner in = new Scanner(paramfile);
         ArrayList<String> lines = new ArrayList<>();
         while (in.hasNext()) {
             String line = in.nextLine();
@@ -84,14 +77,12 @@ public class ConfigReader {
             }
         }
         List<String> initConfig = lines.subList(lines.indexOf("[Initconfig]") + 1, lines.indexOf("[EndInitconfig]"));
-        String[]     init       = new String[initConfig.size()];
+        String[] init = new String[initConfig.size()];
         initConfig.toArray(init);
         List<String> runConfig = lines.subList(lines.indexOf("[Runconfig]") + 1, lines.indexOf("[EndRunconfig]"));
-        String[]     run       = new String[runConfig.size()];
-        initConfig.toArray(run);
-        FractalParams fractalParams = new FractalParams();
-        fractalParams.initParams.paramsFromString(init);
-        fractalParams.runParams.paramsFromString(run);
-        return fractalParams;
+        String[] run = new String[runConfig.size()];
+        initConfig.toArray(run); ComplexFractalParams complexFractalParams = new ComplexFractalParams();
+        complexFractalParams.initParams.paramsFromString(init); complexFractalParams.runParams.paramsFromString(run);
+        return complexFractalParams;
     }
 }

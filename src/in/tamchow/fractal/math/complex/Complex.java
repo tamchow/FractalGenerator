@@ -43,7 +43,7 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
                 a = 0.0;
                 ib = Double.parseDouble(complex.substring(0, complex.length()));
             } else {
-                String a  = complex.substring(0, complex.indexOf(","));
+                String a = complex.substring(0, complex.indexOf(","));
                 String ib = complex.substring(complex.indexOf(",") + 1, complex.lastIndexOf("i"));
                 if (a.startsWith("+")) {
                     a = a.substring(1, a.length());

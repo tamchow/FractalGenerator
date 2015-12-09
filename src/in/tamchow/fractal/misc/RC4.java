@@ -35,16 +35,14 @@ public class RC4 {
         for (int i = 0; i < toprocess.length; i++) {
             toprocess[i] = (byte) ((int) input.charAt(i));
         }
-        byte[] processed = process(toprocess);
-        String output    = "";
+        byte[] processed = process(toprocess); String output = "";
         for (byte aProcessed : processed) {
             output += (char) ((int) aProcessed);
         }
         return output;
     }
     public byte[] process(byte[] input) {
-        byte[] output = new byte[input.length];
-        int    i      = 0, j = 0;
+        byte[] output = new byte[input.length]; int i = 0, j = 0;
         for (int k = 0; k < input.length; k++) {
             i = (i + 1) % key.length;
             j = (j + key[i]) % key.length;

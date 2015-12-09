@@ -1,7 +1,7 @@
-package in.tamchow.fractal;
-import in.tamchow.fractal.config.color.ColorConfig;
-import in.tamchow.fractal.config.color.Colors;
-import in.tamchow.fractal.config.fractalconfig.FractalParams;
+package in.tamchow.fractal.fractals.complex;
+import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
@@ -16,22 +16,22 @@ import java.util.Stack;
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
  * Various (10) Coloring modes (2 have been commented out as they produce output similar to an enabled option)
  */
-public class FractalGenerator implements Serializable {
+public class ComplexFractalGenerator implements Serializable {
     public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2, MODE_BUDDHABROT = 3, MODE_NEWTONBROT = 4, MODE_JULIABROT = 5;
-    ColorConfig        color;
+    ColorConfig color;
     ArrayList<Complex> roots;
-    int                zoom, zoom_factor, base_precision, scale, center_x, center_y, mode;
+    int zoom, zoom_factor, base_precision, scale, center_x, center_y, mode;
     double degree, tolerance;
-    long        maxiter;
-    ImageData   argand;
-    String      function;
-    String[][]  consts;
-    int[][]     escapedata;
+    long maxiter;
+    ImageData argand;
+    String function;
+    String[][] consts;
+    int[][] escapedata;
     Complex[][] argand_map;
-    Complex     centre_offset;
-    boolean     advancedDegree;
+    Complex centre_offset;
+    boolean advancedDegree;
     private String variableCode;
-    public FractalGenerator(FractalParams params) {
+    public ComplexFractalGenerator(ComplexFractalParams params) {
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance, params.initParams.color);
     }
     private void initFractal(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
@@ -46,12 +46,9 @@ public class FractalGenerator implements Serializable {
         if (mode == MODE_MANDELBROT) {
             consts[0][0] = "c";
             consts[0][1] = "0,+0i";
-        }
-        setCenter_x(argand.getWidth() / 2);
-        setCenter_y(argand.getHeight() / 2);
+        } resetCentre();
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()];
-        setCentre_offset(Complex.ZERO);
         populateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         setVariableCode(variableCode);
@@ -71,7 +68,11 @@ public class FractalGenerator implements Serializable {
     public Complex fromCooordinates(int x, int y) {
         return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
     }
-    public FractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
+    public void resetCentre() {
+        setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2);
+        centre_offset = new Complex(Complex.ZERO);
+    }
+    public ComplexFractalGenerator(int width, int height, int zoom, int zoom_factor, int base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, color);
     }
     public boolean isAdvancedDegree() {
@@ -216,7 +217,7 @@ public class FractalGenerator implements Serializable {
     public void setCenter_y(int center_y) {
         this.center_y = center_y;
     }
-    public void generate(FractalParams params) {
+    public void generate(ComplexFractalParams params) {
         if (params.runParams.fully_configured) {
             generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         } else {
@@ -264,21 +265,20 @@ public class FractalGenerator implements Serializable {
         return false;
     }
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        Stack<Complex>    last          = new Stack<>();
-        FunctionEvaluator fe            = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        Polynomial        poly;
-        String            functionderiv = "";
+        Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
+        Polynomial poly; String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             poly = Polynomial.fromString(function);
             function = poly.toString();
             functionderiv = poly.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        long              ctr = 0;
+        long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z  = new Complex(Complex.ZERO);
+                Complex z = new Complex(Complex.ZERO);
                 Complex zd = new Complex(Complex.ZERO);
                 setFirstConstant(this.consts[0][0], argand_map[i][j].toString());
                 fe.setZ_value(z.toString());
@@ -290,7 +290,7 @@ public class FractalGenerator implements Serializable {
                 int c = 0x0;
                 last.push(z);
                 while (c <= iterations && z.modulus() < escape_radius) {
-                    Complex ztmp  = fe.evaluate(function);
+                    Complex ztmp = fe.evaluate(function);
                     Complex ztmpd = null;
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         ztmpd = fed.evaluate(functionderiv);
@@ -341,9 +341,8 @@ public class FractalGenerator implements Serializable {
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
         Polynomial polynomial = Polynomial.fromString(function);
-        function = polynomial.toString();
-        Stack<Complex>    last = new Stack<>();
-        FunctionEvaluator fe   = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
+        function = polynomial.toString(); Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
         if (constant.equals(Complex.ZERO)) {
@@ -353,20 +352,19 @@ public class FractalGenerator implements Serializable {
             functionderiv = polynomial.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        long              ctr = 0;
+        long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z  = argand_map[i][j];
-                Complex zd = argand_map[i][j];
-                int     c  = 0x0;
+                Complex z = argand_map[i][j];
+                Complex zd = argand_map[i][j]; int c = 0x0;
                 fe.setZ_value(z.toString());
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                     fed.setZ_value(zd.toString());
                 }
                 last.push(z);
                 while (c <= iterations) {
-                    Complex ztmp  = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
+                    Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
                     Complex ztmpd = null;
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         ztmpd = ComplexOperations.subtract(zd, ComplexOperations.multiply(constant, ComplexOperations.divide(fed.evaluate(functionderiv), fed.evaluate(polynomial.derivative().derivative().toString()))));
@@ -394,8 +392,8 @@ public class FractalGenerator implements Serializable {
                 if (!containsRoot(z)) {
                     roots.add(z);
                 }
-                double    root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
-                Complex[] pass         = new Complex[3];
+                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
                     pass[k] = last.pop();
                 }
@@ -420,29 +418,27 @@ public class FractalGenerator implements Serializable {
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
         Polynomial polynomial = Polynomial.fromString(function);
-        function = polynomial.toString();
-        Stack<Complex>    last = new Stack<>();
-        FunctionEvaluator fe   = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
+        function = polynomial.toString(); Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             functionderiv = polynomial.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        long              ctr = 0;
+        long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z  = argand_map[i][j];
-                Complex zd = argand_map[i][j];
-                int     c  = 0x0;
+                Complex z = argand_map[i][j];
+                Complex zd = argand_map[i][j]; int c = 0x0;
                 fe.setZ_value(z.toString());
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                     fed.setZ_value(zd.toString());
                 }
                 last.push(z);
                 while (c <= iterations) {
-                    Complex ztmp  = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
+                    Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
                     Complex ztmpd = null;
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         ztmpd = ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv), fed.evaluate(polynomial.derivative().derivative().toString())));
@@ -470,8 +466,8 @@ public class FractalGenerator implements Serializable {
                 if (!containsRoot(z)) {
                     roots.add(z);
                 }
-                double    root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
-                Complex[] pass         = new Complex[3];
+                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
                     pass[k] = last.pop();
                 }
@@ -511,30 +507,28 @@ public class FractalGenerator implements Serializable {
         return -1;
     }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        Stack<Complex>    last          = new Stack<>();
-        FunctionEvaluator fe            = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        Polynomial        poly;
-        String            functionderiv = "";
+        Stack<Complex> last = new Stack<>();
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
+        Polynomial poly; String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             poly = Polynomial.fromString(function);
             function = poly.toString();
             functionderiv = poly.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        long              ctr = 0;
+        long ctr = 0;
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z  = argand_map[i][j];
-                Complex zd = argand_map[i][j];
-                int     c  = 0x0;
+                Complex z = argand_map[i][j];
+                Complex zd = argand_map[i][j]; int c = 0x0;
                 fe.setZ_value(z.toString());
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                     fed.setZ_value(zd.toString());
                 }
                 last.push(z);
                 while (c <= iterations && z.modulus() < escape_radius) {
-                    Complex ztmp  = fe.evaluate(function);
+                    Complex ztmp = fe.evaluate(function);
                     Complex ztmpd = null;
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         ztmpd = fed.evaluate(functionderiv);
@@ -586,10 +580,11 @@ public class FractalGenerator implements Serializable {
         this.color = new ColorConfig(color);
     }
     public synchronized int getColor(int val, Complex[] last, double escape_radius, int iterations) {
-        int    colortmp, color1, color2;
+        int colortmp, color1, color2;
         double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / Math.log(degree))));
         double lbnd, ubnd, calc;
         switch (color.getMode()) {
+            case Colors.CALCULATIONS.SIMPLE: colortmp = color.getColor((val * (iterations * color.color_density)) % color.num_colors); break;
             case Colors.CALCULATIONS.COLOR_DIVIDE:
                 color1 = (int) (0xffffff / renormalized);
                 color2 = (int) (0xffffff / (renormalized + 1));
@@ -692,10 +687,6 @@ public class FractalGenerator implements Serializable {
         setZoom_factor(level);
         setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
         populateMap();
-    }
-    public void resetCentre() {
-        setCenter_x(argand.getWidth() / 2);
-        setCenter_y(argand.getHeight() / 2);
     }
     public void resetBasePrecision() {
         setBase_precision((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);

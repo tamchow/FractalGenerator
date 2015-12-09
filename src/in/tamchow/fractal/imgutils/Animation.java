@@ -4,7 +4,7 @@ import java.util.ArrayList;
  * Stores frames for an animation, or here, transitions, with some metadata such as fps.
  */
 public class Animation {
-    private int                  fps;
+    private int fps;
     private ArrayList<ImageData> frames;
     public Animation() {
         fps = 24;

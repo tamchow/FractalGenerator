@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class ImageParams implements Serializable {
     public ImageData image;
-    public int       transition;
+    public int transition;
     public ImageParams(ImageData image, int transition) {
         initParams(image, transition);
     }

@@ -8,7 +8,7 @@ import java.util.Arrays;
  */
 public class ImageConfig extends Config {
     ImageData[] images;
-    int[]       transitions;
+    int[] transitions;
     public ImageConfig(int transtime, int fps, ImageData[] data, int[] transitions, int wait) {
         setFps(fps);
         setTranstime(transtime);

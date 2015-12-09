@@ -1,4 +1,4 @@
-package in.tamchow.fractal.config.color;
+package in.tamchow.fractal.color;
 /**
  * Holds colour configuration for  custom palettes
  */
@@ -25,28 +25,31 @@ public class ColorConfig {
             initShadePalette();
             return;
         }
-        int baseidx = num_colors / 2;
+        int baseidx = num_colors / 2; int increment = 0;
         for (int i = 0; i < baseidx; i++) {
-            palette[i] = Math.abs(basecolor - step);
-        }
+            palette[i] = Math.abs(basecolor - increment * step); increment++;
+        } increment = 0;
         for (int i = baseidx; i < num_colors; i++) {
-            palette[i] = basecolor + step;
+            palette[i] = basecolor + increment * step; increment++;
         }
     }
     private void initShadePalette() {
-        int baseidx = num_colors / 2;
-        for (int i = 0; i < baseidx; i++) {
-            palette[i] = linearInterpolated(basecolor, 0xffffff, Math.abs(baseidx - i), baseidx);
+        int baseidx = num_colors / 2; for (int i = baseidx - 1; i >= 0; i--) {
+            palette[i] = getTint(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
         }
         for (int i = baseidx; i < num_colors; i++) {
-            palette[i] = linearInterpolated(basecolor, 0x000000, Math.abs(baseidx - i), baseidx);
+            palette[i] = getShade(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
         }
     }
-    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue) {
-        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue);
+    public int getTint(int color, double tint) {
+        int r = (color >> 16) & 0xFF; int g = (color >> 8) & 0xFF; int b = (color) & 0xFF;
+        int nr = (int) (r + (255 - r) * tint); int ng = (int) (g + (255 - g) * tint);
+        int nb = (int) (b + (255 - b) * tint); return (nr << 16) | (ng << 8) | (nb);
     }
-    public static int linearInterpolated(int fromcolor, int tocolor, double bias) {
-        return (int) (fromcolor * (1 - bias) + tocolor * (bias));
+    public int getShade(int color, double shade) {
+        int r = (color >> 16) & 0xFF; int g = (color >> 8) & 0xFF; int b = (color) & 0xFF;
+        int nr = (int) (r * (1 - shade)); int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade));
+        return (nr << 16) | (ng << 8) | (nb);
     }
     private void calcStep() {
         setStep((0xfffff / (color_density << num_colors)));
@@ -149,6 +152,12 @@ public class ColorConfig {
     public void setMode(int mode) {
         this.mode = mode;
     }
+    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue) {
+        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue);
+    }
+    public static int linearInterpolated(int fromcolor, int tocolor, double bias) {
+        return (int) (fromcolor * (1 - bias) + tocolor * (bias));
+    }
     public int createIndex(double val, double min, double max) {
         return (int) Math.abs(((((val - min) / (max - min))) * color_density) % num_colors);
     }
@@ -174,7 +183,7 @@ public class ColorConfig {
                 h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
                 h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
-        int    i1    = ((index - 1) < 0) ? num_colors - 1 : index - 1, i2 = ((index - 2) < 0) ? num_colors - 2 : index - 2, i3 = ((index - 3) < 0) ? num_colors - 3 : index - 3;
+        int i1 = ((index - 1) < 0) ? num_colors - 1 : index - 1, i2 = ((index - 2) < 0) ? num_colors - 2 : index - 2, i3 = ((index - 3) < 0) ? num_colors - 3 : index - 3;
         double color = (h0 * palette[index] + h1 * palette[i1] + h2 * palette[i2] + h3 * palette[i3]);
         color = (color < 0) ? -color : color;
         return (int) color;

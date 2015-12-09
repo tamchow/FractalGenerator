@@ -1,8 +1,8 @@
 package in.tamchow.fractal.platform_tools;
-import in.tamchow.fractal.FractalGenerator;
 import in.tamchow.fractal.config.Config;
-import in.tamchow.fractal.config.fractalconfig.FractalConfig;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.Transition;
 
@@ -17,12 +17,12 @@ import java.io.File;
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener {
     BufferedImage[] img;
-    Image[]         rimg;
-    Image           todraw;
-    int             width, height, ctr, subctr;
-    ImageConfig      imgconf;
-    FractalConfig    fracconf;
-    FractalGenerator current;
+    Image[] rimg;
+    Image todraw;
+    int width, height, ctr, subctr;
+    ImageConfig imgconf;
+    ComplexFractalConfig fracconf;
+    ComplexFractalGenerator current;
     private boolean running, fractal_mode, zoomedin;
     private int zoomin;
     public ImageDisplay(Config config, int width, int height) {
@@ -53,15 +53,14 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             } catch (Exception e) {
                 System.err.print("Image read error: " + e.getMessage());
             }
-        } else if (config instanceof FractalConfig) {
+        } else if (config instanceof ComplexFractalConfig) {
             try {
-                FractalConfig fractalConfig = (FractalConfig) config;
-                this.width = fractalConfig.getParams()[0].initParams.width;
-                this.height = fractalConfig.getParams()[0].initParams.height;
-                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-                fracconf = fractalConfig;
-                img = new BufferedImage[fractalConfig.getParams().length];
-                rimg = new Image[fractalConfig.getParams().length];
+                ComplexFractalConfig complexFractalConfig = (ComplexFractalConfig) config;
+                this.width = complexFractalConfig.getParams()[0].initParams.width;
+                this.height = complexFractalConfig.getParams()[0].initParams.height;
+                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); fracconf = complexFractalConfig;
+                img = new BufferedImage[complexFractalConfig.getParams().length];
+                rimg = new Image[complexFractalConfig.getParams().length];
                 ctr = 0;
                 subctr = 0;
                 zoomin = 1;
@@ -74,13 +73,12 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public ImageDisplay(Config config) {
         if (config instanceof ImageConfig) {
             initDisplay(config, ((ImageConfig) config).getImages()[0].getWidth(), ((ImageConfig) config).getImages()[0].getHeight());
-        } else if (config instanceof FractalConfig) {
-            initDisplay(config, ((FractalConfig) config).getParams()[0].initParams.width, ((FractalConfig) config).getParams()[0].initParams.height);
+        } else if (config instanceof ComplexFractalConfig) {
+            initDisplay(config, ((ComplexFractalConfig) config).getParams()[0].initParams.width, ((ComplexFractalConfig) config).getParams()[0].initParams.height);
         }
     }
     public static void show(Config config, String title) {
-        ImageDisplay id         = new ImageDisplay(config);
-        JScrollPane  scrollPane = new JScrollPane(id);
+        ImageDisplay id = new ImageDisplay(config); JScrollPane scrollPane = new JScrollPane(id);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         JFrame disp = new JFrame(title);
@@ -136,7 +134,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 }
             } else {
                 if (!zoomedin) {
-                    current = new FractalGenerator(fracconf.getParams()[i]);
+                    current = new ComplexFractalGenerator(fracconf.getParams()[i]);
                 }
                 current.generate(fracconf.getParams()[i]);
                 todraw = ImageConverter.toImage(current.getArgand());

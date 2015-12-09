@@ -13,9 +13,7 @@ public class StringManipulator {
         return new String(processor);
     }
     public static long doCyclicShift(long num) {
-        int  digits = Long.valueOf(num).toString().length();
-        long one    = num % 10;
-        long other  = num / 10;
+        int digits = Long.valueOf(num).toString().length(); long one = num % 10; long other = num / 10;
         return (long) (one * Math.pow(10, digits)) + other;
     }
     public static int indexOfBackwards(String search, int startindex, char tosearch) {
