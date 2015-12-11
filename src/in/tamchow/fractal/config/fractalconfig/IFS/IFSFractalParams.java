@@ -8,7 +8,8 @@ public class IFSFractalParams {
     double[] weights;
     int[] colors;
     long depth;
-    int zoom, zoomlevel, base_precision, width, height;
+    int width, height, fps;
+    double zoom, zoomlevel, base_precision;
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
             throw new IllegalArgumentException("Configuration object is not properly defined");
@@ -61,31 +62,33 @@ public class IFSFractalParams {
     public void setWidth(int width) {
         this.width = width;
     }
-    public int getZoom() {
+    public double getZoom() {
         return zoom;
     }
-    public void setZoom(int zoom) {
+    public void setZoom(double zoom) {
         this.zoom = zoom;
     }
-    public int getZoomlevel() {
+    public double getZoomlevel() {
         return zoomlevel;
     }
-    public void setZoomlevel(int zoomlevel) {
+    public void setZoomlevel(double zoomlevel) {
         this.zoomlevel = zoomlevel;
     }
-    public int getBase_precision() {
+    public double getBase_precision() {
         return base_precision;
     }
-    public void setBase_precision(int base_precision) {
+    public void setBase_precision(double base_precision) {
         this.base_precision = base_precision;
     }
+    public int getFps() {return fps;}
+    public void setFps(int fps) {this.fps = fps;}
     public void fromString(String[] input) {
         setWidth(Integer.valueOf(input[0])); setHeight(Integer.valueOf(input[1]));
-        setBase_precision(Integer.valueOf(input[2])); setZoom(Integer.valueOf(input[3]));
-        setZoomlevel(Integer.valueOf(input[4])); setDepth(Integer.valueOf(input[5]));
-        transforms = new Matrix[input.length - 6]; translators = new Matrix[input.length - 6];
-        colors = new int[input.length - 6]; weights = new double[input.length - 6];
-        for (int i = 6; i < input.length; i++) {
+        setBase_precision(Double.valueOf(input[2])); setZoom(Double.valueOf(input[3]));
+        setZoomlevel(Double.valueOf(input[4])); setDepth(Long.valueOf(input[5])); setFps(Integer.valueOf(input[6]));
+        transforms = new Matrix[input.length - 7]; translators = new Matrix[input.length - 7];
+        colors = new int[input.length - 7]; weights = new double[input.length - 7];
+        for (int i = 7; i < input.length; i++) {
             String[] parts = input[i].split(" "); transforms[i] = Matrix.fromString(parts[0]);
             translators[i] = Matrix.fromString(parts[1]); weights[i] = Double.valueOf(parts[2]);
             colors[i] = Integer.valueOf(parts[3], 16);

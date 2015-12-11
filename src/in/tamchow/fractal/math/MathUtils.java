@@ -9,14 +9,16 @@ public class MathUtils {
     public static boolean approxEquals(Complex a, Complex b, double tolerance) {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }
+    public static int weightedRandom(double[] weights) {
+        return (int) weightedRandom(null, weights);
+    }
     public static double weightedRandom(double[] values, double[] weights) {
-        int factor = 0, pidx = 0; double sum = 0.0;
+        int factor = 0, pidx = 0; double sum = 0.0; boolean custom = values != null;
         for (double weight : weights) {
             int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
             factor = ((afterpoint > factor) ? afterpoint : factor);
             sum += weight;
-        }
-        if (values.length != weights.length || sum != 1.0) {
+        } if ((values.length != weights.length && !custom) || sum != 1.0) {
             throw new IllegalArgumentException("Illegal Parameters");
         }
         factor = (int) Math.pow(10, factor);
@@ -25,32 +27,12 @@ public class MathUtils {
             if (i == weights[pidx] * factor) {
                 pidx++;
                 continue;
-            }
-            rand[i] = values[pidx];
+            } rand[i] = (custom) ? values[pidx] : pidx;
             i++;
         }
         return rand[new Random().nextInt(rand.length)];
     }
-    public static int weightedRandom(double[] weights) {
-        int factor = 0, pidx = 0; double sum = 0.0;
-        for (double weight : weights) {
-            int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
-            factor = ((afterpoint > factor) ? afterpoint : factor);
-            sum += weight;
-        }
-        if (sum != 1.0) {
-            throw new IllegalArgumentException("Illegal Parameters");
-        }
-        factor = (int) Math.pow(10, factor);
-        int[] rand = new int[factor];
-        for (int i = 0; i < rand.length; ) {
-            if (i == weights[pidx] * factor) {
-                pidx++;
-                continue;
-            }
-            rand[i] = pidx;
-            i++;
-        }
-        return rand[new Random().nextInt(rand.length)];
+    public static int[] translateCoordinates(int x, int y, int ix, int iy, int fx, int fy) {
+        return new int[]{(x / ix) * fx, (y / iy) * fy};
     }
 }

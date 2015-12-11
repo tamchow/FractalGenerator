@@ -1,11 +1,19 @@
 package in.tamchow.fractal.color;
+import java.io.Serializable;
 /**
  * Holds information about an HSL color
  */
-public class HSL {
+public class HSL implements Serializable {
     double hue, saturation, lightness;
     public HSL(double hue, double saturation, double lightness) {
         setHue(hue); setSaturation(saturation); setLightness(lightness);
+    }
+    public static HSL fromString(String hsl) {
+        String[] parts = hsl.split(",");
+        return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
+    }
+    public static double hueFromAngle(double radianMeasure) {
+        return radianMeasure / (2 * Math.PI);
     }
     public static HSL fromRGB(int color) {
         int ri = (color >> 16) & 0xFF; int gi = (color >> 8) & 0xFF; int bi = (color) & 0xFF; double r = ri / 255;
@@ -19,6 +27,16 @@ public class HSL {
             else h = (r - g) / d + 4; h /= 6;
         } return new HSL(h, s, l);
     }
+    public boolean equals(Object other) {
+        if (other instanceof HSL) {
+            HSL that = (HSL) other;
+            if (that.getHue() == getHue() && that.getLightness() == getLightness() && that.getSaturation() == getSaturation()) {
+                return true;
+            }
+        } return false;
+    }
+    public String toString() {return "" + angleFromHue(hue) + "," + saturation + "," + lightness;}
+    public static double angleFromHue(double hue) {return hue * 2 * Math.PI;}
     public double getHue() {return hue;}
     public void setHue(double hue) {this.hue = hue;}
     public double getSaturation() {return saturation;}

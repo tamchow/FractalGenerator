@@ -3,6 +3,7 @@ import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.math.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
@@ -10,7 +11,6 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Stack;
 /**
  * The actual fractal plotter for Julia, Newton and Mandelbrot Sets using an iterative algorithm.
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
@@ -266,7 +266,7 @@ public class ComplexFractalGenerator implements Serializable {
         return false;
     }
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        Stack<Complex> last = new Stack<>();
+        FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         Polynomial poly; String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
@@ -287,8 +287,7 @@ public class ComplexFractalGenerator implements Serializable {
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                     fed.setZ_value(zd.toString());
                     fed.setConstdec(this.consts);
-                }
-                int c = 0x0;
+                } int c = 0;
                 last.push(z);
                 while (c <= iterations && z.modulus() < escape_radius) {
                     Complex ztmp = fe.evaluate(function);
@@ -341,8 +340,8 @@ public class ComplexFractalGenerator implements Serializable {
         this.consts[0][1] = value;
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
-        Polynomial polynomial = Polynomial.fromString(function);
-        function = polynomial.toString(); Stack<Complex> last = new Stack<>();
+        Polynomial polynomial = Polynomial.fromString(function); function = polynomial.toString();
+        FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
@@ -357,8 +356,7 @@ public class ComplexFractalGenerator implements Serializable {
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z = argand_map[i][j];
-                Complex zd = argand_map[i][j]; int c = 0x0;
+                Complex z = argand_map[i][j]; Complex zd = argand_map[i][j]; int c = 0;
                 fe.setZ_value(z.toString());
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                     fed.setZ_value(zd.toString());
@@ -418,8 +416,8 @@ public class ComplexFractalGenerator implements Serializable {
         }
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
-        Polynomial polynomial = Polynomial.fromString(function);
-        function = polynomial.toString(); Stack<Complex> last = new Stack<>();
+        Polynomial polynomial = Polynomial.fromString(function); function = polynomial.toString();
+        FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
         String functionderiv = "";
@@ -508,7 +506,7 @@ public class ComplexFractalGenerator implements Serializable {
         return -1;
     }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        Stack<Complex> last = new Stack<>();
+        FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         Polynomial poly; String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {

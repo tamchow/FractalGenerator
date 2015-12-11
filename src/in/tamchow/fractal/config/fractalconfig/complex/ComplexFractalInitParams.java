@@ -52,13 +52,8 @@ public class ComplexFractalInitParams implements Serializable {
         String[] con = params[9].split(";");
         String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
-            consts[i][0] = con[i].substring(0, con[i].indexOf(':'));
-            consts[i][1] = con[i].substring(con[i].indexOf(':') + 1, con[i].length());
-        }
-        String[] colorcfg = new String[params.length - 10];
-        for (int i = 0; i < colorcfg.length && (i + 10) < params.length; i++) {
-            colorcfg[i] = params[i + 10];
-        }
+            consts[i] = con[i].split(":");
+        } String[] colorcfg = params[10].split(",");
         ColorConfig colorConfig = new ColorConfig();
         colorConfig.colorsFromString(colorcfg);
         initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), Double.valueOf(params[4]), Integer.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), colorConfig);

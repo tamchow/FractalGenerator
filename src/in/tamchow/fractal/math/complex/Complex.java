@@ -30,9 +30,9 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
         precision = 25;
     }
     public Complex(double arg) {
-        a = Math.cos(arg);
-        ib = Math.sin(arg);
         precision = 25;
+        Complex value = ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(arg + "")));
+        this.a = value.real(); this.ib = value.imaginary();
     }
     public Complex(String complex) {
         try {

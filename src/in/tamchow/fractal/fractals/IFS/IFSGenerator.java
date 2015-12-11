@@ -1,5 +1,6 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
+import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.MathUtils;
 import in.tamchow.fractal.math.matrix.Matrix;
@@ -13,7 +14,8 @@ public class IFSGenerator {
     ImageData plane;
     IFSFractalParams params;
     Matrix centre_offset, initial;
-    int center_x, center_y, scale, zoom, zoom_factor, base_precision;
+    int center_x, center_y, scale;
+    double zoom, zoom_factor, base_precision;
     long depth;
     boolean completion;
     public IFSGenerator(IFSFractalParams params) {
@@ -29,22 +31,22 @@ public class IFSGenerator {
     public void setParams(IFSFractalParams params) {this.params = new IFSFractalParams(params);}
     public long getDepth() {return depth;}
     public void setDepth(long depth) {this.depth = depth;}
-    public int getBase_precision() {
+    public double getBase_precision() {
         return base_precision;
     }
-    public void setBase_precision(int base_precision) {
+    public void setBase_precision(double base_precision) {
         this.base_precision = base_precision;
     }
-    public int getZoom_factor() {
+    public double getZoom_factor() {
         return zoom_factor;
     }
-    public void setZoom_factor(int zoom_factor) {
+    public void setZoom_factor(double zoom_factor) {
         this.zoom_factor = zoom_factor;
     }
-    public int getZoom() {
+    public double getZoom() {
         return zoom;
     }
-    public void setZoom(int zoom) {
+    public void setZoom(double zoom) {
         this.zoom = zoom;
     }
     public int getCenter_x() {return center_x;}
@@ -102,6 +104,11 @@ public class IFSGenerator {
         } return new int[]{x, y};
     }
     public boolean isComplete() {return completion;}
+    public Animation generateAnimation() {
+        Animation animation = new Animation(); for (int i = 0; i <= depth && (!completion); i++) {
+            generateStep(); animation.addFrame(plane);
+        } return animation;
+    }
     public void generateStep() {
         if (initial == null) {
             Random random = new Random();
