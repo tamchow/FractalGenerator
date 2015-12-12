@@ -51,7 +51,8 @@ public class Matrix {
             }
         } return newMatrix;
     }
-    public boolean equals(Matrix other) {
+    public synchronized boolean equals(Object that) {
+        if (!(that instanceof Matrix)) {return false;} Matrix other = (Matrix) that;
         if (!(getNumColumns() == other.getNumColumns() && getNumRows() == other.getNumRows())) return false;
         for (int i = 0; i < other.getNumRows(); i++) {
             for (int j = 0; j < other.getNumColumns(); j++) {
@@ -59,10 +60,17 @@ public class Matrix {
             }
         } return true;
     }
-    public double get(int i, int j) {
+    public String toString() {
+        String matrix = ""; for (int i = 0; i < matrixData.length; i++) {
+            for (int j = 0; j < matrixData[i].length; j++) {
+                matrix += matrixData[i][j] + ",";
+            } matrix = matrix.substring(0, matrix.length() - 1) + ";";//remove trailing ','
+        } return matrix.substring(0, matrix.length() - 1);//remove trailing ';'
+    }
+    public synchronized double get(int i, int j) {
         return matrixData[i][j];
     }
-    public void set(int i, int j, double value) {
+    public synchronized void set(int i, int j, double value) {
         matrixData[i][j] = value;
     }
 }

@@ -257,7 +257,7 @@ public class ComplexFractalGenerator implements Serializable {
                 throw new IllegalArgumentException("Unknown fractal render mode");
         }
     }
-    private boolean isInBounds(Complex val) {
+    private synchronized boolean isInBounds(Complex val) {
         if (val.imaginary() <= argand_map[0][center_x].imaginary() && val.imaginary() >= argand_map[argand_map.length - 1][center_x].imaginary()) {
             if (val.real() <= argand_map[center_y][argand_map[0].length - 1].real() && val.real() >= argand_map[center_y][0].real()) {
                 return true;

@@ -28,7 +28,7 @@ public class Main {
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0);
         if (!def) {
             try {
-                fccfg = ConfigReader.getFractalConfigFromFile(new File(args[0]));
+                fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }

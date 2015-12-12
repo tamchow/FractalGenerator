@@ -1,6 +1,6 @@
 package in.tamchow.fractal.imgutils;
 /**
- * Encapsulates an image or animation frame: here for platform independence, takes int32 packed RGBA values as pixels;
+ * Encapsulates an image or animation frame, for platform independence, takes int32 packed RGB in hex values as pixels.
  */
 public class ImageData {
     private String path;
@@ -68,9 +68,7 @@ public class ImageData {
         }
         return processed;
     }
-    public void setPixel(int y, int x, int val) {
-        pixdata[y][x] = val;
-    }
+    public synchronized void setPixel(int y, int x, int val) {pixdata[y][x] = val;}
     public ImageData getColorAveraged() {
         ImageData processed = new ImageData(this);
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
@@ -83,7 +81,7 @@ public class ImageData {
         }
         return processed;
     }
-    public void setSize(int height, int width) {
+    public synchronized void setSize(int height, int width) {
         int[][] tmp = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);
@@ -99,26 +97,26 @@ public class ImageData {
     public int getWidth() {
         return pixdata[0].length;
     }
-    public void setPixdata(int[] pixdata, int scan) {
+    public synchronized void setPixdata(int[] pixdata, int scan) {
         this.pixdata = new int[pixdata.length / scan][scan];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata, i * scan, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-    public int[] getPixels() {
+    public synchronized int[] getPixels() {
         int[] pixels = new int[pixdata.length * pixdata[0].length];
         for (int i = 0; i < pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
         }
         return pixels;
     }
-    public int getPixel(int y, int x) {
+    public synchronized int getPixel(int y, int x) {
         return pixdata[y][x];
     }
-    public int getPixel(int i) {
+    public synchronized int getPixel(int i) {
         return pixdata[i / pixdata[0].length][i % pixdata[0].length];
     }
-    public void setPixel(int i, int val) {
+    public synchronized void setPixel(int i, int val) {
         pixdata[i / pixdata[0].length][i % pixdata[0].length] = val;
     }
 }

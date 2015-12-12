@@ -1,4 +1,6 @@
 package in.tamchow.fractal.config;
+import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalConfig;
+import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
@@ -16,8 +18,11 @@ public class ConfigReader {
     public static boolean isFileImageConfig(File file) throws FileNotFoundException {
         Scanner in = new Scanner(file); return in.nextLine().equals("[ImageConfig]");
     }
-    public static boolean isFileFractalConfig(File file) throws FileNotFoundException {
+    public static boolean isFileComplexFractalConfig(File file) throws FileNotFoundException {
         Scanner in = new Scanner(file); return in.nextLine().equals("[ComplexFractalConfig]");
+    }
+    public static boolean isFileIFSFractalConfig(File file) throws FileNotFoundException {
+        Scanner in = new Scanner(file); return in.nextLine().equals("[IFSFractalConfig]");
     }
     public static ImageConfig getImageConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
@@ -43,7 +48,7 @@ public class ConfigReader {
         imageConfig.readConfig(imgparams);
         return imageConfig;
     }
-    public static ComplexFractalConfig getFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
+    public static ComplexFractalConfig getComplexFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
         ArrayList<String> lines = new ArrayList<>(); if (!in.nextLine().equals("[ComplexFractalConfig]")) {
             return null;
@@ -61,10 +66,10 @@ public class ConfigReader {
         ComplexFractalConfig complexFractalConfig = new ComplexFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
         ComplexFractalParams[] complexFractalParams = new ComplexFractalParams[specCfg.size()];
         for (int i = 0; i < complexFractalParams.length; i++) {
-            complexFractalParams[i] = getParamFromFile(new File(specCfg.get(i)));
+            complexFractalParams[i] = getComplexParamFromFile(new File(specCfg.get(i)));
         } complexFractalConfig.setParams(complexFractalParams); return complexFractalConfig;
     }
-    public static ComplexFractalParams getParamFromFile(File paramfile) throws FileNotFoundException {
+    public static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile);
         ArrayList<String> lines = new ArrayList<>();
         while (in.hasNext()) {
@@ -84,5 +89,33 @@ public class ConfigReader {
         initConfig.toArray(run); ComplexFractalParams complexFractalParams = new ComplexFractalParams();
         complexFractalParams.initParams.paramsFromString(init); complexFractalParams.runParams.paramsFromString(run);
         return complexFractalParams;
+    }
+    public static IFSFractalConfig getIFSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
+        Scanner in = new Scanner(cfgfile); ArrayList<String> lines = new ArrayList<>();
+        if (!in.nextLine().equals("[ComplexFractalConfig]")) {
+            return null;
+        } while (in.hasNext()) {
+            String line = in.nextLine(); if (!line.startsWith("#")) {
+                if (line.contains("#")) {
+                    line = line.substring(0, line.indexOf("#")).trim();
+                } lines.add(line);
+            }
+        } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
+        List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        IFSFractalConfig ifsFractalConfig = new IFSFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
+        IFSFractalParams[] ifsFractalParams = new IFSFractalParams[specCfg.size()];
+        for (int i = 0; i < ifsFractalParams.length; i++) {
+            ifsFractalParams[i] = getIFSParamFromFile(new File(specCfg.get(i)));
+        } ifsFractalConfig.setParams(ifsFractalParams); return ifsFractalConfig;
+    }
+    public static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
+        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>(); while (in.hasNext()) {
+            String line = in.nextLine(); if (!line.startsWith("#")) {
+                if (line.contains("#")) {
+                    line = line.substring(0, line.indexOf("#")).trim();
+                } lines.add(line);
+            }
+        } String[] params = new String[lines.size()]; lines.toArray(params);
+        IFSFractalParams ifsFractalParams = IFSFractalParams.fromString(params); return ifsFractalParams;
     }
 }
