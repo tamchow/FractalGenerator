@@ -1,9 +1,11 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
+import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.math.matrix.Matrix;
 /**
  * Holds Parameters for an IFS fractal
  */
 public class IFSFractalParams {
+    public ZoomConfig zoomConfig;
     Matrix[] transforms, translators;
     double[] weights;
     int[] colors;
@@ -64,6 +66,7 @@ public class IFSFractalParams {
             params.colors[i] = Integer.valueOf(parts[3], 16);
         } return params;
     }
+    public void setZoomConfig(ZoomConfig config) {zoomConfig = new ZoomConfig(config);}
     public int getHeight() {
         return height;
     }

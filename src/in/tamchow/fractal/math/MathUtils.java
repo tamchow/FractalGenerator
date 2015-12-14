@@ -33,6 +33,6 @@ public class MathUtils {
         return rand[new Random().nextInt(rand.length)];
     }
     public static int[] translateCoordinates(int x, int y, int ix, int iy, int fx, int fy) {
-        return new int[]{(x / ix) * fx, (y / iy) * fy};
+        return new int[]{(int) (((double) x / ix) * fx), (int) (((double) y / iy) * fy)};
     }
 }

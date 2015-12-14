@@ -36,9 +36,11 @@ public class FunctionEvaluator {
         this.variableCode = variableCode;
     }
     public double getDegree(String function) {
-        double degree = 0;
-        if (function.contains("exp") || function.contains("log")) {
+        double degree = 0; if (function.contains("exp")) {
             String function2 = function.replace(function.substring(function.indexOf("exp"), function.indexOf(')', function.indexOf("exp")) + 1), "");
+            return getDegree(function2);
+        } if (function.contains("log")) {
+            String function2 = function.replace(function.substring(function.indexOf("log"), function.indexOf(')', function.indexOf("log")) + 1), "");
             return getDegree(function2);
         }
         if ((function.contains("*") || function.contains("/")) && advancedDegree) {

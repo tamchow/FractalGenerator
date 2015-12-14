@@ -8,7 +8,7 @@ import in.tamchow.fractal.math.complex.Complex;
 public class ThreadedComplexFractalGenerator {
     boolean[] progress;
     ComplexFractalGenerator master;
-    int iterations;
+    long iterations;
     double escape_radius;
     Complex constant;
     int nx, ny;
@@ -77,7 +77,7 @@ public class ThreadedComplexFractalGenerator {
             executor.start();
         }
         public void run() {
-            master.generate(startx, endx, starty, endy, iterations, escape_radius, constant);
+            master.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
             onCompletion();
         }
         void onCompletion() {

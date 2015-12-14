@@ -6,31 +6,21 @@ public class ImageData {
     private String path;
     private int[][] pixdata;
     public ImageData() {
-        path = "";
-        pixdata = new int[1000][1000];
+        path = ""; pixdata = new int[801][801];
         for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {
-                pixdata[i][j] = 0x00000000;
-            }
+            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x00000000;}
         }
     }
     public ImageData(int w, int h) {
-        path = "";
-        pixdata = new int[h][w];
+        path = ""; pixdata = new int[h][w];
         for (int i = 0; i < pixdata.length; i++) {
             for (int j = 0; j < pixdata[i].length; j++) {
-                pixdata[i][j] = 0x00000000;
+                pixdata[i][j] = 0x000000;
             }
         }
     }
-    public ImageData(int[][] pixdata) {
-        path = "";
-        setPixdata(pixdata);
-    }
-    public ImageData(ImageData img) {
-        setPixdata(img.getPixdata());
-        path = img.getPath();
-    }
+    public ImageData(int[][] pixdata) {path = ""; setPixdata(pixdata);}
+    public ImageData(ImageData img) {setPixdata(img.getPixdata()); path = img.getPath();}
     public String getPath() {
         return path;
     }
@@ -46,51 +36,27 @@ public class ImageData {
             System.arraycopy(pixdata[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-    public ImageData(String path) {
-        this.path = path;
-        pixdata = null;
-        /*pixdata = new int[1000][1000];
-        for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {
-                pixdata[i][j] = 0x00000000;
-            }
-        }*/
-    }
-    public ImageData getPostProcessed() {
+    public ImageData(String path) {this.path = path; pixdata = null;}
+    public ImageData getPostProcessed(boolean justAverage) {
         ImageData processed = new ImageData(this);
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
             for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {
                 int left = pixdata[i][j - 1], right = pixdata[i][j + 1], top = pixdata[i - 1][j], bottom = pixdata[i + 1][j];
                 int top_left = pixdata[i - 1][j - 1], top_right = pixdata[i - 1][j + 1], bottom_left = pixdata[i + 1][j - 1], bottom_right = pixdata[i + 1][j + 1];
                 double average = (top_left + top + top_right + left + right + bottom_left + bottom + bottom_right) / 8;
-                processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2));
+                if (justAverage) {processed.setPixel(i, j, (int) average);} else {
+                    processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2));
+                }
             }
-        }
-        return processed;
-    }
+        } return processed;}
     public synchronized void setPixel(int y, int x, int val) {pixdata[y][x] = val;}
-    public ImageData getColorAveraged() {
-        ImageData processed = new ImageData(this);
-        for (int i = 1; i < processed.getPixdata().length - 1; i++) {
-            for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {
-                int left = pixdata[i][j - 1], right = pixdata[i][j + 1], top = pixdata[i - 1][j], bottom = pixdata[i + 1][j];
-                int top_left = pixdata[i - 1][j - 1], top_right = pixdata[i - 1][j + 1], bottom_left = pixdata[i + 1][j - 1], bottom_right = pixdata[i + 1][j + 1];
-                double average = (top_left + top + top_right + left + right + bottom_left + bottom + bottom_right) / 8;
-                processed.setPixel(i, j, (int) average);
-            }
-        }
-        return processed;
-    }
     public synchronized void setSize(int height, int width) {
         int[][] tmp = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
-            System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);
-        }
+            System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);}
         this.pixdata = new int[height][width];
         for (int i = 0; i < this.pixdata.length; i++) {
-            System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
-        }
-    }
+            System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);}}
     public int getHeight() {
         return pixdata.length;
     }
@@ -100,16 +66,12 @@ public class ImageData {
     public synchronized void setPixdata(int[] pixdata, int scan) {
         this.pixdata = new int[pixdata.length / scan][scan];
         for (int i = 0; i < this.pixdata.length; i++) {
-            System.arraycopy(pixdata, i * scan, this.pixdata[i], 0, this.pixdata[i].length);
-        }
-    }
+            System.arraycopy(pixdata, i * scan, this.pixdata[i], 0, this.pixdata[i].length);}}
     public synchronized int[] getPixels() {
         int[] pixels = new int[pixdata.length * pixdata[0].length];
         for (int i = 0; i < pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
-        }
-        return pixels;
-    }
+        } return pixels;}
     public synchronized int getPixel(int y, int x) {
         return pixdata[y][x];
     }
