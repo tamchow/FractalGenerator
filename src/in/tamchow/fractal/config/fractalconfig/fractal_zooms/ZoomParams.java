@@ -1,4 +1,5 @@
 package in.tamchow.fractal.config.fractalconfig.fractal_zooms;
+
 import java.io.Serializable;
 /**
  * Holds data for a fractal zoom

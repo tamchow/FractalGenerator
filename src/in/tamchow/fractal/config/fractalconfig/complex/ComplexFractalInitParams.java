@@ -1,13 +1,14 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 
 import java.io.Serializable;
 /**
  * Parameters for configuring the initialization of a fractal
  */
-public class ComplexFractalInitParams implements Serializable {
+public class ComplexFractalInitParams implements Serializable, DataFromString {
     public String function, variableCode;
     public String[][] consts;
     public int width, height, fractal_mode;
@@ -48,14 +49,13 @@ public class ComplexFractalInitParams implements Serializable {
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 32, 256, 0);
         initParams(1921, 1081, 10, 0, 540, ComplexFractalGenerator.MODE_JULIA, func, consts, "z", 1e-5, -1, cfg);
     }
-    public void paramsFromString(String[] params) {
+    public void fromString(String[] params) {
         String[] con = params[9].split(";");
         String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i] = con[i].split(":");
         } String[] colorcfg = params[10].split(",");
-        ColorConfig colorConfig = new ColorConfig();
-        colorConfig.colorsFromString(colorcfg); if (params.length == 12) {
+        ColorConfig colorConfig = new ColorConfig(); colorConfig.fromString(colorcfg); if (params.length == 12) {
             initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), Double.valueOf(params[4]), Integer.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), Double.valueOf(params[11]), colorConfig);
         } else {
             initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), Double.valueOf(params[4]), Integer.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), -1, colorConfig);

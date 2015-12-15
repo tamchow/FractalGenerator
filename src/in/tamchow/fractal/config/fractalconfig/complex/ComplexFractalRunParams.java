@@ -1,11 +1,12 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
+import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
 /**
  * Parameters for configuring the generation of a fractal
  */
-public class ComplexFractalRunParams implements Serializable {
+public class ComplexFractalRunParams implements Serializable, DataFromString {
     public int start_x, end_x, start_y, end_y;
     public long iterations;
     public double escape_radius;
@@ -70,7 +71,7 @@ public class ComplexFractalRunParams implements Serializable {
     /**
      * @param params: Pass in -1 for escape_radius in case of Newton Fractal Mode
      */
-    public void paramsFromString(String[] params) {
+    public void fromString(String[] params) {
         if (params.length == 6) {
             initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Long.valueOf(params[4]), Double.valueOf(params[5]));
         } else if (params.length == 7) {

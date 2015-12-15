@@ -1,15 +1,15 @@
 package in.tamchow.fractal.color;
+import java.io.Serializable;
 /**
  * Holds colour configuration for  custom palettes
  */
-public class ColorConfig {
+public class ColorConfig implements Serializable {
     public int basecolor, step, color_density, num_colors, mode, palette_type;
     public int[] palette;
     public boolean byParts;
     boolean colors_corrected;
     public ColorConfig(int mode, int color_density, int num_colors, int basecolor) {
-        initColorConfig(mode, color_density, num_colors, basecolor, false);
-    }
+        initColorConfig(mode, color_density, num_colors, basecolor, false);}
     private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts) {
         colors_corrected = false; setByParts(byParts);
         setColor_density(color_density);
@@ -84,10 +84,10 @@ public class ColorConfig {
     }
     public void setPalette(int[] palette, boolean preserve) {
         if (!preserve) {
-            this.palette = new int[palette.length];
+            this.palette = new int[palette.length]; setNum_colors(palette.length);
             System.arraycopy(palette, 0, this.palette, 0, palette.length);
         } else {
-            int[] tmpPalette = new int[this.palette.length];
+            int[] tmpPalette = new int[this.palette.length]; setNum_colors(palette.length);
             System.arraycopy(this.palette, 0, tmpPalette, 0, this.palette.length);
             this.palette = new int[num_colors];
             System.arraycopy(tmpPalette, 0, this.palette, 0, tmpPalette.length);
@@ -227,24 +227,20 @@ public class ColorConfig {
     public void setPalette_type(int palette_type) {
         this.palette_type = palette_type;
     }
-    public void colorsFromString(String[] colors) {
-        mode = Integer.parseInt(colors[0]); byParts = Boolean.parseBoolean(colors[1]);
-        if (colors[1].startsWith("0x")) {
-            int[] palette = new int[colors.length];
-            for (int i = 1; i < colors.length; i++) {
-                palette[i] = Integer.parseInt(colors[i], 16);
-            } setPalette(palette, false);
-        } else {
-            switch (colors.length) {
-                case 2: initColorConfig(mode, Integer.parseInt(colors[2]), byParts);
-                    break;
-                case 4: initColorConfig(mode, Integer.parseInt(colors[2]), Integer.parseInt(colors[3]), Integer.parseInt(colors[4], 16), byParts);
-                    break;
-                case 5: initColorConfig(mode, Integer.parseInt(colors[2]), Integer.parseInt(colors[3]), Integer.parseInt(colors[5], 16), Integer.parseInt(colors[4]), byParts);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported Input");
-            }
+    public void fromString(String[] colors) {
+        String type = colors[0]; mode = Integer.valueOf(colors[1]); byParts = Boolean.valueOf(colors[2]);
+        switch (type) {
+            case "RANDOM_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3]), byParts); break;
+            case "CUSTOM_PALETTE": String[] parts = colors[3].split(";"); int[] colorset = new int[parts.length]; for (int i = 0; i < colorset.length; i++) {
+                colorset[i] = Integer.valueOf(parts[i], 16);
+            } setPalette(colorset, false); setColor_density(Integer.valueOf(parts[4])); break;
+            case "GRADIENT_PALETTE": if (colors.length == 7) {
+                initColorConfig(mode, Integer.valueOf(colors[3]), Integer.valueOf(colors[4]), Integer.valueOf(colors[5], 16), Integer.valueOf(colors[6], 16), byParts);
+            } else if (colors.length == 6) {
+                initColorConfig(mode, Integer.valueOf(colors[3]), Integer.valueOf(colors[4]), Integer.valueOf(colors[5], 16), byParts);
+            } break;
+            case "SHADE_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3]), Integer.valueOf(colors[4]), Integer.valueOf(colors[5], 16), 0x000000, byParts); break;
+            default: throw new IllegalArgumentException("Unsupported palette type");
         }
     }
     public boolean noCustomPalette() {

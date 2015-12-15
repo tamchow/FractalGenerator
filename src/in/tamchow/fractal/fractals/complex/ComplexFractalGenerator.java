@@ -249,11 +249,7 @@ public class ComplexFractalGenerator implements Serializable {
                 break;
             case MODE_NEWTON:
             case MODE_NEWTONBROT:
-                if (constant == null) {
-                    newtonGenerate(start_x, end_x, start_y, end_y, iterations);
-                } else {
                     newtonGenerate(start_x, end_x, start_y, end_y, iterations, constant);
-                }
                 break;
             default:
                 throw new IllegalArgumentException("Unknown fractal render mode");
@@ -307,8 +303,7 @@ public class ComplexFractalGenerator implements Serializable {
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(ztmpd.toString());
-                    }
-                    System.out.println(ctr + " iterations of " + maxiter);
+                    } publishProgress(ctr);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -365,10 +360,16 @@ public class ComplexFractalGenerator implements Serializable {
                 }
                 last.push(z);
                 while (c <= iterations) {
-                    Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
-                    Complex ztmpd = null;
-                    if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
-                        ztmpd = ComplexOperations.subtract(zd, ComplexOperations.multiply(constant, ComplexOperations.divide(fed.evaluate(functionderiv), fed.evaluate(polynomial.derivative().derivative().toString()))));
+                    Complex ztmp, ztmpd; if (constant != null) {
+                        ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString()))));
+                        ztmpd = null; if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
+                            ztmpd = ComplexOperations.subtract(zd, ComplexOperations.multiply(constant, ComplexOperations.divide(fed.evaluate(functionderiv), fed.evaluate(polynomial.derivative().derivative().toString()))));
+                        }
+                    } else {
+                        ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
+                        ztmpd = null; if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
+                            ztmpd = ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv), fed.evaluate(polynomial.derivative().derivative().toString())));
+                        }
                     }
                     if (z.equals(Complex.ZERO)) {
                         c = iterations;
@@ -382,8 +383,7 @@ public class ComplexFractalGenerator implements Serializable {
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(ztmpd.toString());
-                    }
-                    System.out.println(ctr + " iterations of " + maxiter);
+                    } publishProgress(ctr);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -416,78 +416,8 @@ public class ComplexFractalGenerator implements Serializable {
             }
         }
     }
-    public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
-        Polynomial polynomial = Polynomial.fromString(function); function = polynomial.toString();
-        FixedStack last = new FixedStack(iterations + 2);
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        degree = polynomial.getDegree();
-        String functionderiv = "";
-        if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
-            functionderiv = polynomial.derivative().toString();
-        }
-        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        long ctr = 0;
-        outer:
-        for (int i = start_y; i < end_y; i++) {
-            for (int j = start_x; j < end_x; j++) {
-                Complex z = argand_map[i][j];
-                Complex zd = argand_map[i][j]; int c = 0x0;
-                fe.setZ_value(z.toString());
-                if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
-                    fed.setZ_value(zd.toString());
-                }
-                last.push(z);
-                while (c <= iterations) {
-                    Complex ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function), fe.evaluate(polynomial.derivative().toString())));
-                    Complex ztmpd = null;
-                    if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
-                        ztmpd = ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv), fed.evaluate(polynomial.derivative().derivative().toString())));
-                    }
-                    if (z.equals(Complex.ZERO)) {
-                        c = iterations;
-                        break;
-                    }
-                    if (ComplexOperations.distance_squared(z, ztmp) < tolerance) {
-                        break;
-                    }
-                    z = new Complex(ztmp);
-                    fe.setZ_value(z.toString());
-                    if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
-                        zd = new Complex(ztmpd);
-                        fed.setZ_value(ztmpd.toString());
-                    }
-                    System.out.println(ctr + " iterations of " + maxiter);
-                    c++;
-                    if (ctr > maxiter) {
-                        break outer;
-                    }
-                    ctr++;
-                } if (indexOfRoot(z) == -1) {
-                    roots.add(z);
-                }
-                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
-                Complex[] pass = new Complex[3];
-                for (int k = 0; k < last.size() && k < pass.length; k++) {
-                    pass[k] = last.pop();
-                }
-                if (last.size() < 3) {
-                    for (int m = last.size(); m < pass.length; m++) {
-                        pass[m] = new Complex(Complex.ZERO);
-                    }
-                }
-                pass[0] = new Complex(z);
-                if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
-                    pass[1] = new Complex(zd);
-                }
-                escapedata[i][j] = c;
-                if (mode == MODE_NEWTONBROT) {
-                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + getColor(c, pass, root_reached, iterations));
-                } else {
-                    argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));
-                }
-                last.clear();
-            }
-        }
+    public synchronized void publishProgress(long c) {
+        System.out.println(c + " iterations of " + maxiter + ", % completion = " + ((float) c / maxiter) * 100);
     }
     private synchronized int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {
@@ -534,8 +464,7 @@ public class ComplexFractalGenerator implements Serializable {
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(zd.toString());
-                    }
-                    System.out.println(ctr + " iterations of " + maxiter);
+                    } publishProgress(ctr);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -655,36 +584,16 @@ public class ComplexFractalGenerator implements Serializable {
     }
     public int[] toCooordinates(Complex point) {
         int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
-        if (x < 0) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-        if (x >= argand.getWidth()) {
-            x = argand.getWidth() - 1;
-        }
-        if (y >= argand.getHeight()) {
-            y = argand.getHeight() - 1;
-        }
+        if (x < 0) {x = 0;} if (y < 0) {y = 0;} if (x >= argand.getWidth()) {x = argand.getWidth() - 1;}
+        if (y >= argand.getHeight()) {y = argand.getHeight() - 1;}
         return new int[]{x, y};
     }
     public void zoom(ZoomParams zoom) {
         zoom(zoom.centre_x, zoom.centre_y, zoom.level);
     }
     public void zoom(int cx, int cy, double level) {
-        if (cx < 0) {
-            cx = 0;
-        }
-        if (cy < 0) {
-            cy = 0;
-        }
-        if (cx >= argand.getWidth()) {
-            cx = argand.getWidth() - 1;
-        }
-        if (cy >= argand.getHeight()) {
-            cy = argand.getHeight() - 1;
-        }
+        if (cx < 0) {cx = 0;} if (cy < 0) {cy = 0;} if (cx >= argand.getWidth()) {cx = argand.getWidth() - 1;}
+        if (cy >= argand.getHeight()) {cy = argand.getHeight() - 1;}
         setCentre_offset(fromCooordinates(cx, cy));
         setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
         populateMap();

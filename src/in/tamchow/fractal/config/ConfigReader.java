@@ -79,7 +79,7 @@ public class ConfigReader {
         List<String> runConfig = lines.subList(lines.indexOf("[Runconfig]") + 1, lines.indexOf("[EndRunconfig]"));
         String[] run = new String[runConfig.size()];
         initConfig.toArray(run); ComplexFractalParams complexFractalParams = new ComplexFractalParams();
-        complexFractalParams.initParams.paramsFromString(init); complexFractalParams.runParams.paramsFromString(run);
+        complexFractalParams.initParams.fromString(init); complexFractalParams.runParams.fromString(run);
         if (thread_data != null) {complexFractalParams.threadDataFromString(thread_data);}
         if (zooms != null) {complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         return complexFractalParams;
