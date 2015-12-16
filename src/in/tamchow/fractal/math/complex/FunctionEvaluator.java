@@ -90,8 +90,8 @@ public class FunctionEvaluator {
     public void setConstdec(String[][] constdec) {
         this.constdec = constdec;
     }
-    public Complex evaluate(String expr) {
-        String subexpr = substitute(expr, false);
+    public Complex evaluate(String expr, boolean isSymbolic) {
+        String subexpr = substitute(expr, isSymbolic);
         Complex ztmp; int flag = 0;
         do {
             ztmp = eval(process(subexpr));

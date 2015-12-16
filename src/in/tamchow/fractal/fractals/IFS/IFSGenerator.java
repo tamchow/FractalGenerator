@@ -86,14 +86,12 @@ public class IFSGenerator {
     public void generate() {
         if (initial == null) {
             Random random = new Random();
-            initial = fromCooordinates(random.nextInt(plane.getWidth() - 1), random.nextInt(plane.getHeight() - 1));
+            initial = fromCooordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
         } Matrix point = new Matrix(initial); for (long i = 0; i <= depth; i++) {
             int index = MathUtils.weightedRandom(params.getWeights()); int[] coord = toCooordinates(point);
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
-            if (point.equals(initial) || i == depth) {
-                completion = true; break;
-            }
+            if (point.equals(initial) || i == depth) {completion = true; break;}
         }
     }
     public int[] toCooordinates(Matrix point) {
@@ -117,7 +115,7 @@ public class IFSGenerator {
     public void generateStep() {
         if (initial == null) {
             Random random = new Random();
-            initial = fromCooordinates(random.nextInt(plane.getWidth() - 1), random.nextInt(plane.getHeight() - 1));
+            initial = fromCooordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
         } Matrix point = new Matrix(initial); int index = MathUtils.weightedRandom(params.getWeights());
         int[] coord = toCooordinates(point);
         plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);

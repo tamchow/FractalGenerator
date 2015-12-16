@@ -75,7 +75,7 @@ public class Polynomial {
         deriv.setSigns(this.signs);
         for (int i = 0; i < terms.size(); i++) {
             deriv.terms.add(terms.get(i).derivative());
-        }
+        } deriv.setConstdec(constdec); deriv.setVariableCode(variableCode); deriv.setZ_value(z_value);
         return deriv;
     }
     public int countVariableTerms() {
@@ -94,8 +94,12 @@ public class Polynomial {
             try {
                 vardeg = new Complex(term.exponent);
             } catch (IllegalArgumentException iae) {
-                FunctionEvaluator fe = new FunctionEvaluator(z_value, variableCode, constdec, false);
-                vardeg = fe.evaluate(term.exponent);
+                if (!term.isConstant()) {
+                    FunctionEvaluator fe = new FunctionEvaluator(variableCode, constdec, false);
+                    vardeg = fe.evaluate(term.exponent, true);
+                } else {
+                    vardeg = new Complex(Complex.ZERO);
+                }
             }
             if (vardeg.compareTo(degree) > 0) {
                 degree = new Complex(vardeg);
