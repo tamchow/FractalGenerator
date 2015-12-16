@@ -303,7 +303,7 @@ public class ComplexFractalGenerator implements Serializable {
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(ztmpd.toString());
-                    } publishProgress(ctr);
+                    } publishProgress(ctr, i, start_x, end_x, j, start_y, end_y);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -341,8 +341,7 @@ public class ComplexFractalGenerator implements Serializable {
         FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         degree = polynomial.getDegree();
-        String functionderiv = "";
-        if (constant.equals(Complex.ZERO)) {
+        String functionderiv = ""; if (constant != null && constant.equals(Complex.ZERO)) {
             constant = new Complex("" + (1 / degree));
         }
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
@@ -383,7 +382,7 @@ public class ComplexFractalGenerator implements Serializable {
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(ztmpd.toString());
-                    } publishProgress(ctr);
+                    } publishProgress(ctr, i, start_x, end_x, j, start_y, end_y);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -416,8 +415,9 @@ public class ComplexFractalGenerator implements Serializable {
             }
         }
     }
-    public synchronized void publishProgress(long c) {
-        System.out.println(c + " iterations of " + maxiter + ", % completion = " + ((float) c / maxiter) * 100);
+    public synchronized void publishProgress(long ctr, int i, int startx, int endx, int j, int starty, int endy) {
+        float completion = ((float) (i * (endx - startx) + j) / ((endx - startx) * (endy - starty))) * 100.0f;
+        System.out.println(ctr + " iterations of " + maxiter + ",completion = " + completion + "%");
     }
     private synchronized int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {
@@ -464,7 +464,7 @@ public class ComplexFractalGenerator implements Serializable {
                     if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(zd.toString());
-                    } publishProgress(ctr);
+                    } publishProgress(ctr, i, start_x, end_x, j, start_y, end_y);
                     c++;
                     if (ctr > maxiter) {
                         break outer;

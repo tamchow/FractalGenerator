@@ -3,7 +3,7 @@ import in.tamchow.fractal.math.complex.Complex;
 
 import java.util.Random;
 /**
- * Weighted Random Number generator and approximations
+ * Weighted Random Number generator and approximations,prime number calculator
  */
 public class MathUtils {
     public static boolean approxEquals(Complex a, Complex b, double tolerance) {
@@ -25,14 +25,17 @@ public class MathUtils {
         double[] rand = new double[factor];
         for (int i = 0; i < rand.length; ) {
             if (i == weights[pidx] * factor) {
-                pidx++;
-                continue;
-            } rand[i] = (custom) ? values[pidx] : pidx;
-            i++;
+                pidx++; continue;
+            } rand[i] = (custom) ? values[pidx] : pidx; i++;
         }
         return rand[new Random().nextInt(rand.length)];
     }
     public static int[] translateCoordinates(int x, int y, int ix, int iy, int fx, int fy) {
         return new int[]{(int) (((double) x / ix) * fx), (int) (((double) y / iy) * fy)};
+    }
+    public static int firstPrimeFrom(int from) {
+        for (int i = from; i > 0; i++) {
+            int factors = 0; for (int j = 2; j < i; j++) {if (i % j == 0) {++factors;}} if (factors == 0) {return i;}
+        } return -1;
     }
 }

@@ -15,13 +15,13 @@ import java.io.IOException;
  */
 public class Test {
     public static void main(String[] args) {
-        String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + c", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
+        String func = "z ^ 2 + e", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}};
-        int resx = 1921, resy = 1081, fracmode = ComplexFractalGenerator.MODE_MANDELBROT, iter = 16;
-        double escrad = 2.0, tolerance = 1e-3, zoom = 10, zoompow = 0, baseprec = 500;
+        int resx = 401, resy = 401, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 16;
+        double escrad = 2.0, tolerance = 1e-3, zoom = 10, zoompow = 0, baseprec = 200;
         //ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 65536,0xff0000,0xfff000,true);
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY, 167, 65536, 0xff0000, 0xfff000,true);
-        Complex constant = null;//new Complex("-0.5,+0.0i");
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.SIMPLE_SMOOTH, 167, 65536, 0xff0000, 0xffff00, true);
+        Complex constant = null;//new Complex("1.0,+0.0i");
         //func = poly;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {
@@ -31,12 +31,10 @@ public class Test {
         if (def) {
             jgen = new ComplexFractalGenerator(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg);
         } else {jgen = new ComplexFractalGenerator(fccfg.getParams()[0]);}
-        //jgen.zoom(1366, 870, 1);
-        //jgen.zoom(721,132,2);
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
-            //ThreadedComplexFractalGenerator tg=new ThreadedComplexFractalGenerator(2,2,jgen,iter,escrad,constant);
+            //ThreadedComplexFractalGenerator tg=new ThreadedComplexFractalGenerator(2, 2, jgen, iter, escrad, constant);
             //tg.generate();
             if (constant != null) {jgen.generate(iter, escrad, constant);} else {jgen.generate(iter, escrad);}
         } else {jgen.generate(fccfg.getParams()[0]);}

@@ -1,4 +1,6 @@
 package in.tamchow.fractal.color;
+import in.tamchow.fractal.math.MathUtils;
+
 import java.io.Serializable;
 /**
  * Holds colour configuration for  custom palettes
@@ -182,6 +184,7 @@ public class ColorConfig implements Serializable {
             return nr << 16 | ng << 8 | nb;
         } return (int) (tocolor * bias + fromcolor * (1 - bias));
     }
+    public int calculateColorDensity() {return MathUtils.firstPrimeFrom(num_colors);}
     public int createIndex(double val, double min, double max) {
         return (int) Math.abs(((((val - min) / (max - min))) * color_density) % num_colors);
     }
