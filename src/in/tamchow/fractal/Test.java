@@ -20,7 +20,7 @@ public class Test {
         int resx = 601, resy = 601, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 32;
         double escrad = 2, tolerance = 1e-10, zoom = 10, zoompow = 0, baseprec = 200;
         //ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 65536,0xff0000,0xfff000,true);
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.COLOR_DIVIDE, 167, 65536, 0xff0000, 0xfff000, true);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.CURVATURE_AVERAGE, 167, 65536, 0xff0000, 0xfff000, true);
         Complex constant = null;//new Complex("1.0,+0.0i");
         //func = poly;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
