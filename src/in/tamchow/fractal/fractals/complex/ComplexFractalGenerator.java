@@ -23,14 +23,14 @@ public class ComplexFractalGenerator implements Serializable {
     ArrayList<Complex> roots;
     double zoom, zoom_factor, base_precision, scale;
     int center_x, center_y, mode;
-    double degree, tolerance;
+    double tolerance;
     long maxiter;
     ImageData argand;
     String function;
     String[][] consts;
     int[][] escapedata;
     Complex[][] argand_map;
-    Complex centre_offset;
+    Complex centre_offset, degree;
     boolean advancedDegree;
     private String variableCode;
     public ComplexFractalGenerator(ComplexFractalParams params) {
@@ -38,9 +38,9 @@ public class ComplexFractalGenerator implements Serializable {
         if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
     }
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
-        initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, -1, color);
+        initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, new Complex("-1"), color);
     }
-    private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, double degree, ColorConfig color) {
+    private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, Complex degree, ColorConfig color) {
         setZoom(zoom);
         setZoom_factor(zoom_factor);
         setFunction(function);
@@ -59,8 +59,7 @@ public class ComplexFractalGenerator implements Serializable {
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         setVariableCode(variableCode);
         setTolerance(tolerance);
-        roots = new ArrayList<>();
-        setColor(color); setDegree(degree); if (degree == -1) {
+        roots = new ArrayList<>(); setColor(color); setDegree(degree); if (degree.equals(new Complex("-1"))) {
             setAdvancedDegree(true);
         }
     }
@@ -102,11 +101,11 @@ public class ComplexFractalGenerator implements Serializable {
     public int[][] getEscapedata() {
         return escapedata;
     }
-    public double getDegree() {
+    public Complex getDegree() {
         return degree;
     }
-    public synchronized void setDegree(double degree) {
-        this.degree = degree;
+    public synchronized void setDegree(Complex degree) {
+        this.degree = new Complex(degree);
     }
     public double getTolerance() {
         return tolerance;
@@ -235,7 +234,7 @@ public class ComplexFractalGenerator implements Serializable {
     }
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter((end_x - start_x) * (end_y - start_y) * iterations);
-        if (mode != MODE_NEWTON && color.getMode() != Colors.CALCULATIONS.DISTANCE_ESTIMATION && degree == -1) {
+        if (mode != MODE_NEWTON && color.getMode() != Colors.CALCULATIONS.DISTANCE_ESTIMATION && degree.equals(new Complex("-1"))) {
             degree = new FunctionEvaluator(variableCode, consts, advancedDegree).getDegree(function);
         }
         switch (mode) {
@@ -269,7 +268,7 @@ public class ComplexFractalGenerator implements Serializable {
         Polynomial poly; String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             poly = Polynomial.fromString(function); poly.setConstdec(consts); poly.setVariableCode(variableCode);
-            function = poly.toString(); degree = poly.getDegree();
+            function = poly.toString(); if (degree.equals(new Complex("-1"))) {degree = poly.getDegree();}
             functionderiv = poly.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
@@ -341,9 +340,9 @@ public class ComplexFractalGenerator implements Serializable {
         polynomial.setVariableCode(variableCode); function = polynomial.toString();
         FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        degree = polynomial.getDegree();
+        if (degree.equals(new Complex("-1"))) {degree = polynomial.getDegree();}
         String functionderiv = ""; if (constant != null && constant.equals(Complex.ZERO)) {
-            constant = new Complex("" + (1 / degree));
+            constant = ComplexOperations.divide(Complex.ONE, degree);
         }
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             functionderiv = polynomial.derivative().toString();
@@ -434,7 +433,7 @@ public class ComplexFractalGenerator implements Serializable {
         Polynomial poly; String functionderiv = "";
         if (Colors.CALCULATIONS.DISTANCE_ESTIMATION == color.mode) {
             poly = Polynomial.fromString(function); poly.setConstdec(consts); poly.setVariableCode(variableCode);
-            function = poly.toString(); degree = poly.getDegree();
+            function = poly.toString(); if (degree.equals(new Complex("-1"))) {degree = poly.getDegree();}
             functionderiv = poly.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
@@ -502,20 +501,20 @@ public class ComplexFractalGenerator implements Serializable {
     }
     public synchronized int getColor(int val, Complex[] last, double escape_radius, int iterations) {
         int colortmp, color1, color2, index, index2;
-        double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / Math.log(degree))));
+        double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / ComplexOperations.principallog(degree).modulus())));
         double lbnd, ubnd, calc;
         switch (color.getMode()) {
             case Colors.CALCULATIONS.SIMPLE: colortmp = color.getColor((val * (iterations * color.color_density)) % color.num_colors); break;
             case Colors.CALCULATIONS.SIMPLE_SMOOTH: color1 = color.getColor((val * (iterations * color.color_density)) % color.num_colors); color2 = color.getColor(((val + 1) * (iterations * color.color_density)) % color.num_colors);
                 //colortmp=ColorConfig.linearInterpolated(color1,color2, val, iterations,color.isByParts());
                 colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized), color.isByParts()); break;
-            case Colors.CALCULATIONS.COLOR_DIVIDE:
-                color1 = (int) (0xffffff / renormalized);
-                color2 = (int) (0xffffff / (renormalized + 1)); colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized), color.isByParts());
+            case Colors.CALCULATIONS.COLOR_DIVIDE_DIRECT: color1 = (0xffffff / val); color2 = (0xffffff / (val + 1)); colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized), color.isByParts());
                 break;
+            case Colors.CALCULATIONS.COLOR_DIVIDE: color1 = (int) (0xffffff / renormalized); color2 = (int) (0xffffff / (renormalized + 1)); colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized), color.isByParts()); break;
             case Colors.CALCULATIONS.COLOR_HIGH_CONTRAST:
                 colortmp = (iterations * val) << 16 | (iterations * val) << 8 | (iterations * val);
                 break;
+            case Colors.CALCULATIONS.COLOR_MULTIPLY_DIRECT: color1 = val << 16 | val << 8 | val; color2 = (val + 1) << 16 | (val + 1) << 8 | (val + 1); colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized), color.isByParts()); break;
             case Colors.CALCULATIONS.COLOR_MULTIPLY:
                 color1 = (int) renormalized << 16 | (int) renormalized << 8 | (int) renormalized;
                 color2 = (int) (renormalized + 1) << 16 | (int) (renormalized + 1) << 8 | (int) (renormalized + 1); colortmp = ColorConfig.linearInterpolated(color1, color2, renormalized - ((int) renormalized), color.isByParts());

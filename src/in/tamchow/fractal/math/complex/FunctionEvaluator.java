@@ -35,8 +35,8 @@ public class FunctionEvaluator {
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-    public double getDegree(String function) {
-        double degree = 0; if (function.contains("exp")) {
+    public Complex getDegree(String function) {
+        Complex degree = new Complex(Complex.ZERO); if (function.contains("exp")) {
             String function2 = function.replace(function.substring(function.indexOf("exp"), function.indexOf(')', function.indexOf("exp")) + 1), "");
             return getDegree(function2);
         } if (function.contains("log")) {
@@ -46,13 +46,13 @@ public class FunctionEvaluator {
         if ((function.contains("*") || function.contains("/")) && advancedDegree) {
             for (int i = 0; i < function.length(); i++) {
                 if (function.charAt(i) == '*' || function.charAt(i) == '/') {
-                    double dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));
-                    double dr = getDegree(function.substring(function.indexOf('(', i), function.indexOf(')', i) + 1));
-                    double tmpdegree = 0;
+                    Complex dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));
+                    Complex dr = getDegree(function.substring(function.indexOf('(', i), function.indexOf(')', i) + 1));
+                    Complex tmpdegree = new Complex(Complex.ZERO);
                     if (function.charAt(i) == '*') {
-                        tmpdegree = dl + dr;
+                        tmpdegree = ComplexOperations.add(dl, dr);
                     } else if (function.charAt(i) == '/') {
-                        tmpdegree = dl - dr;
+                        tmpdegree = ComplexOperations.subtract(dl, dr);
                     }
                     String function2 = function.replace(function.substring(StringManipulator.indexOfBackwards(function, i, '('), function.indexOf(')', i) + 1), "z ^ " + tmpdegree);
                     return getDegree(function2);
@@ -65,17 +65,17 @@ public class FunctionEvaluator {
         }
         int idx = 0, varidx = 0;
         if ((function.contains(variableCode) && (!function.contains("^")))) {
-            degree = 1;
+            degree = new Complex(Complex.ONE);
         }
         while (function.indexOf('^', idx) != -1) {
             varidx = function.indexOf(variableCode, varidx) + 1;
             idx = function.indexOf('^', varidx) + 1;
-            double nextDegree = new Complex(function.substring(idx + 1, function.indexOf(' ', idx + 1))).modulus();
-            degree = (nextDegree > degree) ? nextDegree : degree;
+            Complex nextDegree = new Complex(function.substring(idx + 1, function.indexOf(' ', idx + 1)));
+            degree = (nextDegree.modulus() > degree.modulus()) ? nextDegree : degree;
         }
         return degree;
     }
-    public double getDegree(Polynomial polynomial) {
+    public Complex getDegree(Polynomial polynomial) {
         return getDegree(limitedEvaluate(polynomial + "", polynomial.countVariableTerms() * 2 + polynomial.countConstantTerms()));
     }
     public String getZ_value() {

@@ -87,7 +87,7 @@ public class Polynomial {
         }
         return ctr;
     }
-    public double getDegree() {
+    public Complex getDegree() {
         Complex degree = new Complex(Complex.ZERO);
         for (Term term : terms) {
             Complex vardeg;
@@ -100,12 +100,10 @@ public class Polynomial {
                 } else {
                     vardeg = new Complex(Complex.ZERO);
                 }
-            }
-            if (vardeg.compareTo(degree) > 0) {
+            } if (vardeg.modulus() > degree.modulus()) {
                 degree = new Complex(vardeg);
             }
-        }
-        return degree.modulus();
+        } return degree;
     }
     public int countConstantTerms() {
         int ctr = 0;
