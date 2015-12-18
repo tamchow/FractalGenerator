@@ -136,31 +136,18 @@ public class ComplexFractalGenerator implements Serializable {
     public void setMode(int mode) {
         this.mode = mode;
     }
-    /**
-     * @param nx:No.   of threads horizontally
+    /**@param nx:No.   of threads horizontally
      * @param ix:Index of thread horizontally
      * @param ny:No.   of threads vertically
      * @param iy:Index of thread vertically
-     * @return the start and end coordinates for a particular thread's rendering region
-     */
+     * @return the start and end coordinates for a particular thread's rendering region*/
     public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {//for multithreading purposes
-        int start_x, end_x, start_y, end_y;
-        int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
+        int start_x, end_x, start_y, end_y; int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
         if (ix == (nx - 1)) {
-            start_x = (nx - 1) * x_dist;
-            end_x = argand.getWidth();
-        } else {
-            start_x = ix * x_dist;
-            end_x = (ix + 1) * x_dist;
-        }
-        if (iy == (ny - 1)) {
-            start_y = (ny - 1) * y_dist;
-            end_y = argand.getHeight();
-        } else {
-            start_y = iy * y_dist;
-            end_y = (iy + 1) * y_dist;
-        }
-        return new int[]{start_x, end_x, start_y, end_y};
+            start_x = (nx - 1) * x_dist; end_x = argand.getWidth();
+        } else {start_x = ix * x_dist; end_x = (ix + 1) * x_dist - 1;} if (iy == (ny - 1)) {
+            start_y = (ny - 1) * y_dist; end_y = argand.getHeight();
+        } else {start_y = iy * y_dist; end_y = (iy + 1) * y_dist - 1;} return new int[]{start_x, end_x, start_y, end_y};
     }
     public double getScale() {
         return scale;
@@ -259,8 +246,17 @@ public class ComplexFractalGenerator implements Serializable {
             if (val.real() <= argand_map[center_y][argand_map[0].length - 1].real() && val.real() >= argand_map[center_y][0].real()) {
                 return true;
             }
-        }
-        return false;
+        } return false;
+    }
+    private synchronized Complex getLastConstant() {return new Complex(consts[getLastConstantIndex()][1]);}
+    private synchronized void setLastConstant(String value) {consts[getLastConstantIndex()][1] = value;}
+    private synchronized int getConstantIndex(String constant) {
+        for (int i = 0; i < consts.length; i++) {if (consts[i][0].equals(constant)) {return i;}} return -1;
+    }
+    private synchronized int getLastConstantIndex() {
+        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
+            if (getConstantIndex(parts[i]) != -1) {return getConstantIndex(parts[i]);}
+        } return -1;
     }
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack last = new FixedStack(iterations + 2);
@@ -277,8 +273,7 @@ public class ComplexFractalGenerator implements Serializable {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = new Complex(Complex.ZERO);
-                Complex zd = new Complex(Complex.ZERO);
-                setFirstConstant(this.consts[0][0], argand_map[i][j].toString());
+                Complex zd = new Complex(Complex.ZERO); setLastConstant(argand_map[i][j].toString());
                 fe.setZ_value(z.toString());
                 fe.setConstdec(this.consts);
                 if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION) {
@@ -330,10 +325,6 @@ public class ComplexFractalGenerator implements Serializable {
                 last.clear();
             }
         }
-    }
-    public synchronized void setFirstConstant(String name, String value) {
-        this.consts[0][0] = name;
-        this.consts[0][1] = value;
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
         Polynomial polynomial = Polynomial.fromString(function); polynomial.setConstdec(consts);
@@ -500,10 +491,14 @@ public class ComplexFractalGenerator implements Serializable {
         this.color = new ColorConfig(color);
     }
     public synchronized int getColor(int val, Complex[] last, double escape_radius, int iterations) {
-        int colortmp, color1, color2, index, index2;
-        double renormalized = ((val + 1) - (Math.log(Math.log(last[0].modulus() / Math.log(escape_radius)) / ComplexOperations.principallog(degree).modulus())));
-        double smoothcount = (renormalized > 0) ? Math.log(renormalized) : ComplexOperations.principallog(new Complex(renormalized, 0)).modulus();
-        double lbnd, ubnd, calc;
+        int colortmp, color1, color2, index, index2; double renormalized; double lbnd, ubnd, calc;
+        if (degree.equals(Complex.ZERO) || degree.equals(Complex.ONE)) {
+            renormalized = val + ((double) val / iterations);
+        } else {
+            renormalized = (val + 1) - (Math.log(Math.log(last[0].modulus()) / Math.log(escape_radius)) / ComplexOperations.principallog(degree).modulus());
+            if (renormalized - (int) renormalized == 0) {renormalized += ((double) val / iterations);}
+        }
+        double smoothcount = (renormalized > 0) ? Math.abs(Math.log(renormalized)) : ComplexOperations.principallog(new Complex(renormalized, 0)).modulus();
         switch (color.getMode()) {
             case Colors.CALCULATIONS.SIMPLE: colortmp = color.getColor((val * (iterations * color.color_density)) % color.num_colors); break;
             case Colors.CALCULATIONS.SIMPLE_SMOOTH: color1 = color.getColor((val * (iterations * color.color_density)) % color.num_colors); color2 = color.getColor(((val + 1) * (iterations * color.color_density)) % color.num_colors);
@@ -568,9 +563,7 @@ public class ComplexFractalGenerator implements Serializable {
                 colortmp = color.splineInterpolated(index, smoothcount - ((int) smoothcount));
             }
                 break; case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR:
-            case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY:
-                lbnd = Math.abs(ComplexOperations.power(last[1], new Complex(degree)).modulus() - new Complex(consts[0][1]).modulus());
-                ubnd = ComplexOperations.power(last[1], new Complex(degree)).modulus() + new Complex(consts[0][1]).modulus();
+            case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY: lbnd = Math.abs(ComplexOperations.power(last[1], new Complex(degree)).modulus() - getLastConstant().modulus()); ubnd = ComplexOperations.power(last[1], new Complex(degree)).modulus() + getLastConstant().modulus();
                 calc = (last[0].modulus() - lbnd) / (ubnd - lbnd); index = color.createIndex(calc, lbnd, ubnd); index2 = (index + 1) > color.num_colors ? index : index + 1; if (color.getMode() == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR) {
                 colortmp = ColorConfig.linearInterpolated(color.getColor(index), color.getColor(index2), smoothcount - ((int) smoothcount), color.isByParts());
             } else {

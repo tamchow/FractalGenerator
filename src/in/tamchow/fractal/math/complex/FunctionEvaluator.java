@@ -36,7 +36,12 @@ public class FunctionEvaluator {
         this.variableCode = variableCode;
     }
     public Complex getDegree(String function) {
-        Complex degree = new Complex(Complex.ZERO); if (function.contains("exp")) {
+        Complex degree = new Complex(Complex.ZERO);
+        if ((function.contains(variableCode) && (!function.contains("^")))) {
+            degree = new Complex(Complex.ONE); return degree;
+        } if (!hasBeenSubstituted) {
+            hasBeenSubstituted = true; return getDegree(substitute(function, true));
+        } if (function.contains("exp")) {
             String function2 = function.replace(function.substring(function.indexOf("exp"), function.indexOf(')', function.indexOf("exp")) + 1), "");
             return getDegree(function2);
         } if (function.contains("log")) {
@@ -44,29 +49,27 @@ public class FunctionEvaluator {
             return getDegree(function2);
         }
         if ((function.contains("*") || function.contains("/")) && advancedDegree) {
+            System.out.println(function);
             for (int i = 0; i < function.length(); i++) {
                 if (function.charAt(i) == '*' || function.charAt(i) == '/') {
-                    Complex dl = getDegree(function.substring(StringManipulator.indexOfBackwards(function, i, '('), StringManipulator.indexOfBackwards(function, i, ')') + 1));
-                    Complex dr = getDegree(function.substring(function.indexOf('(', i), function.indexOf(')', i) + 1));
+                    int closeLeftIndex = StringManipulator.indexOfBackwards(function, i, ')');
+                    int openLeftIndex = StringManipulator.findMatchingOpener(')', function, closeLeftIndex);
+                    Complex dl = getDegree(function.substring(openLeftIndex, closeLeftIndex + 1));
+                    int openRightIndex = function.indexOf('(', i);
+                    int closeRightIndex = StringManipulator.findMatchingCloser('(', function, openRightIndex);
+                    Complex dr = getDegree(function.substring(openRightIndex, closeRightIndex + 1));
                     Complex tmpdegree = new Complex(Complex.ZERO);
                     if (function.charAt(i) == '*') {
                         tmpdegree = ComplexOperations.add(dl, dr);
                     } else if (function.charAt(i) == '/') {
                         tmpdegree = ComplexOperations.subtract(dl, dr);
                     }
-                    String function2 = function.replace(function.substring(StringManipulator.indexOfBackwards(function, i, '('), function.indexOf(')', i) + 1), "z ^ " + tmpdegree);
+                    String function2 = function.replace(function.substring(openLeftIndex, closeRightIndex + 1), "z ^ " + tmpdegree);
                     return getDegree(function2);
                 }
             }
         }
-        if (!hasBeenSubstituted) {
-            hasBeenSubstituted = true;
-            return getDegree(substitute(function, true));
-        }
         int idx = 0, varidx = 0;
-        if ((function.contains(variableCode) && (!function.contains("^")))) {
-            degree = new Complex(Complex.ONE);
-        }
         while (function.indexOf('^', idx) != -1) {
             varidx = function.indexOf(variableCode, varidx) + 1;
             idx = function.indexOf('^', varidx) + 1;
