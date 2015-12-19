@@ -84,6 +84,7 @@ public class IFSGenerator {
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
             if (point.equals(initial) || i == depth || isOutOfBounds(point)) {completion = true; break;}
+            publishProgress(i);
         }
     }
     public boolean isOutOfBounds(Matrix point) {
@@ -95,10 +96,13 @@ public class IFSGenerator {
         if (x < 0) {x = 0;} if (y < 0) {y = 0;} if (x >= plane.getWidth()) {
             x = plane.getWidth() - 1;
         } if (y >= plane.getHeight()) {y = plane.getHeight() - 1;} return new int[]{x, y};}
+    public synchronized void publishProgress(long val) {
+        System.out.println("% completion= " + (((float) val) / depth) * 100.0 + "%");
+    }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
         Animation animation = new Animation(); for (long i = 0; i <= depth && (!completion); i++) {
-            generateStep(); animation.addFrame(plane);
+            generateStep(); animation.addFrame(plane); publishProgress(i);
         } return animation;
     }
     public void generateStep() {
