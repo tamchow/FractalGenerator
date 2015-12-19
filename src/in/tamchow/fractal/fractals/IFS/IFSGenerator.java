@@ -23,32 +23,24 @@ public class IFSGenerator {
         setParams(params); plane = new ImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision()); initial = null; completion = false;
-        if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
-    }
+        if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}}
     public void zoom(ZoomParams zoom) {
         zoom(zoom.centre_x, zoom.centre_y, zoom.level);
     }
     public void zoom(int cx, int cy, double level) {
-        if (cx < 0) {
-            cx = 0;
-        } if (cy < 0) {
-            cy = 0;
-        } if (cx >= plane.getWidth()) {
+        if (cx < 0) {cx = 0;} if (cy < 0) {cy = 0;} if (cx >= plane.getWidth()) {
             cx = plane.getWidth() - 1;
         } if (cy >= plane.getHeight()) {
             cy = plane.getHeight() - 1;
         } setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
-        setScale(base_precision * Math.pow(zoom, zoom_factor));
-    }
+        setScale(base_precision * Math.pow(zoom, zoom_factor));}
     public Matrix fromCooordinates(int x, int y) {
         double[][] matrixData = new double[2][1]; matrixData[0][0] = ((((double) x) - center_x) / scale);
         matrixData[1][0] = ((center_y - ((double) y)) / scale);
-        return MatrixOperations.add(centre_offset, new Matrix(matrixData));
-    }
+        return MatrixOperations.add(centre_offset, new Matrix(matrixData));}
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2); setCenter_y(plane.getHeight() / 2); double[][] matrixData = new double[2][1];
-        matrixData[0][0] = 0; matrixData[1][0] = 0;
-    }
+        matrixData[0][0] = 0; matrixData[1][0] = 0; setCentre_offset(new Matrix(matrixData));}
     public IFSFractalParams getParams() {return params;}
     public void setParams(IFSFractalParams params) {this.params = new IFSFractalParams(params);}
     public long getDepth() {return depth;}
@@ -91,21 +83,18 @@ public class IFSGenerator {
             int index = MathUtils.weightedRandom(params.getWeights()); int[] coord = toCooordinates(point);
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
-            if (point.equals(initial) || i == depth) {completion = true; break;}
+            if (point.equals(initial) || i == depth || isOutOfBounds(point)) {completion = true; break;}
         }
+    }
+    public boolean isOutOfBounds(Matrix point) {
+        int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
+        return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
     public int[] toCooordinates(Matrix point) {
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
-        if (x < 0) {
-            x = 0;
-        } if (y < 0) {
-            y = 0;
-        } if (x >= plane.getWidth()) {
+        if (x < 0) {x = 0;} if (y < 0) {y = 0;} if (x >= plane.getWidth()) {
             x = plane.getWidth() - 1;
-        } if (y >= plane.getHeight()) {
-            y = plane.getHeight() - 1;
-        } return new int[]{x, y};
-    }
+        } if (y >= plane.getHeight()) {y = plane.getHeight() - 1;} return new int[]{x, y};}
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
         Animation animation = new Animation(); for (long i = 0; i <= depth && (!completion); i++) {
@@ -120,6 +109,4 @@ public class IFSGenerator {
         int[] coord = toCooordinates(point);
         plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
         point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
-        if (point.equals(initial)) completion = true;
-    }
-}
+        if (point.equals(initial) || isOutOfBounds(point)) completion = true;}}

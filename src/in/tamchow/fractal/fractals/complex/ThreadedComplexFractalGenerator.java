@@ -35,7 +35,7 @@ public class ThreadedComplexFractalGenerator {
         for (int i = 0; i < ny; i++) {
             for (int j = 0; j < nx; j++) {
                 int[] coords = master.start_end_coordinates(nx, j, ny, i);
-                SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[2], coords[1], coords[3]);
+                SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
                 System.out.println("Initiated thread " + idx);
                 idx++;
             }

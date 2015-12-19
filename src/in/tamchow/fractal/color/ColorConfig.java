@@ -1,5 +1,7 @@
 package in.tamchow.fractal.color;
 import in.tamchow.fractal.math.MathUtils;
+import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.math.complex.ComplexOperations;
 
 import java.io.Serializable;
 /**
@@ -8,29 +10,21 @@ import java.io.Serializable;
 public class ColorConfig implements Serializable {
     public int basecolor, step, color_density, num_colors, mode, palette_type;
     public int[] palette;
-    public boolean byParts;
+    public boolean byParts, logIndex;
     boolean colors_corrected;
     public ColorConfig(int mode, int color_density, int num_colors, int basecolor) {
-        initColorConfig(mode, color_density, num_colors, basecolor, false);}
-    private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts) {
-        colors_corrected = false; setByParts(byParts);
-        setColor_density(color_density);
-        setNum_colors(num_colors);
-        setBasecolor(basecolor);
-        calcStep();
-        initGradientPalette(); setMode(mode);
+        initColorConfig(mode, color_density, num_colors, basecolor, false, false);
+    }
+    private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex) {
+        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
+        setNum_colors(num_colors); setBasecolor(basecolor); calcStep(); initGradientPalette(); setMode(mode);
     }
     public void initGradientPalette() {
-        setPalette_type(Colors.PALETTE.CUSTOM);
-        palette = new int[num_colors];
-        if (step == 0) {
-            initShadePalette(); return;
-        }
-        int baseidx = num_colors / 2; int increment = 0;
+        setPalette_type(Colors.PALETTE.CUSTOM); palette = new int[num_colors];
+        if (step == 0) {initShadePalette(); return;} int baseidx = num_colors / 2; int increment = 0;
         for (int i = 0; i < baseidx; i++) {
             palette[i] = Math.abs(basecolor - increment * step); increment++;
-        } increment = 0;
-        for (int i = baseidx; i < num_colors; i++) {
+        } increment = 0; for (int i = baseidx; i < num_colors; i++) {
             palette[i] = basecolor + increment * step; increment++;
         }
     }
@@ -44,9 +38,9 @@ public class ColorConfig implements Serializable {
     }
     public int getTint(int color, double tint) {
         int r = separateRGB(color, Colors.RGBCOMPONENTS.RED); int g = separateRGB(color, Colors.RGBCOMPONENTS.GREEN);
-        int b = separateRGB(color, Colors.RGBCOMPONENTS.BLUE);
-        int nr = (int) (r + (255 - r) * tint); int ng = (int) (g + (255 - g) * tint);
-        int nb = (int) (b + (255 - b) * tint); return (nr << 16) | (ng << 8) | (nb);
+        int b = separateRGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r + (255 - r) * tint);
+        int ng = (int) (g + (255 - g) * tint); int nb = (int) (b + (255 - b) * tint);
+        return (nr << 16) | (ng << 8) | (nb);
     }
     public static int separateRGB(int color, int component) {
         int part = 0; switch (component) {
@@ -58,21 +52,20 @@ public class ColorConfig implements Serializable {
     }
     public int getShade(int color, double shade) {
         int r = separateRGB(color, Colors.RGBCOMPONENTS.RED); int g = separateRGB(color, Colors.RGBCOMPONENTS.GREEN);
-        int b = separateRGB(color, Colors.RGBCOMPONENTS.BLUE);
-        int nr = (int) (r * (1 - shade)); int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade));
-        return (nr << 16) | (ng << 8) | (nb);
+        int b = separateRGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r * (1 - shade));
+        int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade)); return (nr << 16) | (ng << 8) | (nb);
     }
     private void calcStep() {
         setStep((0xfffff / (color_density << num_colors)));
     }
-    public ColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts) {
-        initColorConfig(mode, color_density, num_colors, basecolor, byParts);
+    public ColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex) {
+        initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex);
     }
-    public ColorConfig(int mode, int color_density, int num_colors, int basecolor, int step, boolean byParts) {
-        initColorConfig(mode, color_density, num_colors, basecolor, step, byParts);
+    public ColorConfig(int mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex) {
+        initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex);
     }
-    private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, int step, boolean byParts) {
-        colors_corrected = false; this.byParts = byParts;
+    private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex) {
+        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex);
         setColor_density(color_density);
         setNum_colors(num_colors);
         setBasecolor(basecolor);
@@ -97,11 +90,10 @@ public class ColorConfig implements Serializable {
         }
     }
     public ColorConfig(int mode, int color_density, int num_colors) {
-        initColorConfig(mode, num_colors, false); setColor_density(color_density);
+        initColorConfig(mode, num_colors, false, false); setColor_density(color_density);
     }
-    private void initColorConfig(int mode, int num_colors, boolean byParts) {
-        colors_corrected = false; setByParts(byParts);
-        setNum_colors(num_colors);
+    private void initColorConfig(int mode, int num_colors, boolean byParts, boolean logIndex) {
+        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setNum_colors(num_colors);
         initRandomPalette(num_colors, false); setMode(mode);
     }
     public void initRandomPalette(int num_colors, boolean preserve) {
@@ -121,15 +113,14 @@ public class ColorConfig implements Serializable {
             }
         }
     }
-    public ColorConfig() {
-        palette = null;
-        setPalette_type(Colors.PALETTE.RANDOM); initColorConfig(0, 0, 0x0, 0, false);
-    }
+    public ColorConfig() {palette = null; setPalette_type(Colors.PALETTE.RANDOM); initColorConfig(0, 0, 0x0, 0, false, false);}
     public ColorConfig(ColorConfig old) {
-        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts());
+        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts(), old.isLogIndex());
         setPalette(old.getPalette(), false);
         colors_corrected = old.colors_corrected;
     }
+    public boolean isLogIndex() {return logIndex;}
+    public void setLogIndex(boolean logIndex) {this.logIndex = logIndex;}
     public boolean isByParts() {
         return byParts;
     }
@@ -186,14 +177,18 @@ public class ColorConfig implements Serializable {
     }
     public int calculateColorDensity() {return MathUtils.firstPrimeFrom(num_colors);}
     public int createIndex(double val, double min, double max) {
-        return (int) Math.abs(((((val - min) / (max - min))) * color_density) % num_colors);
+        if (((min == 0 || (max - min) == 1 || (max - min) == 0) && logIndex) || (!logIndex)) {
+            return (int) (Math.abs((val - min) / (max - min)) * color_density) % num_colors;
+        } Complex exp = new Complex(val / min, 0); Complex base = new Complex(max / min, 0);
+        double idx = ComplexOperations.divide(ComplexOperations.principallog(exp), ComplexOperations.principallog(base)).modulus();
+        return (int) (idx * color_density) % num_colors;
     }
     public int getColor(int index) {
         return palette[index];
     }
     public int splineInterpolated(int index, double bias) {
         if ((!colors_corrected) && num_colors < 4) {
-            num_colors = 4; initColorConfig(mode, color_density, num_colors, basecolor, step, byParts);
+            num_colors = 4; initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex);
             if (palette_type == Colors.PALETTE.RANDOM) {
                 initRandomPalette(num_colors, true);
             } else {initGradientPalette();} colors_corrected = true;
@@ -232,17 +227,19 @@ public class ColorConfig implements Serializable {
     }
     public void fromString(String[] colors) {
         String type = colors[0]; mode = Integer.valueOf(colors[1]); byParts = Boolean.valueOf(colors[2]);
+        int offset = 0;
+        try {logIndex = Boolean.valueOf(colors[3]); offset = 1;} catch (Exception e) {setLogIndex(false);}
         switch (type) {
-            case "RANDOM_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3]), byParts); break;
-            case "CUSTOM_PALETTE": String[] parts = colors[3].split(";"); int[] colorset = new int[parts.length]; for (int i = 0; i < colorset.length; i++) {
-                colorset[i] = Integer.valueOf(parts[i], 16);
-            } setPalette(colorset, false); setColor_density(Integer.valueOf(parts[4])); break;
-            case "GRADIENT_PALETTE": if (colors.length == 7) {
-                initColorConfig(mode, Integer.valueOf(colors[3]), Integer.valueOf(colors[4]), Integer.valueOf(colors[5], 16), Integer.valueOf(colors[6], 16), byParts);
-            } else if (colors.length == 6) {
-                initColorConfig(mode, Integer.valueOf(colors[3]), Integer.valueOf(colors[4]), Integer.valueOf(colors[5], 16), byParts);
+            case "RANDOM_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3]), byParts, false); break;
+            case "CUSTOM_PALETTE": String[] parts = colors[3 + offset].split(";"); int[] colorset = new int[parts.length]; for (int i = 0; i < colorset.length; i++) {
+                colorset[i] = Integer.valueOf(parts[i + 3 + offset], 16);
+            } setPalette(colorset, false); setColor_density(Integer.valueOf(parts[4 + offset])); break;
+            case "GRADIENT_PALETTE": if (colors.length == 7 + offset) {
+                initColorConfig(mode, Integer.valueOf(colors[3 + offset]), Integer.valueOf(colors[4 + offset]), Integer.valueOf(colors[5 + offset], 16), Integer.valueOf(colors[6] + offset, 16), byParts, logIndex);
+            } else if (colors.length == 6 + offset) {
+                initColorConfig(mode, Integer.valueOf(colors[3 + offset]), Integer.valueOf(colors[4 + offset]), Integer.valueOf(colors[5 + offset], 16), byParts, logIndex);
             } break;
-            case "SHADE_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3]), Integer.valueOf(colors[4]), Integer.valueOf(colors[5], 16), 0x000000, byParts); break;
+            case "SHADE_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3 + offset]), Integer.valueOf(colors[4 + offset]), Integer.valueOf(colors[5 + offset], 16), 0x000000, byParts, logIndex); break;
             default: throw new IllegalArgumentException("Unsupported palette type");
         }
     }
