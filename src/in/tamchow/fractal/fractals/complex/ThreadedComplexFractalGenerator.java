@@ -21,13 +21,11 @@ public class ThreadedComplexFractalGenerator {
         ny = y_threads;
         progress = new boolean[nx * ny];
     }
-    public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, ComplexFractalParams config) {
+    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config) {
         this.master = master;
         this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
-        this.constant = config.runParams.constant;
-        nx = x_threads;
-        ny = y_threads;
+        this.constant = config.runParams.constant; nx = config.x_threads; ny = config.y_threads;
         progress = new boolean[nx * ny];
     }
     public void generate() {

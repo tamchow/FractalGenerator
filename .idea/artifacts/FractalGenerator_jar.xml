@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="FractalGenerator:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/FractalGenerator_jar</output-path>
+    <output-path>$PROJECT_DIR$/out/production/FractalGenerator/deployment</output-path>
     <root id="archive" name="FractalGenerator.jar">
       <element id="module-output" name="FractalGenerator" />
     </root>

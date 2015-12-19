@@ -15,12 +15,12 @@ import java.io.IOException;
  */
 public class Test {
     public static void main(String[] args) {
-        String func = "z ^ 2 + e", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
+        String func = "z ^ 4 + 1", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}, {"f", "-0.5,+0.25i"}};
-        int resx = 801, resy = 601, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 32;
-        double escrad = 2, tolerance = 1e-10, zoom = 10, zoompow = 0, baseprec = 400;
+        int resx = 801, resy = 801, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 32;
+        double escrad = 2, tolerance = 1e-10, zoom = 10, zoompow = 0, baseprec = 300;
         //ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 65536,0xff0000,0xfff000,true,true);
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.SIMPLE_SMOOTH, 167, 65536, 0x00ff00, 0x000000, true, true);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE, 8, 256, false, true);
         Complex constant = null;//new Complex("1.0,+0.0i");//func = poly;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {

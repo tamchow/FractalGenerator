@@ -89,8 +89,8 @@ public class ColorConfig implements Serializable {
             System.arraycopy(palette, 0, this.palette, tmpPalette.length, this.palette.length - tmpPalette.length);
         }
     }
-    public ColorConfig(int mode, int color_density, int num_colors) {
-        initColorConfig(mode, num_colors, false, false); setColor_density(color_density);
+    public ColorConfig(int mode, int color_density, int num_colors, boolean byParts, boolean logIndex) {
+        initColorConfig(mode, num_colors, byParts, logIndex); setColor_density(color_density);
     }
     private void initColorConfig(int mode, int num_colors, boolean byParts, boolean logIndex) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setNum_colors(num_colors);
