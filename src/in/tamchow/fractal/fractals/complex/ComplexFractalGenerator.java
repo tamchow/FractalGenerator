@@ -492,8 +492,9 @@ public class ComplexFractalGenerator implements Serializable {
                 color = ColorConfig.linearInterpolated(0xffffff, color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors),((double) val / iterations),color.isByParts());
                 }*/
                 break;
-            case Colors.CALCULATIONS.COLOR_NEWTON_2: colortmp = ColorConfig.linearInterpolated(0xffffff, color.getColor((int) (escape_radius * color.color_density) % color.num_colors), smoothcount - ((int) smoothcount), color.isByParts());
-                break; case Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR:
+            case Colors.CALCULATIONS.COLOR_NEWTON_2: colortmp = ColorConfig.linearInterpolated(0xffffff, color.getColor((int) (escape_radius * color.color_density) % color.num_colors), smoothcount - ((int) smoothcount), color.isByParts()); break;
+            case Colors.CALCULATIONS.COLOR_NEWTON_3: color1 = color.getTint(color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((indexOfRoot(last[0]) * color.color_density) % color.num_colors), ((double) (val + 1) / iterations)); colortmp = ColorConfig.linearInterpolated(color1, color2, val, iterations, color.isByParts()); break;
+            case Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR:
             case Colors.CALCULATIONS.CURVATURE_AVERAGE: lbnd = -Math.PI; ubnd = Math.PI;
                 if (last[1].equals(Complex.ZERO) && last[2] == Complex.ZERO) {
                     calc = Math.PI / 2;
