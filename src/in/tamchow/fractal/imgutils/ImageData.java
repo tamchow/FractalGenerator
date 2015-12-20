@@ -1,22 +1,20 @@
 package in.tamchow.fractal.imgutils;
+import in.tamchow.fractal.color.ColorConfig;
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed RGB in hex values as pixels.
  */
 public class ImageData {
+    public static final int AVERAGE = 1, WEIGHTED_AVERAGE = 2, INTERPOLATED_AVERAGE = 3;
     private String path;
     private int[][] pixdata;
     public ImageData() {
-        path = ""; pixdata = new int[801][801];
-        for (int i = 0; i < pixdata.length; i++) {
+        path = ""; pixdata = new int[801][801]; for (int i = 0; i < pixdata.length; i++) {
             for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x00000000;}
         }
     }
     public ImageData(int w, int h) {
-        path = ""; pixdata = new int[h][w];
-        for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {
-                pixdata[i][j] = 0x000000;
-            }
+        path = ""; pixdata = new int[h][w]; for (int i = 0; i < pixdata.length; i++) {
+            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x000000;}
         }
     }
     public ImageData(int[][] pixdata) {path = ""; setPixdata(pixdata);}
@@ -37,18 +35,22 @@ public class ImageData {
         }
     }
     public ImageData(String path) {this.path = path; pixdata = null;}
-    public ImageData getPostProcessed(boolean justAverage) {
+    public ImageData getPostProcessed(int mode, double[][] biases, boolean byParts) {
         ImageData processed = new ImageData(this);
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
             for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {
                 int left = pixdata[i][j - 1], right = pixdata[i][j + 1], top = pixdata[i - 1][j], bottom = pixdata[i + 1][j];
                 int top_left = pixdata[i - 1][j - 1], top_right = pixdata[i - 1][j + 1], bottom_left = pixdata[i + 1][j - 1], bottom_right = pixdata[i + 1][j + 1];
                 double average = (top_left + top + top_right + left + right + bottom_left + bottom + bottom_right) / 8;
-                if (justAverage) {processed.setPixel(i, j, (int) average);} else {
-                    processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2));
+                switch (mode) {
+                    case AVERAGE: processed.setPixel(i, j, (int) average); break;
+                    case WEIGHTED_AVERAGE: processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2)); break;
+                    case INTERPOLATED_AVERAGE: processed.setPixel(i, j, ColorConfig.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (int) biases[i][j], byParts)); break;
+                    default: throw new IllegalArgumentException("Unsupported Post Processing type");
                 }
             }
-        } return processed;}
+        } return processed;
+    }
     public synchronized void setPixel(int y, int x, int val) {pixdata[y][x] = val;}
     public synchronized void setSize(int height, int width) {
         int[][] tmp = new int[pixdata.length][pixdata[0].length];
@@ -68,10 +70,10 @@ public class ImageData {
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata, i * scan, this.pixdata[i], 0, this.pixdata[i].length);}}
     public synchronized int[] getPixels() {
-        int[] pixels = new int[pixdata.length * pixdata[0].length];
-        for (int i = 0; i < pixdata.length; i++) {
+        int[] pixels = new int[pixdata.length * pixdata[0].length]; for (int i = 0; i < pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
-        } return pixels;}
+        } return pixels;
+    }
     public synchronized int getPixel(int y, int x) {
         return pixdata[y][x];
     }
