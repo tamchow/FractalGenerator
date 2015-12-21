@@ -29,27 +29,21 @@ public class ConfigReader {
             String line = in.nextLine(); if (!line.startsWith("#")) {
                 if (line.contains("#")) {
                     line = line.substring(0, line.indexOf("#")).trim();
-                } lines.add(line);}
+                } lines.add(line);
+            }
         } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
         List<String> specCfg = lines.subList(lines.indexOf("[Images]") + 1, lines.indexOf("[EndImages]"));
         ImageConfig imageConfig = new ImageConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
         ImageParams[] imgparams = new ImageParams[specCfg.size()];
         for (int i = 0; i < specCfg.size(); i++) {
             imgparams[i] = new ImageParams(specCfg.get(i).substring(0, specCfg.get(i).indexOf(" ")), Integer.valueOf(specCfg.get(i).substring(specCfg.get(i).indexOf(" ") + 1, specCfg.get(i).length())));
-        }
-        imageConfig.readConfig(imgparams);
-        return imageConfig;
+        } imageConfig.readConfig(imgparams); return imageConfig;
     }
     public static ComplexFractalConfig getComplexFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile); ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[ComplexFractalConfig]")) {return null;}
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
-                }
-                lines.add(line);
+        if (!in.nextLine().equals("[ComplexFractalConfig]")) {return null;} while (in.hasNext()) {
+            String line = in.nextLine(); if (!line.startsWith("#")) {
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
         } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
         List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
@@ -60,12 +54,13 @@ public class ConfigReader {
         } complexFractalConfig.setParams(complexFractalParams); return complexFractalConfig;
     }
     public static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
-        Scanner in = new Scanner(paramfile);
-        ArrayList<String> lines = new ArrayList<>(); String thread_data=null;
-        while (in.hasNext()) {
+        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
+        String thread_data = null, post_process_mode = null; while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Threads:")) {
                 thread_data = line.substring("Threads:".length()).trim(); continue;}
-            if (!line.startsWith("#")) {
+            if (line.startsWith("Postprocessing:")) {
+                post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
+            } if (!line.startsWith("#")) {
                 if (line.contains("#")) {
                     line = line.substring(0, line.indexOf("#")).trim();
                 } lines.add(line);
@@ -74,13 +69,13 @@ public class ConfigReader {
             List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));
             zooms = new String[zoomsConfig.size()]; zoomsConfig.toArray(zooms);}
         List<String> initConfig = lines.subList(lines.indexOf("[Initconfig]") + 1, lines.indexOf("[EndInitconfig]"));
-        String[] init = new String[initConfig.size()];
-        initConfig.toArray(init);
+        String[] init = new String[initConfig.size()]; initConfig.toArray(init);
         List<String> runConfig = lines.subList(lines.indexOf("[Runconfig]") + 1, lines.indexOf("[EndRunconfig]"));
         String[] run = new String[runConfig.size()];
         initConfig.toArray(run); ComplexFractalParams complexFractalParams = new ComplexFractalParams();
         complexFractalParams.initParams.fromString(init); complexFractalParams.runParams.fromString(run);
         if (thread_data != null) {complexFractalParams.threadDataFromString(thread_data);}
+        if (post_process_mode != null) {complexFractalParams.setPostprocessMode(Integer.valueOf(post_process_mode));}
         if (zooms != null) {complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         return complexFractalParams;
     }
@@ -88,9 +83,7 @@ public class ConfigReader {
         Scanner in = new Scanner(cfgfile); ArrayList<String> lines = new ArrayList<>();
         if (!in.nextLine().equals("[IFSFractalConfig]")) {return null;} while (in.hasNext()) {
             String line = in.nextLine(); if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
-                } lines.add(line);
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
         } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
         List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));

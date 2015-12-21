@@ -25,7 +25,10 @@ public class IFSGenerator {
         setBase_precision(params.getBase_precision()); initial = null; completion = false;
         if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}}
     public void zoom(ZoomParams zoom) {
-        zoom(zoom.centre_x, zoom.centre_y, zoom.level);
+        if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}
+    }
+    public void zoom(Matrix centre_offset, double level) {
+        setCentre_offset(centre_offset); setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
     public void zoom(int cx, int cy, double level) {
         if (cx < 0) {cx = 0;} if (cy < 0) {cy = 0;} if (cx >= plane.getWidth()) {

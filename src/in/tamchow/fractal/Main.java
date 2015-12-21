@@ -48,7 +48,11 @@ public class Main {
                     } else {
                         generator.generate(params);
                     } File outputFile = new File(args[1] + "/Fractal_" + i + ".jpg");
-                    ImageIO.write(ImageConverter.toImage(generator.getArgand()), "jpg", outputFile);
+                    if (params.getPostprocessMode() != -1) {
+                        ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getColor().isByParts())), "jpg", outputFile);
+                    } else {
+                        ImageIO.write(ImageConverter.toImage(generator.getArgand()), "jpg", outputFile);
+                    }
                 }
             } else if (ConfigReader.isFileIFSFractalConfig(input)) {
                 if (args.length == 1) {System.err.println("No output directory specified"); System.exit(3);}
