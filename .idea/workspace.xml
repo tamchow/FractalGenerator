@@ -7,18 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Final update before next major release">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,7 +41,7 @@
       <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.56692916">
+            <state vertical-scroll-proportion="0.68953687">
               <caret line="43" column="65" selection-start-line="43" selection-start-column="65" selection-end-line="43" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -128,7 +118,6 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/StringManipulator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" />
@@ -140,6 +129,7 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
       </list>
     </option>
   </component>
@@ -191,6 +181,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -313,9 +306,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -873,7 +863,7 @@
     <option name="fileTypes" value="class;svn-base;svn-work;Extra;gif;png;jpg;jpeg;bmp;tga;tiff;ear;war;zip;jar;iml;iws;ipr;bz2;gz;" />
   </component>
   <component name="StructureViewFactory">
-    <option name="ACTIVE_ACTIONS" value=",SHOW_PROPERTIES" />
+    <option name="ACTIVE_ACTIONS" value=",SHOW_PROPERTIES,SHOW_FIELDS" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -992,13 +982,8 @@
       <workItem from="1450524767904" duration="3243000" />
       <workItem from="1450539426910" duration="3160000" />
       <workItem from="1450596259940" duration="2819000" />
-      <workItem from="1450674764237" duration="7821000" />
-    </task>
-    <task id="LOCAL-00012" summary="added math utility classes for implementing newton fractals later&#10;bugfixes&#10;added math utility classes for implementing IFS fractals later">
-      <created>1447502419024</created>
-      <option name="number" value="00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1447502419024</updated>
+      <workItem from="1450674764237" duration="7934000" />
+      <workItem from="1450689300734" duration="1589000" />
     </task>
     <task id="LOCAL-00013" summary="Implementing color configuration class for custom palettes option">
       <created>1447575950259</created>
@@ -1288,11 +1273,17 @@
       <option name="project" value="LOCAL" />
       <updated>1450603498599</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Final update before next major release">
+      <created>1450685561627</created>
+      <option name="number" value="00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1450685561628</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="410528000" />
+    <option name="totallyTimeSpent" value="412230000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1309,12 +1300,10 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33060557" sideWeight="0.5045386" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32733223" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33060557" sideWeight="0.49546143" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30030257" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1324,15 +1313,17 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2569558" sideWeight="0.4969743" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2569558" sideWeight="0.4969743" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39770868" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33060557" sideWeight="0.49546143" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1694,14 +1685,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3327616">
-          <caret line="170" column="22" selection-start-line="170" selection-start-column="22" selection-end-line="170" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1714,10 +1697,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.94168097">
           <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
-          <folding>
-            <element signature="e#3192#3193#0" expanded="true" />
-            <element signature="e#3232#3233#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1725,9 +1704,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.37907377">
           <caret line="13" column="88" selection-start-line="13" selection-start-column="88" selection-end-line="13" selection-end-column="88" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1735,9 +1711,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18353345">
           <caret line="24" column="38" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1745,7 +1718,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23327616">
           <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1761,7 +1733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.67066896">
           <caret line="24" column="50" selection-start-line="24" selection-start-column="50" selection-end-line="24" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1777,7 +1748,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="484" selection-start-line="6" selection-start-column="484" selection-end-line="6" selection-end-column="484" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1797,9 +1767,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12521441">
+          <caret line="185" column="105" selection-start-line="185" selection-start-column="105" selection-end-line="185" selection-end-column="105" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56692916">
+        <state vertical-scroll-proportion="0.68953687">
           <caret line="43" column="65" selection-start-line="43" selection-start-column="65" selection-end-line="43" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />

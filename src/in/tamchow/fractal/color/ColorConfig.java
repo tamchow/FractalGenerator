@@ -24,15 +24,13 @@ public class ColorConfig implements Serializable {
         if (step == 0) {initShadePalette(); return;} int baseidx = num_colors / 2; int increment = 0;
         for (int i = 0; i < baseidx; i++) {
             palette[i] = Math.abs(basecolor - increment * step); increment++;
-        } increment = 0; for (int i = baseidx; i < num_colors; i++) {
-            palette[i] = basecolor + increment * step; increment++;
-        }
+        } increment = 0;
+        for (int i = baseidx; i < num_colors; i++) {palette[i] = basecolor + increment * step; increment++;}
     }
     private void initShadePalette() {
         int baseidx = num_colors / 2; for (int i = baseidx - 1; i >= 0; i--) {
             palette[i] = getTint(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
-        }
-        for (int i = baseidx; i < num_colors; i++) {
+        } for (int i = baseidx; i < num_colors; i++) {
             palette[i] = getShade(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
         }
     }
@@ -65,26 +63,17 @@ public class ColorConfig implements Serializable {
         initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex);
     }
     private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex) {
-        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex);
-        setColor_density(color_density);
-        setNum_colors(num_colors);
-        setBasecolor(basecolor);
-        setStep(step);
-        initGradientPalette();
-        setMode(mode);
+        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
+        setNum_colors(num_colors); setBasecolor(basecolor); setStep(step); initGradientPalette(); setMode(mode);
     }
-    public ColorConfig(int mode, int[] palette) {
-        setPalette(palette, false);
-        setMode(mode); setByParts(false);
-    }
+    public ColorConfig(int mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(false);}
     public void setPalette(int[] palette, boolean preserve) {
         if (!preserve) {
             this.palette = new int[palette.length]; setNum_colors(palette.length);
             System.arraycopy(palette, 0, this.palette, 0, palette.length);
         } else {
             int[] tmpPalette = new int[this.palette.length]; setNum_colors(palette.length);
-            System.arraycopy(this.palette, 0, tmpPalette, 0, this.palette.length);
-            this.palette = new int[num_colors];
+            System.arraycopy(this.palette, 0, tmpPalette, 0, this.palette.length); this.palette = new int[num_colors];
             System.arraycopy(tmpPalette, 0, this.palette, 0, tmpPalette.length);
             System.arraycopy(palette, 0, this.palette, tmpPalette.length, this.palette.length - tmpPalette.length);
         }
@@ -97,17 +86,13 @@ public class ColorConfig implements Serializable {
         initRandomPalette(num_colors, false); setMode(mode);
     }
     public void initRandomPalette(int num_colors, boolean preserve) {
-        setPalette_type(Colors.PALETTE.RANDOM);
-        if (!preserve) {
-            palette = new int[num_colors];
-            for (int pidx = 0; pidx < num_colors; pidx++) {
+        setPalette_type(Colors.PALETTE.RANDOM); if (!preserve) {
+            palette = new int[num_colors]; for (int pidx = 0; pidx < num_colors; pidx++) {
                 palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
             }
         } else {
-            int[] randtmp = new int[palette.length];
-            System.arraycopy(palette, 0, randtmp, 0, palette.length);
-            palette = new int[num_colors];
-            System.arraycopy(randtmp, 0, palette, 0, randtmp.length);
+            int[] randtmp = new int[palette.length]; System.arraycopy(palette, 0, randtmp, 0, palette.length);
+            palette = new int[num_colors]; System.arraycopy(randtmp, 0, palette, 0, randtmp.length);
             for (int pidx = randtmp.length; pidx < num_colors; pidx++) {
                 palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
             }
@@ -116,8 +101,7 @@ public class ColorConfig implements Serializable {
     public ColorConfig() {palette = null; setPalette_type(Colors.PALETTE.RANDOM); initColorConfig(0, 0, 0x0, 0, false, false);}
     public ColorConfig(ColorConfig old) {
         initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts(), old.isLogIndex());
-        setPalette(old.getPalette(), false);
-        colors_corrected = old.colors_corrected;
+        setPalette(old.getPalette(), false); colors_corrected = old.colors_corrected;
     }
     public boolean isLogIndex() {return logIndex;}
     public void setLogIndex(boolean logIndex) {this.logIndex = logIndex;}
@@ -179,6 +163,17 @@ public class ColorConfig implements Serializable {
             int ng = (int) (tg * bias + fg * (1 - bias)); int nb = (int) (tb * bias + fb * (1 - bias));
             return nr << 16 | ng << 8 | nb;
         } return (int) (tocolor * bias + fromcolor * (1 - bias));
+    }
+    public void createSmoothPalette(int[] control_colors, double[] control_points) {
+        setPalette_type(Colors.PALETTE.CUSTOM); palette = new int[num_colors];
+        int[] controls = new int[control_points.length];
+        for (int i = 0; i < control_points.length; i++) {controls[i] = createIndex(control_points[i], 0, 1);} int c = 0;
+        for (int i = 0; i < palette.length && c < controls.length; i++) {
+            if (i == controls[c]) {palette[i] = control_colors[c]; c++;}
+        } c = 0; int cnext = c + 1; for (int i = 0; i < palette.length && c < controls.length; i++) {
+            if (c == controls.length - 1) {cnext = 0;} if (i == controls[c]) {c++; cnext++; continue;}
+            palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(controls[cnext] - controls[c]), num_colors, isByParts());
+        }
     }
     public int calculateColorDensity() {return MathUtils.firstPrimeFrom(num_colors);}
     public int createIndex(double val, double min, double max) {
@@ -245,6 +240,10 @@ public class ColorConfig implements Serializable {
                 initColorConfig(mode, Integer.valueOf(colors[3 + offset]), Integer.valueOf(colors[4 + offset]), Integer.valueOf(colors[5 + offset], 16), byParts, logIndex);
             } break;
             case "SHADE_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3 + offset]), Integer.valueOf(colors[4 + offset]), Integer.valueOf(colors[5 + offset], 16), 0x000000, byParts, logIndex); break;
+            case "SMOOTH_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3 + offset]), byParts, logIndex); setColor_density(Integer.valueOf(colors[4 + offset])); String[] controls = colors[5 + offset].split(";"); int[] control_colors = new int[controls.length]; double[] control_points = new double[controls.length]; for (int i = 0; i < controls.length; i++) {
+                String[] control = controls[i].split(" "); control_colors[i] = Integer.valueOf(control[0]);
+                control_points[i] = Double.valueOf(control[1]);
+            } createSmoothPalette(control_colors, control_points); break;
             default: throw new IllegalArgumentException("Unsupported palette type");
         }
     }
