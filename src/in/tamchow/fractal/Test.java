@@ -40,9 +40,8 @@ public class Test {
             if (constant != null) {jgen.generate(iter, escrad, constant);} else {jgen.generate(iter, escrad);}
         } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
-        File pic = new File("D:/Fractal.jpg"); File postpic = new File("D:/Fractal_processed.jpg"); try {
+        File pic = new File("D:/Fractal.jpg"); try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.INTERPOLATED_AVERAGE, jgen.getNormalized_escapes(), jgen.getColor().isByParts())), "jpg", pic);
-            //ImageIO.write(ImageConverter.toImage(jgen.getArgand().getColorAveraged()), "jpg", postpic);
         } catch (Exception e) {e.printStackTrace();} long endtime = System.currentTimeMillis();
         System.out.println("Writing image took:" + (endtime - gentime) + "ms");
     }
