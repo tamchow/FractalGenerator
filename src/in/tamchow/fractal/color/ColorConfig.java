@@ -172,7 +172,7 @@ public class ColorConfig implements Serializable {
             if (i == controls[c]) {palette[i] = control_colors[c]; c++;}
         } c = 0; int cnext = c + 1; for (int i = 0; i < palette.length && c < controls.length; i++) {
             if (c == controls.length - 1) {cnext = 0;} if (i == controls[c]) {c++; cnext++; continue;}
-            palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(controls[cnext] - controls[c]), num_colors, isByParts());
+            palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(i - controls[c]), num_colors, isByParts());
         }
     }
     public int calculateColorDensity() {return MathUtils.firstPrimeFrom(num_colors);}
