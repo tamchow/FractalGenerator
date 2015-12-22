@@ -1,5 +1,4 @@
 package in.tamchow.fractal.color;
-import in.tamchow.fractal.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 
@@ -153,7 +152,7 @@ public class ColorConfig implements Serializable {
         return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);
     }
     public static int linearInterpolated(int fromcolor, int tocolor, double bias, boolean byParts) {
-        if (byParts) {
+        if (tocolor < fromcolor) {bias = 1 - bias;} if (byParts) {
             int fr = separateRGB(fromcolor, Colors.RGBCOMPONENTS.RED);
             int fg = separateRGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
             int fb = separateRGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
@@ -167,8 +166,9 @@ public class ColorConfig implements Serializable {
     public void createSmoothPalette(int[] control_colors, double[] control_points, boolean useSpline) {
         setPalette_type(Colors.PALETTE.CUSTOM); palette = new int[num_colors];
         int[] controls = new int[control_points.length];
-        for (int i = 0; i < control_points.length; i++) {controls[i] = createIndex(control_points[i], 0, 1);} int c = 0;
-        for (int i = 0; i < palette.length && c < controls.length; i++) {
+        for (int i = 0; i < controls.length && i < control_points.length; i++) {
+            controls[i] = createIndex(control_points[i], 0, 1, 1);
+        } int c = 0; for (int i = 0; i < palette.length && c < controls.length; i++) {
             if (i == controls[c]) {palette[i] = control_colors[c]; c++;}
         } c = 0; int cnext = c + 1; for (int i = 0; i < palette.length && c < controls.length; i++) {
             if (c == controls.length - 1) {cnext = 0;} if (i == controls[c]) {c++; cnext++; continue;} if (useSpline) {
@@ -178,10 +178,11 @@ public class ColorConfig implements Serializable {
             }
         }
     }
-    public int calculateColorDensity() {return MathUtils.firstPrimeFrom(num_colors);}
-    public int createIndex(double val, double min, double max) {
+    public int calculateColorDensity() {if (mode == Colors.CALCULATIONS.SIMPLE) {return 1;} return num_colors - 1;}
+    public int createIndex(double val, double min, double max, double zoom) {
+        val /= zoom; max /= zoom; min /= zoom;
         if (((min == 0 || (max - min) == 1 || (max - min) == 0) && logIndex) || (!logIndex)) {
-            return (int) (Math.abs((val - min) / (max - min)) * color_density) % num_colors;
+            return (int) ((Math.abs((val - min) / (max - min)) * color_density) % num_colors);
         } Complex exp = new Complex(val / min, 0); Complex base = new Complex(max / min, 0);
         double idx = ComplexOperations.divide(ComplexOperations.principallog(exp), ComplexOperations.principallog(base)).modulus();
         return (int) (idx * color_density) % num_colors;
