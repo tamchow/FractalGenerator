@@ -11,8 +11,9 @@
 Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
 The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation.
 This calculation can be manually overriden after initializing the fractal generator with <pre>setDegree(double)</pre> of the <pre>ComplexFractalGenerator</pre> object in the <pre>Test</pre> class. 
-This could be made more accesible once a GUI is made. 
-Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a complex value. 
+This could be made more accessible once a GUI is made.
+Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a complex value.
+
 Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B components.
 
 The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring, by default.
@@ -41,12 +42,6 @@ The linear interpolant methods have the 3 Newton fractal coloring modes, and the
     </ol>
     <br>
 The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
-
-Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
-The automatic degree calculation system has some issues with nested powers,
-especially if considering division or multiplication in-system.
-This calculation can be manually overriden after initializing the fractal generator with `setDegree(double)` of the `FractalGenerator` object in the `Main` class.
-This could be made more accesible if a GUI is made.
     <br>
     Support for IFS Affine Transform fractals such as the fern is in place.
 
@@ -74,7 +69,7 @@ This could be made more accesible if a GUI is made.
     but it is currently single-threaded since multithreaded generation has some issues which need to be fleshed out.
     </p>
     <p>
-    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results. Also, total scaling beyond 10<sup>4</sup> might not produce very detailed output, but then I haven't done very extensive tests.
+    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
     </p>
     <p>
     Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].jpg</pre> as specified in the CMD arguments to the program.
