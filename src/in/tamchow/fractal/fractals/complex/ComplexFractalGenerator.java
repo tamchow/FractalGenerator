@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 /** The actual fractal plotter for Julia, Newton and Mandelbrot Sets using an iterative algorithm.
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
- * Various (11) Coloring modes (2 have been commented out as they produce output similar to an enabled option)*/
+ * Various (21) Coloring modes*/
 public class ComplexFractalGenerator implements Serializable {
     public static final int MODE_MANDELBROT = 0, MODE_JULIA = 1, MODE_NEWTON = 2, MODE_BUDDHABROT = 3, MODE_NEWTONBROT = 4, MODE_JULIABROT = 5;
     ColorConfig color;

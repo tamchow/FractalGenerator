@@ -7,8 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Final update before next major release">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="$PROJECT_DIR$/.idea/description.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,32 +52,32 @@
       </file>
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
-          <provider editor-type-id="MarkdownPreviewEditor">
-            <state />
-          </provider>
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="11" column="179" selection-start-line="11" selection-start-column="149" selection-end-line="11" selection-end-column="179" />
               <folding />
             </state>
           </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
         </entry>
       </file>
-      <file leaf-file-name="description.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="description.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/description.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.439068">
+            <state vertical-scroll-proportion="-11.192307">
               <caret line="71" column="197" selection-start-line="71" selection-start-column="197" selection-end-line="71" selection-end-column="197" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ComplexFractalGenerator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ComplexFractalGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="473" column="9" selection-start-line="473" selection-start-column="9" selection-end-line="473" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.11643836">
+              <caret line="17" column="3" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -177,10 +177,10 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
         <option value="$PROJECT_DIR$/.idea/description.html" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
       </list>
     </option>
   </component>
@@ -233,8 +233,6 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -371,6 +369,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1061,13 +1061,8 @@
       <workItem from="1450768707562" duration="897000" />
       <workItem from="1450771290811" duration="25919000" />
       <workItem from="1450847166230" duration="2999000" />
-      <workItem from="1450850398904" duration="97000" />
-    </task>
-    <task id="LOCAL-00018" summary="Newton Mode implemented, compiles and runs, but no output.">
-      <created>1448341070865</created>
-      <option name="number" value="00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1448341070865</updated>
+      <workItem from="1450850398904" duration="179000" />
+      <workItem from="1450850769110" duration="47000" />
     </task>
     <task id="LOCAL-00019" summary="Newton Mode implemented, compiles and runs, but no output.">
       <created>1448341353025</created>
@@ -1357,11 +1352,17 @@
       <option name="project" value="LOCAL" />
       <updated>1450850161167</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Final update before next major release">
+      <created>1450850500078</created>
+      <option name="number" value="00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1450850500078</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="445389000" />
+    <option name="totallyTimeSpent" value="445518000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1811,14 +1812,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="473" column="9" selection-start-line="473" selection-start-column="9" selection-end-line="473" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1866,8 +1859,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/description.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.439068">
+        <state vertical-scroll-proportion="-11.192307">
           <caret line="71" column="197" selection-start-line="71" selection-start-column="197" selection-end-line="71" selection-end-column="197" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11643836">
+          <caret line="17" column="3" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
           <folding />
         </state>
       </provider>
