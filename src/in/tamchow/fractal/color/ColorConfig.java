@@ -188,10 +188,12 @@ public class ColorConfig implements Serializable {
         return (int) (idx * color_density) % num_colors;
     }
     public int getColor(int index) {
+        if (index < 0) {return getColor(num_colors + index);}
+        if (index >= num_colors) {return getColor(num_colors - index);}
         return palette[index];
     }
     public int splineInterpolated(int index, double bias) {
-        return splineInterpolated(index, (index + 1 >= num_colors) ? 0 : index + 1, bias);
+        return splineInterpolated(index, index + 1, bias);
     }
     public int splineInterpolated(int index, int index1, double bias) {
         if ((!colors_corrected) && num_colors < 4) {
@@ -204,22 +206,22 @@ public class ColorConfig implements Serializable {
                 h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
                 h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1)); int i2, i3; if (index > index1) {
-            i2 = (index + 1 >= num_colors) ? 0 : index + 1; i3 = (index1 - 1 < 0) ? num_colors - 1 : index1 - 1;
-        } else {i2 = (index1 + 1 >= num_colors) ? 0 : index1 + 1; i3 = (index - 1 < 0) ? num_colors - 1 : index - 1;}
+            i2 = index + 1; i3 = index1 - 1;
+        } else {i2 = index1 + 1; i3 = index - 1;}
         if (byParts) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
-            r1 = separateRGB(palette[index], Colors.RGBCOMPONENTS.RED);
-            r2 = separateRGB(palette[index1], Colors.RGBCOMPONENTS.RED);
-            r3 = separateRGB(palette[i2], Colors.RGBCOMPONENTS.RED);
-            r4 = separateRGB(palette[i3], Colors.RGBCOMPONENTS.RED);
-            g1 = separateRGB(palette[index], Colors.RGBCOMPONENTS.GREEN);
-            g2 = separateRGB(palette[index1], Colors.RGBCOMPONENTS.GREEN);
-            g3 = separateRGB(palette[i2], Colors.RGBCOMPONENTS.GREEN);
-            g4 = separateRGB(palette[i3], Colors.RGBCOMPONENTS.GREEN);
-            b1 = separateRGB(palette[index], Colors.RGBCOMPONENTS.BLUE);
-            b2 = separateRGB(palette[index1], Colors.RGBCOMPONENTS.BLUE);
-            b3 = separateRGB(palette[i2], Colors.RGBCOMPONENTS.BLUE);
-            b4 = separateRGB(palette[i3], Colors.RGBCOMPONENTS.BLUE);
+            r1 = separateRGB(getColor(index), Colors.RGBCOMPONENTS.RED);
+            r2 = separateRGB(getColor(index1), Colors.RGBCOMPONENTS.RED);
+            r3 = separateRGB(getColor(i2), Colors.RGBCOMPONENTS.RED);
+            r4 = separateRGB(getColor(i3), Colors.RGBCOMPONENTS.RED);
+            g1 = separateRGB(getColor(index), Colors.RGBCOMPONENTS.GREEN);
+            g2 = separateRGB(getColor(index1), Colors.RGBCOMPONENTS.GREEN);
+            g3 = separateRGB(getColor(i2), Colors.RGBCOMPONENTS.GREEN);
+            g4 = separateRGB(getColor(i3), Colors.RGBCOMPONENTS.GREEN);
+            b1 = separateRGB(getColor(index), Colors.RGBCOMPONENTS.BLUE);
+            b2 = separateRGB(getColor(index1), Colors.RGBCOMPONENTS.BLUE);
+            b3 = separateRGB(getColor(i2), Colors.RGBCOMPONENTS.BLUE);
+            b4 = separateRGB(getColor(i3), Colors.RGBCOMPONENTS.BLUE);
             int nr = (int) Math.abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4);
             int ng = (int) Math.abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4);
             int nb = (int) Math.abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4); return nr << 16 | ng << 8 | nb;

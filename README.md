@@ -5,13 +5,13 @@ that implements display of custom functions, with constant declaration processin
 
 Newton Mode only supports simple polynomials with complex exponents and coefficients allowed, but the polynomial must be in a special format, which is documented in .idea/description.html
 
-There are 19 different colouring schemes, 10 have linear interpolation, 4 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based black-and-white coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
+There are 21 different colouring schemes, 10 have linear interpolation, 5 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
 
 Degrees of functions are auto-calculated for use in calculating the renormalized iteration count. The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation. This calculation can be manually overriden after initializing the fractal generator with `setDegree(double)` of the `ComplexFractalGenerator` object in the `Test` class. This could be made more accesible once a GUI is made. Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a complex value. Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B components.
 
-The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring, by default.
+The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring and Color Distance Estimation, by default.
 
-The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct and normalized coloring modes, and linear versions of the spline-interpolant methods.
+The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation.
 
 Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
 

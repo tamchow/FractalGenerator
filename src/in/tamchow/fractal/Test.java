@@ -15,18 +15,18 @@ import java.io.IOException;
  */
 public class Test {
     public static void main(String[] args) {
-        String func = "z ^ 2 + e", variableCode = "z", poly = "{1:z:4};+;{1:z:0}";
+        String func = "z ^ 2 + e", variableCode = "z", poly = "{1:z:2};+;{e:z:0}";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}, {"f", "-0.5,+0.25i"}};
-        int resx = 1366, resy = 768, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 16;
-        double escrad = 2, tolerance = 1e-10, zoom = 10, zoompow = 0, baseprec = 300;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.DISTANCE_ESTIMATION, 255, 256, true, false);
-        cfg.setColor_density(cfg.calculateColorDensity());
+        int resx = 401, resy = 401, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 16;
+        double escrad = 2, tolerance = 1e-10, zoom = 10, zoompow = 0, baseprec = 100;
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE, 8, 256, true, true);
+        //cfg.setColor_density(cfg.calculateColorDensity());
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24,82,177),rgb(57,125,209), rgb(134,181,229), rgb(211,236,248), rgb(241,233,191), rgb(248,201,95), rgb(255,170,0), rgb(204,128,0), rgb(153,87,0), rgb(106,52,3)},false);
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575}, false);
         //cfg.setPalette(new int[]{0x000000,0xff0000, 0x00ff00, 0x0000ff,0xffffff}, false);
         //cfg.createSmoothPalette(new int[]{0x000000,0xff0000, 0x00ff00, 0x0000ff,0xffffff},new double[]{0,0.25,0.5,0.75,1},true);
         Complex constant = null;//new Complex("1.0,+0.0i");
-        func = poly;
+        // func = poly;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
