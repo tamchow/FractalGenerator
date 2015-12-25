@@ -5,6 +5,7 @@ import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 
 import javax.imageio.ImageIO;
@@ -32,8 +33,9 @@ public class Test {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
             } catch (IOException ioe) {ioe.printStackTrace();}
         } long inittime = System.currentTimeMillis(); ComplexFractalGenerator jgen; if (def) {
-            jgen = new ComplexFractalGenerator(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg);
-        } else {jgen = new ComplexFractalGenerator(fccfg.getParams()[0]);} long starttime = System.currentTimeMillis();
+            jgen = new ComplexFractalGenerator(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, new DesktopProgressPublisher());
+        } else {jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());}
+        long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
             //ThreadedComplexFractalGenerator tg=new ThreadedComplexFractalGenerator(2, 2, jgen, iter, escrad, constant);

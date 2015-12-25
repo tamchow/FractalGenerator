@@ -10,6 +10,7 @@ import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.misc.EncryptDecryptFile;
 import in.tamchow.fractal.misc.PBrainer;
+import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 import in.tamchow.fractal.platform_tools.ImageDisplay;
 
@@ -41,7 +42,7 @@ public class Main {
                 ComplexFractalConfig cfg = ConfigReader.getComplexFractalConfigFromFile(input);
                 for (int i = 0; i < cfg.getParams().length; i++) {
                     ComplexFractalParams params = cfg.getParams()[i];
-                    ComplexFractalGenerator generator = new ComplexFractalGenerator(params);
+                    ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
                     if (params.useThreadedGenerator()) {
                         ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator, params);
                         threaded.generate();
@@ -58,7 +59,8 @@ public class Main {
                 if (args.length == 1) {System.err.println("No output directory specified"); System.exit(3);}
                 IFSFractalConfig cfg = ConfigReader.getIFSFractalConfigFromFile(input);
                 for (int i = 0; i < cfg.getParams().length; i++) {
-                    IFSFractalParams params = cfg.getParams()[i]; IFSGenerator generator = new IFSGenerator(params);
+                    IFSFractalParams params = cfg.getParams()[i];
+                    IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
                     generator.generate(); File outputFile = new File(args[1] + "/Fractal_" + i + ".jpg");
                     ImageIO.write(ImageConverter.toImage(generator.getPlane()), "jpg", outputFile);
                 }

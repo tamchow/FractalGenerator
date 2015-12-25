@@ -1,6 +1,7 @@
 package in.tamchow.fractal.fractals.complex;
 import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.config.Printable;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.imgutils.ImageData;
@@ -33,13 +34,16 @@ public class ComplexFractalGenerator implements Serializable {
     boolean advancedDegree;
     int[] histogram;
     double[][] normalized_escapes;
+    Printable progressPublisher;
     private String variableCode;
-    public ComplexFractalGenerator(ComplexFractalParams params) {
+    public ComplexFractalGenerator(ComplexFractalParams params, Printable progressPublisher) {
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.tolerance, params.initParams.degree, params.initParams.color);
         if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
+        this.progressPublisher = progressPublisher;
     }
-    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color) {
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Printable progressPublisher) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, new Complex(-1, 0), color);
+        this.progressPublisher = progressPublisher;
     }
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, Complex degree, ColorConfig color) {
         setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
@@ -398,7 +402,7 @@ public class ComplexFractalGenerator implements Serializable {
                 } else {argand.setPixel(i, j, getColor(c, pass, root_reached, iterations));} last.clear();}}}
     public synchronized void publishProgress(long ctr, int i, int startx, int endx, int j, int starty, int endy) {
         float completion = ((float) (i * (endx - startx) + j) / ((endx - startx) * (endy - starty))) * 100.0f;
-        System.out.println(ctr + " iterations of " + maxiter + ",completion = " + completion + "%");
+        progressPublisher.println(ctr + " iterations of " + maxiter + ",completion = " + completion + "%");
     }
     private synchronized int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {

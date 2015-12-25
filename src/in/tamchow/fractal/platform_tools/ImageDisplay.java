@@ -134,7 +134,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 }
             } else {
                 if (!zoomedin) {
-                    current = new ComplexFractalGenerator(fracconf.getParams()[i]);
+                    current = new ComplexFractalGenerator(fracconf.getParams()[i], new DesktopProgressPublisher());
                 }
                 current.generate(fracconf.getParams()[i]);
                 todraw = ImageConverter.toImage(current.getArgand());

@@ -1,4 +1,5 @@
 package in.tamchow.fractal.fractals.IFS;
+import in.tamchow.fractal.config.Printable;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.imgutils.Animation;
@@ -19,11 +20,14 @@ public class IFSGenerator {
     double zoom, zoom_factor, base_precision, scale;
     long depth;
     boolean completion;
-    public IFSGenerator(IFSFractalParams params) {
+    Printable progressPublisher;
+    public IFSGenerator(IFSFractalParams params, Printable progressPublisher) {
         setParams(params); plane = new ImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision()); initial = null; completion = false;
-        if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}}
+        if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
+        this.progressPublisher = progressPublisher;
+    }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}
     }
@@ -100,7 +104,7 @@ public class IFSGenerator {
             x = plane.getWidth() - 1;
         } if (y >= plane.getHeight()) {y = plane.getHeight() - 1;} return new int[]{x, y};}
     public synchronized void publishProgress(long val) {
-        System.out.println("% completion= " + (((float) val) / depth) * 100.0 + "%");
+        progressPublisher.println("% completion= " + (((float) val) / depth) * 100.0 + "%");
     }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
