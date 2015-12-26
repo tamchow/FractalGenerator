@@ -39,6 +39,11 @@ public class Main {
                 ImageDisplay.show(ic, "Images from config file:" + input.getCanonicalPath());
             } else if (ConfigReader.isFileComplexFractalConfig(input)) {
                 if (args.length == 1) {System.err.println("No output directory specified"); System.exit(3);}
+                if (args.length == 3) {
+                    if (args[2].equalsIgnoreCase("-v")) {
+                        ImageDisplay.show(ConfigReader.getComplexFractalConfigFromFile(input), "Fractal");
+                    }
+                }
                 ComplexFractalConfig cfg = ConfigReader.getComplexFractalConfigFromFile(input);
                 for (int i = 0; i < cfg.getParams().length; i++) {
                     ComplexFractalParams params = cfg.getParams()[i];

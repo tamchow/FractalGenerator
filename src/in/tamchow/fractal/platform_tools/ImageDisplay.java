@@ -1,5 +1,6 @@
 package in.tamchow.fractal.platform_tools;
 import in.tamchow.fractal.config.Config;
+import in.tamchow.fractal.config.Printable;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
@@ -15,10 +16,11 @@ import java.io.File;
 /**
  * Swing app to display images
  */
-public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener {
+public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Printable {
     BufferedImage[] img;
     Image[] rimg;
     Image todraw;
+    JFrame parent;
     int width, height, ctr, subctr;
     ImageConfig imgconf;
     ComplexFractalConfig fracconf;
@@ -80,21 +82,17 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public static void show(Config config, String title) {
         ImageDisplay id = new ImageDisplay(config); JScrollPane scrollPane = new JScrollPane(id);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        JFrame disp = new JFrame(title);
-        disp.addWindowListener(new WindowAdapter() {
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); id.parent = new JFrame(title);
+        id.parent.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
-        });
-        disp.addKeyListener(id);
-        disp.add(scrollPane);
-        disp.pack();
-        id.running = true;
-        disp.setVisible(true);
+        }); id.parent.addKeyListener(id); id.parent.add(scrollPane); id.parent.pack();
+        id.running = true; id.parent.setVisible(true);
         Thread thread = new Thread(id);
         thread.start();
     }
+    public void println(String toPrint) {parent.setTitle("Generating Fractal: " + toPrint);}
     @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {
@@ -134,7 +132,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 }
             } else {
                 if (!zoomedin) {
-                    current = new ComplexFractalGenerator(fracconf.getParams()[i], new DesktopProgressPublisher());
+                    current = new ComplexFractalGenerator(fracconf.getParams()[i], this);
                 }
                 current.generate(fracconf.getParams()[i]);
                 todraw = ImageConverter.toImage(current.getArgand());

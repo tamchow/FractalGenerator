@@ -1,11 +1,12 @@
 package in.tamchow.fractal.config.imageconfig;
+import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.imgutils.ImageData;
 
 import java.io.Serializable;
 /**
  * Parameters for configuring an image
  */
-public class ImageParams implements Serializable {
+public class ImageParams implements Serializable, DataFromString {
     public ImageData image;
     public int transition;
     public ImageParams(ImageData image, int transition) {
@@ -28,7 +29,7 @@ public class ImageParams implements Serializable {
     public ImageParams(String path) {
         initParams(path, -1);
     }
-    public void paramsFromString(String[] params) {
+    public void fromString(String[] params) {
         initParams(params[0], Integer.valueOf(params[1]));
     }
 }
