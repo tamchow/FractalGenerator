@@ -23,9 +23,9 @@ public class Test {
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE, 8, 256, true, true);
         //cfg.setColor_density(cfg.calculateColorDensity());
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24,82,177),rgb(57,125,209), rgb(134,181,229), rgb(211,236,248), rgb(241,233,191), rgb(248,201,95), rgb(255,170,0), rgb(204,128,0), rgb(153,87,0), rgb(106,52,3)},false);
-        cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575}, false);
+        //cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575}, false);
         //cfg.setPalette(new int[]{0x000000,0xff0000, 0x00ff00, 0x0000ff,0xffffff}, false);
-        //cfg.createSmoothPalette(new int[]{0x000000,0xff0000, 0x00ff00, 0x0000ff,0xffffff},new double[]{0,0.25,0.5,0.75,1},true);
+        cfg.createSmoothPalette(new int[]{0x000000, 0xff0000, 0x00ff00, 0x0000ff, 0xffffff}, new double[]{0, 0.25, 0.5, 0.75, 1}, true);
         Complex constant = null;//new Complex("1.0,+0.0i");
         // func = poly;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {

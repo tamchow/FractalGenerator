@@ -22,7 +22,7 @@ public class ComplexFractalGenerator implements Serializable {
     ColorConfig color;
     ArrayList<Complex> roots;
     double zoom, zoom_factor, base_precision, scale;
-    int center_x, center_y, mode, lastConstantIdx;
+    int center_x, center_y, mode, lastConstantIdx, stripe_density;
     double tolerance;
     long maxiter;
     ImageData argand;
@@ -57,6 +57,9 @@ public class ComplexFractalGenerator implements Serializable {
         roots = new ArrayList<>(); setColor(color); setDegree(degree); if (degree.equals(new Complex("-1"))) {
             setAdvancedDegree(true);
         } lastConstant = new Complex(-1, 0);
+        if (color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) {
+            stripe_density = color.getColor_density(); color.setColor_density(color.calculateColorDensity());
+        } else {stripe_density = -1;}
     }
     public synchronized void populateMap() {
         for (int i = 0; i < argand.getHeight(); i++) {
@@ -546,7 +549,7 @@ public class ComplexFractalGenerator implements Serializable {
                 break; case Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR: case Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE:
                 lbnd = 0.0;//min value of 0.5*sin(x)+0.5, min value of sin(x)=-1
                 ubnd = 1.0;//max value of 0.5*sin(x)+0.5, max value of sin(x)=1
-                calc = 0.5 * Math.sin(color.color_density * last[0].arg()) + 0.5; index = color.createIndex(calc, lbnd, ubnd, scaling); if (color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) {
+                calc = 0.5 * Math.sin(stripe_density * last[0].arg()) + 0.5; index = color.createIndex(calc, lbnd, ubnd, scaling); if (color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) {
                     colortmp = getColor(index, smoothcount);
                 } else {colortmp = color.splineInterpolated(index, smoothcount - ((int) smoothcount));}
                 break; case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR:
