@@ -52,8 +52,11 @@ public class ImageData {
         } return output;
     }
     public synchronized int getPixel(int y, int x) {
-        return pixdata[y][x];
+        if (y < 0) {y = getHeight() + y;} if (y >= getHeight()) {y = y - getHeight();} if (x < 0) {x = getWidth() + x;}
+        if (x >= getWidth()) {x = x - getWidth();} return pixdata[y][x];
     }
+    public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
+    public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
     public ImageData getPostProcessed(int mode, double[][] biases, boolean byParts) {
         ImageData processed = new ImageData(this);
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
@@ -77,8 +80,6 @@ public class ImageData {
         this.pixdata = new int[height][width];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);}}
-    public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
-    public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
     public synchronized void setPixdata(int[] pixdata, int scan) {
         this.pixdata = new int[pixdata.length / scan][scan];
         for (int i = 0; i < this.pixdata.length; i++) {
@@ -88,9 +89,7 @@ public class ImageData {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
         } return pixels;
     }
-    public synchronized int getPixel(int i) {
-        return pixdata[i / pixdata[0].length][i % pixdata[0].length];
-    }
+    public synchronized int getPixel(int i) {return getPixel(i / pixdata[0].length, i % pixdata[0].length);}
     public synchronized void setPixel(int i, int val) {
         pixdata[i / pixdata[0].length][i % pixdata[0].length] = val;
     }

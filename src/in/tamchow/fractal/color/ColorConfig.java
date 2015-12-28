@@ -189,7 +189,7 @@ public class ColorConfig implements Serializable {
     }
     public int getColor(int index) {
         if (index < 0) {return getColor(num_colors + index);}
-        if (index >= num_colors) {return getColor(num_colors - index);}
+        if (index >= num_colors) {return getColor(index - num_colors);}
         return palette[index];
     }
     public int splineInterpolated(int index, double bias) {
