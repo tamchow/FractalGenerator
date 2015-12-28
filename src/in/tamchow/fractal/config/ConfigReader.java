@@ -5,7 +5,6 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
-import in.tamchow.fractal.config.imageconfig.ImageParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,21 +22,19 @@ public class ConfigReader {
     public static boolean isFileIFSFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[IFSFractalConfig]");}
     public static ImageConfig getImageConfigFromFile(File cfgfile) throws FileNotFoundException {
-        Scanner in = new Scanner(cfgfile);
+        Scanner in = new Scanner(cfgfile); String dimensions = null;
         ArrayList<String> lines = new ArrayList<>(); if (!in.nextLine().equals("[ImageConfig]")) {return null;}
         while (in.hasNext()) {
             String line = in.nextLine(); if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
-                } lines.add(line);
+                if (line.startsWith("Dimensions:")) {
+                    dimensions = line.substring("Dimensions:".length()).trim(); continue;
+                } if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
-        } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        List<String> specCfg = lines.subList(lines.indexOf("[Images]") + 1, lines.indexOf("[EndImages]"));
-        ImageConfig imageConfig = new ImageConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
-        ImageParams[] imgparams = new ImageParams[specCfg.size()];
-        for (int i = 0; i < specCfg.size(); i++) {
-            imgparams[i] = new ImageParams(specCfg.get(i).substring(0, specCfg.get(i).indexOf(" ")), Integer.valueOf(specCfg.get(i).substring(specCfg.get(i).indexOf(" ") + 1, specCfg.get(i).length())));
-        } imageConfig.readConfig(imgparams); return imageConfig;
+        } String[] imgparams = new String[lines.size()]; lines.toArray(imgparams);
+        ImageConfig imageConfig = new ImageConfig(); imageConfig.fromString(imgparams); if (dimensions != null) {
+            imageConfig.setWidth(Integer.valueOf(dimensions.split(",")[0]));
+            imageConfig.setHeight(Integer.valueOf(dimensions.split(",")[1]));
+        } return imageConfig;
     }
     public static ComplexFractalConfig getComplexFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile); ArrayList<String> lines = new ArrayList<>();
@@ -61,9 +58,7 @@ public class ConfigReader {
             if (line.startsWith("Postprocessing:")) {
                 post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
-                } lines.add(line);
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
         } String[] zooms = null; if (lines.indexOf("[Zooms]") >= 0) {
             List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));
@@ -95,9 +90,7 @@ public class ConfigReader {
     public static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>(); while (in.hasNext()) {
             String line = in.nextLine(); if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
-                } lines.add(line);
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
         } String[] zooms = null; if (lines.indexOf("[Zooms]") >= 0) {
             List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));

@@ -1,56 +1,43 @@
 package in.tamchow.fractal.config.imageconfig;
 import in.tamchow.fractal.config.Config;
+import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.imgutils.ImageData;
 
-import java.util.Arrays;
+import java.io.Serializable;
 /**
  * Stores configuration data for the image display function
  */
-public class ImageConfig extends Config {
-    ImageData[] images;
-    int[] transitions;
+public class ImageConfig extends Config implements DataFromString, Serializable {
+    ImageParams[] params;
+    int width, height;
+    public ImageConfig() {}
     public ImageConfig(int transtime, int fps, ImageData[] data, int[] transitions, int wait) {
-        setFps(fps);
-        setTranstime(transtime);
-        setImages(data);
-        setTransitions(transitions);
-        setWait(wait);
-    }
-    public ImageConfig(int transtime, int fps, int wait) {
-        setFps(fps);
-        setTranstime(transtime);
-        setWait(wait);
-    }
-    public ImageConfig(int fps, ImageData[] data, int wait) {
-        setFps(fps);
-        setTranstime(data.length / fps);
-        setImages(data);
-        transitions = new int[data.length];
-        Arrays.fill(transitions, -1);
-        setWait(wait);
-    }
-    public ImageData[] getImages() {
-        return images;
-    }
-    public void setImages(ImageData[] images) {
-        this.images = new ImageData[images.length];
-        for (int i = 0; i < images.length; i++) {
-            this.images[i] = new ImageData(images[i]);
+        setWidth(-1); setHeight(-1); setFps(fps); setTranstime(transtime); setWait(wait);
+        params = new ImageParams[data.length]; for (int i = 0; i < params.length; i++) {
+            params[i] = new ImageParams(transtime, fps, wait, data[i], transitions[i]);
         }
     }
-    public int[] getTransitions() {
-        return transitions;
+    public ImageConfig(int transtime, int fps, int wait) {
+        setWidth(-1); setHeight(-1); setFps(fps); setTranstime(transtime); setWait(wait); params = null;
     }
-    public void setTransitions(int[] transitions) {
-        this.transitions = new int[transitions.length];
-        System.arraycopy(transitions, 0, this.transitions, 0, transitions.length);
+    public ImageConfig(int fps, ImageData[] data, int wait) {
+        setWidth(-1); setHeight(-1); setFps(fps); setWait(wait); setTranstime(data.length / fps);
+        params = new ImageParams[data.length];
+        for (int i = 0; i < params.length; i++) {params[i] = new ImageParams(transtime, fps, wait, data[i], -1);}
     }
-    public void readConfig(ImageParams[] config) {
-        images = new ImageData[config.length];
-        transitions = new int[config.length];
-        for (int i = 0; i < config.length; i++) {
-            images[i] = config[i].image;
-            transitions[i] = config[i].transition;
+    public int getWidth() {return width;}
+    public void setWidth(int width) {this.width = width;}
+    public int getHeight() {return height;}
+    public void setHeight(int height) {this.height = height;}
+    public ImageParams[] getParams() {return params;}
+    public void setParams(ImageParams[] params) {
+        this.params = new ImageParams[params.length]; for (int i = 0; i < this.params.length; i++) {
+            this.params[i] = new ImageParams(params[i]);
+        }
+    }
+    public void fromString(String[] params) {
+        this.params = new ImageParams[params.length]; for (int i = 0; i < params.length; i++) {
+            this.params[i] = new ImageParams(); this.params[i].fromString(params[i]);
         }
     }
 }

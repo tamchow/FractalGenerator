@@ -1,5 +1,6 @@
 package in.tamchow.fractal.imgutils;
 import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.HSL;
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed RGB in hex values as pixels.
  */
@@ -35,6 +36,24 @@ public class ImageData {
         }
     }
     public ImageData(String path) {this.path = path; pixdata = null;}
+    public static ImageData fromHSL(HSL[][] input) {
+        ImageData img = new ImageData(input[0].length, input.length); for (int i = 0; i < input.length; i++) {
+            for (int j = 0; j < input[i].length; j++) {
+                img.setPixel(i, j, input[i][j].toRGB());
+            }
+        } return img;
+    }
+    public synchronized void setPixel(int y, int x, int val) {pixdata[y][x] = val;}
+    public HSL[][] toHSL() {
+        HSL[][] output = new HSL[pixdata.length][pixdata[0].length]; for (int i = 0; i < output.length; i++) {
+            for (int j = 0; j < output[i].length; j++) {
+                output[i][j] = HSL.fromRGB(getPixel(i, j));
+            }
+        } return output;
+    }
+    public synchronized int getPixel(int y, int x) {
+        return pixdata[y][x];
+    }
     public ImageData getPostProcessed(int mode, double[][] biases, boolean byParts) {
         ImageData processed = new ImageData(this);
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
@@ -51,7 +70,6 @@ public class ImageData {
             }
         } return processed;
     }
-    public synchronized void setPixel(int y, int x, int val) {pixdata[y][x] = val;}
     public synchronized void setSize(int height, int width) {
         int[][] tmp = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
@@ -59,12 +77,8 @@ public class ImageData {
         this.pixdata = new int[height][width];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);}}
-    public int getHeight() {
-        return pixdata.length;
-    }
-    public int getWidth() {
-        return pixdata[0].length;
-    }
+    public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
+    public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
     public synchronized void setPixdata(int[] pixdata, int scan) {
         this.pixdata = new int[pixdata.length / scan][scan];
         for (int i = 0; i < this.pixdata.length; i++) {
@@ -73,9 +87,6 @@ public class ImageData {
         int[] pixels = new int[pixdata.length * pixdata[0].length]; for (int i = 0; i < pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
         } return pixels;
-    }
-    public synchronized int getPixel(int y, int x) {
-        return pixdata[y][x];
     }
     public synchronized int getPixel(int i) {
         return pixdata[i / pixdata[0].length][i % pixdata[0].length];
