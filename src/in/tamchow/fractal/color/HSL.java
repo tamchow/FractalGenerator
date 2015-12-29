@@ -27,6 +27,7 @@ public class HSL implements Serializable {
             else h = (r - g) / d + 4; h /= 6;
         } return new HSL(h, s, l);
     }
+    @Override
     public boolean equals(Object other) {
         if (other instanceof HSL) {
             HSL that = (HSL) other;
@@ -35,14 +36,25 @@ public class HSL implements Serializable {
             }
         } return false;
     }
+    @Override
     public String toString() {return "" + angleFromHue(hue) + "," + saturation + "," + lightness;}
     public static double angleFromHue(double hue) {return hue * 2 * Math.PI;}
     public double getHue() {return hue;}
-    public void setHue(double hue) {this.hue = hue;}
+    public void setHue(double hue) {
+        if (hue < 0) {hue += 1; setHue(hue);} if (hue > 1) {
+            hue -= 1; setHue(hue);
+        } this.hue = hue;
+    }
     public double getSaturation() {return saturation;}
-    public void setSaturation(double saturation) {this.saturation = saturation;}
+    public void setSaturation(double saturation) {
+        if (saturation < 0) {saturation += 1; setSaturation(saturation);}
+        if (saturation > 1) {saturation -= 1; setSaturation(saturation);} this.saturation = saturation;
+    }
     public double getLightness() {return lightness;}
-    public void setLightness(double lightness) {this.lightness = lightness;}
+    public void setLightness(double lightness) {
+        if (lightness < 0) {lightness += 1; setLightness(lightness);}
+        if (lightness > 1) {lightness -= 1; setLightness(lightness);} this.lightness = lightness;
+    }
     public int toRGB() {
         double r, g, b; if (saturation == 0.0) r = g = b = lightness;
         else {

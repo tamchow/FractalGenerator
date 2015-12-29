@@ -38,22 +38,25 @@ public class ImageData {
     public ImageData(String path) {this.path = path; pixdata = null;}
     public static ImageData fromHSL(HSL[][] input) {
         ImageData img = new ImageData(input[0].length, input.length); for (int i = 0; i < input.length; i++) {
-            for (int j = 0; j < input[i].length; j++) {
-                img.setPixel(i, j, input[i][j].toRGB());
-            }
+            for (int j = 0; j < input[i].length; j++) {img.setPixel(i, j, input[i][j].toRGB());}
         } return img;
     }
-    public synchronized void setPixel(int y, int x, int val) {pixdata[y][x] = val;}
+    public synchronized void setPixel(int y, int x, int val) {
+        if (y < 0) {y += getHeight(); setPixel(y, x, val);}
+        if (y >= getHeight()) {y -= getHeight(); setPixel(y, x, val);}
+        if (x < 0) {x += getWidth(); setPixel(y, x, val);} if (x >= getWidth()) {x -= getWidth(); setPixel(y, x, val);}
+        pixdata[y][x] = val;
+    }
     public HSL[][] toHSL() {
         HSL[][] output = new HSL[pixdata.length][pixdata[0].length]; for (int i = 0; i < output.length; i++) {
-            for (int j = 0; j < output[i].length; j++) {
-                output[i][j] = HSL.fromRGB(getPixel(i, j));
-            }
+            for (int j = 0; j < output[i].length; j++) {output[i][j] = HSL.fromRGB(getPixel(i, j));}
         } return output;
     }
     public synchronized int getPixel(int y, int x) {
-        if (y < 0) {y = getHeight() + y;} if (y >= getHeight()) {y = y - getHeight();} if (x < 0) {x = getWidth() + x;}
-        if (x >= getWidth()) {x = x - getWidth();} return pixdata[y][x];
+        if (y < 0) {y += getHeight(); return getPixel(y, x);}
+        if (y >= getHeight()) {y -= getHeight(); return getPixel(y, x);}
+        if (x < 0) {x += getWidth(); return getPixel(y, x);}
+        if (x >= getWidth()) {x -= getWidth(); return getPixel(y, x);} return pixdata[y][x];
     }
     public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
     public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
@@ -74,10 +77,8 @@ public class ImageData {
         } return processed;
     }
     public synchronized void setSize(int height, int width) {
-        int[][] tmp = new int[pixdata.length][pixdata[0].length];
-        for (int i = 0; i < this.pixdata.length; i++) {
-            System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);}
-        this.pixdata = new int[height][width];
+        int[][] tmp = new int[pixdata.length][pixdata[0].length]; for (int i = 0; i < this.pixdata.length; i++) {
+            System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);} this.pixdata = new int[height][width];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);}}
     public synchronized void setPixdata(int[] pixdata, int scan) {
@@ -91,6 +92,6 @@ public class ImageData {
     }
     public synchronized int getPixel(int i) {return getPixel(i / pixdata[0].length, i % pixdata[0].length);}
     public synchronized void setPixel(int i, int val) {
-        pixdata[i / pixdata[0].length][i % pixdata[0].length] = val;
+        setPixel(i / pixdata[0].length, i % pixdata[0].length, val);
     }
 }

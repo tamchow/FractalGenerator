@@ -53,13 +53,13 @@ public class ComplexFractalGenerator implements Serializable {
         argand_map = new Complex[argand.getHeight()][argand.getWidth()]; populateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
-        setTolerance(tolerance);
-        roots = new ArrayList<>(); setColor(color); setDegree(degree); if (degree.equals(new Complex("-1"))) {
+        setTolerance(tolerance); roots = new ArrayList<>(); setColor(color); setDegree(degree);
+        if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
         } lastConstant = new Complex(-1, 0);
         if (color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) {
-            stripe_density = color.getColor_density(); color.setColor_density(color.calculateColorDensity());
-        } else {stripe_density = -1;}
+            setStripe_density(color.getColor_density()); color.setColor_density(color.calculateColorDensity());
+        } else {setStripe_density(-1);}
     }
     public synchronized void populateMap() {
         for (int i = 0; i < argand.getHeight(); i++) {
@@ -73,6 +73,8 @@ public class ComplexFractalGenerator implements Serializable {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2);
         centre_offset = new Complex(Complex.ZERO);
     }
+    public int getStripe_density() {return stripe_density;}
+    public void setStripe_density(int stripe_density) {this.stripe_density = stripe_density;}
     public boolean isAdvancedDegree() {
         return advancedDegree;
     }
@@ -483,6 +485,7 @@ public class ComplexFractalGenerator implements Serializable {
     public int[] getHistogram() {return histogram;}
     public double[][] getNormalized_escapes() {return normalized_escapes;}
     public int getLastConstantIdx() {return lastConstantIdx;}
+    public void setLastConstantIdx(int lastConstantIdx) {this.lastConstantIdx = lastConstantIdx;}
     public synchronized int getColor(int val, Complex[] last, double escape_radius, int iterations) {
         int colortmp, colortmp1, colortmp2, color1, color2, color3, index, index2; double renormalized;
         double lbnd, ubnd, calc, scaling = Math.pow(zoom, zoom_factor);
@@ -517,8 +520,7 @@ public class ComplexFractalGenerator implements Serializable {
             } else {
                 index = color.createIndex((distance - (int) distance), 0, 1, scaling);
                 colortmp = color.splineInterpolated(index, renormalized - (int) renormalized);
-                /*
-                if (mode == MODE_BUDDHABROT || mode == MODE_MANDELBROT) {
+                /*if (mode == MODE_BUDDHABROT || mode == MODE_MANDELBROT) {
                     if (!color.isByParts()) {colortmp = (distance > escape_radius) ? 0xffffff : 0x000000;} else {
                         colortmp = (distance > Math.sqrt(ComplexOperations.distance_squared(last[0], last[2]))) ? 0xffffff : 0x000000;
                     }
@@ -582,9 +584,12 @@ public class ComplexFractalGenerator implements Serializable {
         setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
     }
     public void zoom(int cx, int cy, double level) {
-        if (cx < 0) {cx = 0;} if (cy < 0) {cy = 0;} if (cx >= argand.getWidth()) {cx = argand.getWidth() - 1;}
-        if (cy >= argand.getHeight()) {cy = argand.getHeight() - 1;} setCentre_offset(fromCooordinates(cx, cy));
-        setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
+        if (cx < 0) {cx += argand.getWidth(); zoom(cx, cy, level);}
+        if (cy < 0) {cy += argand.getHeight(); zoom(cx, cy, level);}
+        if (cx >= argand.getWidth()) {cx -= argand.getWidth(); zoom(cx, cy, level);}
+        if (cy >= argand.getHeight()) {cy -= argand.getHeight(); zoom(cx, cy, level);}
+        setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
+        setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
     }
     public void resetBasePrecision() {
         setBase_precision((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
