@@ -8,8 +8,8 @@ import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
+import in.tamchow.fractal.misc.BFker;
 import in.tamchow.fractal.misc.EncryptDecryptFile;
-import in.tamchow.fractal.misc.PBrainer;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 import in.tamchow.fractal.platform_tools.ImageDisplay;
@@ -25,7 +25,7 @@ public class Main {
         if (args.length == 0) {System.err.println("Nothing to do."); System.exit(1);}
         if (args[0].equalsIgnoreCase("PBrain")) {
             String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
-            PBrainer.main(modArgs);
+            BFker.main(modArgs);
         } else if (args[0].equalsIgnoreCase("encrypt") || args[0].equalsIgnoreCase("decrypt")) {
             String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             try {EncryptDecryptFile.main(modArgs);} catch (IOException ioe) {

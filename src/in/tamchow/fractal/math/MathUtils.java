@@ -6,6 +6,14 @@ import java.util.Random;
  * Weighted Random Number generator and approximations,prime number calculator
  */
 public class MathUtils {
+    public static int[] diamondPuzzleSolver(int sum, int product) {
+        for (int a = -100; a <= 100; a++) {
+            for (int b = -100; b <= 100; b++) if (a + b == sum && a * b == product) return new int[]{a, b};
+        } return null;
+    }
+    public static int[] diamondPuzzleSolverQuadratic(int sum, int product) {
+        int x = sum + (int) Math.sqrt(sum * sum - 4 * product); return new int[]{x / 2, sum - x / 2};
+    }
     public static boolean approxEquals(Complex a, Complex b, double tolerance) {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }

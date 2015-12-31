@@ -41,5 +41,21 @@ public class StringManipulator {
                 default: throw new IllegalArgumentException("Unsupported match character");
             } if (counter == 0) {return closeIndex;} closeIndex++;
         } return -1;}
+    public static int getNumFromIndex(String str, int idx) {
+        String num = ""; boolean neg = false; if (str.charAt(idx) == '_') {neg = true; idx++;}
+        for (int i = idx; i < str.length(); i++) {
+            char current = str.charAt(i); if (Character.isDigit(current)) {num += current;} else {break;}
+        } if (neg) {
+            return -Integer.valueOf(num);
+        } return Integer.valueOf(num);
+    }
+    public static int nthIndexBackwards(String s, char c, int idx, int n) {
+        int ctr = 0; for (int i = idx; i >= 0; i--) {if (ctr == n) {return i;} if (s.charAt(i) == c) {ctr++;}}
+        return -1;
+    }
+    public static int nthIndex(String s, char c, int idx, int n) {
+        int ctr = 0; for (int i = idx; i < s.length(); i++) {if (ctr == n) {return i;} if (s.charAt(i) == c) {ctr++;}}
+        return -1;
+    }
     private int count_char(char c, String str) {
         int ctr = 0; for (int i = 0; i < str.length(); i++) {if (c == str.charAt(ctr)) {ctr++;}} return ctr;}}
