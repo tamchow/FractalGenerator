@@ -6,6 +6,12 @@ import java.util.Random;
  * Weighted Random Number generator and approximations,prime number calculator
  */
 public class MathUtils {
+    public static String numberLineRepresentation(float number, int precision) {
+        float f = number; int p = precision;
+        int g = (int) f, d = Math.round((f - g) * p), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
+        String h = "", q = "" + g; int c = q.length(); for (; i < b; i++) h += " "; for (++i; i <= b + p; i++) h += "-";
+        for (i = c; i < c + d; i++) q += "|"; for (; i < p + b; i++) q += " "; return q + (g + 1) + "\n" + h;
+    }
     public static int[] diamondPuzzleSolver(int sum, int product, int low, int high) {
         for (int a = low; a <= high; a++) {
             for (int b = low; b <= high; b++) if (a + b == sum && a * b == product) return new int[]{a, b};
