@@ -6,9 +6,9 @@ import java.util.Random;
  * Weighted Random Number generator and approximations,prime number calculator
  */
 public class MathUtils {
-    public static int[] diamondPuzzleSolver(int sum, int product) {
-        for (int a = -100; a <= 100; a++) {
-            for (int b = -100; b <= 100; b++) if (a + b == sum && a * b == product) return new int[]{a, b};
+    public static int[] diamondPuzzleSolver(int sum, int product, int low, int high) {
+        for (int a = low; a <= high; a++) {
+            for (int b = low; b <= high; b++) if (a + b == sum && a * b == product) return new int[]{a, b};
         } return null;
     }
     public static int[] diamondPuzzleSolverQuadratic(int sum, int product) {
