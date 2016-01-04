@@ -10,7 +10,7 @@ public class ImageData {
     private int[][] pixdata;
     public ImageData() {
         path = ""; pixdata = new int[801][801]; for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x00000000;}
+            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x000000;}
         }
     }
     public ImageData(int w, int h) {
@@ -40,6 +40,20 @@ public class ImageData {
         ImageData img = new ImageData(input[0].length, input.length); for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[i].length; j++) {img.setPixel(i, j, input[i][j].toRGB());}
         } return img;
+    }
+    public void fill(int color) {
+        for (int i = 0; i < pixdata.length; i++) {
+            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = color;}
+        }
+    }
+    public void drawRect(int startx, int starty, int endx, int endy, int thickness, int color) {
+        int oldcolor = pixdata[(endy - starty) / 2][(endx - startx) / 2]; fillRect(startx, starty, endx, endy, color);
+        fillRect(startx + thickness, starty + thickness, endx - thickness, endy - thickness, oldcolor);
+    }
+    public void fillRect(int startx, int starty, int endx, int endy, int color) {
+        for (int i = starty; i < endy; i++) {
+            for (int j = startx; j < endx; j++) {pixdata[i][j] = color;}
+        }
     }
     public synchronized void setPixel(int y, int x, int val) {
         if (y < 0) {y += getHeight(); setPixel(y, x, val);}
