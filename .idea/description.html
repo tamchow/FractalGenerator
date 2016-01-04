@@ -29,6 +29,17 @@ The linear interpolant methods have the 3 Newton fractal coloring modes, and the
     Newton fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a different input format:
 
     {coefficient:variable:exponent};+;{coefficient:variable:exponent};-;{coefficient:variable:exponent},etc.
+
+    It can also handle simple transcendental functions like log,exp,sin,sinh,so,cosh.
+
+    This is the input format:
+
+    [polynomial];[function];[polynomial];[constant]
+
+    The 1<sup>st</sup> polynomial is the coefficient,the 2<sup>nd</sup> is the function argument.
+    The constant is optional. Replace the terms in the square bracket with applicable terms, e.g.
+
+    {1:z:0};sin;{1:z:2};{f:z:0}
     <br>
     Colors currently available are based on:
     <ol>
