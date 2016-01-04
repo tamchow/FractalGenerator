@@ -188,9 +188,10 @@ public class ColorConfig implements Serializable {
         return (int) (idx * color_density) % num_colors;
     }
     public int getColor(int index) {
-        if (index < 0) {return getColor(num_colors + index);}
-        if (index >= num_colors) {return getColor(index - num_colors);}
-        return palette[index];
+        if (index < 0) {return getColor(num_colors + index);} if (index >= num_colors) {
+            if (index > 2 * num_colors) return getColor(index % num_colors);
+            else return getColor(index - num_colors);
+        } return palette[index];
     }
     public int splineInterpolated(int index, double bias) {
         return splineInterpolated(index, index + 1, bias);

@@ -4,19 +4,14 @@ import java.io.Serializable;
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
  */
 public class Complex extends Number implements Serializable, Comparable<Complex> {
-    public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0);
+    public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);
     private double a, ib;
-    private int precision;
-    public Complex(Complex old) {
-        this.a = old.real();
-        this.ib = old.imaginary();
-        precision = old.getPrecision();
-    }
-    public int getPrecision() {
-        return precision;
-    }
-    public void setPrecision(int precision) {
-        this.precision = precision;
+    public Complex(Complex old) {initComplex(old.real(), old.imaginary(), false);}
+    public void initComplex(double a, double ib, boolean cis) {
+        if (cis) {
+            Complex value = ComplexOperations.multiply(new Complex(a), ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(ib))));
+            this.a = value.real(); this.ib = value.imaginary();
+        } else {this.a = a; this.ib = ib;}
     }
     public double real() {
         return a;
@@ -24,40 +19,23 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
     public double imaginary() {
         return ib;
     }
-    public Complex(double a, double ib) {
-        this.a = a;
-        this.ib = ib;
-        precision = 25;
-    }
-    public Complex(double arg) {
-        precision = 25;
-        Complex value = ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(arg + "")));
-        this.a = value.real(); this.ib = value.imaginary();
-    }
+    public Complex() {}
+    public Complex(double a, double ib) {initComplex(a, ib, false);}
+    public Complex(double a) {initComplex(a, 0, false);}
     public Complex(String complex) {
         try {
             if (complex.lastIndexOf('i') == -1) {
-                a = Double.parseDouble(complex);
-                ib = 0.0;
+                a = Double.parseDouble(complex); ib = 0.0;
             } else if ((!complex.contains(",")) && complex.lastIndexOf("i") > 0) {
-                a = 0.0;
-                ib = Double.parseDouble(complex.substring(0, complex.length()));
+                a = 0.0; ib = Double.parseDouble(complex.substring(0, complex.length()));
             } else {
                 String a = complex.substring(0, complex.indexOf(","));
                 String ib = complex.substring(complex.indexOf(",") + 1, complex.lastIndexOf("i"));
-                if (a.startsWith("+")) {
-                    a = a.substring(1, a.length());
-                }
-                if (ib.startsWith("+")) {
-                    ib = ib.substring(1, ib.length());
-                }
-                this.a = Double.parseDouble(a);
+                if (a.startsWith("+")) {a = a.substring(1, a.length());}
+                if (ib.startsWith("+")) {ib = ib.substring(1, ib.length());} this.a = Double.parseDouble(a);
                 this.ib = Double.parseDouble(ib);
             }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Input Format Error", e);
-        }
-        precision = 25;
+        } catch (Exception e) {throw new IllegalArgumentException("Input Format Error", e);}
     }
     public int compareTo(Complex complex) {
         return (int) (this.modulus() - complex.modulus());
@@ -67,18 +45,10 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
     }
     public boolean equals(Object complex) {
         if (complex instanceof Complex) {
-            if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {
-                return true;
-            }
-        }
-        return false;
+            if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {return true;}
+        } return false;
     }
-    public String toString() {
-        //round();
-        if (ib < 0) {
-            return a + ",-" + (-ib) + "i";
-        } else return a + ",+" + ib + "i";
-    }
+    public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
     public double arg() {
         if (a > 0) return Math.atan((ib / a));
         else if (a < 0 && ib >= 0) return Math.atan((ib / a)) + Math.PI;
@@ -87,27 +57,14 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
         else if (a == 0 && ib < 0) return -Math.PI / 2;
         else return Double.NaN;
     }
-    public Complex conjugate() {
-        return new Complex(this.a, -this.ib);
-    }
-    public Complex inverse() {
-        double c = a * a + ib * ib;
-        return new Complex((a / c), (-(ib / c)));
-    }
+    public Complex conjugate() {return new Complex(this.a, -this.ib);}
+    public Complex inverse() {double c = a * a + ib * ib; return new Complex((a / c), (-(ib / c)));}
     @Override
-    public int intValue() {
-        return (int) modulus();
-    }
+    public int intValue() {return (int) modulus();}
     @Override
-    public long longValue() {
-        return (long) modulus();
-    }
+    public long longValue() {return (long) modulus();}
     @Override
-    public float floatValue() {
-        return (float) modulus();
-    }
+    public float floatValue() {return (float) modulus();}
     @Override
-    public double doubleValue() {
-        return modulus();
-    }
+    public double doubleValue() {return modulus();}
 }

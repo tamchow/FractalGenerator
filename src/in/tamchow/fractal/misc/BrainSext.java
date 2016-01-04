@@ -11,9 +11,10 @@ import java.util.Scanner;
  * (with replacement by equivalent commands:
  */
 public class BrainSext {
-    String code, codebackup;
+    public static final int OUTPUT = 0, ERROR = 1;
+    String code, codebackup, output;
     int[] procidx, operand;
-    int ptr, proctr, itmp, size;
+    int ptr, proctr, itmp, size, errorCount;
     private int storage;
     public BrainSext() {
         code = ""; codebackup = code; size = 65536; procidx = new int[size]; initMemory(); ptr = 0; proctr = 0;
@@ -32,6 +33,7 @@ public class BrainSext {
             } else {executor.code = args[0];}
         } executor.execute();
     }
+    public void setMemory(int[] data) {size = data.length; operand = new int[size]; System.arraycopy(data, 0, operand, 0, size);}
     void readFile(String path) {
         File input = new File(path); try {
             Scanner sc = new Scanner(input); while (sc.hasNextLine()) {code += sc.nextLine();}
@@ -53,14 +55,14 @@ public class BrainSext {
                     code += "" + (char) operand[j];
                 } initMemory(); continue outer; case '(': procidx[proctr] = i + 1; proctr++; break;
                 case '[': if (StringManipulator.findMatchingCloser('[', code, i - 1) == -1) {
-                    System.err.println("Unmatched [ at " + i);
+                    setOutput("Unmatched [ at " + i + "\n", ERROR);
                 } if (operand[ptr] == 0) {
                     i = StringManipulator.findMatchingCloser('[', code, i + 1) + 1;
                 } continue outer; case ']': if (StringManipulator.findMatchingOpener(']', code, i - 1) == -1) {
-                    System.err.println("Unmatched ] at " + i);
+                    setOutput("Unmatched ] at " + i + "\n", ERROR);
                 } i = StringManipulator.findMatchingOpener(']', code, i - 1) + 1; continue outer;
                 case ':': codebackup = code; itmp = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]); if (itmp == -1) {
-                    System.err.println("Unmatched ) for procedure call at " + i);
+                    setOutput("Unmatched ) for procedure call at " + i + "\n", ERROR);
                 } code = codebackup.substring(procidx[operand[ptr]], itmp - 1); execute(); i = itmp; code = codebackup; continue outer;
                 case 'C': operand[ptr] = operand[ptr] + "".charAt(0);
                 case 'I': operand[ptr] = Integer.valueOf("" + (char) operand[ptr]);
@@ -104,14 +106,27 @@ public class BrainSext {
                     i = StringManipulator.nthIndexBackwards(code, '[', i, c);
                 } i = boundsProtected(i, code.length()); continue outer;
                 case ',': try {operand[ptr] = System.in.read();} catch (IOException e) {
-                    System.err.print("Input error: " + e.getMessage());
-                } break; case '.': System.out.print((char) operand[ptr]); break;
-                case '"': System.out.print(operand[ptr]); break; case '!': System.out.print(operand[ptr]); break;
-                case 'h': System.err.println("Program signalled HALT at " + i); return; default: if (!numAfter(i)) {
-                    System.err.println("Unrecognized character at " + i);
+                    setOutput("Input error: " + e.getMessage(), ERROR);
+                } break; case '.': setOutput((char) operand[ptr] + "", OUTPUT); break;
+                case '"': setOutput(operand[ptr] + "", OUTPUT); break; case '!': System.out.print(operand[ptr]); break;
+                case 'h': setOutput("Program signalled HALT at " + i + "\n", ERROR); return;
+                default: if (!numAfter(i)) {
+                    setOutput("Unrecognized character at " + i + "\n", ERROR);
                 }
             } i++;
         }
+    }
+    void setOutput(String output, int mode) {
+        switch (mode) {
+            case ERROR: this.output += "E:" + output; System.err.print(output); errorCount++; break;
+            case OUTPUT: this.output += output; System.out.print(output); break;
+        }
+    }
+    public int getErrorCount() {return errorCount;}
+    public String getOutput(boolean withErrors) {
+        if (withErrors) {return output;} String cleanOutput = ""; for (int i = 0; i < output.split("\n").length; i++) {
+            if (!output.split("\n")[i].startsWith("E:")) {cleanOutput += output.split("\n")[i].trim();}
+        } return cleanOutput;
     }
     int boundsProtected(int ptr, int size) {
         if (ptr < 0) {ptr = size + ptr;} if (ptr >= size) {

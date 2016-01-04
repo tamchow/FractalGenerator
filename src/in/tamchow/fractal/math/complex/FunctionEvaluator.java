@@ -120,10 +120,25 @@ public class FunctionEvaluator {
                     } break;
                     case "log": ztmp = ComplexOperations.principallog(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
                         ++i;
+                    } break;
+                    case "log2": ztmp = ComplexOperations.log(ztmp, new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "sin": ztmp = ComplexOperations.sin(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "sinh": ztmp = ComplexOperations.sinh(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "cos": ztmp = ComplexOperations.cos(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "cosh": ztmp = ComplexOperations.cosh(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
                     } break; case "inv": ztmp = ztmp.inverse(); if (i < (processed.length - 1)) {++i;} break;
                     case "conj": ztmp = ztmp.conjugate(); if (i < (processed.length - 1)) {++i;} break;
                     default: ztmp = new Complex(processed[i]);
-                }//ztmp.round(factor);
+                }
             } catch (ArrayIndexOutOfBoundsException ae) {
                 throw new IllegalArgumentException("Function Input Error", ae);
             }

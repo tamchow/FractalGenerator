@@ -10,6 +10,7 @@ import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
+import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import java.io.Serializable;
@@ -282,11 +283,18 @@ public class ComplexFractalGenerator implements Serializable {
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        Polynomial poly; String functionderiv = "";
+        String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
-            poly = Polynomial.fromString(function); poly.setConstdec(consts); poly.setVariableCode(variableCode);
+            if (Function.isSpecialFunction(function)) {
+                Function func = Function.fromString(function, variableCode); func.setConsts(consts);
+                function = func.toString(); if (degree.equals(new Complex("-1"))) {degree = func.getDegree();}
+                functionderiv = func.derivative(1);
+            } else {
+                Polynomial poly = Polynomial.fromString(function); poly.setConstdec(consts);
+                poly.setVariableCode(variableCode);
             function = poly.toString(); if (degree.equals(new Complex("-1"))) {degree = poly.getDegree();}
-            functionderiv = poly.derivative().toString();
+                functionderiv = poly.derivative().toString();
+            }
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0; getLastConstant(); setLastConstant(Complex.ZERO);
@@ -347,16 +355,26 @@ public class ComplexFractalGenerator implements Serializable {
         }
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
+        String functionderiv = "", functionderiv2 = ""; if (Function.isSpecialFunction(function)) {
+            Function func = Function.fromString(function, variableCode); func.setConsts(consts);
+            function = func.toString(); if (degree.equals(new Complex("-1"))) {degree = func.getDegree();}
+            functionderiv = func.derivative(1);
+            if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
+                functionderiv2 = func.derivative(2);
+            }
+        } else {
         Polynomial polynomial = Polynomial.fromString(function); polynomial.setConstdec(consts);
         polynomial.setVariableCode(variableCode); function = polynomial.toString();
+            if (degree.equals(new Complex("-1"))) {degree = polynomial.getDegree();}
+            functionderiv = polynomial.derivative() + "";
+            if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
+                functionderiv2 = polynomial.derivative().derivative() + "";
+            }
+        }
         FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        if (degree.equals(new Complex("-1"))) {degree = polynomial.getDegree();}
-        String functionderiv = ""; if (constant != null && constant.equals(Complex.ZERO)) {
+        if (constant != null && constant.equals(Complex.ZERO)) {
             constant = ComplexOperations.divide(Complex.ONE, degree);
-        }
-        if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
-            functionderiv = polynomial.derivative().toString();
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0;
@@ -371,13 +389,15 @@ public class ComplexFractalGenerator implements Serializable {
                 last.push(z);
                 while (c <= iterations) {
                     Complex ztmp, ztmpd; if (constant != null) {
-                        ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(polynomial.derivative().toString(), false))));
-                        ztmpd = null; if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE) {
-                            ztmpd = ComplexOperations.subtract(zd, ComplexOperations.multiply(constant, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(polynomial.derivative().derivative().toString(), false))));
+                        ztmp = ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))));
+                        ztmpd = null;
+                        if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
+                            ztmpd = ComplexOperations.subtract(zd, ComplexOperations.multiply(constant, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false))));
                         }} else {
-                        ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(polynomial.derivative().toString(), false)));
-                        ztmpd = null; if (color.mode == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE) {
-                            ztmpd = ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(polynomial.derivative().derivative().toString(), false)));
+                        ztmp = ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)));
+                        ztmpd = null;
+                        if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
+                            ztmpd = ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false)));
                         }
                     } if (z.equals(Complex.ZERO)) {c = iterations; break;}
                     if (ComplexOperations.distance_squared(z, ztmp) < tolerance) {break;}
@@ -415,11 +435,18 @@ public class ComplexFractalGenerator implements Serializable {
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
-        Polynomial poly; String functionderiv = "";
+        String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
-            poly = Polynomial.fromString(function); poly.setConstdec(consts); poly.setVariableCode(variableCode);
+            if (Function.isSpecialFunction(function)) {
+                Function func = Function.fromString(function, variableCode); func.setConsts(consts);
+                function = func.toString(); if (degree.equals(new Complex("-1"))) {degree = func.getDegree();}
+                functionderiv = func.derivative(1);
+            } else {
+                Polynomial poly = Polynomial.fromString(function); poly.setConstdec(consts);
+                poly.setVariableCode(variableCode);
             function = poly.toString(); if (degree.equals(new Complex("-1"))) {degree = poly.getDegree();}
-            functionderiv = poly.derivative().toString();
+                functionderiv = poly.derivative().toString();
+            }
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0; outer:
@@ -515,10 +542,10 @@ public class ComplexFractalGenerator implements Serializable {
             } else {
                 distance = Math.abs(last[0].modulus() * Math.log(last[0].modulus())) / Math.log(last[1].modulus());
             } if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE) {
-                color1 = (int) ((distance - (int) distance) * 255);
+                color1 = (int) Math.abs((distance - (long) distance) * 255); if (color1 > 255) color1 %= 255;
                 colortmp = ColorConfig.toRGB(color1, color1, color1);
             } else {
-                index = color.createIndex((distance - (int) distance), 0, 1, scaling);
+                index = color.createIndex((distance - Math.floor(distance)), 0, 1, scaling);
                 colortmp = color.splineInterpolated(index, renormalized - (int) renormalized);
                 /*if (mode == MODE_BUDDHABROT || mode == MODE_MANDELBROT) {
                     if (!color.isByParts()) {colortmp = (distance > escape_radius) ? 0xffffff : 0x000000;} else {

@@ -52,4 +52,32 @@ public class MathUtils {
             int factors = 0; for (int j = 2; j < i; j++) {if (i % j == 0) {++factors;}} if (factors == 0) {return i;}
         } return -1;
     }
+    public int[] mostEfficientfactor(int a) {
+        int num_factors = 0; for (int i = 1; i <= a; i++) {if (a % i == 0) num_factors++;}
+        int[] factors = new int[num_factors]; num_factors = 0;
+        for (int i = 1; i <= a && num_factors < factors.length; i++) {
+            if (a % i == 0) {factors[num_factors] = i; num_factors++;}
+        } FactorData[] data = new FactorData[num_factors]; for (int i = 0; i < num_factors; i++) {
+            for (int j = i + 1; j < num_factors; j++) {data[i] = new FactorData(factors[i], factors[j]);}
+        } quickSort(data, 0, data.length - 1); return new int[]{data[0].a, data[0].b};
+    }
+    void quickSort(FactorData[] arr, int low, int high) {
+        if (arr == null || arr.length == 0) return; if (low >= high) return;
+        // pick the pivot
+        int middle = low + (high - low) / 2; int pivot = arr[middle].sum;
+        // make left < pivot and right > pivot
+        int i = low, j = high; while (i <= j) {
+            while (arr[i].sum < pivot) {i++;} while (arr[j].sum > pivot) {j--;} if (i <= j) {
+                FactorData temp = new FactorData(arr[i]); arr[i] = new FactorData(arr[j]);
+                arr[j] = new FactorData(temp); i++; j--;
+            }
+        }
+        // recursively sort two sub parts
+        if (low < j) quickSort(arr, low, j); if (high > i) quickSort(arr, i, high);
+    }
+    private class FactorData {
+        int a, b, sum;
+        public FactorData(int a, int b) {this.a = a; this.b = b; this.sum = a + b;}
+        public FactorData(FactorData old) {a = old.a; b = old.b; sum = old.sum;}
+    }
 }
