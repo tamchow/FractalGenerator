@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class Test {
     public static void main(String[] args) {
-        String func = "1,+0.3i * ( sin z )", variableCode = "z", poly = "{f:z:0};sin;{1:z:1}";
+        String func = "f * ( sin z )", variableCode = "z", poly = "{f:z:0};sin;{1:z:1}";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}, {"f", "-0.5,+0.25i"}, {"f", "1,+0.3i"}};
         int resx = 401, resy = 401, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 32;
         double escrad = 50, tolerance = 1e-10, zoom = 10, zoompow = 0, baseprec = 50;
