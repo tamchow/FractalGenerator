@@ -7,8 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Final update before next major release">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="$PROJECT_DIR$/.idea/description.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,24 +39,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Test.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.26771653">
+              <caret line="22" column="82" selection-start-line="22" selection-start-column="82" selection-end-line="22" selection-end-column="82" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="description.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.idea/description.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.50140846">
-              <caret line="32" column="80" selection-start-line="32" selection-start-column="80" selection-end-line="32" selection-end-column="80" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -64,25 +55,8 @@
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="550" column="5" selection-start-line="550" selection-start-column="5" selection-end-line="550" selection-end-column="5" />
+              <caret line="566" column="752" selection-start-line="566" selection-start-column="752" selection-end-line="566" selection-end-column="752" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ImageData.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-              <folding>
-                <element signature="e#1045#1046#0" expanded="false" />
-                <element signature="e#1072#1073#0" expanded="false" />
-                <element signature="e#1111#1112#0" expanded="false" />
-                <element signature="e#1143#1144#0" expanded="false" />
-                <element signature="e#1177#1178#0" expanded="false" />
-                <element signature="e#1207#1208#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -166,10 +140,10 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/BrainSext.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
         <option value="$PROJECT_DIR$/.idea/description.html" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
       </list>
     </option>
   </component>
@@ -994,13 +968,8 @@
       <workItem from="1451645887301" duration="4624000" />
       <workItem from="1451668141929" duration="968000" />
       <workItem from="1451879545668" duration="11453000" />
-      <workItem from="1451892058163" duration="6905000" />
-    </task>
-    <task id="LOCAL-00033" summary="Final update before next major release">
-      <created>1449477613899</created>
-      <option name="number" value="00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1449477613899</updated>
+      <workItem from="1451892058163" duration="7004000" />
+      <workItem from="1451910422736" duration="1426000" />
     </task>
     <task id="LOCAL-00034" summary="Final update before next major release">
       <created>1449477619413</created>
@@ -1290,11 +1259,17 @@
       <option name="project" value="LOCAL" />
       <updated>1451900124545</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="Final update before next major release">
+      <created>1451900242705</created>
+      <option name="number" value="00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1451900242705</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="489938000" />
+    <option name="totallyTimeSpent" value="491463000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1700,10 +1675,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32761577">
           <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
-          <folding>
-            <element signature="e#1403#1404#0" expanded="false" />
-            <element signature="e#1461#1462#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1711,7 +1682,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.65008575">
           <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1743,7 +1713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.24040921">
           <caret line="116" column="43" selection-start-line="116" selection-start-column="43" selection-end-line="116" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1775,40 +1744,33 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding>
-            <element signature="e#1045#1046#0" expanded="false" />
-            <element signature="e#1072#1073#0" expanded="false" />
-            <element signature="e#1111#1112#0" expanded="false" />
-            <element signature="e#1143#1144#0" expanded="false" />
-            <element signature="e#1177#1178#0" expanded="false" />
-            <element signature="e#1207#1208#0" expanded="false" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/description.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6433692">
+          <caret line="32" column="80" selection-start-line="32" selection-start-column="80" selection-end-line="32" selection-end-column="80" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="550" column="5" selection-start-line="550" selection-start-column="5" selection-end-line="550" selection-end-column="5" />
+          <caret line="566" column="752" selection-start-line="566" selection-start-column="752" selection-end-line="566" selection-end-column="752" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.26771653">
+          <caret line="22" column="82" selection-start-line="22" selection-start-column="82" selection-end-line="22" selection-end-column="82" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/description.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50140846">
-          <caret line="32" column="80" selection-start-line="32" selection-start-column="80" selection-end-line="32" selection-end-column="80" />
-          <folding />
         </state>
       </provider>
     </entry>
