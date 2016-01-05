@@ -5,7 +5,7 @@ import in.tamchow.fractal.color.HSL;
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed RGB in hex values as pixels.
  */
 public class ImageData {
-    public static final int AVERAGE = 1, WEIGHTED_AVERAGE = 2, INTERPOLATED_AVERAGE = 3;
+    public static final int AVERAGE = 1, WEIGHTED_AVERAGE = 2, INTERPOLATED_AVERAGE = 3, INTERPOLATED = 4;
     private String path;
     private int[][] pixdata;
     public ImageData() {
@@ -69,8 +69,8 @@ public class ImageData {
     public synchronized int getPixel(int y, int x) {
         if (y < 0) {y += getHeight(); return getPixel(y, x);}
         if (y >= getHeight()) {y -= getHeight(); return getPixel(y, x);}
-        if (x < 0) {x += getWidth(); return getPixel(y, x);}
-        if (x >= getWidth()) {x -= getWidth(); return getPixel(y, x);} return pixdata[y][x];
+        if (x < 0) {x += getWidth(); y--; return getPixel(y, x);}
+        if (x >= getWidth()) {x -= getWidth(); y++; return getPixel(y, x);} return pixdata[y][x];
     }
     public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
     public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
@@ -84,7 +84,8 @@ public class ImageData {
                 switch (mode) {
                     case AVERAGE: processed.setPixel(i, j, (int) average); break;
                     case WEIGHTED_AVERAGE: processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2)); break;
-                    case INTERPOLATED_AVERAGE: processed.setPixel(i, j, ColorConfig.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (int) biases[i][j], byParts)); break;
+                    case INTERPOLATED_AVERAGE: processed.setPixel(i, j, ColorConfig.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (long) biases[i][j], byParts)); break;
+                    case INTERPOLATED: processed.setPixel(i, j, ColorConfig.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts)); break;
                     default: throw new IllegalArgumentException("Unsupported Post Processing type");
                 }
             }

@@ -28,7 +28,7 @@ public class ComplexOperations {
     }
     public static Complex principallog(Complex z) {double r = z.modulus(); return new Complex(Math.log(r), z.arg());}
     public static double distance_squared(Complex z1, Complex z2) {
-        return Math.sqrt((Math.pow(z1.real() - z2.real(), 2) + Math.pow(z1.imaginary() - z2.imaginary(), 2)));
+        return (Math.pow(z1.real() - z2.real(), 2) + Math.pow(z1.imaginary() - z2.imaginary(), 2));
     }
     public static Complex sin(Complex z) {return new Complex(Math.sin(z.real()) * Math.cosh(z.imaginary()), Math.cos(z.real()) * Math.sinh(z.imaginary()));}
     public static Complex cos(Complex z) {return new Complex(Math.cos(z.real()) * Math.cosh(z.imaginary()), Math.sin(z.real()) * Math.sinh(z.imaginary()));}

@@ -44,8 +44,8 @@ public class Matrix {
         int ncolumn = rows[0].substring(1, rows[0].length() - 1).split(",").length;
         Matrix newMatrix = new Matrix(nrow, ncolumn);
         for (int i = 0; i < newMatrix.matrixData.length && i < rows.length; i++) {
-            String[] columns = rows[i].substring(1, rows[i].length() - 1).split(",");
             //trim leading and trailing square brackets
+            String[] columns = rows[i].substring(1, rows[i].length() - 1).split(",");
             for (int j = 0; j < newMatrix.matrixData[i].length && j < columns.length; j++) {
                 newMatrix.matrixData[i][j] = Double.valueOf(columns[j]);
             }
@@ -64,8 +64,8 @@ public class Matrix {
         String matrix = ""; for (int i = 0; i < matrixData.length; i++) {
             for (int j = 0; j < matrixData[i].length; j++) {
                 matrix += matrixData[i][j] + ",";
-            } matrix = matrix.substring(0, matrix.length() - 1) + ";";//remove trailing ','
-        } return matrix.substring(0, matrix.length() - 1);//remove trailing ';'
+            } matrix = "[" + matrix.substring(0, matrix.length() - 1) + "];";//remove trailing ','
+        } return "[" + matrix.substring(0, matrix.length() - 1) + "]";//remove trailing ';'
     }
     public synchronized double get(int i, int j) {
         return matrixData[i][j];

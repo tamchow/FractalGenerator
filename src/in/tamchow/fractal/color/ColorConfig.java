@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class ColorConfig implements Serializable {
     public int basecolor, step, color_density, num_colors, mode, palette_type;
     public int[] palette;
-    public boolean byParts, logIndex;
+    public boolean byParts, logIndex, exponentialSmoothing;
     boolean colors_corrected;
     public ColorConfig(int mode, int color_density, int num_colors, int basecolor) {
         initColorConfig(mode, color_density, num_colors, basecolor, false, false);
@@ -165,16 +165,25 @@ public class ColorConfig implements Serializable {
     }
     public void createSmoothPalette(int[] control_colors, double[] control_points, boolean useSpline) {
         setPalette_type(Colors.PALETTE.CUSTOM); palette = new int[num_colors];
-        int[] controls = new int[control_points.length];
+        int[] controls = new int[control_points.length]; int color_density_backup = color_density;
+        color_density = num_colors;
         for (int i = 0; i < controls.length && i < control_points.length; i++) {
             controls[i] = createIndex(control_points[i], 0, 1, 1);
-        } int c = 0; for (int i = 0; i < palette.length && c < controls.length; i++) {
+        } color_density = color_density_backup; int c = 0;
+        for (int i = 0; i < palette.length && c < controls.length; i++) {
             if (i == controls[c]) {palette[i] = control_colors[c]; c++;}
         } c = 0; int cnext = c + 1; for (int i = 0; i < palette.length && c < controls.length; i++) {
             if (c == controls.length - 1) {cnext = 0;} if (i == controls[c]) {c++; cnext++; continue;} if (useSpline) {
                 palette[i] = splineInterpolated(controls[c], controls[cnext], ((double) Math.abs(i - controls[c])) / num_colors);
             } else {
                 palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(i - controls[c]), num_colors, isByParts());
+            }
+        } if (useSpline) {//mirror the palette about the last colour to make it cyclic.
+            num_colors *= 2; int[] tmp = new int[palette.length]; System.arraycopy(palette, 0, tmp, 0, tmp.length);
+            palette = new int[num_colors]; System.arraycopy(tmp, 0, palette, 0, tmp.length);
+            //Since 2*tmp.length==num_colors
+            for (int i = num_colors - 1, j = tmp.length - 1; i >= tmp.length && j >= 0; i--, j--) {
+                palette[i] = palette[j];
             }
         }
     }
@@ -235,10 +244,13 @@ public class ColorConfig implements Serializable {
     public void setPalette_type(int palette_type) {
         this.palette_type = palette_type;
     }
+    public boolean isExponentialSmoothing() {return exponentialSmoothing;}
+    public void setExponentialSmoothing(boolean exponentialSmoothing) {this.exponentialSmoothing = exponentialSmoothing;}
     public void fromString(String[] colors) {
         String type = colors[0]; mode = Integer.valueOf(colors[1]); byParts = Boolean.valueOf(colors[2]);
-        int offset = 0;
-        try {logIndex = Boolean.valueOf(colors[3]); offset = 1;} catch (Exception e) {setLogIndex(false);}
+        int offset = 0; try {
+            exponentialSmoothing = Boolean.valueOf(colors[3]); logIndex = Boolean.valueOf(colors[4]); offset = 1;
+        } catch (Exception e) {setExponentialSmoothing(true); setLogIndex(true);}
         switch (type) {
             case "RANDOM_PALETTE": initColorConfig(mode, Integer.valueOf(colors[3]), byParts, false); break;
             case "CUSTOM_PALETTE": String[] parts = colors[3 + offset].split(";"); int[] colorset = new int[parts.length]; for (int i = 0; i < colorset.length; i++) {
