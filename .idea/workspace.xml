@@ -8,7 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Final update before next major release">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/BrainSext.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/BrainSext.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,15 +60,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BrainSext.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BrainSext.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/BrainSext.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1457976">
+            <state vertical-scroll-proportion="0.0">
               <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
               <folding>
-                <element signature="e#11238#11239#0" expanded="true" />
-                <element signature="e#11289#11290#0" expanded="true" />
+                <element signature="e#11415#11416#0" expanded="true" />
+                <element signature="e#11470#11471#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.6037736">
+              <caret line="28" column="86" selection-start-line="28" selection-start-column="86" selection-end-line="28" selection-end-column="86" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -132,7 +142,6 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/Printable.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
@@ -156,6 +165,7 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/BrainSext.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
       </list>
     </option>
   </component>
@@ -993,13 +1003,7 @@
       <workItem from="1451916425786" duration="26380000" />
       <workItem from="1452054424739" duration="8230000" />
       <workItem from="1452065557977" duration="137000" />
-      <workItem from="1452072664730" duration="1281000" />
-    </task>
-    <task id="LOCAL-00038" summary="Final update before next major release">
-      <created>1449571457342</created>
-      <option name="number" value="00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1449571457342</updated>
+      <workItem from="1452072664730" duration="1467000" />
     </task>
     <task id="LOCAL-00039" summary="Final update before next major release">
       <created>1449572453357</created>
@@ -1289,11 +1293,17 @@
       <option name="project" value="LOCAL" />
       <updated>1452065674007</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="Final update before next major release">
+      <created>1452073950673</created>
+      <option name="number" value="00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1452073950674</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="527961000" />
+    <option name="totallyTimeSpent" value="528147000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1629,13 +1639,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6295026">
-          <caret line="43" column="105" selection-start-line="43" selection-start-column="105" selection-end-line="43" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1795,12 +1798,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/BrainSext.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1457976">
+        <state vertical-scroll-proportion="0.0">
           <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
           <folding>
-            <element signature="e#11238#11239#0" expanded="true" />
-            <element signature="e#11289#11290#0" expanded="true" />
+            <element signature="e#11415#11416#0" expanded="true" />
+            <element signature="e#11470#11471#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6037736">
+          <caret line="28" column="86" selection-start-line="28" selection-start-column="86" selection-end-line="28" selection-end-column="86" />
+          <folding />
         </state>
       </provider>
     </entry>

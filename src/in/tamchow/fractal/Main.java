@@ -23,10 +23,10 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {System.err.println("Nothing to do."); System.exit(1);}
-        if (args[0].equalsIgnoreCase("PBrain")) {
+        if (args[0].equalsIgnoreCase("/BS")) {
             String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             BrainSext.main(modArgs);
-        } else if (args[0].equalsIgnoreCase("encrypt") || args[0].equalsIgnoreCase("decrypt")) {
+        } else if (args[0].equalsIgnoreCase("/encrypt") || args[0].equalsIgnoreCase("/decrypt")) {
             String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             try {EncryptDecryptFile.main(modArgs);} catch (IOException ioe) {
                 System.err.println("I/O Error: " + ioe.getMessage());
