@@ -5,8 +5,8 @@ import in.tamchow.fractal.math.complex.Complex;
  * Multithreading for the fractal generator
  */
 public class ThreadedComplexFractalGenerator {
+    final ComplexFractalGenerator master;
     boolean[] progress;
-    ComplexFractalGenerator master;
     long iterations;
     double escape_radius;
     Complex constant;
@@ -38,19 +38,11 @@ public class ThreadedComplexFractalGenerator {
         } try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {master.getProgressPublisher().println("Interrupted:" + e.getMessage());}
-        /*while (!allComplete()) {
-            for (idx = 0; idx < progress.length; idx++) {
-                //System.out.println("Thread "+idx+" has completed:"+progress[idx]);
-            }
-        }*/
     }
     boolean allComplete() {
         for (boolean progression : progress) {
-            if (!progression) {
-                return false;
-            }
-        }
-        return true;
+            if (!progression) {return false;}
+        } return true;
     }
     class SlaveRunner extends Thread {
         ComplexFractalGenerator copyOfMaster;
@@ -66,16 +58,20 @@ public class ThreadedComplexFractalGenerator {
             this.copyOfMaster = new ComplexFractalGenerator(master.getParams(), master.getProgressPublisher());
         }
         public void start() {
-            if (executor == null) {
-                executor = new Thread(this);
-            }
-            executor.start();
+            if (executor == null) {executor = new Thread(this);} executor.start();
         }
         public void run() {
             copyOfMaster.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
             onCompletion();
         }
         void onCompletion() {
+            synchronized (master) {
+                for (int i = starty; i < endy; i++) {
+                    for (int j = startx; j < endy; j++) {
+                        master.argand.setPixel(i, j, copyOfMaster.argand.getPixel(i, j));
+                    }
+                }
+            }
             System.out.println("Thread " + index + " has completed");
             progress[index] = true;
         }
