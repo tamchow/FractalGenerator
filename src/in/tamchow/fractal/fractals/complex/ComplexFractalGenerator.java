@@ -15,7 +15,7 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-/** The actual fractal plotter for Julia, Newton and Mandelbrot Sets using an iterative algorithm.
+/** The actual fractal plotter for Julia, Newton, Nova (both Mandelbrot and Julia variants),Secant and Mandelbrot Sets using an iterative algorithm.
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
  * Various (21) Coloring modes*/
 public class ComplexFractalGenerator implements Serializable {
