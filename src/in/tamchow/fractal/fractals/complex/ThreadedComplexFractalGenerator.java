@@ -3,7 +3,6 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.math.complex.Complex;
 /**
  * Multithreading for the fractal generator
- * TODO: Lockup somewhere, no output. To check later.
  */
 public class ThreadedComplexFractalGenerator {
     boolean[] progress;
@@ -33,16 +32,12 @@ public class ThreadedComplexFractalGenerator {
         for (int i = 0; i < ny; i++) {
             for (int j = 0; j < nx; j++) {
                 int[] coords = master.start_end_coordinates(nx, j, ny, i);
-                SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-                System.out.println("Initiated thread " + idx);
-                idx++;
+                SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]); runner.start();
+                master.getProgressPublisher().println("Initiated thread: " + idx); idx++;
             }
-        }
-        try {
+        } try {
             Thread.currentThread().join();
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted:" + e.getMessage());
-        }
+        } catch (InterruptedException e) {master.getProgressPublisher().println("Interrupted:" + e.getMessage());}
         /*while (!allComplete()) {
             for (idx = 0; idx < progress.length; idx++) {
                 //System.out.println("Thread "+idx+" has completed:"+progress[idx]);
@@ -58,6 +53,7 @@ public class ThreadedComplexFractalGenerator {
         return true;
     }
     class SlaveRunner extends Thread {
+        ComplexFractalGenerator copyOfMaster;
         Thread executor;
         int index;
         int startx, starty, endx, endy;
@@ -67,6 +63,7 @@ public class ThreadedComplexFractalGenerator {
             this.starty = starty;
             this.endx = endx;
             this.endy = endy;
+            this.copyOfMaster = new ComplexFractalGenerator(master.getParams(), master.getProgressPublisher());
         }
         public void start() {
             if (executor == null) {
@@ -75,7 +72,7 @@ public class ThreadedComplexFractalGenerator {
             executor.start();
         }
         public void run() {
-            master.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
+            copyOfMaster.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
             onCompletion();
         }
         void onCompletion() {

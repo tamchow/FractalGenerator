@@ -1,9 +1,9 @@
 # FractalGenerator
 <html>
 A <b>Java</b> fractal generator (currently without an input/configuration UI, soon through a configuration file),
-that implements display of custom functions, with constant declaration processing, in both Mandelbrot,Newton Julia modes.
+that implements display of custom functions, with constant declaration processing, in both Mandelbrot,Newton, Nova (both Julia and Mandelbrot  types), Secant and Julia modes.
 
-Newton Mode only supports simple polynomials with complex exponents and coefficients allowed, but the polynomial must be in a special format, which is documented in .idea/description.html
+Newton Mode only supports simple polynomials with complex exponents and coefficients allowed, but the polynomial must be in a special format, which is documented in .idea/description.html or the Wiki Description page.
 
 There are 21 different colouring schemes, 10 have linear interpolation, 5 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
 
@@ -44,7 +44,7 @@ Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symm
 <p>
 Running:
 
-Parameter is optional, but if you have a slow PC and it is defaulted to a FullHD or 4K render,
+Parameters are optional in test builds, but not in the rlease version. If you have a slow PC and it is defaulted to a FullHD or 4K render,
 be ready to wait upto an hour or more for output. I have an Asus K55VM and on this configuration with CMD I get 30 mins.
 
 This runs substantially faster through Idea itself (9.5 mins for me), no idea why. I use IntelliJ Idea 15.

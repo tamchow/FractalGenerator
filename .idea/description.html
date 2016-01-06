@@ -2,11 +2,11 @@
 <head>
     A <b>Java</b> fractal generator (currently UI-silent, with configuration through a file),
     that implements display of custom functions,
-    with constant declaration processing, in Mandelbrot, Newton and Julia modes, and an experimental IFS render system.
+    with constant declaration processing, in Mandelbrot, Newton,Secant,Nova (both Mandelbrot and Julia types) and Julia modes, and an experimental IFS render system.
 
     There are also Buddhabrot techniques ( naive algorithm ) for each of the above.
     <br>
-    There are 21 different colouring schemes, 10 have linear interpolation, 5 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
+    There are 21 different colouring schemes, 10 have linear interpolation, 5 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics (symbolic differentiation) backend.
 
 Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
 The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation.
@@ -24,9 +24,9 @@ The linear interpolant methods have the 3 Newton fractal coloring modes, and the
 </head>
 <body>
 <p>
-    Supported modes: Julia, Mandelbrot, Newton, with Buddhabrot technique variations available for each.
+    Supported modes: Julia, Mandelbrot, Newton, Nova (both mandelbrot and Julia variants) and Secant, with Buddhabrot technique variations available for each.
     <br>
-    Newton fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a different input format:
+    Newton/Nova fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a different input format:
 
     {coefficient:variable:exponent};+;{coefficient:variable:exponent};-;{coefficient:variable:exponent},etc.
 
@@ -34,7 +34,7 @@ The linear interpolant methods have the 3 Newton fractal coloring modes, and the
 
     This is the input format:
 
-    [polynomial];[function];[polynomial];[constant]
+    [polynomial];[function];[polynomial];[constant]|+|[polynomial];[function];[polynomial];[constant],...
 
     The 1<sup>st</sup> polynomial is the coefficient,the 2<sup>nd</sup> is the function argument.
     The constant is optional. Replace the terms in the square bracket with applicable terms, e.g.
