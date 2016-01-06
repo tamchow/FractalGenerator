@@ -8,7 +8,20 @@ import java.util.Scanner;
  * capable of interpreting PBrain, BrainFlow, pure BFk (directly),
  * command sets from Extended BFk,and  a set of extended behaviour from PointerLang
  * <a href="http://codegolf.stackexchange.com/questions/52277/write-an-interpreter-for-my-new-esoteric-language-pointerlang?rq=1">here</a>>
- * (with replacement by equivalent commands:
+ * (with replacement by equivalent commands)
+ *
+ * Example "Hello World" program:
+ *
+ * <pre>[G5.]@Hello World</pre>
+ *
+ * Explanation:
+ *
+ * 1. Anything after '@' is preloaded as data
+ * 2. '[' indicates start of loop
+ * 3. 'G' will execute next operation if value at pointer is greater than value in storage, which is by default -1;
+ * 4. 5 is the index in the code string to jump to if the condition is not met.
+ * 5. '.' outputs the character representation of the value at the pointer
+ * 6. ']' indicates end of loop
  */
 public class BrainSext {
     public static final int OUTPUT = 0, ERROR = 1;
@@ -26,17 +39,19 @@ public class BrainSext {
         if (args.length == 0) {throw new IllegalArgumentException("Nothing to interpret");}
         if (args[0].equalsIgnoreCase("-s")) {
             executor.size = Integer.parseInt(args[1]);
-            if (args[2].equalsIgnoreCase("-f")) {executor.readFile(args[3]);} else {executor.code = args[2];}
+            if (args[2].equalsIgnoreCase("-f")) {executor.readFile(args[3]);} else {
+                executor.code = args[2]; executor.codebackup = executor.code;
+            }
         } else {
             if (args[0].equalsIgnoreCase("-f")) {
                 executor.readFile(args[1]);
-            } else {executor.code = args[0];}
+            } else {executor.code = args[0]; executor.codebackup = executor.code;}
         } executor.execute();
     }
     public void setMemory(int[] data) {size = data.length; operand = new int[size]; System.arraycopy(data, 0, operand, 0, size);}
     void readFile(String path) {
         File input = new File(path); try {
-            Scanner sc = new Scanner(input); while (sc.hasNextLine()) {code += sc.nextLine();}
+            Scanner sc = new Scanner(input); while (sc.hasNextLine()) {code += sc.nextLine();} codebackup = code;
         } catch (FileNotFoundException e) {System.err.println("Input File location " + path + " is invalid.");}
     }
     public void execute() {
@@ -44,13 +59,17 @@ public class BrainSext {
         //filter comments first
         while (code.contains("{") && code.contains("}")) {
             int i1 = code.indexOf('{'), i2 = code.indexOf('}'); code = code.replace(code.substring(i1, i2 + 1), "");
+        } //load appended data,if any
+        if (code.contains("@") && code.length() > code.indexOf('@') + 1) {
+            String data = code.substring(code.indexOf('@') + 1, code.length());
+            for (int i = 0; i < data.length() && i < size; i++) {operand[i] = data.charAt(i);}
         } outer:
         for (int i = 0; i < code.length(); ) {
             switch (code.charAt(i)) {
                 case 'm': if (numAfter(i)) {
                     size = StringManipulator.getNumFromIndex(code, i + 1);
-                } else {size = code.length();} initMemory(); for (int j = 0; j < code.length(); j++) {
-                    operand[j] = code.charAt(j);
+                } else {size = codebackup.length();} initMemory(); for (int j = 0; j < codebackup.length(); j++) {
+                    operand[j] = codebackup.charAt(j);
                 } break; case 'u': for (int j = 0; j < code.length() && j < operand.length; j++) {
                     code += "" + (char) operand[j];
                 } initMemory(); continue outer; case '(': procidx[proctr] = i + 1; proctr++; break;
@@ -77,25 +96,33 @@ public class BrainSext {
                 case 'x': operand[ptr] = operand[ptr] ^ storage; break;
                 case 'd': System.arraycopy(operand, 0, tmp, 0, operand.length); System.arraycopy(tmp, 0, operand, 0, ptr - 1); System.arraycopy(tmp, ptr + 1, operand, ptr, tmp.length); break;
                 case 'i': System.arraycopy(operand, 0, tmp, 0, operand.length); System.arraycopy(tmp, 0, operand, 0, ptr); System.arraycopy(tmp, ptr, operand, ptr + 1, tmp.length); operand[ptr] = -1; break;
-                case 'E': if (operand[ptr] == storage) {break;} else {i = jumpIndex(i); continue outer;}
-                case 'N': if (!(operand[ptr] == storage)) {break;} else {i = jumpIndex(i); continue outer;}
-                case 'G': if (operand[ptr] > storage) {break;} else {i = jumpIndex(i); continue outer;}
-                case 'L': if (operand[ptr] < storage) {break;} else {i = jumpIndex(i); continue outer;}
+                case 'E': if (operand[ptr] == storage) {i++; break;} else {i = jumpIndex(i); continue outer;}
+                case 'N': if (!(operand[ptr] == storage)) {i++; break;} else {i = jumpIndex(i); continue outer;}
+                case 'G': if (operand[ptr] > storage) {i++; break;} else {i = jumpIndex(i); continue outer;}
+                case 'L': if (operand[ptr] < storage) {i++; break;} else {i = jumpIndex(i); continue outer;}
                 case '<': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     ptr -= StringManipulator.getNumFromIndex(code, i + 1); ptr = boundsProtected(ptr, size);
                 } else {if (ptr - 1 < 0) {ptr = size - 1;} else {--ptr;}} break; case '>': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     ptr += StringManipulator.getNumFromIndex(code, i + 1); ptr = boundsProtected(ptr, size);
                 } else {if (ptr + 1 >= size) {ptr = size - 1;} else {--ptr;}} break; case '+': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] += StringManipulator.getNumFromIndex(code, i + 1);
                 } else {++operand[ptr];} break; case '-': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] -= StringManipulator.getNumFromIndex(code, i + 1);
                 } else {--operand[ptr];} break; case '=': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] = StringManipulator.getNumFromIndex(code, i + 1);
                 } else {operand[ptr] = ptr;} break; case '*': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] *= StringManipulator.getNumFromIndex(code, i + 1);
                 } else {operand[ptr] *= 1;} break; case '/': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] /= StringManipulator.getNumFromIndex(code, i + 1);
                 } else {operand[ptr] /= 1;} break; case '%': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] %= StringManipulator.getNumFromIndex(code, i + 1);
                 } else {operand[ptr] %= 1;} break;
                 case '^': ptr = operand[ptr]; ptr = boundsProtected(ptr, size); break;
@@ -142,5 +169,8 @@ public class BrainSext {
     }
     boolean numAfter(int i) {
         return ((i + 1 < code.length() - 1) && (Character.isDigit(code.charAt(i + 1)) || code.charAt(i + 1) == '_'));
+    }
+    int indexAfterSkipLiteral(int index, int literal) {
+        return index += (literal + "").length();
     }
 }
