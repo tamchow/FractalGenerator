@@ -16,20 +16,19 @@ import java.io.IOException;
  */
 public class Test {
     public static void main(String[] args) {
-        String func = "f * ( sin z )", variableCode = "z", poly = "{1:z:4};-;{1:z:0}", poly2 = "{f:z:0};sin;{1:z:1}";
-        String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}, {"f", "-0.5,+0.25i"}, {"f", "1,+0.3i"}};
-        int resx = 640, resy = 480, fracmode = ComplexFractalGenerator.MODE_NEWTON, iter = 16;
-        double escrad = 50, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 200;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC, 4, 4, true, true);
+        String func = "z ^ 2 + e", variableCode = "z", poly = "{1:z:4};-;{1:z:0}", poly2 = "{f:z:0};sin;{1:z:1}";
+        String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.911i"}, {"e", "-0.8,+0.156i"}, {"f", "-0.5,+0.25i"}, {"g", "1,+0.3i"}};
+        int resx = 640, resy = 480, fracmode = ComplexFractalGenerator.MODE_JULIA, iter = 16;
+        double escrad = 50, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 240;
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR, 4, 20, true, true);
         cfg.setExponentialSmoothing(true);
-        cfg.setColor_density(cfg.calculateColorDensity());
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24,82,177),rgb(57,125,209), rgb(134,181,229), rgb(211,236,248), rgb(241,233,191), rgb(248,201,95), rgb(255,170,0), rgb(204,128,0), rgb(153,87,0), rgb(106,52,3)},false);
         //cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575}, true);
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
         cfg.createSmoothPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, new double[]{0.2, 0.4, 0.6, 0.8}, true);
         cfg.setColor_density(cfg.calculateColorDensity());
         Complex constant = null;//new Complex("1.0,+0.0i");
-        func = poly;
+        //func = poly;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));

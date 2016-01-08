@@ -350,14 +350,14 @@ public class ComplexFractalGenerator implements Serializable {
             }
         } return false;
     }
-    private synchronized Complex getLastConstant() {
+    public synchronized Complex getLastConstant() {
         if (lastConstant.equals(new Complex(-1, 0))) {lastConstant = new Complex(consts[getLastConstantIndex()][1]);}
         return lastConstant;
     }
     private synchronized void setLastConstant(Complex value) {consts[lastConstantIdx][1] = value.toString();}
-    private synchronized int getConstantIndex(String constant) {
+    public synchronized int getConstantIndex(String constant) {
         for (int i = 0; i < consts.length; i++) {if (consts[i][0].equals(constant)) {return i;}} return -1;}
-    private synchronized int getLastConstantIndex() {
+    public synchronized int getLastConstantIndex() {
         String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
             if (getConstantIndex(parts[i]) != -1) {
                 lastConstantIdx = getConstantIndex(parts[i]); return getConstantIndex(parts[i]);}} return -1;}
@@ -455,7 +455,7 @@ public class ComplexFractalGenerator implements Serializable {
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
         long ctr = 0; Complex toadd = new Complex(Complex.ZERO);
-        if (mode == MODE_JULIA_NOVA || mode == MODE_JULIA_NOVABROT) {toadd = new Complex(consts[0][1]);}
+        if (mode == MODE_JULIA_NOVA || mode == MODE_JULIA_NOVABROT) {toadd = getLastConstant();}
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -685,7 +685,7 @@ public class ComplexFractalGenerator implements Serializable {
                     colortmp = getColor(index, smoothcount);
                 } else {colortmp = color.splineInterpolated(index, smoothcount - ((long) smoothcount));}
                 break; case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR:
-            case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE: lbnd = Math.abs(ComplexOperations.power(last[1], new Complex(degree)).modulus() - getLastConstant().modulus()); ubnd = ComplexOperations.power(last[1], new Complex(degree)).modulus() + getLastConstant().modulus(); calc = (last[0].modulus() - lbnd) / (ubnd - lbnd); index = color.createIndex(calc, lbnd, ubnd, scaling); if (color.getMode() == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR) {
+            case Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE: lbnd = Math.abs(ComplexOperations.power(last[1], degree).modulus() - getLastConstant().modulus()); ubnd = ComplexOperations.power(last[1], degree).modulus() + getLastConstant().modulus(); calc = (last[0].modulus() - lbnd) / (ubnd - lbnd); index = color.createIndex(calc, lbnd, ubnd, scaling); if (color.getMode() == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR) {
                 colortmp = getColor(index, smoothcount);
             } else {
                 colortmp = color.splineInterpolated(index, smoothcount - ((long) smoothcount));
