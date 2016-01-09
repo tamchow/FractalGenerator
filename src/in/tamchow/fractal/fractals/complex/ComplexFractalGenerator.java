@@ -6,6 +6,7 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.FixedStack;
+import in.tamchow.fractal.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
@@ -355,12 +356,6 @@ public class ComplexFractalGenerator implements Serializable {
         return lastConstant;
     }
     private synchronized void setLastConstant(Complex value) {consts[lastConstantIdx][1] = value.toString();}
-    public synchronized int getConstantIndex(String constant) {
-        for (int i = 0; i < consts.length; i++) {if (consts[i][0].equals(constant)) {return i;}} return -1;}
-    public synchronized int getLastConstantIndex() {
-        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
-            if (getConstantIndex(parts[i]) != -1) {
-                lastConstantIdx = getConstantIndex(parts[i]); return getConstantIndex(parts[i]);}} return -1;}
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack last = new FixedStack(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, advancedDegree);
@@ -709,19 +704,37 @@ public class ComplexFractalGenerator implements Serializable {
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}
     }
-    public void zoom(Matrix centre_offset, double level) {
-        setCentre_offset(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0))); setZoom_factor(level);
-        setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
-    }
-    public void zoom(int cx, int cy, double level) {
-        if (cx < 0) {cx += argand.getWidth(); zoom(cx, cy, level);}
-        if (cy < 0) {cy += argand.getHeight(); zoom(cx, cy, level);}
-        if (cx >= argand.getWidth()) {cx -= argand.getWidth(); zoom(cx, cy, level);}
-        if (cy >= argand.getHeight()) {cy -= argand.getHeight(); zoom(cx, cy, level);}
-        setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
-        setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
-    }
     public void resetBasePrecision() {
         setBase_precision((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
+    public void mandelbrotToJulia(int cx, int cy, double level) {changeMode(); zoom(cx, cy, level);}
+    public void zoom(int cx, int cy, double level) {
+        cx = MathUtils.boundsProtected(cx, argand.getWidth()); cy = MathUtils.boundsProtected(cy, argand.getHeight());
+        setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
+        setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
+    }
+    private void changeMode() {
+        consts[getLastConstantIndex()][1] = lastConstant + "";
+        setMode((mode == MODE_BUDDHABROT) ? MODE_JULIABROT : ((mode == MODE_MANDELBROT) ? MODE_JULIA : mode));
+    }
+    public synchronized int getLastConstantIndex() {
+        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
+            if (getConstantIndex(parts[i]) != -1) {
+                lastConstantIdx = getConstantIndex(parts[i]); return getConstantIndex(parts[i]);
+            }
+        } return -1;
+    }
+    public synchronized int getConstantIndex(String constant) {
+        for (int i = 0; i < consts.length; i++) {if (consts[i][0].equals(constant)) {return i;}} return -1;
+    }
+    public void mandelbrotToJulia(Matrix centre_offset, double level) {changeMode(); zoom(centre_offset, level);}
+    public void zoom(Matrix centre_offset, double level) {
+        zoom(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0)), level);
+    }
+    public void zoom(Complex centre_offset, double level) {
+        setCentre_offset(centre_offset); setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
+        populateMap();
+    }
+    public void mandelbrotToJulia(Complex centre_offset, double level) {changeMode(); zoom(centre_offset, level);}
+    public void mandelbrotToJulia(ZoomParams zoom) {changeMode(); zoom(zoom);}
 }

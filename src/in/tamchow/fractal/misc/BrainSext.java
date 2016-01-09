@@ -1,4 +1,6 @@
 package in.tamchow.fractal.misc;
+import in.tamchow.fractal.math.MathUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -76,7 +78,9 @@ public class BrainSext {
                     operand[j] = codebackup.charAt(j);
                 } break; case 'u': for (int j = 0; j < code.length() && j < operand.length; j++) {
                     code += "" + (char) operand[j];
-                } initMemory(); continue outer; case '(': procidx[proctr] = i + 1; proctr++; break;
+                } initMemory(); continue outer;
+                case '(': procidx[proctr] = i + 1; i = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]) + 1; proctr++; break;
+                case ')': break;//skip this over, index will be updated anyway
                 case '[': if (StringManipulator.findMatchingCloser('[', code, i - 1) == -1) {
                     setOutput("Unmatched [ at " + i + "\n", ERROR);
                 } if (operand[ptr] == 0) {
@@ -86,8 +90,8 @@ public class BrainSext {
                 } i = StringManipulator.findMatchingOpener(']', code, i - 1) + 1; continue outer;
                 case ':': codebackup = code; itmp = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]); if (itmp == -1) {
                     setOutput("Unmatched ) for procedure call at " + i + "\n", ERROR);
-                } code = codebackup.substring(procidx[operand[ptr]], itmp - 1); execute(); i = itmp; code = codebackup; continue outer;
-                case 'C': operand[ptr] = operand[ptr] + "".charAt(0);
+                } operand[ptr] = MathUtils.boundsProtected(operand[ptr], procidx.length); code = codebackup.substring(procidx[operand[ptr]], itmp - 1); execute(); i = itmp; code = codebackup; continue outer;
+                case 'C': operand[ptr] = (operand[ptr] + "").charAt(0);
                 case 'I': operand[ptr] = Integer.valueOf("" + (char) operand[ptr]);
                 case '@': i = jumpIndex(i, false); continue outer;
                 case 's': int t = operand[ptr]; operand[ptr] = storage; storage = t; break;
@@ -106,10 +110,10 @@ public class BrainSext {
                 case 'L': if (operand[ptr] < storage) {i++; break;} else {i = jumpIndex(i, true); continue outer;}
                 case '<': if (numAfter(i)) {
                     i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
-                    ptr -= StringManipulator.getNumFromIndex(code, i + 1); ptr = boundsProtected(ptr, size);
+                    ptr -= StringManipulator.getNumFromIndex(code, i + 1); ptr = MathUtils.boundsProtected(ptr, size);
                 } else {if (ptr - 1 < 0) {ptr = size - 1;} else {--ptr;}} break; case '>': if (numAfter(i)) {
                     i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
-                    ptr += StringManipulator.getNumFromIndex(code, i + 1); ptr = boundsProtected(ptr, size);
+                    ptr += StringManipulator.getNumFromIndex(code, i + 1); ptr = MathUtils.boundsProtected(ptr, size);
                 } else {if (ptr + 1 >= size) {ptr = size - 1;} else {--ptr;}} break; case '+': if (numAfter(i)) {
                     i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] += StringManipulator.getNumFromIndex(code, i + 1);
@@ -129,13 +133,13 @@ public class BrainSext {
                     i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] %= StringManipulator.getNumFromIndex(code, i + 1);
                 } else {operand[ptr] %= 1;} break;
-                case '^': ptr = operand[ptr]; ptr = boundsProtected(ptr, size); break;
-                case '&': operand[ptr] = boundsProtected(operand[ptr], size); operand[ptr] = operand[operand[ptr]]; break;
+                case '^': ptr = operand[ptr]; ptr = MathUtils.boundsProtected(ptr, size); break;
+                case '&': operand[ptr] = MathUtils.boundsProtected(operand[ptr], size); operand[ptr] = operand[operand[ptr]]; break;
                 case ';': int c = 0; if (numAfter(i)) {
                     c = StringManipulator.getNumFromIndex(code, i);
                 } if (c > 0) {i = StringManipulator.nthIndex(code, ']', i, c) + 1;} else if (c < 0) {
                     i = StringManipulator.nthIndexBackwards(code, '[', i, c);
-                } i = boundsProtected(i, code.length()); continue outer;
+                } i = MathUtils.boundsProtected(i, code.length()); continue outer;
                 case ',': try {operand[ptr] = System.in.read();} catch (IOException e) {
                     setOutput("Input error: " + e.getMessage(), ERROR);
                 } break; case '.': setOutput((char) operand[ptr] + "", OUTPUT); break;
@@ -156,19 +160,14 @@ public class BrainSext {
     public int getErrorCount() {return errorCount;}
     public String getOutput() {return output;}
     public String getErrors() {return errors;}
-    int boundsProtected(int ptr, int size) {
-        if (ptr < 0) {ptr = size + ptr;} if (ptr >= size) {
-            while (ptr >= size) {ptr = ptr - size;}
-        } return ptr;
-    }
     boolean fromInt(int val) {return val > 0;}
     int toInt(boolean val) {if (val) return 1; return 0;}
     int jumpIndex(int i, boolean relative) {
         if ((i + 1 < code.length() - 1) && Character.isDigit(code.charAt(i + 1))) {
             if (relative) {i += StringManipulator.getNumFromIndex(code, i + 1);} else {
                 i = StringManipulator.getNumFromIndex(code, i + 1);
-            } i = indexAfterSkipLiteral(i, i); i = boundsProtected(i, code.length());
-        } else {i = operand[ptr]; i = boundsProtected(i, code.length());} return i;
+            } i = indexAfterSkipLiteral(i, i); i = MathUtils.boundsProtected(i, code.length());
+        } else {i = operand[ptr]; i = MathUtils.boundsProtected(i, code.length());} return i;
     }
     boolean numAfter(int i) {
         return ((i + 1 < code.length() - 1) && (Character.isDigit(code.charAt(i + 1)) || code.charAt(i + 1) == '_'));

@@ -35,11 +35,8 @@ public class IFSGenerator {
         setCentre_offset(centre_offset); setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
     public void zoom(int cx, int cy, double level) {
-        if (cx < 0) {cx = 0;} if (cy < 0) {cy = 0;} if (cx >= plane.getWidth()) {
-            cx = plane.getWidth() - 1;
-        } if (cy >= plane.getHeight()) {
-            cy = plane.getHeight() - 1;
-        } setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
+        cx = MathUtils.boundsProtected(cx, plane.getWidth()); cy = MathUtils.boundsProtected(cy, plane.getHeight());
+        setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));}
     public Matrix fromCooordinates(int x, int y) {
         double[][] matrixData = new double[2][1]; matrixData[0][0] = ((((double) x) - center_x) / scale);

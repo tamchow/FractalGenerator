@@ -1,6 +1,7 @@
 package in.tamchow.fractal.imgutils;
 import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.HSL;
+import in.tamchow.fractal.math.MathUtils;
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed RGB in hex values as pixels.
  */
@@ -67,10 +68,9 @@ public class ImageData {
         } return output;
     }
     public synchronized int getPixel(int y, int x) {
-        if (y < 0) {y += getHeight(); return getPixel(y, x);}
-        if (y >= getHeight()) {y -= getHeight(); return getPixel(y, x);}
-        if (x < 0) {x += getWidth(); y--; return getPixel(y, x);}
-        if (x >= getWidth()) {x -= getWidth(); y++; return getPixel(y, x);} return pixdata[y][x];
+        if (x < 0) {x = MathUtils.boundsProtected(x, getWidth()); y--;}
+        if (x >= getWidth()) {x = MathUtils.boundsProtected(x, getWidth()); y++;}
+        y = MathUtils.boundsProtected(y, getHeight()); return pixdata[y][x];
     }
     public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
     public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}

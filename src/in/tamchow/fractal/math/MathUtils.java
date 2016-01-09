@@ -6,6 +6,9 @@ import java.util.Random;
  * Weighted Random Number generator and approximations,prime number calculator
  */
 public class MathUtils {
+    public static int boundsProtected(int ptr, int size) {
+        return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
+    }
     public static String numberLineRepresentation(float number, int precision) {
         float f = number; int p = precision;
         int g = (int) f, d = Math.round((f - g) * p), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;

@@ -1,4 +1,5 @@
 package in.tamchow.fractal.color;
+import in.tamchow.fractal.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 
@@ -196,12 +197,7 @@ public class ColorConfig implements Serializable {
         double idx = ComplexOperations.divide(ComplexOperations.principallog(exp), ComplexOperations.principallog(base)).modulus();
         return (int) (idx * color_density) % num_colors;
     }
-    public int getColor(int index) {
-        if (index < 0) {return getColor(num_colors + index);} if (index >= num_colors) {
-            if (index > 2 * num_colors) return getColor(index % num_colors);
-            else return getColor(index - num_colors);
-        } return palette[index];
-    }
+    public int getColor(int index) {return palette[MathUtils.boundsProtected(index, palette.length)];}
     public int splineInterpolated(int index, double bias) {
         return splineInterpolated(index, index + 1, bias);
     }
