@@ -18,6 +18,7 @@ public class ColorConfig implements Serializable {
     private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
         setNum_colors(num_colors); setBasecolor(basecolor); calcStep(); initGradientPalette(); setMode(mode);
+        setExponentialSmoothing(true);
     }
     public void initGradientPalette() {
         setPalette_type(Colors.PALETTE.CUSTOM); palette = new int[num_colors];
@@ -64,6 +65,7 @@ public class ColorConfig implements Serializable {
     }
     private void initColorConfig(int mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
+        setExponentialSmoothing(true);
         setNum_colors(num_colors); setBasecolor(basecolor); setStep(step); initGradientPalette(); setMode(mode);
     }
     public ColorConfig(int mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(false);}
@@ -83,7 +85,7 @@ public class ColorConfig implements Serializable {
     }
     private void initColorConfig(int mode, int num_colors, boolean byParts, boolean logIndex) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setNum_colors(num_colors);
-        initRandomPalette(num_colors, false); setMode(mode);
+        setExponentialSmoothing(true); initRandomPalette(num_colors, false); setMode(mode);
     }
     public void initRandomPalette(int num_colors, boolean preserve) {
         setPalette_type(Colors.PALETTE.RANDOM); if (!preserve) {
@@ -101,6 +103,7 @@ public class ColorConfig implements Serializable {
     public ColorConfig() {palette = null; setPalette_type(Colors.PALETTE.RANDOM); initColorConfig(0, 0, 0x0, 0, false, false);}
     public ColorConfig(ColorConfig old) {
         initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts(), old.isLogIndex());
+        setExponentialSmoothing(old.isExponentialSmoothing());
         setPalette(old.getPalette(), false); colors_corrected = old.colors_corrected;
     }
     public boolean isLogIndex() {return logIndex;}
@@ -144,6 +147,8 @@ public class ColorConfig implements Serializable {
     public void setMode(int mode) {
         this.mode = mode;
     }
+    public boolean isExponentialSmoothing() {return exponentialSmoothing;}
+    public void setExponentialSmoothing(boolean exponentialSmoothing) {this.exponentialSmoothing = exponentialSmoothing;}
     public static int toRGB(int r, int g, int b) {
         if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
             throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
@@ -240,8 +245,6 @@ public class ColorConfig implements Serializable {
     public void setPalette_type(int palette_type) {
         this.palette_type = palette_type;
     }
-    public boolean isExponentialSmoothing() {return exponentialSmoothing;}
-    public void setExponentialSmoothing(boolean exponentialSmoothing) {this.exponentialSmoothing = exponentialSmoothing;}
     public void fromString(String[] colors) {
         String type = colors[0]; mode = Integer.valueOf(colors[1]); byParts = Boolean.valueOf(colors[2]);
         int offset = 0; try {
