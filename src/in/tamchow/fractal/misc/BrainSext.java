@@ -22,7 +22,7 @@ import java.util.Scanner;
  * 2. '[' indicates start of loop
  * 3. 'G' will execute next operation if value at pointer is greater than value in storage, which is by default -1;
  * 4. 2 is the index in the code string relative to the currently executing operand to jump to,
- * if the condition is not met.
+ * if the condition ('G') is not met.
  * 5. '.' outputs the character representation of the value at the pointer
  * 6. ']' indicates end of loop
  */
@@ -66,8 +66,8 @@ public class BrainSext {
         while (code.contains("{") && code.contains("}")) {
             int i1 = code.indexOf('{'), i2 = code.indexOf('}'); code = code.replace(code.substring(i1, i2 + 1), "");
         } //load appended data,if any
-        if (code.contains("h") && code.length() > code.indexOf('h') + 1) {
-            String data = code.substring(code.indexOf('h') + 1, code.length());
+        if (code.contains("\\") && code.length() > code.indexOf('\\') + 1) {
+            String data = code.substring(code.indexOf('\\') + 1, code.length());
             for (int i = 0; i < data.length() && i < size; i++) {operand[i] = data.charAt(i);}
         } outer:
         for (int i = 0; i < code.length(); ) {
@@ -138,8 +138,8 @@ public class BrainSext {
                 case '^': ptr = operand[ptr]; ptr = MathUtils.boundsProtected(ptr, size); break;
                 case '&': operand[ptr] = MathUtils.boundsProtected(operand[ptr], size); operand[ptr] = operand[operand[ptr]]; break;
                 case ';': int c = 0; if (numAfter(i)) {
-                    c = StringManipulator.getNumFromIndex(code, i);
-                } if (c > 0) {i = StringManipulator.nthIndex(code, ']', i, c) + 1;} else if (c < 0) {
+                    c = StringManipulator.getNumFromIndex(code, i); i = indexAfterSkipLiteral(i, c);
+                } if (c > 0) {i = StringManipulator.nthIndex(code, ']', i, c);} else if (c < 0) {
                     i = StringManipulator.nthIndexBackwards(code, '[', i, c);
                 } i = MathUtils.boundsProtected(i, code.length()); continue outer;
                 case ',': try {operand[ptr] = System.in.read();} catch (IOException e) {
@@ -175,6 +175,6 @@ public class BrainSext {
         return ((i + 1 < code.length() - 1) && (Character.isDigit(code.charAt(i + 1)) || code.charAt(i + 1) == '_'));
     }
     int indexAfterSkipLiteral(int index, int literal) {
-        return index += (literal + "").length();
+        return index + (literal + "").length();
     }
 }
