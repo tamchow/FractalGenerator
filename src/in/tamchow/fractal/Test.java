@@ -40,7 +40,7 @@ public class Test {
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
             if (constant != null) {jgen.generate(iter, escrad, constant);} else {
-                jgen.zoom(300, 430, 2); jgen.generate(iter, escrad);
+                jgen.generate(iter, escrad);
             }
         } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");

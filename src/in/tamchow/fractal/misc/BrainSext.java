@@ -79,7 +79,9 @@ public class BrainSext {
                 } break; case 'u': for (int j = 0; j < code.length() && j < operand.length; j++) {
                     code += "" + (char) operand[j];
                 } initMemory(); continue outer;
-                case '(': procidx[proctr] = i + 1; i = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]) + 1; proctr++; break;
+                case '(': procidx[proctr] = i + 1; i = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]) + 1; if (i == 0) {
+                    setOutput("Unmatched ( for procedure declaration at " + i + "\n", ERROR);
+                } i = MathUtils.boundsProtected(i, code.length()); proctr++; break;
                 case ')': break;//skip this over, index will be updated anyway
                 case '[': if (StringManipulator.findMatchingCloser('[', code, i - 1) == -1) {
                     setOutput("Unmatched [ at " + i + "\n", ERROR);
