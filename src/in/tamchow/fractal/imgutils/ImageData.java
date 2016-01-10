@@ -68,8 +68,8 @@ public class ImageData {
         } return output;
     }
     public synchronized int getPixel(int y, int x) {
-        if (x < 0) {x = MathUtils.boundsProtected(x, getWidth()); y--;}
-        if (x >= getWidth()) {x = MathUtils.boundsProtected(x, getWidth()); y++;}
+        if (x < 0) {y -= x / getWidth(); x = MathUtils.boundsProtected(x, getWidth());}
+        if (x >= getWidth()) {y += x / getWidth(); x = MathUtils.boundsProtected(x, getWidth());}
         y = MathUtils.boundsProtected(y, getHeight()); return pixdata[y][x];
     }
     public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
