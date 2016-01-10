@@ -4,6 +4,7 @@ import in.tamchow.fractal.config.Printable;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
+import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.Transition;
 
@@ -102,7 +103,12 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 } try {Thread.sleep(1000 * imgconf.getParams()[i].getWait());} catch (InterruptedException ignored) {}
             } else {
                 if (!zoomedin) {current = new ComplexFractalGenerator(fracconf.getParams()[i], this);}
-                current.generate(fracconf.getParams()[i]); todraw = ImageConverter.toImage(current.getArgand());
+                if (fracconf.getParams()[i].useThreadedGenerator()) {
+                    ThreadedComplexFractalGenerator tcfg = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[i]);
+                    tcfg.generate();
+                } else {
+                    current.generate(fracconf.getParams()[i]);
+                } todraw = ImageConverter.toImage(current.getArgand());
                 zoomedin = false; paint(this.getGraphics());
                 try {Thread.sleep(1000 * fracconf.getWait());} catch (InterruptedException ignored) {}
             } if (i == img.length - 1 && running) {ctr = 0; i = ctr; continue;}i++;}}
