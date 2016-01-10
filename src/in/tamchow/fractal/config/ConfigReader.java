@@ -52,10 +52,12 @@ public class ConfigReader {
     }
     public static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String thread_data = null, post_process_mode = null; while (in.hasNext()) {
+        String thread_data = null, post_process_mode = null, switch_rate = null; while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Threads:")) {
                 thread_data = line.substring("Threads:".length()).trim(); continue;}
-            if (line.startsWith("Postprocessing:")) {
+            if (line.startsWith("Switch_Mode_Rate:")) {
+                switch_rate = line.substring("Switch_Mode_Rate:".length()).trim(); continue;
+            } if (line.startsWith("Postprocessing:")) {
                 post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
@@ -72,6 +74,7 @@ public class ConfigReader {
         if (thread_data != null) {complexFractalParams.threadDataFromString(thread_data);}
         if (post_process_mode != null) {complexFractalParams.setPostprocessMode(Integer.valueOf(post_process_mode));}
         if (zooms != null) {complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
+        if (switch_rate != null) {complexFractalParams.initParams.setSwitch_rate(Integer.valueOf(switch_rate));}
         return complexFractalParams;
     }
     public static IFSFractalConfig getIFSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
