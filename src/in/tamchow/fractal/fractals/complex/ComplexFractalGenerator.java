@@ -77,6 +77,7 @@ public class ComplexFractalGenerator implements Serializable {
         }
     }
     public Complex fromCooordinates(int x, int y) {
+        x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
         return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
     }
     public void resetCentre() {
@@ -760,9 +761,10 @@ public class ComplexFractalGenerator implements Serializable {
         return colortmp;
     }
     public int[] toCooordinates(Complex point) {
+        point = ComplexOperations.subtract(point, centre_offset);
         int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
-        if (x < 0) {x = 0;} if (y < 0) {y = 0;} if (x >= argand.getWidth()) {x = argand.getWidth() - 1;}
-        if (y >= argand.getHeight()) {y = argand.getHeight() - 1;} return new int[]{x, y};
+        x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
+        return new int[]{x, y};
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}

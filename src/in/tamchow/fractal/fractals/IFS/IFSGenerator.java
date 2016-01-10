@@ -39,9 +39,11 @@ public class IFSGenerator {
         setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));}
     public Matrix fromCooordinates(int x, int y) {
+        x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
         double[][] matrixData = new double[2][1]; matrixData[0][0] = ((((double) x) - center_x) / scale);
         matrixData[1][0] = ((center_y - ((double) y)) / scale);
-        return MatrixOperations.add(centre_offset, new Matrix(matrixData));}
+        return MatrixOperations.add(new Matrix(matrixData), centre_offset);
+    }
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2); setCenter_y(plane.getHeight() / 2); double[][] matrixData = new double[2][1];
         matrixData[0][0] = 0; matrixData[1][0] = 0; setCentre_offset(new Matrix(matrixData));}
@@ -96,10 +98,11 @@ public class IFSGenerator {
         return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
     public int[] toCooordinates(Matrix point) {
+        MatrixOperations.subtract(point, centre_offset);
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
-        if (x < 0) {x = 0;} if (y < 0) {y = 0;} if (x >= plane.getWidth()) {
-            x = plane.getWidth() - 1;
-        } if (y >= plane.getHeight()) {y = plane.getHeight() - 1;} return new int[]{x, y};}
+        x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
+        return new int[]{x, y};
+    }
     public synchronized void publishProgress(long val) {
         progressPublisher.println("% completion= " + (((float) val) / depth) * 100.0 + "%");
     }
