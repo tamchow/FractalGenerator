@@ -80,9 +80,9 @@ public class ComplexFractalGenerator implements Serializable {
         return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
     }
     public void resetCentre() {
-        setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2);
-        centre_offset = new Complex(Complex.ZERO);
+        setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
     }
+    public void resetCentre_Offset() {centre_offset = new Complex(Complex.ZERO);}
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Printable progressPublisher, int switch_rate) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, tolerance, new Complex(-1, 0), color, switch_rate);
         this.progressPublisher = progressPublisher;
@@ -371,6 +371,16 @@ public class ComplexFractalGenerator implements Serializable {
     }
     public synchronized void setLastConstant(Complex value) {
         consts[getLastConstantIndex()][1] = value.toString(); lastConstant = new Complex(value);
+    }
+    public synchronized int getLastConstantIndex() {
+        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
+            if (getConstantIndex(parts[i]) != -1) {
+                setLastConstantIdx(getConstantIndex(parts[i])); return lastConstantIdx;
+            }
+        } return -1;
+    }
+    public synchronized int getConstantIndex(String constant) {
+        for (int i = 0; i < consts.length; i++) {if (consts[i][0].equals(constant)) {return i;}} return -1;
     }
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack last = new FixedStack(iterations + 2);
@@ -760,27 +770,11 @@ public class ComplexFractalGenerator implements Serializable {
     public void resetBasePrecision() {
         setBase_precision((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
-    public void mandelbrotToJulia(int cx, int cy, double level) {changeMode(); zoom(cx, cy, level);}
-    public void zoom(int cx, int cy, double level) {
-        cx = MathUtils.boundsProtected(cx, argand.getWidth()); cy = MathUtils.boundsProtected(cy, argand.getHeight());
-        setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
-        setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
-    }
-    private void changeMode() {
-        setLastConstant(getLastConstant());
+    public void mandelbrotToJulia(Matrix constant, double level) {zoom(constant, level); changeMode(centre_offset); resetCentre();}
+    private void changeMode(Complex lastConstant) {
+        setLastConstant(lastConstant);
         setMode((mode == MODE_BUDDHABROT) ? MODE_JULIABROT : ((mode == MODE_MANDELBROT) ? MODE_JULIA : mode));
     }
-    public synchronized int getLastConstantIndex() {
-        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
-            if (getConstantIndex(parts[i]) != -1) {
-                setLastConstantIdx(getConstantIndex(parts[i])); return lastConstantIdx;
-            }
-        } return -1;
-    }
-    public synchronized int getConstantIndex(String constant) {
-        for (int i = 0; i < consts.length; i++) {if (consts[i][0].equals(constant)) {return i;}} return -1;
-    }
-    public void mandelbrotToJulia(Matrix centre_offset, double level) {changeMode(); zoom(centre_offset, level);}
     public void zoom(Matrix centre_offset, double level) {
         zoom(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0)), level);
     }
@@ -788,6 +782,12 @@ public class ComplexFractalGenerator implements Serializable {
         setCentre_offset(centre_offset); setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
         populateMap();
     }
-    public void mandelbrotToJulia(Complex centre_offset, double level) {changeMode(); zoom(centre_offset, level);}
-    public void mandelbrotToJulia(ZoomParams zoom) {changeMode(); zoom(zoom);}
+    public void mandelbrotToJulia(int cx, int cy, double level) {zoom(cx, cy, level); changeMode(centre_offset); resetCentre();}
+    public void zoom(int cx, int cy, double level) {
+        cx = MathUtils.boundsProtected(cx, argand.getWidth()); cy = MathUtils.boundsProtected(cy, argand.getHeight());
+        setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
+        setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
+    }
+    public void mandelbrotToJulia(Complex constant, double level) {zoom(constant, level); changeMode(centre_offset); resetCentre();}
+    public void mandelbrotToJulia(ZoomParams zoom) {zoom(zoom); changeMode(centre_offset); resetCentre();}
 }
