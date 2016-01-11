@@ -6,8 +6,7 @@ import in.tamchow.fractal.misc.StringManipulator;
  */
 public class FunctionEvaluator {
     private String[][] constdec;
-    private String z_value;
-    private String variableCode;
+    private String z_value, oldvalue, variableCode;
     private boolean hasBeenSubstituted;
     private boolean advancedDegree;
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, boolean advancedDegree) {
@@ -23,6 +22,8 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
+    public String getOldvalue() {return oldvalue;}
+    public void setOldvalue(String oldvalue) {this.oldvalue = oldvalue;}
     public boolean isAdvancedDegree() {
         return advancedDegree;
     }
@@ -137,6 +138,8 @@ public class FunctionEvaluator {
                         ++i;
                     } break; case "inv": ztmp = ztmp.inverse(); if (i < (processed.length - 1)) {++i;} break;
                     case "conj": ztmp = ztmp.conjugate(); if (i < (processed.length - 1)) {++i;} break;
+                    case "re": ztmp = new Complex(ztmp.real(), 0); if (i < (processed.length - 1)) {++i;} break;
+                    case "im": ztmp = new Complex(0, ztmp.imaginary()); if (i < (processed.length - 1)) {++i;} break;
                     default: ztmp = new Complex(processed[i]);
                 }
             } catch (ArrayIndexOutOfBoundsException ae) {
@@ -152,6 +155,8 @@ public class FunctionEvaluator {
     private String substitute(String expr, boolean isSymbolic) {
         String[] mod = expr.split(" "); String sub = ""; for (int i = 0; i < mod.length; i++) {
             if (mod[i].equals(variableCode) && (!isSymbolic)) {
+                mod[i] = "" + z_value;
+            } else if ((mod[i].equalsIgnoreCase("old")) && (!isSymbolic)) {
                 mod[i] = "" + z_value;
             } else if (getConstant(mod[i]) != null) {mod[i] = getConstant(mod[i]);}
         } for (String aMod : mod) {sub += aMod + " ";} return sub.trim();

@@ -5,6 +5,7 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,13 +53,16 @@ public class ConfigReader {
     }
     public static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String thread_data = null, post_process_mode = null, switch_rate = null; while (in.hasNext()) {
+        String thread_data = null, post_process_mode = null, switch_rate = null, trap_point = null;
+        while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Threads:")) {
                 thread_data = line.substring("Threads:".length()).trim(); continue;}
             if (line.startsWith("Switch_Mode_Rate:")) {
                 switch_rate = line.substring("Switch_Mode_Rate:".length()).trim(); continue;
             } if (line.startsWith("Postprocessing:")) {
                 post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
+            } if (line.startsWith("Trap_point:")) {
+                trap_point = line.substring("Trap_point:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
@@ -75,6 +79,7 @@ public class ConfigReader {
         if (post_process_mode != null) {complexFractalParams.setPostprocessMode(Integer.valueOf(post_process_mode));}
         if (zooms != null) {complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (switch_rate != null) {complexFractalParams.initParams.setSwitch_rate(Integer.valueOf(switch_rate));}
+        if (trap_point != null) {complexFractalParams.initParams.setTrap_point(new Complex(trap_point));}
         return complexFractalParams;
     }
     public static IFSFractalConfig getIFSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
