@@ -855,7 +855,7 @@ public class ComplexFractalGenerator implements Serializable {
             } else {
                 colortmp = color.splineInterpolated(index, smoothcount - ((long) smoothcount));
             } break; case Colors.CALCULATIONS.EPSILON_CROSS_LINEAR:
-            case Colors.CALCULATIONS.EPSILON_CROSS_SPLINE: if (escape_radius < 0.15 * base_precision && val > 0) {
+            case Colors.CALCULATIONS.EPSILON_CROSS_SPLINE: if (escape_radius < trap_point.modulus() * base_precision && val > 0) {
                 smoothcount = Math.abs(val - escape_radius);
                 if (color.getMode() == Colors.CALCULATIONS.EPSILON_CROSS_LINEAR) {
                     colortmp = getColor(color.createIndex(escape_radius - (long) escape_radius, 0, 1, scaling), smoothcount - (long) smoothcount);
