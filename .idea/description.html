@@ -6,7 +6,7 @@
 
     There are also Buddhabrot techniques ( naive algorithm ) for each of the above.
     <br>
-    There are 21 different colouring schemes, 10 have linear interpolation, 5 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics (symbolic differentiation) backend.
+    There are 21 different colouring schemes, 14 have linear interpolation, 16 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics (symbolic differentiation) backend.
 
 Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
 The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation.
@@ -16,10 +16,9 @@ Specifying a degree value in the configuration file will also override the calcu
 
 Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B components.
 
-The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring, by default.
+    The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring and Color Distance Estimation,Orbit and Line Traps and Gaussian Distance and Epsilon Cross, by default.
 
-The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct and normalized coloring modes, and linear versions of the spline-interpolant methods.. Distance estimation is also an option.
-    <br>
+    The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation and traps.<br>
     Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
 </head>
 <body>
@@ -50,6 +49,7 @@ The linear interpolant methods have the 3 Newton fractal coloring modes, and the
     <li>Low Contrast Grayscale Mode</li>
     <li>Full custom or base-step, or linear-interpolated control points gradient palette mode by fractional iteration count (interpolation available)</li>
     <li>Randomized palette mode by fractional iteration count (interpolation available)</li>
+    <li>Newton Mode - maximum modulus (linear or spline) or root reached</li>
     </ol>
     <br>
 The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
@@ -64,7 +64,10 @@ The final is distance estimation based grayscale or palette coloring, which is s
     <li>Triangle Area Inequality</li>
     <li>Curvature Average</li>
     <li>Stripe Average</li>
+        <li>Orbit and line traps (min.,max.,average)</li>
     <li>Histogram</li>
+        <li>Gaussian Distance</li>
+        <li>Epsilon Cross Distance</li>
     </ol>
     Also, these modes support Catmull-Rom Spline interpolation.
 

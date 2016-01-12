@@ -50,12 +50,11 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
     }
     public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
     public double arg() {
-        if (a > 0) return Math.atan((ib / a));
-        else if (a < 0 && ib >= 0) return Math.atan((ib / a)) + Math.PI;
-        else if (a < 0 && ib < 0) return Math.atan((ib / a)) - Math.PI;
-        else if (a == 0 && ib > 0) return Math.PI / 2;
-        else if (a == 0 && ib < 0) return -Math.PI / 2;
-        else return Double.NaN;
+        double arg = Math.atan2(ib, a); return (arg < 0) ? arg + 2 * Math.PI : arg;
+        /*if(ib!=0){return 2*Math.atan((modulus()-a)/ib);}
+        else if(a>0&&ib==0){return 0;}
+        else if(a<0&&ib==0){return Math.PI;}
+        else{return Double.NaN;}*/
     }
     public Complex conjugate() {return new Complex(this.a, -this.ib);}
     public Complex inverse() {double c = a * a + ib * ib; return new Complex((a / c), (-(ib / c)));}
