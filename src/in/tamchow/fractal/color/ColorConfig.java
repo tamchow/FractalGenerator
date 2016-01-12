@@ -208,8 +208,14 @@ public class ColorConfig implements Serializable {
     }
     public int splineInterpolated(int index, int index1, double bias) {
         if ((!colors_corrected) && num_colors < 4) {
+            int[] tmppalette = new int[num_colors];
+            if (palette != null) System.arraycopy(palette, 0, tmppalette, 0, palette.length);
             num_colors = 4; initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex);
-            if (palette_type == Colors.PALETTE.RANDOM) {
+            if (palette != null && palette.length > 0) {
+                int j = 0; for (int i = 0; i < num_colors; i++) {
+                    if (j == tmppalette.length - 1) {j = 0;} palette[i] = tmppalette[j];
+                }
+            } else if (palette_type == Colors.PALETTE.RANDOM) {
                 initRandomPalette(num_colors, true);
             } else {initGradientPalette();} colors_corrected = true;
         }
