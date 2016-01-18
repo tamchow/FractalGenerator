@@ -50,7 +50,7 @@ public class Complex extends Number implements Serializable, Comparable<Complex>
     }
     public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
     public double arg() {
-        double arg = Math.atan2(ib, a); return (arg < 0) ? arg + 2 * Math.PI : arg;
+        return Math.atan2(ib, a); //return (arg < 0) ? arg + 2 * Math.PI : arg;
         /*if(ib!=0){return 2*Math.atan((modulus()-a)/ib);}
         else if(a>0&&ib==0){return 0;}
         else if(a<0&&ib==0){return Math.PI;}

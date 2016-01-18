@@ -34,4 +34,5 @@ public class ComplexOperations {
     public static Complex cos(Complex z) {return new Complex(Math.cos(z.real()) * Math.cosh(z.imaginary()), Math.sin(z.real()) * Math.sinh(z.imaginary()));}
     public static Complex sinh(Complex z) {return new Complex(Math.sinh(z.real()) * Math.cos(z.imaginary()), Math.cosh(z.real()) * Math.sin(z.imaginary()));}
     public static Complex cosh(Complex z) {return new Complex(Math.cosh(z.real()) * Math.cos(z.imaginary()), Math.sinh(z.real()) * Math.sin(z.imaginary()));}
+    public static Complex flip(Complex z) {return new Complex(z.imaginary(), z.real());}
 }
