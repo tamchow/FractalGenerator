@@ -79,24 +79,26 @@ The final is distance estimation based grayscale or palette coloring, which is s
 
 <p>
     NOTES:
-    The fractal generator has the basic framework for being extensible and being multithreaded,
-    but it is currently single-threaded since multithreaded generation has some issues which need to be fleshed out.
+    The fractal generator has the basic framework for being extensible and being multithreaded, and multithreading works,
+    albeit being extremely resource intensive, requiring about a 20x increase in memory requirements for about a 10x
+    speedup during generation (12 threads). Also, there might be OOM errors in very intensive cases.
+    I still encourage people to use multithreading, with up to 14 threads (7*2).
     </p>
     <p>
     Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
     </p>
     <p>
-    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].jpg</pre> as specified in the CMD arguments to the program.
+    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].jpg</pre> in the output directory specified in the CMD arguments to the program.
 </p>
 
 <p>
-    There is also an included image viewer, which can also display fractal images.
+    There is also an included image viewer, which can also display fractal images. Enable it with the <pre>-v</pre>
+    command-line switch.
     <br>
     There is support for elementary image transitions from top, bottom, left and right in the viewer, again configurable.
     <br>
     However, saving of the fractal image and zooming in the viewer are both supported but untested.
     All input to the application is currently handled by:
-
     <ol>
     <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
     </ol>
@@ -105,7 +107,8 @@ Image and Fractal display configuration files are a stickler for format, but do 
 </p>
 
 <p>
-    I did not have time to put in documenting comments. I'll start putting them in and updating files as they get ready.
+    I do not have much time for putting in documenting comments.
+    I'll put them in and update files as and when possible.
 </p>
 </body>
 </html>

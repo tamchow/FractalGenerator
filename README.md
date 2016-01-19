@@ -18,10 +18,11 @@ Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symm
 <p>
     NOTES:
     
-    Multithreading -- A class enabling multithreaded fractal generation has been included, but there is no output.
-    Will have to be debugged.
+    Multithreading -- Multithreading works, but it is extremely resource intensive, requiring about a 20x increase in
+    memory requirements for about a 10x speedup during generation (12 threads). Also, there might be OOM errors in very
+    intensive cases. I still encourage people to use multithreading, with up to 14 threads (7*2).
               
-    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results. Also, total scaling beyond 10<sup>4</sup> might not produce very detailed output, but then I haven't done very extensive tests.
+    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
 </p>
 
 <p>
@@ -38,13 +39,14 @@ Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symm
 </p>
 
 <p>
-  I did not have time to put in documenting comments. I'll start putting them in and updating files as they get ready.
+  I do not have much time for putting in documenting comments.
+      I'll put them in and update files as and when possible.
 </p>
 
 <p>
 Running:
 
-Parameters are optional in test builds, but not in the rlease version. If you have a slow PC and it is defaulted to a FullHD or 4K render,
+Parameters are optional in test builds, but not in the release version. If you have a slow PC and it is defaulted to a FullHD or 4K render,
 be ready to wait upto an hour or more for output. I have an Asus K55VM and on this configuration with CMD I get 30 mins.
 
 This runs substantially faster through Idea itself (9.5 mins for me), no idea why. I use IntelliJ Idea 15.
