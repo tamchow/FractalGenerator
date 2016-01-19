@@ -756,8 +756,10 @@ public class ComplexFractalGenerator implements Serializable {
         }
     }
     public void publishProgress(long ctr, int i, int startx, int endx, int j, int starty, int endy) {
+        if (params != null && (!params.useThreadedGenerator())) {
         float completion = ((float) ((i - starty) * (endx - startx) + (j - startx)) / ((endx - startx) * (endy - starty))) * 100.0f;
-        //progressPublisher.println(ctr + " iterations of " + maxiter + ",completion = " + completion + "%");
+            progressPublisher.println(ctr + " iterations of " + maxiter + ",completion = " + completion + "%");
+        }
     }
     private synchronized int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {
@@ -932,7 +934,7 @@ public class ComplexFractalGenerator implements Serializable {
             case Colors.CALCULATIONS.SIMPLE: colortmp = color.getColor((val * color.color_density) % color.num_colors); break;
             case Colors.CALCULATIONS.SIMPLE_SMOOTH: color1 = color.getColor((val * (iterations * color.color_density)) % color.num_colors); color2 = color.getColor(((val + 1) * (iterations * color.color_density)) % color.num_colors); color3 = color.getColor(((val - 1) * (iterations * color.color_density)) % color.num_colors); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts());
                 break;
-            case Colors.CALCULATIONS.COLOR_DIVIDE_DIRECT: color1 = (0xffffff / val); color2 = (0xffffff / (val + 1)); color3 = (0xffffff / (val - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts()); break;
+            case Colors.CALCULATIONS.COLOR_DIVIDE_DIRECT: val = (val == 0) ? iterations + 1 : (val - 1 == 0) ? iterations + 2 : val; color1 = (0xffffff / val); color2 = (0xffffff / (val + 1)); color3 = (0xffffff / (val - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts()); break;
             case Colors.CALCULATIONS.COLOR_DIVIDE_NORMALIZED: color1 = (int) (0xffffff / renormalized); color2 = (int) (0xffffff / (renormalized + 1)); color3 = (int) (0xffffff / (renormalized - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts()); break;
             case Colors.CALCULATIONS.COLOR_GRAYSCALE_HIGH_CONTRAST: colortmp = ColorConfig.toGray(val * iterations); break;
             case Colors.CALCULATIONS.SIMPLE_DISTANCE_ESTIMATION: calc = Math.abs((double) val / iterations); if (calc > 1) {
