@@ -36,22 +36,23 @@ public class ColorConfig implements Serializable {
         }
     }
     public int getTint(int color, double tint) {
-        int r = separateRGB(color, Colors.RGBCOMPONENTS.RED); int g = separateRGB(color, Colors.RGBCOMPONENTS.GREEN);
-        int b = separateRGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r + (255 - r) * tint);
+        int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
+        int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r + (255 - r) * tint);
         int ng = (int) (g + (255 - g) * tint); int nb = (int) (b + (255 - b) * tint);
-        return (nr << 16) | (ng << 8) | (nb);
+        return packRGB(nr,ng,nb);
     }
-    public static int separateRGB(int color, int component) {
-        int part = 0; switch (component) {
-            case Colors.RGBCOMPONENTS.RED: part = (color >> 16) & 0xFF; break;
-            case Colors.RGBCOMPONENTS.GREEN: part = (color >> 8) & 0xFF; break;
-            case Colors.RGBCOMPONENTS.BLUE: part = (color) & 0xFF; break;
-            default: throw new IllegalArgumentException("Cannot extract unknown part of 24-bit packed RGB");
-        } return part;
-    }
+    public static double colorSeparation(int color1,int color2){
+        int r1=separateARGB(color1, Colors.RGBCOMPONENTS.RED),r2=separateARGB(color2, Colors.RGBCOMPONENTS.RED),
+                g1=separateARGB(color1, Colors.RGBCOMPONENTS.GREEN),g2=separateARGB(color2, Colors.RGBCOMPONENTS.GREEN),
+                b1=separateARGB(color1, Colors.RGBCOMPONENTS.BLUE),b2=separateARGB(color2, Colors.RGBCOMPONENTS.BLUE);
+        return Math.sqrt((r2-r1)*(r2-r1)+(g2-g1)*(g2-g1)+(b2-b1)*(b2-b1));}
+    public static int separateARGB(int color, int component) {return (color>>(component*8))&0xFF;}
+    public static int packARGB(int a,int r,int g,int b){return a<<(Colors.RGBCOMPONENTS.ALPHA*8)|r<<(Colors.RGBCOMPONENTS.RED*8)|g<<(Colors.RGBCOMPONENTS.GREEN*8)| b;}
+    public static int packRGB(int r,int g,int b){
+        return r<<(Colors.RGBCOMPONENTS.RED*8)|g<<(Colors.RGBCOMPONENTS.GREEN*8)| b;}
     public int getShade(int color, double shade) {
-        int r = separateRGB(color, Colors.RGBCOMPONENTS.RED); int g = separateRGB(color, Colors.RGBCOMPONENTS.GREEN);
-        int b = separateRGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r * (1 - shade));
+        int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
+        int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r * (1 - shade));
         int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade)); return (nr << 16) | (ng << 8) | (nb);
     }
     private void calcStep() {
@@ -90,13 +91,13 @@ public class ColorConfig implements Serializable {
     public void initRandomPalette(int num_colors, boolean preserve) {
         if (!preserve) {
             palette = new int[num_colors]; for (int pidx = 0; pidx < num_colors; pidx++) {
-                palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
+                palette[pidx] =packRGB(((int) (Math.random() * 255)),((int) (Math.random() * 255)),((int) (Math.random() * 255)));
             }
         } else {
             int[] randtmp = new int[palette.length]; System.arraycopy(palette, 0, randtmp, 0, palette.length);
             palette = new int[num_colors]; System.arraycopy(randtmp, 0, palette, 0, randtmp.length);
             for (int pidx = randtmp.length; pidx < num_colors; pidx++) {
-                palette[pidx] = (((int) (Math.random() * 255)) << 16 | ((int) (Math.random() * 255)) << 8 | ((int) (Math.random() * 255)));
+                palette[pidx] = packRGB(((int) (Math.random() * 255)),((int) (Math.random() * 255)),((int) (Math.random() * 255)));
             }
         }
     }
@@ -149,27 +150,28 @@ public class ColorConfig implements Serializable {
     }
     public boolean isExponentialSmoothing() {return exponentialSmoothing;}
     public void setExponentialSmoothing(boolean exponentialSmoothing) {this.exponentialSmoothing = exponentialSmoothing;}
+    public static int toGray(int common){return toRGB(common,common,common);}
     public static int toRGB(int r, int g, int b) {
         if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
-            throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
-        } return r << 16 | g << 8 | b;
-    }
+            r=Math.abs(r);g=Math.abs(g);b=Math.abs(b);r%=255;g%=255;b%=255;
+            //throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
+        } return packRGB(r,g,b);}
     public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, boolean byParts) {
-        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);
-    }
+        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);}
     public static int linearInterpolated(int fromcolor, int tocolor, double bias, boolean byParts) {
+        bias=(bias<0)?-bias:bias;bias=(bias>1)?bias-(long)bias:bias;
         if (tocolor < fromcolor) {bias = 1 - bias;} if (byParts) {
-            int fr = separateRGB(fromcolor, Colors.RGBCOMPONENTS.RED);
-            int fg = separateRGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
-            int fb = separateRGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
-            int tr = separateRGB(tocolor, Colors.RGBCOMPONENTS.RED);
-            int tg = separateRGB(tocolor, Colors.RGBCOMPONENTS.GREEN);
-            int tb = separateRGB(tocolor, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (tr * bias + fr * (1 - bias));
-            int ng = (int) (tg * bias + fg * (1 - bias)); int nb = (int) (tb * bias + fb * (1 - bias));
-            return nr << 16 | ng << 8 | nb;
-        } return (int) (tocolor * bias + fromcolor * (1 - bias));
-    }
-    public void createSmoothPalette(int[] control_colors, double[] control_points, boolean useSpline) {
+            int fr = separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED);
+            int fg = separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
+            int fb = separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
+            int tr = separateARGB(tocolor, Colors.RGBCOMPONENTS.RED);
+            int tg = separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN);
+            int tb = separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE);
+            int nr = Math.round((float)(tr * bias + fr * (1 - bias)));
+            int ng = Math.round((float)(tg * bias + fg * (1 - bias)));
+            int nb = Math.round((float)(tb * bias + fg * (1 - bias)));
+            return toRGB(nr,ng,nb);} return Math.round((float)(tocolor * bias + fromcolor * (1 - bias)));
+    }public void createSmoothPalette(int[] control_colors, double[] control_points, boolean useSpline) {
         palette = new int[num_colors];
         int[] controls = new int[control_points.length]; int color_density_backup = color_density;
         color_density = num_colors;
@@ -227,24 +229,25 @@ public class ColorConfig implements Serializable {
         } else {i2 = index1 + 1; i3 = index - 1;}
         if (byParts) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
-            r1 = separateRGB(getColor(index), Colors.RGBCOMPONENTS.RED);
-            r2 = separateRGB(getColor(index1), Colors.RGBCOMPONENTS.RED);
-            r3 = separateRGB(getColor(i2), Colors.RGBCOMPONENTS.RED);
-            r4 = separateRGB(getColor(i3), Colors.RGBCOMPONENTS.RED);
-            g1 = separateRGB(getColor(index), Colors.RGBCOMPONENTS.GREEN);
-            g2 = separateRGB(getColor(index1), Colors.RGBCOMPONENTS.GREEN);
-            g3 = separateRGB(getColor(i2), Colors.RGBCOMPONENTS.GREEN);
-            g4 = separateRGB(getColor(i3), Colors.RGBCOMPONENTS.GREEN);
-            b1 = separateRGB(getColor(index), Colors.RGBCOMPONENTS.BLUE);
-            b2 = separateRGB(getColor(index1), Colors.RGBCOMPONENTS.BLUE);
-            b3 = separateRGB(getColor(i2), Colors.RGBCOMPONENTS.BLUE);
-            b4 = separateRGB(getColor(i3), Colors.RGBCOMPONENTS.BLUE);
-            int nr = (int) Math.abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4);
-            int ng = (int) Math.abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4);
-            int nb = (int) Math.abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4); return nr << 16 | ng << 8 | nb;
+            r1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.RED);
+            r2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.RED);
+            r3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.RED);
+            r4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.RED);
+            g1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.GREEN);
+            g2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.GREEN);
+            g3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.GREEN);
+            g4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.GREEN);
+            b1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.BLUE);
+            b2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.BLUE);
+            b3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.BLUE);
+            b4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.BLUE);
+            int nr = Math.round((float)Math.abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
+            int ng = Math.round((float)Math.abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
+            int nb = Math.round((float)Math.abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4)); return toRGB(nr,ng,nb);
         } double color = (h0 * palette[index] + h1 * palette[index1] + h2 * palette[i2] + h3 * palette[i3]);
         color = (color < 0) ? -color : color; return (int) color;
     }
+
     public int getPalette_type() {
         return palette_type;
     }

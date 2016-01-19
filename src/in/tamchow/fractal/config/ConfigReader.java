@@ -64,7 +64,7 @@ public class ConfigReader {
             } if (line.startsWith("Trap_point:")) {
                 trap_point = line.substring("Trap_point:".length()).trim(); continue;
             } if (line.startsWith("Trap_line:")) {
-                trap_line = line.substring("Trap_line:".length()).trim(); continue;
+                 trap_line = line.substring("Trap_line:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }

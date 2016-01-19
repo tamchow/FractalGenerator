@@ -17,10 +17,12 @@ import in.tamchow.fractal.platform_tools.ImageDisplay;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 /**
  * Production Main Class: Handles Images, Complex and IFS Fractals. Max. of 2 required arguments.
  */
 public class Main {
+    private static final class Lock{}
     public static void main(String[] args) {
         if (args.length == 0) {System.err.println("Nothing to do."); System.exit(1);}
         if (args[0].equalsIgnoreCase("/BS")) {
@@ -48,9 +50,9 @@ public class Main {
                     ComplexFractalParams params = cfg.getParams()[i];
                     ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
                     if (params.useThreadedGenerator()) {
-                        ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator, params);
-                        threaded.generate();
-                    } else {
+                        Object lock=new Lock();
+                        ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator, params,lock);
+                        threaded.generate();} else {
                         generator.generate(params);
                     } File outputFile = new File(args[1] + "/Fractal_" + i + ".jpg");
                     if (params.getPostprocessMode() != -1) {

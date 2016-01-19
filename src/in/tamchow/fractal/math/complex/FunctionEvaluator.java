@@ -140,6 +140,7 @@ public class FunctionEvaluator {
                     case "conj": ztmp = ztmp.conjugate(); if (i < (processed.length - 1)) {++i;} break;
                     case "re": ztmp = new Complex(ztmp.real(), 0); if (i < (processed.length - 1)) {++i;} break;
                     case "im": ztmp = new Complex(0, ztmp.imaginary()); if (i < (processed.length - 1)) {++i;} break;
+                    case "flip": ztmp = ComplexOperations.flip(ztmp); if (i < (processed.length - 1)) {++i;} break;
                     default: ztmp = new Complex(processed[i]);
                 }
             } catch (ArrayIndexOutOfBoundsException ae) {

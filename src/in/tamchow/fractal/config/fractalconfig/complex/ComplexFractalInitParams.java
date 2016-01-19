@@ -18,19 +18,16 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public double tolerance, zoom, zoom_factor, base_precision;
     public Complex degree, trap_point;
     public ColorConfig color;
-    public boolean flip;
     public ComplexFractalInitParams(ComplexFractalInitParams initParams) {
-        initParams(initParams.width, initParams.height, initParams.zoom, initParams.zoom_factor, initParams.base_precision, initParams.fractal_mode, initParams.function, initParams.consts, initParams.variableCode, initParams.tolerance, initParams.degree, initParams.getColor(), initParams.switch_rate, initParams.trap_point, initParams.linetrap, initParams.isFlip());
+        initParams(initParams.width, initParams.height, initParams.zoom, initParams.zoom_factor, initParams.base_precision, initParams.fractal_mode, initParams.function, initParams.consts, initParams.variableCode, initParams.tolerance, initParams.degree, initParams.getColor(), initParams.switch_rate, initParams.trap_point, initParams.linetrap);
     }
-    public boolean isFlip() {return flip;}
-    public void setFlip(boolean flip) {this.flip = flip;}
     public ColorConfig getColor() {
         return new ColorConfig(color);
     }
     public void setColor(ColorConfig color) {
         this.color = new ColorConfig(color);
     }
-    private void initParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, Complex degree, ColorConfig colors, int switch_rate, Complex trap_point, String linetrap, boolean flip) {
+    private void initParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, Complex degree, ColorConfig colors, int switch_rate, Complex trap_point, String linetrap) {
         this.width = width;
         this.height = height;
         this.zoom = zoom;
@@ -40,7 +37,7 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         this.function = function; this.switch_rate = switch_rate;
         setConsts(consts);
         this.variableCode = variableCode; this.tolerance = tolerance; this.degree = new Complex(degree);
-        setColor(colors); setTrap_point(trap_point); this.flip = flip; this.linetrap = linetrap;
+        setColor(colors); setTrap_point(trap_point); this.linetrap = linetrap;
     }
     private void setConsts(String[][] consts) {
         this.consts = new String[consts.length][consts[0].length];
@@ -49,13 +46,19 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         }
     }
     public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, Complex degree, ColorConfig color, int switch_rate, Complex trap_point) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, degree, color, switch_rate, trap_point, null, false);
+        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, degree, color, switch_rate, trap_point, null);
+    }
+    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point) {
+        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance,new Complex(-1), color, switch_rate, trap_point, null);
+    }
+    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point,String linetrap) {
+        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance,new Complex(-1), color, switch_rate, trap_point, linetrap);
     }
     public ComplexFractalInitParams() {
         String func = "z ^ 2 + c"; String[][] consts = {{"c", "-0.8,+0.156i"}};
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE, 19, 16, true, true);
         cfg.setPalette(new int[]{ColorConfig.toRGB(66, 30, 15), ColorConfig.toRGB(25, 7, 26), ColorConfig.toRGB(9, 1, 47), ColorConfig.toRGB(4, 4, 73), ColorConfig.toRGB(0, 7, 100), ColorConfig.toRGB(12, 44, 138), ColorConfig.toRGB(24, 82, 177), ColorConfig.toRGB(57, 125, 209), ColorConfig.toRGB(134, 181, 229), ColorConfig.toRGB(211, 236, 248), ColorConfig.toRGB(241, 233, 191), ColorConfig.toRGB(248, 201, 95), ColorConfig.toRGB(255, 170, 0), ColorConfig.toRGB(204, 128, 0), ColorConfig.toRGB(153, 87, 0), ColorConfig.toRGB(106, 52, 3)}, false);
-        initParams(1921, 1081, 10, 0, 540, ComplexFractalGenerator.MODE_JULIA, func, consts, "z", 1e-5, new Complex("-1"), cfg, 0, Complex.ZERO, null, false);
+        initParams(1921, 1081, 10, 0, 540, ComplexFractalGenerator.MODE_JULIA, func, consts, "z", 1e-5, new Complex("-1"), cfg, 0, Complex.ZERO, null);
     }
     public String getLinetrap() {return linetrap;}
     public void setLinetrap(String linetrap) {this.linetrap = linetrap;}
@@ -79,7 +82,6 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         this.width = width; this.height = height; this.zoom = zoom; this.zoom_factor = zoom_factor;
         this.base_precision = base_precision; this.fractal_mode = fractal_mode; this.function = function;
         this.switch_rate = switch_rate; setConsts(consts); this.variableCode = variableCode; this.tolerance = tolerance;
-        this.degree = new Complex(degree); setColor(colors); setTrap_point(Complex.ZERO); this.flip = false;
-        this.linetrap = null;
+        this.degree = new Complex(degree); setColor(colors); setTrap_point(Complex.ZERO);this.linetrap = null;
     }
 }

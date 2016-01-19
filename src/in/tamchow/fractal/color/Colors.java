@@ -10,6 +10,6 @@ public final class Colors {
         public static final int RANDOM_PALETTE = 0, CUSTOM_PALETTE = 1, GRADIENT_PALETTE = 2, SMOOTH_PALETTE_LINEAR = 3, SMOOTH_PALETTE_SPLINE = 4, SHADE_PALETTE = 5;
     }
     public static final class RGBCOMPONENTS {
-        public static final int RED = 0, GREEN = 1, BLUE = 2;
+        public static final int ALPHA=3,RED = 2, GREEN = 1, BLUE = 0;
     }
 }

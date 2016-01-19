@@ -18,6 +18,7 @@ import java.io.File;
  * Swing app to display images & complex number fractals
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Printable {
+    private static final class Lock{}
     BufferedImage[] img;
     Image[] rimg;
     Image todraw;
@@ -83,7 +84,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         id.parent.setVisible(true); Thread thread = new Thread(id); thread.start();
     }
     @Override
-    public void println(String toPrint) {parent.setTitle("Generating Fractal: " + toPrint);}
+    public synchronized void println(String toPrint) {parent.setTitle("Generating Fractal: " + toPrint);}
     @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {
@@ -103,10 +104,9 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 } try {Thread.sleep(1000 * imgconf.getParams()[i].getWait());} catch (InterruptedException ignored) {}
             } else {
                 if (!zoomedin) {current = new ComplexFractalGenerator(fracconf.getParams()[i], this);}
-                if (fracconf.getParams()[i].useThreadedGenerator()) {
-                    ThreadedComplexFractalGenerator tcfg = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[i]);
-                    tcfg.generate();
-                } else {
+                if (fracconf.getParams()[i].useThreadedGenerator()) {Object lock=new Lock();
+                    ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0],lock);
+                    threaded.generate();} else {
                     current.generate(fracconf.getParams()[i]);
                 } todraw = ImageConverter.toImage(current.getArgand());
                 zoomedin = false; paint(this.getGraphics());
