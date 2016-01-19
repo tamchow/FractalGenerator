@@ -57,6 +57,6 @@ For further details, refer to the wiki.
 
 To run:
 
-<pre>java -jar FractalGenerator.jar [path-to-fractal-config-file]</pre>
+<pre>java -jar FractalGenerator.jar [switches] [path-to-fractal-config-file] [options] [output-directory]</pre>
 </p>
 </html>
