@@ -19,7 +19,6 @@ import java.io.IOException;
  * Test class, handles CMDLINE input.
  */
 public class Test {
-    private static final class Lock{}
     public static void main(String[] args) {
         String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + e", variableCode = "z", poly = "{1:z:3};+;{d:z:1};+;{e:z:0}", poly2 = "{f:z:0};sin;{1:z:1}", func2 = "z ^ 2 + f";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"}, {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
@@ -38,23 +37,22 @@ public class Test {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
             } catch (IOException ioe) {ioe.printStackTrace();}
         } long inittime = System.currentTimeMillis(); ComplexFractalGenerator jgen;
-        ComplexFractalParams jgenParams=null;
-        if (def) {
-            jgenParams=new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance,cfg,switch_rate,trap),null);
-            if(constant!=null){ jgenParams.runParams=new ComplexFractalRunParams(iter,escrad,constant);}
-            else {jgenParams.runParams=new ComplexFractalRunParams(iter,escrad);}
-            jgenParams.x_threads=4;jgenParams.y_threads=4;
+        ComplexFractalParams jgenParams = null; if (def) {
+            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null);
+            if (constant != null) { jgenParams.runParams = new ComplexFractalRunParams(iter, escrad, constant);} else {
+                jgenParams.runParams = new ComplexFractalRunParams(iter, escrad);
+            } jgenParams.x_threads = 4; jgenParams.y_threads = 4;
             jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
         } else {jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());}
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
-            if(jgenParams.useThreadedGenerator()){
-                Object lock=new Lock();
-                ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(jgen, jgenParams,lock);
-                threaded.generate();}else{jgen.generate(jgenParams);}
-        } else {jgen.generate(fccfg.getParams()[0]);}
-        long gentime = System.currentTimeMillis();
+            if (jgenParams.useThreadedGenerator()) {
+                Object lock = new Lock();
+                ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(jgen, jgenParams, lock);
+                threaded.generate();
+            } else {jgen.generate(jgenParams);}
+        } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         File pic = new File("D:/Fractal.jpg"); try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand()/*.getPostProcessed(ImageData.INTERPOLATED, jgen.getNormalized_escapes(), jgen.getColor().isByParts())*/), "jpg", pic);
@@ -62,4 +60,5 @@ public class Test {
         System.out.println("Writing image took:" + (endtime - gentime) + "ms");
     }
     static int rgb(int r, int g, int b) {return ColorConfig.toRGB(r, g, b);}
+    private static final class Lock {}
 }

@@ -49,10 +49,10 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, degree, color, switch_rate, trap_point, null);
     }
     public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance,new Complex(-1), color, switch_rate, trap_point, null);
+        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, new Complex(-1), color, switch_rate, trap_point, null);
     }
-    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point,String linetrap) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance,new Complex(-1), color, switch_rate, trap_point, linetrap);
+    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, int fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point, String linetrap) {
+        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, tolerance, new Complex(-1), color, switch_rate, trap_point, linetrap);
     }
     public ComplexFractalInitParams() {
         String func = "z ^ 2 + c"; String[][] consts = {{"c", "-0.8,+0.156i"}};
@@ -82,6 +82,6 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         this.width = width; this.height = height; this.zoom = zoom; this.zoom_factor = zoom_factor;
         this.base_precision = base_precision; this.fractal_mode = fractal_mode; this.function = function;
         this.switch_rate = switch_rate; setConsts(consts); this.variableCode = variableCode; this.tolerance = tolerance;
-        this.degree = new Complex(degree); setColor(colors); setTrap_point(Complex.ZERO);this.linetrap = null;
+        this.degree = new Complex(degree); setColor(colors); setTrap_point(Complex.ZERO); this.linetrap = null;
     }
 }

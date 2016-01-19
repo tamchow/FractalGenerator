@@ -984,13 +984,7 @@
       <workItem from="1452680611703" duration="513000" />
       <workItem from="1453107196119" duration="6679000" />
       <workItem from="1453117018945" duration="3596000" />
-      <workItem from="1453197546520" duration="11335000" />
-    </task>
-    <task id="LOCAL-00060" summary="Final update before next major release">
-      <created>1450603498599</created>
-      <option name="number" value="00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1450603498599</updated>
+      <workItem from="1453197546520" duration="11388000" />
     </task>
     <task id="LOCAL-00061" summary="Final update before next major release">
       <created>1450685561627</created>
@@ -1280,11 +1274,17 @@
       <option name="project" value="LOCAL" />
       <updated>1453120521527</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <task id="LOCAL-00109" summary="Final update before next major release">
+      <created>1453208946504</created>
+      <option name="number" value="00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1453208946504</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="606988000" />
+    <option name="totallyTimeSpent" value="607041000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1402,9 +1402,6 @@
     <MESSAGE value="All String Tokenizations migrated to regex splits&#10;&#10;Zoom algorithm improved&#10;&#10;Methods for string handling&#10;&#10;Better degree calculation for functions involving variable multiplication&#10;or division" />
     <MESSAGE value="Final update before next major release" />
     <option name="LAST_COMMIT_MESSAGE" value="Final update before next major release" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

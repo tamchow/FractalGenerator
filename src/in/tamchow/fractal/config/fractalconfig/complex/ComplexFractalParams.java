@@ -20,8 +20,9 @@ public class ComplexFractalParams implements Serializable {
     }
     public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams) {
         this.initParams = new ComplexFractalInitParams(initParams);
-        if(runParams!=null){this.runParams = new ComplexFractalRunParams(runParams);}
-        this.x_threads = 1; this.y_threads = 1;setPostprocessMode(-1);}
+        if (runParams != null) {this.runParams = new ComplexFractalRunParams(runParams);} this.x_threads = 1;
+        this.y_threads = 1; setPostprocessMode(-1);
+    }
     public ComplexFractalParams(ComplexFractalParams params) {
         this.initParams = new ComplexFractalInitParams(params.initParams);
         this.runParams = new ComplexFractalRunParams(params.runParams); this.x_threads = params.x_threads;

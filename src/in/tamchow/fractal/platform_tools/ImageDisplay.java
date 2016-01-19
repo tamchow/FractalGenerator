@@ -18,7 +18,6 @@ import java.io.File;
  * Swing app to display images & complex number fractals
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Printable {
-    private static final class Lock{}
     BufferedImage[] img;
     Image[] rimg;
     Image todraw;
@@ -104,9 +103,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 } try {Thread.sleep(1000 * imgconf.getParams()[i].getWait());} catch (InterruptedException ignored) {}
             } else {
                 if (!zoomedin) {current = new ComplexFractalGenerator(fracconf.getParams()[i], this);}
-                if (fracconf.getParams()[i].useThreadedGenerator()) {Object lock=new Lock();
-                    ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0],lock);
-                    threaded.generate();} else {
+                if (fracconf.getParams()[i].useThreadedGenerator()) {
+                    Object lock = new Lock();
+                    ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0], lock);
+                    threaded.generate();
+                } else {
                     current.generate(fracconf.getParams()[i]);
                 } todraw = ImageConverter.toImage(current.getArgand());
                 zoomedin = false; paint(this.getGraphics());
@@ -154,4 +155,6 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     @Override
     public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {}}
+    public void mouseExited(MouseEvent e) {}
+    private static final class Lock {}
+}
