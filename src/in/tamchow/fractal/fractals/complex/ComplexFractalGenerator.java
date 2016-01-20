@@ -263,7 +263,7 @@ public class ComplexFractalGenerator implements Serializable {
             case MODE_SECANT: case MODE_SECANTBROT: secantGenerate(start_x, end_x, start_y, end_y, iterations); break;
             default: throw new IllegalArgumentException("Unknown fractal render mode");
         }
-        if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+        if (!params.useThreadedGenerator() && (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR)) {
             double scaling = Math.pow(zoom, zoom_factor);
             int total = 0; for (int i = 0; i < iterations; i += 1) {total += histogram[i];}
             for (int i = start_y; i < end_y; i++) {
