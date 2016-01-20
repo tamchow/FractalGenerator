@@ -2,9 +2,9 @@ package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.Printable;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
+import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
-import in.tamchow.fractal.math.MathUtils;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 

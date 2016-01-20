@@ -1,4 +1,4 @@
-package in.tamchow.fractal.math;
+package in.tamchow.fractal.helpers;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.util.Random;

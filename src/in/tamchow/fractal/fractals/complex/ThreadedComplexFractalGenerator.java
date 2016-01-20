@@ -55,6 +55,8 @@ public class ThreadedComplexFractalGenerator {
                 } double scaling = Math.pow(master.zoom, master.zoom_factor); for (PartImage partImage : buffer) {
                     for (int i = partImage.starty; i < partImage.endy; i++) {
                         for (int j = partImage.startx; j < partImage.endx; j++) {
+                            master.escapedata[i][j] = partImage.escapedata[i][j];
+                            master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
                             if (master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                                 double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
                                 for (int k = 0; k < partImage.escapedata[i][j]; k += 1) {
@@ -109,7 +111,7 @@ public class ThreadedComplexFractalGenerator {
             if (master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                 buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
-                buffer[index] = new PartImage(new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
+                buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
             }
             progress[index] = true; float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
             master.progressPublisher.println("Thread " + index + " has completed, total completion = " + completion + "%");

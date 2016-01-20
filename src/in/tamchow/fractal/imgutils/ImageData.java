@@ -1,7 +1,7 @@
 package in.tamchow.fractal.imgutils;
 import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.HSL;
-import in.tamchow.fractal.math.MathUtils;
+import in.tamchow.fractal.helpers.MathUtils;
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed ARGB in hex values as pixels.
  */
@@ -11,12 +11,12 @@ public class ImageData {
     private int[][] pixdata;
     public ImageData() {
         path = ""; pixdata = new int[801][801]; for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x00000000;}
+            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x000000;}
         }
     }
     public ImageData(int w, int h) {
         path = ""; pixdata = new int[h][w]; for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x00000000;}
+            for (int j = 0; j < pixdata[i].length; j++) {pixdata[i][j] = 0x000000;}
         }
     }
     public ImageData(int[][] pixdata) {path = ""; setPixdata(pixdata);}

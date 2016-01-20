@@ -1,5 +1,6 @@
 package in.tamchow.fractal.misc;
-import in.tamchow.fractal.math.MathUtils;
+import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.StringManipulator;
 
 import java.io.File;
 import java.io.FileNotFoundException;

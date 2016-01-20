@@ -1,4 +1,4 @@
-package in.tamchow.fractal.misc;
+package in.tamchow.fractal.helpers;
 /**
  * Miscellaneous: String Manipulation.
  */

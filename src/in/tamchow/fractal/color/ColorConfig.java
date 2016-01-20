@@ -1,5 +1,5 @@
 package in.tamchow.fractal.color;
-import in.tamchow.fractal.math.MathUtils;
+import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 
