@@ -104,8 +104,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             } else {
                 if (!zoomedin) {current = new ComplexFractalGenerator(fracconf.getParams()[i], this);}
                 if (fracconf.getParams()[i].useThreadedGenerator()) {
-                    Object lock = new Lock();
-                    ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0], lock);
+                    ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
                     threaded.generate();
                 } else {
                     current.generate(fracconf.getParams()[i]);
@@ -156,5 +155,4 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}
-    private static final class Lock {}
 }

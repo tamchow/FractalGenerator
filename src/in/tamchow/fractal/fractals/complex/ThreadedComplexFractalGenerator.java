@@ -6,29 +6,28 @@ import in.tamchow.fractal.math.complex.Complex;
  * Multithreading for the fractal generator
  */
 public class ThreadedComplexFractalGenerator {
-    public final ComplexFractalGenerator master;
-    final Object lock;
+    final ComplexFractalGenerator master;
+    private final Object lock = new Lock();
     boolean[] progress;
     PartImage[] buffer;
     long iterations;
     double escape_radius;
     Complex constant;
     int nx, ny;
-    public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant, Object lock) {
+    public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
         this.master = master;
         this.iterations = iterations;
         this.escape_radius = escape_radius;
         this.constant = constant;
         nx = x_threads;
-        ny = y_threads;
-        progress = new boolean[nx * ny]; buffer = new PartImage[progress.length]; this.lock = lock;
+        ny = y_threads; progress = new boolean[nx * ny]; buffer = new PartImage[progress.length];
     }
-    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config, Object lock) {
+    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config) {
         this.master = master;
         this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
         this.constant = config.runParams.constant; nx = config.x_threads; ny = config.y_threads;
-        progress = new boolean[nx * ny]; buffer = new PartImage[progress.length]; this.lock = lock;
+        progress = new boolean[nx * ny]; buffer = new PartImage[progress.length];
     }
     private int countCompletedThreads() {
         int ctr = 0; for (boolean progression : progress) {
@@ -60,6 +59,7 @@ public class ThreadedComplexFractalGenerator {
             if (!progression) {return false;}
         } return true;
     }
+    private static final class Lock {}
     class SlaveRunner extends Thread {
         ComplexFractalGenerator copyOfMaster;
         Thread executor;

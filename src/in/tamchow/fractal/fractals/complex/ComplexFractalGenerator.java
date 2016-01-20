@@ -924,7 +924,7 @@ public class ComplexFractalGenerator implements Serializable {
     public synchronized int getColor(int i, int j, int val, Complex[] last, double escape_radius, int iterations) {
         int colortmp, colortmp1, colortmp2, color1, color2, color3, index;
         double renormalized, lbnd = 0, ubnd = 1, calc, scaling = Math.pow(zoom, zoom_factor), smoothcount;
-        if (color.isExponentialSmoothing() || mode == MODE_NEWTON || mode == MODE_NEWTONBROT) {
+        if (color.isExponentialSmoothing() || mode == MODE_NEWTON || mode == MODE_NEWTONBROT || mode == MODE_JULIA_NOVA || mode == MODE_JULIA_NOVABROT || mode == MODE_MANDELBROT_NOVA || mode == MODE_MANDELBROT_NOVABROT) {
             smoothcount = normalized_escapes[i][j]; renormalized = smoothcount;
         } else {
             renormalized = getNormalized(val, iterations, last[0], escape_radius);

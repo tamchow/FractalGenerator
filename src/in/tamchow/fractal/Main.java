@@ -49,8 +49,7 @@ public class Main {
                     ComplexFractalParams params = cfg.getParams()[i];
                     ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
                     if (params.useThreadedGenerator()) {
-                        Object lock = new Lock();
-                        ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator, params, lock);
+                        ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator, params);
                         threaded.generate();
                     } else {
                         generator.generate(params);
@@ -74,5 +73,4 @@ public class Main {
             }
         } catch (IOException ioe) {System.out.println("I/O Error: " + ioe.getMessage());}
     }
-    private static final class Lock {}
 }

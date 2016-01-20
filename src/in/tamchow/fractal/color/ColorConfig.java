@@ -47,10 +47,10 @@ public class ColorConfig implements Serializable {
     public int getShade(int color, double shade) {
         int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
         int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r * (1 - shade));
-        int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade)); return (nr << 16) | (ng << 8) | (nb);
+        int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade)); return packRGB(nr, ng, nb);
     }
     private void calcStep() {
-        setStep((0xfffff / (color_density << num_colors)));
+        setStep((basecolor / num_colors) * color_density);
     }
     public ColorConfig(int mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex) {
         initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex);
@@ -154,7 +154,8 @@ public class ColorConfig implements Serializable {
     public static int toGray(int common) {return toRGB(common, common, common);}
     public static int toRGB(int r, int g, int b) {
         if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
-            r = Math.abs(r); g = Math.abs(g); b = Math.abs(b); r %= 255; g %= 255; b %= 255;
+            r = MathUtils.boundsProtected(r, 256); g = MathUtils.boundsProtected(g, 256);
+            b = MathUtils.boundsProtected(b, 256);
             //throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
         } return packRGB(r, g, b);
     }
@@ -172,8 +173,11 @@ public class ColorConfig implements Serializable {
             int tb = separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE);
             int nr = Math.round((float) (tr * bias + fr * (1 - bias)));
             int ng = Math.round((float) (tg * bias + fg * (1 - bias)));
-            int nb = Math.round((float) (tb * bias + fg * (1 - bias))); return toRGB(nr, ng, nb);
+            int nb = Math.round((float) (tb * bias + fb * (1 - bias))); return toRGB(nr, ng, nb);
         } return Math.round((float) (tocolor * bias + fromcolor * (1 - bias)));
+    }
+    public void createSmoothPalette(int[] control_colors, double[] control_points) {
+        createSmoothPalette(control_colors, control_points, false);
     }
     public void createSmoothPalette(int[] control_colors, double[] control_points, boolean useSpline) {
         palette = new int[num_colors];
@@ -190,7 +194,7 @@ public class ColorConfig implements Serializable {
             } else {
                 palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(i - controls[c]), Math.abs(controls[cnext] - controls[c]), isByParts());
             }
-        } if (useSpline) {//mirror the palette about the last colour to make it cyclic.
+        } if (isByParts()) {//mirror the palette about the last colour to make it cyclic.
             num_colors *= 2; int[] tmp = new int[palette.length]; System.arraycopy(palette, 0, tmp, 0, tmp.length);
             palette = new int[num_colors]; System.arraycopy(tmp, 0, palette, 0, tmp.length);
             //Since 2*tmp.length==num_colors
@@ -230,7 +234,9 @@ public class ColorConfig implements Serializable {
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
                 h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1)); int i2, i3; if (index > index1) {
             i2 = index + 1; i3 = index1 - 1;
-        } else {i2 = index1 + 1; i3 = index - 1;}
+        } else {i2 = index1 + 1; i3 = index - 1;} index = MathUtils.boundsProtected(index, palette.length);
+        index1 = MathUtils.boundsProtected(index1, palette.length); i2 = MathUtils.boundsProtected(i2, palette.length);
+        i3 = MathUtils.boundsProtected(i3, palette.length);
         if (byParts) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
             r1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.RED);
