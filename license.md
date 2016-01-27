@@ -1,3 +1,8 @@
+ NOTES:
+ 
+This license encompasses the core program, i.e., FractalGenerator and IFSGenerator including their support classes and the interface classes, as well as the BS esolang interpreter and the RC4 utility.
+ 
+ 
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
