@@ -10,37 +10,30 @@ import in.tamchow.fractal.math.complex.Complex;
 public class ThreadedComplexFractalGenerator {
     final ComplexFractalGenerator master;
     private final Object lock = new Lock();
-    boolean[] progress;
     PartImage[] buffer;
     long iterations;
     double escape_radius;
     Complex constant;
     int nx, ny;
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
-        this.master = master;
-        this.iterations = iterations;
-        this.escape_radius = escape_radius;
-        this.constant = constant;
-        nx = x_threads;
-        ny = y_threads; progress = new boolean[nx * ny]; buffer = new PartImage[progress.length];
+        this.master = master; this.iterations = iterations; this.escape_radius = escape_radius;
+        this.constant = constant; nx = x_threads; ny = y_threads; buffer = new PartImage[nx * ny];
     }
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config) {
-        this.master = master;
-        this.iterations = config.runParams.iterations;
+        this.master = master; this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
         this.constant = config.runParams.constant; nx = config.x_threads; ny = config.y_threads;
-        progress = new boolean[nx * ny]; buffer = new PartImage[progress.length];
+        buffer = new PartImage[nx * ny];
     }
     private int countCompletedThreads() {
-        int ctr = 0; for (boolean progression : progress) {
-            if (progression) ctr++;
-        } return ctr;
+        int ctr = 0; for (PartImage partImage : buffer) {if (partImage != null) ctr++;} return ctr;
     }
-    public void generate() {
+    public void generate() {generate(0, master.argand.getWidth(), 0, master.argand.getHeight());}
+    public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
         for (int i = 0; i < ny; i++) {
             for (int j = 0; j < nx; j++) {
-                int[] coords = master.start_end_coordinates(nx, j, ny, i);
+                int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, j, ny, i);
                 SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
                 master.getProgressPublisher().println("Initiated thread: " + idx); idx++; runner.start();
             }
@@ -82,8 +75,8 @@ public class ThreadedComplexFractalGenerator {
         } catch (Exception e) {master.getProgressPublisher().println("Exception:" + e.getMessage());}
     }
     public boolean allComplete() {
-        for (boolean progression : progress) {
-            if (!progression) {return false;}
+        for (PartImage partImage : buffer) {
+            if (partImage == null) {return false;}
         } return true;
     }
     private static final class Lock {}
@@ -112,8 +105,7 @@ public class ThreadedComplexFractalGenerator {
                 buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
                 buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
-            }
-            progress[index] = true; float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
+            } float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
             master.progressPublisher.println("Thread " + index + " has completed, total completion = " + completion + "%");
         }
     }

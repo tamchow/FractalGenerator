@@ -10,15 +10,18 @@ public class IFSFractalParams {
     double[] weights;
     int[] colors;
     long depth;
-    int width, height, fps;
+    int width, height, fps, frameskip;
     double zoom, zoomlevel, base_precision;
-    private IFSFractalParams() {}
+    private IFSFractalParams() {setFrameskip(-1);}
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
             throw new IllegalArgumentException("Configuration object is not properly defined");
         } setColors(config.getColors()); setWeights(config.getWeights()); setTransforms(config.getTransforms());
-        setTranslators(config.getTranslators()); setDepth(config.getDepth());
+        setTranslators(config.getTranslators()); setDepth(config.getDepth()); setFrameskip(config.getFrameskip());
+        setFps(config.getFps());
     }
+    public int getFrameskip() {return frameskip;}
+    public void setFrameskip(int frameskip) {this.frameskip = frameskip;}
     public long getDepth() {
         return depth;
     }
@@ -53,6 +56,8 @@ public class IFSFractalParams {
     public void setColors(int[] colors) {
         this.colors = new int[colors.length]; System.arraycopy(colors, 0, this.colors, 0, this.colors.length);
     }
+    public int getFps() {return fps;}
+    public void setFps(int fps) {this.fps = fps;}
     public static IFSFractalParams fromString(String[] input) {
         IFSFractalParams params = new IFSFractalParams(); params.setWidth(Integer.valueOf(input[0]));
         params.setHeight(Integer.valueOf(input[1])); params.setBase_precision(Double.valueOf(input[2]));
@@ -97,6 +102,4 @@ public class IFSFractalParams {
     public void setBase_precision(double base_precision) {
         this.base_precision = base_precision;
     }
-    public int getFps() {return fps;}
-    public void setFps(int fps) {this.fps = fps;}
 }

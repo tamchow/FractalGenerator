@@ -34,6 +34,7 @@ public class ImageParams extends Config implements Serializable, DataFromString 
     public ImageParams(int transtime, int fps, int wait, String path) {
         initParams(transtime, fps, wait, path, -1);
     }
+    public String toString() {return transtime + "," + fps + "," + wait + "," + image.getPath() + "," + transition;}
     public void fromString(String params) {fromString(params.split(","));}
     public void fromString(String[] params) {
         initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), params[3], Integer.valueOf(params[4]));

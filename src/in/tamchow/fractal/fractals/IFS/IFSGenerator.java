@@ -5,6 +5,7 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.LinearizedImageData;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 
@@ -13,7 +14,7 @@ import java.util.Random;
  * Generates IFS fractals
  */
 public class IFSGenerator {
-    ImageData plane;
+    LinearizedImageData plane;
     IFSFractalParams params;
     Matrix centre_offset, initial;
     int center_x, center_y;
@@ -22,7 +23,7 @@ public class IFSGenerator {
     boolean completion;
     Printable progressPublisher;
     public IFSGenerator(IFSFractalParams params, Printable progressPublisher) {
-        setParams(params); plane = new ImageData(params.getWidth(), params.getHeight()); resetCentre();
+        setParams(params); plane = new LinearizedImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision()); initial = null; completion = false;
         if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
@@ -98,7 +99,7 @@ public class IFSGenerator {
         return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
     public int[] toCooordinates(Matrix point) {
-        MatrixOperations.subtract(point, centre_offset);
+        point = MatrixOperations.subtract(point, centre_offset);
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
         x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
         return new int[]{x, y};
@@ -108,8 +109,9 @@ public class IFSGenerator {
     }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
-        Animation animation = new Animation(); for (long i = 0; i <= depth && (!completion); i++) {
-            generateStep(); animation.addFrame(plane); publishProgress(i);
+        Animation animation = new Animation(params.getFps()); for (long i = 0; i <= depth && (!completion); i++) {
+            generateStep(); publishProgress(i);
+            if (params.getFrameskip() > 0 && i % params.getFrameskip() == 0) {animation.addFrame(plane);}
         } return animation;
     }
     public void generateStep() {
@@ -120,4 +122,7 @@ public class IFSGenerator {
         int[] coord = toCooordinates(point);
         plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
         point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
-        if (point.equals(initial) || isOutOfBounds(point)) completion = true;}}
+        if (point.equals(initial) || isOutOfBounds(point)) completion = true;
+    }
+    //TODO: Add pan method
+}

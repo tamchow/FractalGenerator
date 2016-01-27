@@ -49,8 +49,7 @@ public class Transition {
         this.transtype = transtype;
     }
     public void doTransition() {
-        frames.clearFrames();
-        ImageData tmp = new ImageData(img1);
+        frames.clearFrames(); ImageData tmp = new ImageData(img1); int[][] pixdata = tmp.getPixdata();
         frames.addFrame(img1); int numframes = frames.getFps() * transtime; int bandwidth = img2.getWidth() / numframes;
         int bandheight = img2.getHeight() / numframes;
         switch (transtype) {
@@ -98,6 +97,20 @@ public class Transition {
                 }
                 frames.addFrame(img2);
                 break;
+            case TransitionTypes.CENTRE_OUT: for (int i = img2.getHeight() / 2, j = img2.getHeight() / 2; i >= 0 && j < img2.getHeight(); i -= bandheight, j += bandheight) {
+                for (int k = img2.getWidth() / 2, l = img2.getWidth() / 2; k >= 0 && l < img2.getWidth(); k -= bandwidth, l += bandwidth) {
+                    for (int m = i; m <= j; m++) {
+                        System.arraycopy(img2.getRow(m), k, pixdata[m], k, l);
+                    }
+                } tmp.setPixdata(pixdata); frames.addFrame(tmp);
+            } frames.addFrame(img2);
+            case TransitionTypes.EDGE_IN: for (int i = img2.getHeight() - 1, j = 0; i >= img2.getHeight() / 2 && j < img2.getHeight() / 2; i -= bandheight, j += bandheight) {
+                for (int k = img2.getWidth() - 1, l = 0; k >= img2.getWidth() / 2 && l < img2.getWidth() / 2; k -= bandwidth, l += bandwidth) {
+                    for (int m = i; m <= j; m++) {
+                        System.arraycopy(img2.getRow(m), k, pixdata[m], k, l);
+                    }
+                } tmp.setPixdata(pixdata); frames.addFrame(tmp);
+            } frames.addFrame(img2);
             default:
                 throw new IllegalArgumentException("Unrecognized transition type");
         }

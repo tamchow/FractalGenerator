@@ -99,8 +99,11 @@ public class ConfigReader {
             ifsFractalParams[i] = getIFSParamFromFile(new File(specCfg.get(i)));
         } ifsFractalConfig.setParams(ifsFractalParams); return ifsFractalConfig;}
     public static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
-        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>(); while (in.hasNext()) {
-            String line = in.nextLine(); if (!line.startsWith("#")) {
+        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>(); String frameskip = null;
+        while (in.hasNext()) {
+            String line = in.nextLine(); if (line.startsWith("Frameskip:")) {
+                frameskip = line.substring("Frameskip:".length()).trim();
+            } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
         } String[] zooms = null; if (lines.indexOf("[Zooms]") >= 0) {
@@ -108,6 +111,7 @@ public class ConfigReader {
             zooms = new String[zoomsConfig.size()]; zoomsConfig.toArray(zooms);
         } String[] params = new String[lines.size()]; lines.toArray(params);
         IFSFractalParams ifsFractalParams = IFSFractalParams.fromString(params);
-        if (zooms != null) {ifsFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));} return ifsFractalParams;
+        if (zooms != null) {ifsFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
+        if (frameskip != null) {ifsFractalParams.setFrameskip(Integer.valueOf(frameskip));} return ifsFractalParams;
     }
 }

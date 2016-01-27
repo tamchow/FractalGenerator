@@ -35,6 +35,12 @@ public class ImageConfig extends Config implements DataFromString, Serializable 
             this.params[i] = new ImageParams(params[i]);
         }
     }
+    public String toString() {
+        String representation = "";
+        if (customDimensions()) {representation += "Dimensions:" + width + "," + height + "\n";}
+        for (ImageParams param : params) {representation += param + "\n";} return representation;
+    }
+    public boolean customDimensions() {return height >= 0 && width >= 0;}
     public void fromString(String[] params) {
         this.params = new ImageParams[params.length]; for (int i = 0; i < params.length; i++) {
             this.params[i] = new ImageParams(); this.params[i].fromString(params[i]);

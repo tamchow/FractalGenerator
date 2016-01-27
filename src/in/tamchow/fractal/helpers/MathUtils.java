@@ -7,13 +7,14 @@ import java.util.Random;
  */
 public class MathUtils {
     public static int boundsProtected(int ptr, int size) {
+        if (ptr >= 0 || ptr < size) {return ptr;}
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
     public static String numberLineRepresentation(float number, int precision) {
-        float f = number; int p = precision;
-        int g = (int) f, d = Math.round((f - g) * p), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
-        String h = "", q = "" + g; int c = q.length(); for (; i < b; i++) h += " "; for (++i; i <= b + p; i++) h += "-";
-        for (i = c; i < c + d; i++) q += "|"; for (; i < p + b; i++) q += " "; return q + (g + 1) + "\n" + h;
+        int g = (int) number, d = Math.round((number - g) * precision), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
+        String h = "", q = "" + g; int c = q.length(); for (; i < b; i++) h += " ";
+        for (++i; i <= b + precision; i++) h += "-"; for (i = c; i < c + d; i++) q += "|";
+        for (; i < precision + b; i++) q += " "; return q + (g + 1) + "\n" + h;
     }
     public static int[] diamondPuzzleSolver(int sum, int product, int low, int high) {
         for (int a = low; a <= high; a++) {

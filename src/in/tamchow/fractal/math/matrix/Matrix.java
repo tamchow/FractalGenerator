@@ -61,11 +61,11 @@ public class Matrix {
         } return true;
     }
     public String toString() {
-        String matrix = ""; for (int i = 0; i < matrixData.length; i++) {
-            for (int j = 0; j < matrixData[i].length; j++) {
-                matrix += matrixData[i][j] + ",";
-            } matrix = "[" + matrix.substring(0, matrix.length() - 1) + "];";//remove trailing ','
-        } return "[" + matrix.substring(0, matrix.length() - 1) + "]";//remove trailing ';'
+        String matrix = ""; for (double[] aMatrixData : matrixData) {
+            for (int j = 0; j < aMatrixData.length; j++) {matrix += aMatrixData[j] + ",";}
+            matrix = "[" + matrix.substring(0, matrix.length() - 1) + "];";
+        }//remove trailing ','}
+        return "[" + matrix.substring(0, matrix.length() - 1) + "]";//remove trailing ';'
     }
     public synchronized double get(int i, int j) {
         return matrixData[i][j];

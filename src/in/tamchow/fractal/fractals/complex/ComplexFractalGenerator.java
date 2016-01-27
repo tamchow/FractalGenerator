@@ -1,11 +1,13 @@
 package in.tamchow.fractal.fractals.complex;
 import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.config.Printable;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.LinearizedImageData;
 import in.tamchow.fractal.math.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
@@ -27,7 +29,7 @@ public class ComplexFractalGenerator implements Serializable {
     int center_x, center_y, mode, lastConstantIdx, stripe_density, switch_rate;
     double tolerance;
     long maxiter;
-    ImageData argand;
+    LinearizedImageData argand;
     String function;
     String[][] consts;
     int[][] escapedata;
@@ -53,7 +55,7 @@ public class ComplexFractalGenerator implements Serializable {
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, int mode, String function, String[][] consts, String variableCode, double tolerance, Complex degree, ColorConfig color, int switch_rate, Complex trap_point, String linetrap) {
         setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
         setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
-        argand = new ImageData(width, height); setMode(mode); resetCentre();
+        argand = new LinearizedImageData(width, height); setMode(mode); resetCentre();
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()]; populateMap();
         escapedata = new int[argand.getHeight()][argand.getWidth()];
@@ -170,13 +172,18 @@ public class ComplexFractalGenerator implements Serializable {
      * @param ny:No.   of threads vertically
      * @param iy:Index of thread vertically
      * @return the start and end coordinates for a particular thread's rendering region*/
-    public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {//for multithreading purposes
-        int start_x, end_x, start_y, end_y; int x_dist = argand.getWidth() / nx, y_dist = argand.getHeight() / ny;
+    public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {
+        return start_end_coordinates(0, argand.getWidth(), 0, argand.getHeight(), nx, ix, ny, iy);
+    }
+    public int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
+        //for multithreading purposes
+        int start_x = startx, end_x, start_y = starty, end_y;
+        int x_dist = (endx - startx) / nx, y_dist = (endy - starty) / ny;
         if (ix == (nx - 1)) {
-            start_x = (nx - 1) * x_dist; end_x = argand.getWidth();
-        } else {start_x = ix * x_dist; end_x = (ix + 1) * x_dist;} if (iy == (ny - 1)) {
-            start_y = (ny - 1) * y_dist; end_y = argand.getHeight();
-        } else {start_y = iy * y_dist; end_y = (iy + 1) * y_dist;} return new int[]{start_x, end_x, start_y, end_y};
+            start_x += (nx - 1) * x_dist; end_x = endx;
+        } else {start_x += ix * x_dist; end_x = (ix + 1) * x_dist;} if (iy == (ny - 1)) {
+            start_y += (ny - 1) * y_dist; end_y = endy;
+        } else {start_y += iy * y_dist; end_y = (iy + 1) * y_dist;} return new int[]{start_x, end_x, start_y, end_y};
     }
     public double getScale() {
         return scale;
@@ -211,9 +218,7 @@ public class ComplexFractalGenerator implements Serializable {
     public ImageData getArgand() {
         return argand;
     }
-    public void setArgand(ImageData argand) {
-        this.argand = new ImageData(argand);
-    }
+    public void setArgand(ImageData argand) {this.argand = new LinearizedImageData(argand);}
     public String[][] getConsts() {
         return consts;
     }
@@ -1013,6 +1018,7 @@ public class ComplexFractalGenerator implements Serializable {
             case Colors.CALCULATIONS.ORBIT_TRAP_MIN: case Colors.CALCULATIONS.LINE_TRAP_MIN:
             case Colors.CALCULATIONS.LINE_TRAP_MAX:
             case Colors.CALCULATIONS.LINE_TRAP_AVG: colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount); break;
+            case Colors.CALCULATIONS.DOMAIN_COLORING: colortmp = new HSL(HSL.hueFromAngle(last[0].arg() + Math.PI), last[0].modulus() / escape_radius, ((double) color.getBasecolor()) / 0xffffff).toRGB(); break;
             default: throw new IllegalArgumentException("invalid argument");
         } return colortmp;
     }
@@ -1057,4 +1063,5 @@ public class ComplexFractalGenerator implements Serializable {
     }
     public void mandelbrotToJulia(Complex constant, double level) {zoom(constant, level); changeMode(centre_offset); resetCentre();}
     public void mandelbrotToJulia(ZoomParams zoom) {zoom(zoom); changeMode(centre_offset); resetCentre();}
+    //TODO: Add pan method
 }

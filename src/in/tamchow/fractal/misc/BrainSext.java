@@ -73,6 +73,9 @@ public class BrainSext {
         } outer:
         for (int i = 0; i < code.length(); ) {
             switch (code.charAt(i)) {
+                case '#': String data = ""; for (int k : operand) {
+                    data += k;
+                } data.replace("-1", ""); operand[ptr] = data.hashCode(); break;
                 case 'm': if (numAfter(i)) {
                     size = StringManipulator.getNumFromIndex(code, i + 1);
                 } else {size = codebackup.length();} initMemory(); for (int j = 0; j < codebackup.length(); j++) {

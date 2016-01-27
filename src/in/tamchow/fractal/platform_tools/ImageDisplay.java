@@ -67,10 +67,14 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     }
     public ImageDisplay(Config config) {
         if (config instanceof ImageConfig) {
-            int width = ((ImageConfig) config).getWidth(), height = ((ImageConfig) config).getHeight();
-            if (width == -1) {width = ((ImageConfig) config).getParams()[0].image.getWidth();}
-            if (height == -1) {height = ((ImageConfig) config).getParams()[0].image.getHeight();}
-            initDisplay(config, width, height);
+            int width, height; if (((ImageConfig) config).customDimensions()) {
+                width = ((ImageConfig) config).getWidth(); height = ((ImageConfig) config).getHeight();
+            } else {
+                if (((ImageConfig) config).getParams()[0].image.getPath() == null) {
+                    width = ((ImageConfig) config).getParams()[0].image.getWidth();
+                    height = ((ImageConfig) config).getParams()[0].image.getHeight();
+                } else {width = -1; height = -1;}
+            } initDisplay(config, width, height);
         } else if (config instanceof ComplexFractalConfig) {
             initDisplay(config, ((ComplexFractalConfig) config).getParams()[0].initParams.width, ((ComplexFractalConfig) config).getParams()[0].initParams.height);}}
     public static void show(Config config, String title) {
