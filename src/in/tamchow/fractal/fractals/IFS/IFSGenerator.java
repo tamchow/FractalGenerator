@@ -14,7 +14,7 @@ import java.util.Random;
  * Generates IFS fractals
  */
 public class IFSGenerator {
-    LinearizedImageData plane;
+    ImageData plane;
     IFSFractalParams params;
     Matrix centre_offset, initial;
     int center_x, center_y;
@@ -124,5 +124,10 @@ public class IFSGenerator {
         point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
         if (point.equals(initial) || isOutOfBounds(point)) completion = true;
     }
-    //TODO: Add pan method
+    public void pan(int distance, double angle) {pan(distance, angle, false);}
+    public void pan(int distance, double angle, boolean flip_axes) {
+        angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
+        pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
+    }
+    public void pan(int x_dist, int y_dist) {zoom(center_x + x_dist, center_y + y_dist, zoom_factor);}
 }

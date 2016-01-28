@@ -1,4 +1,4 @@
-package in.tamchow.fractal.misc;
+package in.tamchow.fractal.misc.RC4Utility;
 /**
  * Implements simple RC4 encryption/decryption
  */

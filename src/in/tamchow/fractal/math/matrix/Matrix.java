@@ -1,8 +1,9 @@
 package in.tamchow.fractal.math.matrix;
+import java.io.Serializable;
 /**
  * Holds a rectangular matrix
  */
-public class Matrix {
+public final class Matrix implements Serializable, Comparable<Matrix> {
     private int rows, columns;
     private double[][] matrixData;
     public Matrix(double[][] matrixData) {
@@ -52,7 +53,7 @@ public class Matrix {
         } return newMatrix;
     }
     public synchronized boolean equals(Object that) {
-        if (!(that instanceof Matrix)) {return false;} Matrix other = (Matrix) that;
+        if (that == null) {return false;} if (!(that instanceof Matrix)) {return false;} Matrix other = (Matrix) that;
         if (!(getNumColumns() == other.getNumColumns() && getNumRows() == other.getNumRows())) return false;
         for (int i = 0; i < other.getNumRows(); i++) {
             for (int j = 0; j < other.getNumColumns(); j++) {
@@ -62,7 +63,7 @@ public class Matrix {
     }
     public String toString() {
         String matrix = ""; for (double[] aMatrixData : matrixData) {
-            for (int j = 0; j < aMatrixData.length; j++) {matrix += aMatrixData[j] + ",";}
+            for (double anAMatrixData : aMatrixData) {matrix += anAMatrixData + ",";}
             matrix = "[" + matrix.substring(0, matrix.length() - 1) + "];";
         }//remove trailing ','}
         return "[" + matrix.substring(0, matrix.length() - 1) + "]";//remove trailing ';'
@@ -72,5 +73,15 @@ public class Matrix {
     }
     public synchronized void set(int i, int j, double value) {
         matrixData[i][j] = value;
+    }
+    @Override
+    public int compareTo(Matrix other) {
+        if (other == null) {return 0;}
+        if (other.getNumColumns() + other.getNumRows() != getNumColumns() + getNumRows()) {
+            return (other.getNumColumns() + other.getNumRows()) - (getNumColumns() + getNumRows());
+        } else {return (int) (other.sumAllElements() - sumAllElements());}
+    }
+    private double sumAllElements() {
+        double sum = 0; for (double[] row : matrixData) {for (double element : row) {sum += element;}} return sum;
     }
 }

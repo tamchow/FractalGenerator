@@ -7,6 +7,7 @@ import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.Transition;
+import in.tamchow.fractal.imgutils.TransitionTypes;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -92,7 +93,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public void run() {
         for (int i = ctr; i < rimg.length; ) {
             if (!fractal_mode) {
-                if (imgconf.getParams()[i].transition == -1) {
+                if (imgconf.getParams()[i].transition == TransitionTypes.NONE) {
                     todraw = rimg[i]; paint(this.getGraphics()); if (!running) {ctr = i - 1; break;}
                 } else {
                     int k = i + 1; if (i == rimg.length - 1) {k = 0;}

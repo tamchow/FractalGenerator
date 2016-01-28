@@ -23,12 +23,13 @@ public class LinearizedImageData extends ImageData implements Serializable {
         this.width = width; this.pixdata = new int[pixdata.length];
         System.arraycopy(pixdata, 0, this.pixdata, 0, this.pixdata.length);
     }
-    public int[] getPixels() {return pixdata;}
     public LinearizedImageData(int[][] pixels) {
         pixdata = new int[pixels.length * pixels[0].length]; width = pixels[0].length;
         for (int i = 0; i < pixels.length; i++) {System.arraycopy(pixels[i], 0, pixdata, i * width, width);}
     }
+    public int[] getPixels() {return pixdata;}
     public LinearizedImageData(int width, int height) {this.width = width; pixdata = new int[height * width];}
+
     public int[][] getPixdata() {
         int[][] pixels = new int[pixdata.length / width][width]; for (int i = 0; i < pixels.length; i++) {
             System.arraycopy(pixdata, i * width, pixels[i], 0, pixels[i].length);
@@ -49,7 +50,7 @@ public class LinearizedImageData extends ImageData implements Serializable {
     }
     public int getPixel(int i) {return pixdata[i];}
     public void setPixel(int i, int val) {pixdata[i] = val;}
-    public LinearizedImageData getPostProcessed(int mode, double[][] biases, boolean byParts) {
+    public LinearizedImageData getPostProcessed(PostProcessMode mode, double[][] biases, boolean byParts) {
         return new LinearizedImageData(toImageData().getPostProcessed(mode, biases, byParts));
     }
 }

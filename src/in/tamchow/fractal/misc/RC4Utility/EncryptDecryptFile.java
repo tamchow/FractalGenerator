@@ -1,4 +1,4 @@
-package in.tamchow.fractal.misc;
+package in.tamchow.fractal.misc.RC4Utility;
 import java.io.*;
 import java.util.ArrayList;
 /**

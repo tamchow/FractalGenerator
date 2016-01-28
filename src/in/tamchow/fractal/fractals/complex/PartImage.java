@@ -1,9 +1,11 @@
 package in.tamchow.fractal.fractals.complex;
 import in.tamchow.fractal.imgutils.ImageData;
+
+import java.io.Serializable;
 /**
  * Holds a part of a fractal image for threaded generation, along with the render coordinates
  */
-public class PartImage {
+public final class PartImage implements Serializable {
     ImageData imageData;
     int[][] escapedata;
     double[][] normalized_escapes;

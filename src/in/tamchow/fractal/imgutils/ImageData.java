@@ -6,7 +6,6 @@ import in.tamchow.fractal.helpers.MathUtils;
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed ARGB in hex values as pixels.
  */
 public class ImageData {
-    public static final int AVERAGE = 1, WEIGHTED_AVERAGE = 2, INTERPOLATED_AVERAGE = 3, INTERPOLATED = 4;
     private String path;
     private int[][] pixdata;
     public ImageData() {
@@ -75,8 +74,8 @@ public class ImageData {
     public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
     public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
     public int[] getRow(int row) {row = MathUtils.boundsProtected(row, getHeight()); return pixdata[row];}
-    public ImageData getPostProcessed(int mode, double[][] biases, boolean byParts) {
-        ImageData processed = new ImageData(this);
+    public ImageData getPostProcessed(PostProcessMode mode, double[][] biases, boolean byParts) {
+        ImageData processed = new ImageData(this); if (mode == PostProcessMode.NONE) {return processed;}
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
             for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {
                 int left = pixdata[i][j - 1], right = pixdata[i][j + 1], top = pixdata[i - 1][j], bottom = pixdata[i + 1][j];
@@ -87,6 +86,7 @@ public class ImageData {
                     case WEIGHTED_AVERAGE: processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2)); break;
                     case INTERPOLATED_AVERAGE: processed.setPixel(i, j, ColorConfig.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (long) biases[i][j], byParts)); break;
                     case INTERPOLATED: processed.setPixel(i, j, ColorConfig.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts)); break;
+                    case NONE: break;
                     default: throw new IllegalArgumentException("Unsupported Post Processing type");
                 }
             }
@@ -107,7 +107,27 @@ public class ImageData {
         } return pixels;
     }
     public synchronized int getPixel(int i) {return getPixel(i / pixdata[0].length, i % pixdata[0].length);}
-    public synchronized void setPixel(int i, int val) {
-        setPixel(i / pixdata[0].length, i % pixdata[0].length, val);
+    public synchronized void setPixel(int i, int val) {setPixel(i / pixdata[0].length, i % pixdata[0].length, val);}
+    public ImageData pan(int x_res, int y_res, int x_dist, int y_dist) {
+        if (x_res + x_dist >= getWidth() || y_res + y_dist >= getHeight() || x_res + x_dist < 0 || y_res + y_dist < 0) {
+            throw new UnsupportedOperationException("Panning out of range");
+        } else {
+            ImageData tmp = new ImageData(x_res, y_res);
+            int start_x = ((getWidth() - x_res) / 2) + x_dist, start_y = ((getHeight() - y_res) / 2) + y_dist;
+            int end_x = (getWidth() - ((getWidth() - x_res) / 2)) + x_dist, end_y = (getHeight() - ((getHeight() - y_res) / 2)) + y_dist;
+            for (int i = start_y, k = 0; i < end_y && k < tmp.getHeight(); i++, k++) {
+                for (int j = start_x, l = 0; j < end_x && l < tmp.getWidth(); j++, l++) {
+                    tmp.setPixel(k, l, getPixel(i, j));
+                }
+            } return tmp;
+        }
     }
+    public ImageData pan(int x_res, int y_res, int distance, double angle, boolean flip_axes) {
+        angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
+        return pan(x_res, y_res, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
+    }
+    public ImageData pan(int x_res, int y_res, int distance, double angle) {
+        return pan(x_res, y_res, distance, angle, false);
+    }
+    public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NONE}
 }

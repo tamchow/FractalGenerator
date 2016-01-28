@@ -8,8 +8,9 @@ import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
-import in.tamchow.fractal.misc.BrainSext;
-import in.tamchow.fractal.misc.EncryptDecryptFile;
+import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
+import in.tamchow.fractal.misc.bs.BrainSext;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 import in.tamchow.fractal.platform_tools.ImageDisplay;
@@ -57,7 +58,7 @@ public class Main {
                             } else {
                                 generator.generate(params);
                             } File outputFile = new File(args[1] + "/Fractal_" + i + ".jpg");
-                            if (params.getPostprocessMode() != -1) {
+                            if (params.getPostprocessMode() != ImageData.PostProcessMode.NONE) {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getColor().isByParts())), "jpg", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand()), "jpg", outputFile);

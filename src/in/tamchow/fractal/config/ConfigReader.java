@@ -5,6 +5,7 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.File;
@@ -78,7 +79,9 @@ public class ConfigReader {
         initConfig.toArray(run); ComplexFractalParams complexFractalParams = new ComplexFractalParams();
         complexFractalParams.initParams.fromString(init); complexFractalParams.runParams.fromString(run);
         if (thread_data != null) {complexFractalParams.threadDataFromString(thread_data);}
-        if (post_process_mode != null) {complexFractalParams.setPostprocessMode(Integer.valueOf(post_process_mode));}
+        if (post_process_mode != null) {
+            complexFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+        }
         if (zooms != null) {complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (switch_rate != null) {complexFractalParams.initParams.setSwitch_rate(Integer.valueOf(switch_rate));}
         if (trap_point != null) {complexFractalParams.initParams.setTrap_point(new Complex(trap_point));}

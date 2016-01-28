@@ -1,6 +1,7 @@
-package in.tamchow.fractal.misc;
+package in.tamchow.fractal.misc.bs;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.misc.bs.bserrors.HaltError;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +60,7 @@ public class BrainSext {
     void readFile(String path) {
         File input = new File(path); try {
             Scanner sc = new Scanner(input); while (sc.hasNextLine()) {code += sc.nextLine();} codebackup = code;
-        } catch (FileNotFoundException e) {System.err.println("Input File location " + path + " is invalid.");}
+        } catch (FileNotFoundException e) {errorCount++; errors += e.getMessage();}
     }
     public void execute() {
         int[] tmp = new int[operand.length];
@@ -75,7 +76,7 @@ public class BrainSext {
             switch (code.charAt(i)) {
                 case '#': String data = ""; for (int k : operand) {
                     data += k;
-                } data.replace("-1", ""); operand[ptr] = data.hashCode(); break;
+                } data = data.replace("-1", ""); operand[ptr] = data.hashCode(); break;
                 case 'm': if (numAfter(i)) {
                     size = StringManipulator.getNumFromIndex(code, i + 1);
                 } else {size = codebackup.length();} initMemory(); for (int j = 0; j < codebackup.length(); j++) {
@@ -147,10 +148,10 @@ public class BrainSext {
                     i = StringManipulator.nthIndexBackwards(code, '[', i, c);
                 } i = MathUtils.boundsProtected(i, code.length()); continue outer;
                 case ',': try {operand[ptr] = System.in.read();} catch (IOException e) {
-                    setOutput("Input error: " + e.getMessage(), ERROR);
+                    setOutput("Input error: " + e.getMessage() + "\n", ERROR);
                 } break; case '.': setOutput((char) operand[ptr] + "", OUTPUT); break;
                 case '"': setOutput(operand[ptr] + "", OUTPUT); break; case '!': System.out.print(operand[ptr]); break;
-                case '\\': setOutput("Program signalled HALT at " + i + "\n", ERROR); return;
+                case '\\': String halterror = "Program signalled HALT at " + i + "\n"; setOutput(halterror, ERROR); throw new HaltError(halterror);
                 default: if (!numAfter(i)) {
                     setOutput("Unrecognized character at " + i + "\n", ERROR);
                 }

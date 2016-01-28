@@ -4,10 +4,12 @@ import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
+
+import java.io.Serializable;
 /**
  * Multithreading for the fractal generator
  */
-public class ThreadedComplexFractalGenerator {
+public final class ThreadedComplexFractalGenerator implements Serializable {
     final ComplexFractalGenerator master;
     private final Object lock = new Lock();
     PartImage[] buffer;
@@ -44,8 +46,9 @@ public class ThreadedComplexFractalGenerator {
                 if (master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                     for (PartImage partImage : buffer) {
                         for (int i = 0; i < histogram.length; i++) {histogram[i] += partImage.histogram[i];}
-                    } for (int i = 0; i < iterations; i += 1) {total += histogram[i];}
-                } double scaling = Math.pow(master.zoom, master.zoom_factor); for (PartImage partImage : buffer) {
+                    }
+                } for (int i = 0; i < iterations; i++) {total += histogram[i];}
+                double scaling = Math.pow(master.zoom, master.zoom_factor); for (PartImage partImage : buffer) {
                     for (int i = partImage.starty; i < partImage.endy; i++) {
                         for (int j = partImage.startx; j < partImage.endx; j++) {
                             master.escapedata[i][j] = partImage.escapedata[i][j];
@@ -72,7 +75,10 @@ public class ThreadedComplexFractalGenerator {
                     }
                 }
             }
-        } catch (Exception e) {master.getProgressPublisher().println("Exception:" + e.getMessage());}
+        } catch (Exception e) {
+            e.printStackTrace();
+            //master.getProgressPublisher().println("Exception:" + e.getMessage());
+        }
     }
     public boolean allComplete() {
         for (PartImage partImage : buffer) {

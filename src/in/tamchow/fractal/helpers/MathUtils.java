@@ -7,7 +7,6 @@ import java.util.Random;
  */
 public class MathUtils {
     public static int boundsProtected(int ptr, int size) {
-        if (ptr >= 0 || ptr < size) {return ptr;}
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
     public static String numberLineRepresentation(float number, int precision) {
@@ -75,8 +74,7 @@ public class MathUtils {
                 FactorData temp = new FactorData(arr[i]); arr[i] = new FactorData(arr[j]);
                 arr[j] = new FactorData(temp); i++; j--;
             }
-        }
-        // recursively sort two sub parts
+        }// recursively sort the 2 subparts
         if (low < j) quickSort(arr, low, j); if (high > i) quickSort(arr, i, high);
     }
     private class FactorData {
