@@ -26,7 +26,7 @@ public class FractalPanningHelper {
                 start_y = 0; end_y = (-y_dist);
             } else {
                 start_y = toPan.getArgand().getHeight() - y_dist; end_y = toPan.getArgand().getHeight();
-            } start_x = 0; start_y = toPan.getArgand().getWidth(); panner.generate(start_x, end_x, start_y, end_y);
+            } start_x = 0; end_x = toPan.getArgand().getWidth(); panner.generate(start_x, end_x, start_y, end_y);
             return toPan.getArgand();
         } else if (toPanthis instanceof IFSGenerator) {
             IFSGenerator toPan = (IFSGenerator) toPanthis; try {
