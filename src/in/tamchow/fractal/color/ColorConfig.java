@@ -97,6 +97,10 @@ public class ColorConfig implements Serializable {
             }
         }
     }
+    public ColorConfig(Colors.CALCULATIONS mode, int num_colors, boolean byParts, boolean logIndex) {
+        initColorConfig(mode, num_colors, byParts, logIndex); setColor_density(calculateColorDensity());
+    }
+    public int calculateColorDensity() {if (mode == Colors.CALCULATIONS.SIMPLE) {return 1;} return num_colors - 1;}
     public ColorConfig() {palette = null; initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, false, false);}
     public ColorConfig(ColorConfig old) {
         initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts(), old.isLogIndex());
@@ -206,7 +210,6 @@ public class ColorConfig implements Serializable {
             }
         }
     }
-    public int calculateColorDensity() {if (mode == Colors.CALCULATIONS.SIMPLE) {return 1;} return num_colors - 1;}
     public int createIndex(double val, double min, double max, double zoom) {
         val /= zoom; max /= zoom; min /= zoom;
         if (((min == 0 || (max - min) == 1 || (max - min) == 0) && logIndex) || (!logIndex)) {
@@ -273,7 +276,7 @@ public class ColorConfig implements Serializable {
         palette_type = Colors.PALETTE.valueOf(colors[0]); mode = Colors.CALCULATIONS.valueOf(colors[1]);
         byParts = Boolean.valueOf(colors[2]); exponentialSmoothing = Boolean.valueOf(colors[3]);
         logIndex = Boolean.valueOf(colors[4]); switch (palette_type) {
-            case RANDOM_PALETTE: initColorConfig(mode, Integer.valueOf(colors[3]), byParts, false); break;
+            case RANDOM_PALETTE: initColorConfig(mode, Integer.valueOf(colors[5]), byParts, logIndex); setColor_density(Integer.valueOf(colors[6])); break;
             case CUSTOM_PALETTE: String[] parts = colors[5].split(";"); int[] colorset = new int[parts.length]; for (int i = 0; i < colorset.length; i++) {
                 colorset[i] = Integer.valueOf(parts[i + 5], 16);
             } setPalette(colorset, false); setColor_density(Integer.valueOf(parts[6])); break;
@@ -289,9 +292,22 @@ public class ColorConfig implements Serializable {
                 control_points[i] = Double.valueOf(control[1]);
             } if (palette_type == Colors.PALETTE.SMOOTH_PALETTE_SPLINE) {
                 createSmoothPalette(control_colors, control_points, true);
-            } else {createSmoothPalette(control_colors, control_points, false);} break;
+            } else {
+                createSmoothPalette(control_colors, control_points, false);
+            } setPalette_type(Colors.PALETTE.CUSTOM_PALETTE); break;
             default: throw new IllegalArgumentException("Unsupported palette type");
         }
+    }
+    @Override
+    public String toString() {
+        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + "," + logIndex;
+        switch (palette_type) {
+            case RANDOM_PALETTE: representation += "," + num_colors + "," + color_density; break;
+            case CUSTOM_PALETTE: for (int color : palette) {
+                representation += "," + color;
+            } representation += color_density; break; case GRADIENT_PALETTE:
+            case SHADE_PALETTE: representation += "," + color_density + "," + num_colors + "," + basecolor + ((step == 0) ? "" : "," + step); break;
+        } return representation;
     }
     public boolean noCustomPalette() {
         return (palette_type == Colors.PALETTE.RANDOM_PALETTE) || (palette.length == 0) || (palette == null);

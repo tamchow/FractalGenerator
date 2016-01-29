@@ -19,7 +19,8 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 /**
- * Production Main Class: Handles Images, Complex and IFS Fractals. Max. of 2 required arguments.
+ * Production Main Class: Handles Images, Complex and IFS Fractals.
+ * Max. of 2 required arguments, not including switches or flags
  */
 public class Main {
     public static void main(String[] args) {
@@ -53,7 +54,7 @@ public class Main {
                             ComplexFractalParams params = cfg.getParams()[i];
                             ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
                             if (params.useThreadedGenerator()) {
-                                ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator, params);
+                                ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator);
                                 threaded.generate();
                             } else {
                                 generator.generate(params);

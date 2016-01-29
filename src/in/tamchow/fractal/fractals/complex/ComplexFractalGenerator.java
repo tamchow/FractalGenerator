@@ -8,6 +8,7 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.LinearizedImageData;
+import in.tamchow.fractal.imgutils.Pannable;
 import in.tamchow.fractal.math.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 /** The actual fractal plotter for Julia, Newton, Nova (both Mandelbrot and Julia variants),Secant and Mandelbrot Sets using an iterative algorithm.
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
  * Various (21) Coloring modes*/
-public final class ComplexFractalGenerator implements Serializable {
+public final class ComplexFractalGenerator implements Serializable, Pannable {
     ColorConfig color;
     ArrayList<Complex> roots;
     double zoom, zoom_factor, base_precision, scale;
@@ -248,6 +249,9 @@ public final class ComplexFractalGenerator implements Serializable {
     }
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter((end_x - start_x) * (end_y - start_y) * iterations);
+        if (this.color.getMode() == Colors.CALCULATIONS.SIMPLE_SMOOTH) {
+            this.color.setColor_density(this.color.getColor_density() * iterations);
+        }
         if (mode != Mode.NEWTON && mode != Mode.NEWTONBROT && mode != Mode.JULIA_NOVA && mode != Mode.JULIA_NOVABROT && mode != Mode.MANDELBROT_NOVA && mode != Mode.MANDELBROT_NOVABROT && (color.getMode() != Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() != Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) && degree.equals(new Complex(-1, 0)) && (!color.isExponentialSmoothing())) {
             degree = new FunctionEvaluator(variableCode, consts, advancedDegree).getDegree(function);
         }
@@ -915,9 +919,8 @@ public final class ComplexFractalGenerator implements Serializable {
             smoothcount = (renormalized > 0) ? Math.abs(Math.log(renormalized)) : ComplexOperations.principallog(new Complex(renormalized, 0)).modulus();
         }
         switch (color.getMode()) {
-            case SIMPLE: colortmp = color.getColor((val * color.color_density) % color.num_colors); break;
-            case SIMPLE_SMOOTH: color1 = color.getColor((val * (iterations * color.color_density)) % color.num_colors); color2 = color.getColor(((val + 1) * (iterations * color.color_density)) % color.num_colors); color3 = color.getColor(((val - 1) * (iterations * color.color_density)) % color.num_colors); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts());
-                break;
+            case SIMPLE: colortmp = color.getColor(color.createIndex(val, 0, iterations, scaling)); break;
+            case SIMPLE_SMOOTH: colortmp = getColor(color.createIndex(val, 0, iterations, scaling), smoothcount); break;
             case COLOR_DIVIDE_DIRECT: val = (val == 0) ? iterations + 1 : (val - 1 == 0) ? iterations + 2 : val; color1 = (0xffffff / val); color2 = (0xffffff / (val + 1)); color3 = (0xffffff / (val - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts()); break;
             case COLOR_DIVIDE_NORMALIZED: color1 = (int) (0xffffff / renormalized); color2 = (int) (0xffffff / (renormalized + 1)); color3 = (int) (0xffffff / (renormalized - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts()); break;
             case COLOR_GRAYSCALE_HIGH_CONTRAST: colortmp = ColorConfig.toGray(val * iterations); break;
@@ -1000,8 +1003,8 @@ public final class ComplexFractalGenerator implements Serializable {
     }
     private int getColor(int index, double smoothcount) {
         int color1, color2, color3, colortmp1, colortmp2, colortmp,
-                index2 = (index + 1) >= color.num_colors ? index : index + 1; color1 = color.getColor(index);
-        color2 = color.getColor(index2); color3 = color.getColor(Math.abs(index - 1));
+                index2 = MathUtils.boundsProtected(index + 1, color.getNum_colors()); color1 = color.getColor(index);
+        color2 = color.getColor(index2); color3 = MathUtils.boundsProtected(index - 1, color.getNum_colors());
         colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.isByParts());
         colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.isByParts());
         colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.isByParts());
@@ -1022,7 +1025,7 @@ public final class ComplexFractalGenerator implements Serializable {
     public void mandelbrotToJulia(Matrix constant, double level) {zoom(constant, level); changeMode(centre_offset); resetCentre();}
     private void changeMode(Complex lastConstant) {
         setLastConstant(lastConstant);
-        setMode((mode == Mode.BUDDHABROT) ? Mode.JULIABROT : ((mode == Mode.MANDELBROT) ? Mode.JULIA : mode));
+        setMode((mode == Mode.BUDDHABROT || mode == Mode.RUDYBROT) ? Mode.JULIABROT : ((mode == Mode.MANDELBROT || mode == Mode.RUDY) ? Mode.JULIA : mode));
     }
     public void zoom(Matrix centre_offset, double level) {
         zoom(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0)), level);
@@ -1039,6 +1042,49 @@ public final class ComplexFractalGenerator implements Serializable {
     }
     public void mandelbrotToJulia(Complex constant, double level) {zoom(constant, level); changeMode(centre_offset); resetCentre();}
     public void mandelbrotToJulia(ZoomParams zoom) {zoom(zoom); changeMode(centre_offset); resetCentre();}
+    @Override
+    public void pan(int distance, double angle) {pan(distance, angle, false);}
+    @Override
+    public void pan(int distance, double angle, boolean flip_axes) {
+        angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
+        pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
+    }
+    @Override
+    public void pan(int x_dist, int y_dist) {
+        zoom(center_x + x_dist, center_y + y_dist, zoom_factor); int histogram_length = histogram.length;
+        histogram = new int[histogram_length]; int[][] tmp_escapes = new int[escapedata.length][escapedata[0].length];
+        double[][] tmp_normalized_escapes = new double[normalized_escapes.length][normalized_escapes[0].length];
+        ImageData tmp_argand = new LinearizedImageData(argand);
+        for (int i = 0; i < tmp_escapes.length && i < tmp_normalized_escapes.length; i++) {
+            System.arraycopy(escapedata[i], 0, tmp_escapes[i], 0, tmp_escapes[i].length);
+            System.arraycopy(normalized_escapes[i], 0, tmp_normalized_escapes[i], 0, tmp_normalized_escapes[i].length);
+        } argand = new ImageData(tmp_argand.getWidth(), tmp_argand.getHeight());
+        escapedata = new int[tmp_escapes.length][tmp_escapes[0].length];
+        normalized_escapes = new double[tmp_normalized_escapes.length][tmp_normalized_escapes[0].length];
+        if (y_dist < 0) {
+            for (int i = 0, j = y_dist; i < argand.getHeight() - y_dist && j < argand.getHeight(); i++, j++) {
+                rangedCopyHelper(i, j, x_dist, tmp_escapes, tmp_normalized_escapes, tmp_argand);
+            }
+        } else {
+            for (int i = (-y_dist), j = 0; i < argand.getHeight() && j < argand.getHeight() + y_dist; i++, j++) {
+                rangedCopyHelper(i, j, x_dist, tmp_escapes, tmp_normalized_escapes, tmp_argand);
+            }
+        }
+    }
+    private void rangedCopyHelper(int i, int j, int x_dist, int[][] tmp_escapes, double[][] tmp_normalized_escapes, ImageData tmp_argand) {
+        if (x_dist < 0) {
+            System.arraycopy(tmp_escapes[i], (-x_dist), escapedata[j], 0, escapedata[j].length + x_dist);
+            System.arraycopy(tmp_normalized_escapes[i], (-x_dist), normalized_escapes[j], 0, normalized_escapes[j].length + x_dist);
+            for (int k = (-x_dist), l = 0; k < tmp_argand.getWidth() && l < tmp_argand.getWidth() + x_dist; k++, l++) {
+                argand.setPixel(j, l, tmp_argand.getPixel(i, k));
+            }
+        } else {
+            System.arraycopy(tmp_escapes[i], 0, escapedata[j], x_dist, escapedata[j].length - x_dist);
+            System.arraycopy(tmp_normalized_escapes[i], 0, normalized_escapes[j], x_dist, normalized_escapes[j].length - x_dist);
+            for (int k = 0, l = x_dist; k < tmp_argand.getWidth() - x_dist && l < tmp_argand.getWidth(); k++, l++) {
+                argand.setPixel(j, l, tmp_argand.getPixel(i, k));
+            }
+        }
+    }
     public enum Mode {MANDELBROT, JULIA, NEWTON, BUDDHABROT, NEWTONBROT, JULIABROT, MANDELBROT_NOVA, JULIA_NOVA, MANDELBROT_NOVABROT, JULIA_NOVABROT, SECANT, SECANTBROT, RUDY, RUDYBROT}
-    //TODO: Add pan method
 }

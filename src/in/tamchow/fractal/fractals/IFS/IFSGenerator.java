@@ -6,14 +6,16 @@ import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.LinearizedImageData;
+import in.tamchow.fractal.imgutils.Pannable;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 
+import java.io.Serializable;
 import java.util.Random;
 /**
  * Generates IFS fractals
  */
-public class IFSGenerator {
+public class IFSGenerator implements Serializable, Pannable {
     ImageData plane;
     IFSFractalParams params;
     Matrix centre_offset, initial;
@@ -23,11 +25,13 @@ public class IFSGenerator {
     boolean completion;
     Printable progressPublisher;
     public IFSGenerator(IFSFractalParams params, Printable progressPublisher) {
-        setParams(params); plane = new LinearizedImageData(params.getWidth(), params.getHeight()); resetCentre();
+        setParams(params); initIFS(params); this.progressPublisher = progressPublisher;
+    }
+    private void initIFS(IFSFractalParams params) {
+        plane = new LinearizedImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision()); initial = null; completion = false;
         if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
-        this.progressPublisher = progressPublisher;
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}
@@ -48,6 +52,12 @@ public class IFSGenerator {
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2); setCenter_y(plane.getHeight() / 2); double[][] matrixData = new double[2][1];
         matrixData[0][0] = 0; matrixData[1][0] = 0; setCentre_offset(new Matrix(matrixData));}
+    public void setWidth(int width) {
+        IFSFractalParams modified = new IFSFractalParams(params); modified.setWidth(width); initIFS(modified);
+    }
+    public void setHeight(int height) {
+        IFSFractalParams modified = new IFSFractalParams(params); modified.setHeight(height); initIFS(modified);
+    }
     public IFSFractalParams getParams() {return params;}
     public void setParams(IFSFractalParams params) {this.params = new IFSFractalParams(params);}
     public long getDepth() {return depth;}
@@ -124,10 +134,13 @@ public class IFSGenerator {
         point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
         if (point.equals(initial) || isOutOfBounds(point)) completion = true;
     }
+    @Override
     public void pan(int distance, double angle) {pan(distance, angle, false);}
+    @Override
     public void pan(int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
+    @Override
     public void pan(int x_dist, int y_dist) {zoom(center_x + x_dist, center_y + y_dist, zoom_factor);}
 }

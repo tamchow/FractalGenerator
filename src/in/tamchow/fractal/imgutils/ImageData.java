@@ -2,10 +2,12 @@ package in.tamchow.fractal.imgutils;
 import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.MathUtils;
+
+import java.io.Serializable;
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed ARGB in hex values as pixels.
  */
-public class ImageData {
+public class ImageData implements Serializable, Pannable {
     private String path;
     private int[][] pixdata;
     public ImageData() {
@@ -108,26 +110,38 @@ public class ImageData {
     }
     public synchronized int getPixel(int i) {return getPixel(i / pixdata[0].length, i % pixdata[0].length);}
     public synchronized void setPixel(int i, int val) {setPixel(i / pixdata[0].length, i % pixdata[0].length, val);}
-    public ImageData pan(int x_res, int y_res, int x_dist, int y_dist) {
+    @Override
+    public void pan(int distance, double angle) {pan(distance, angle, false);}
+    @Override
+    public void pan(int distance, double angle, boolean flip_axes) {
+        angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
+        pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
+    }
+    @Override
+    public void pan(int x_dist, int y_dist) {pan(getWidth(), getHeight(), x_dist, y_dist);}
+    public void pan(int x_res, int y_res, int x_dist, int y_dist) {
         if (x_res + x_dist >= getWidth() || y_res + y_dist >= getHeight() || x_res + x_dist < 0 || y_res + y_dist < 0) {
             throw new UnsupportedOperationException("Panning out of range");
         } else {
             ImageData tmp = new ImageData(x_res, y_res);
             int start_x = ((getWidth() - x_res) / 2) + x_dist, start_y = ((getHeight() - y_res) / 2) + y_dist;
-            int end_x = (getWidth() - ((getWidth() - x_res) / 2)) + x_dist, end_y = (getHeight() - ((getHeight() - y_res) / 2)) + y_dist;
+            int end_x = (getWidth() - (start_x - x_dist)) + x_dist, end_y = (getHeight() - (start_y - y_dist)) + y_dist;
             for (int i = start_y, k = 0; i < end_y && k < tmp.getHeight(); i++, k++) {
                 for (int j = start_x, l = 0; j < end_x && l < tmp.getWidth(); j++, l++) {
                     tmp.setPixel(k, l, getPixel(i, j));
                 }
-            } return tmp;
+            } setPixdata(tmp.getPixdata());
         }
     }
-    public ImageData pan(int x_res, int y_res, int distance, double angle, boolean flip_axes) {
+    public void pan(int x_res, int y_res, int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
-        return pan(x_res, y_res, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
+        pan(x_res, y_res, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-    public ImageData pan(int x_res, int y_res, int distance, double angle) {
-        return pan(x_res, y_res, distance, angle, false);
+    public void pan(int x_res, int y_res, int distance, double angle) {
+        pan(x_res, y_res, distance, angle, false);
+    }
+    public ImageData subImage(int x_res, int y_res) {
+        ImageData subImage = new ImageData(this); subImage.pan(0, 0); return subImage;
     }
     public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NONE}
 }

@@ -21,6 +21,9 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
         this.master = master; this.iterations = iterations; this.escape_radius = escape_radius;
         this.constant = constant; nx = x_threads; ny = y_threads; buffer = new PartImage[nx * ny];
     }
+    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master) {
+        this(master, master.getParams());
+    }
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config) {
         this.master = master; this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
