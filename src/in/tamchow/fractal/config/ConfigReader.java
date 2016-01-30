@@ -54,7 +54,7 @@ public class ConfigReader {
     }
     public static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String thread_data = null, post_process_mode = null, switch_rate = null, trap_point = null, trap_line = null;
+        String thread_data = null, post_process_mode = null, switch_rate = null, trap_point = null, trap_line = null, oldvariablecode = null;
         while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Threads:")) {
                 thread_data = line.substring("Threads:".length()).trim(); continue;}
@@ -66,6 +66,8 @@ public class ConfigReader {
                 trap_point = line.substring("Trap_point:".length()).trim(); continue;
             } if (line.startsWith("Trap_line:")) {
                 trap_line = line.substring("Trap_line:".length()).trim(); continue;
+            } if (line.startsWith("Old_variable_code:")) {
+                oldvariablecode = line.substring("Old_variable_code:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
@@ -86,6 +88,7 @@ public class ConfigReader {
         if (switch_rate != null) {complexFractalParams.initParams.setSwitch_rate(Integer.valueOf(switch_rate));}
         if (trap_point != null) {complexFractalParams.initParams.setTrap_point(new Complex(trap_point));}
         if (trap_line != null) {complexFractalParams.initParams.setLinetrap(trap_line);}
+        if (oldvariablecode != null) {complexFractalParams.initParams.setOldvariablecode(oldvariablecode);}
         return complexFractalParams;
     }
     public static IFSFractalConfig getIFSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {

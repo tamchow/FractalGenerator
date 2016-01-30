@@ -10,9 +10,10 @@ public class Function {
     ArrayList<String> signs;
     String[][] consts;
     String z_value;
-    String variableCode;
-    public Function(String variable, String variableCode, String[][] varconst) {
-        setZ_value(variable); setConsts(varconst); setVariableCode(variableCode);
+    String variableCode, oldvariablecode;
+    public Function(String variable, String variableCode, String oldvariablecode, String[][] varconst) {
+        setZ_value(variable); setConsts(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
+        terms = new ArrayList<>(); signs = new ArrayList<>();
     }
     public Function() {
         terms = new ArrayList<>(); signs = new ArrayList<>();
@@ -20,17 +21,19 @@ public class Function {
     public static boolean isSpecialFunction(String function) {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
-    public static Function fromString(String function, String variableCode) {
+    public static Function fromString(String function, String variableCode, String oldvariablecode) {
         Function poly = new Function(); String[] tokens = function.split("|"); for (String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
-                poly.terms.add(FunctionTerm.fromString(token.trim(), variableCode));
+                poly.terms.add(FunctionTerm.fromString(token.trim(), variableCode, oldvariablecode));
             }
         } if (poly.signs.size() == poly.terms.size() - 1 || (!poly.signs.get(0).equals("-"))) {
             poly.signs.add(0, "+");
         } return poly;
     }
+    public String getOldvariablecode() {return oldvariablecode;}
+    public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
     public String getZ_value() {
         return z_value;
     }

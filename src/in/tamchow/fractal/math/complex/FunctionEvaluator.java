@@ -6,22 +6,30 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
  */
 public class FunctionEvaluator {
     private String[][] constdec;
-    private String z_value, oldvalue, variableCode;
+    private String z_value, oldvalue, variableCode, oldvariablecode;
     private boolean hasBeenSubstituted;
     private boolean advancedDegree;
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, boolean advancedDegree) {
         setZ_value(variable);
-        setConstdec(varconst);
-        setVariableCode(variableCode);
+        setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(variableCode + "_p");
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
     public FunctionEvaluator(String variableCode, String[][] varconst, boolean advancedDegree) {
-        setConstdec(varconst);
-        setVariableCode(variableCode);
+        setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(variableCode + "_p");
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
+    public FunctionEvaluator(String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
+        setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
+        hasBeenSubstituted = false; setAdvancedDegree(advancedDegree);
+    }
+    public FunctionEvaluator(String variable, String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
+        setZ_value(variable); setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
+        hasBeenSubstituted = false; setAdvancedDegree(advancedDegree);
+    }
+    public String getOldvariablecode() {return oldvariablecode;}
+    public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
     public String getOldvalue() {return oldvalue;}
     public void setOldvalue(String oldvalue) {this.oldvalue = oldvalue;}
     public boolean isAdvancedDegree() {
@@ -37,6 +45,7 @@ public class FunctionEvaluator {
         this.variableCode = variableCode;
     }
     public Complex getDegree(String function) {
+        function = function.replace(oldvariablecode, variableCode);
         Complex degree = new Complex(Complex.ZERO);
         if ((function.contains(variableCode) && (!function.contains("^")))) {
             degree = new Complex(Complex.ONE); return degree;
@@ -155,9 +164,9 @@ public class FunctionEvaluator {
     }
     private String substitute(String expr, boolean isSymbolic) {
         String[] mod = expr.split(" "); String sub = ""; for (int i = 0; i < mod.length; i++) {
-            if (mod[i].equals(variableCode) && (!isSymbolic)) {
+            if (mod[i].equalsIgnoreCase(variableCode) && (!isSymbolic)) {
                 mod[i] = "" + z_value;
-            } else if ((mod[i].equalsIgnoreCase("old")) && (!isSymbolic)) {
+            } else if ((mod[i].equalsIgnoreCase(oldvariablecode)) && (!isSymbolic)) {
                 mod[i] = "" + z_value;
             } else if (getConstant(mod[i]) != null) {mod[i] = getConstant(mod[i]);}
         } for (String aMod : mod) {sub += aMod + " ";} return sub.trim();

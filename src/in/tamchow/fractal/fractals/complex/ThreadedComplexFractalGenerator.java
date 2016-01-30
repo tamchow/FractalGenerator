@@ -40,13 +40,13 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
             for (int j = 0; j < nx; j++) {
                 int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, j, ny, i);
                 SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-                master.getProgressPublisher().println("Initiated thread: " + idx); idx++; runner.start();
+                master.getProgressPublisher().publish("Initiated thread: " + idx, idx); idx++; runner.start();
             }
         } try {
             synchronized (lock) {
                 while (!allComplete()) {lock.wait(1000);} lock.notifyAll();
                 int[] histogram = new int[(int) iterations + 2]; int total = 0;
-                if (master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                if (master.getInterpolated().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getInterpolated().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                     for (PartImage partImage : buffer) {
                         for (int i = 0; i < histogram.length; i++) {histogram[i] += partImage.histogram[i];}
                     }
@@ -56,7 +56,7 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
                         for (int j = partImage.startx; j < partImage.endx; j++) {
                             master.escapedata[i][j] = partImage.escapedata[i][j];
                             master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
-                            if (master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                            if (master.getInterpolated().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getInterpolated().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                                 double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
                                 for (int k = 0; k < partImage.escapedata[i][j]; k += 1) {
                                     hue += ((double) histogram[k]) / total;
@@ -110,12 +110,12 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
             onCompletion();
         }
         void onCompletion() {
-            if (master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getColor().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+            if (master.getInterpolated().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.getInterpolated().getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                 buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
                 buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
             } float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
-            master.progressPublisher.println("Thread " + index + " has completed, total completion = " + completion + "%");
+            master.progressPublisher.publish("Thread " + index + " has completed, total completion = " + completion + "%", completion);
         }
     }
 }

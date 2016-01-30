@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.IFS;
-import in.tamchow.fractal.config.Printable;
+import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.helpers.MathUtils;
@@ -23,8 +23,8 @@ public class IFSGenerator implements Serializable, Pannable {
     double zoom, zoom_factor, base_precision, scale;
     long depth;
     boolean completion;
-    Printable progressPublisher;
-    public IFSGenerator(IFSFractalParams params, Printable progressPublisher) {
+    Publisher progressPublisher;
+    public IFSGenerator(IFSFractalParams params, Publisher progressPublisher) {
         setParams(params); initIFS(params); this.progressPublisher = progressPublisher;
     }
     private void initIFS(IFSFractalParams params) {
@@ -115,7 +115,8 @@ public class IFSGenerator implements Serializable, Pannable {
         return new int[]{x, y};
     }
     public synchronized void publishProgress(long val) {
-        progressPublisher.println("% completion= " + (((float) val) / depth) * 100.0 + "%");
+        float completion = (((float) val) / depth) * 100.0f;
+        progressPublisher.publish("% completion= " + completion + "%", completion);
     }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {

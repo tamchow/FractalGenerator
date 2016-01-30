@@ -11,11 +11,10 @@ public class Polynomial {
     ArrayList<String> signs;
     String[][] constdec;
     String z_value;
-    String variableCode;
-    public Polynomial(String variable, String variableCode, String[][] varconst) {
+    String variableCode, oldvariablecode;
+    public Polynomial(String variable, String variableCode, String oldvariablecode, String[][] varconst) {
         setZ_value(variable);
-        setConstdec(varconst);
-        setVariableCode(variableCode);
+        setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
     }
     public Polynomial() {
         terms = new ArrayList<>();
@@ -35,6 +34,8 @@ public class Polynomial {
         }
         return poly;
     }
+    public String getOldvariablecode() {return oldvariablecode;}
+    public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
     public String getZ_value() {
         return z_value;
     }
@@ -95,7 +96,7 @@ public class Polynomial {
                 vardeg = new Complex(term.exponent);
             } catch (IllegalArgumentException iae) {
                 if (!term.isConstant()) {
-                    FunctionEvaluator fe = new FunctionEvaluator(variableCode, constdec, false);
+                    FunctionEvaluator fe = new FunctionEvaluator(variableCode, oldvariablecode, constdec, false);
                     vardeg = fe.evaluate(term.exponent, true);
                 } else {
                     vardeg = new Complex(Complex.ZERO);

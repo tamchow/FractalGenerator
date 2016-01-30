@@ -1,6 +1,6 @@
 package in.tamchow.fractal.platform_tools;
 import in.tamchow.fractal.config.Config;
-import in.tamchow.fractal.config.Printable;
+import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
@@ -18,7 +18,7 @@ import java.io.File;
 /**
  * Swing app to display images & complex number fractals
  */
-public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Printable {
+public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Publisher {
     BufferedImage[] img;
     Image[] rimg;
     Image todraw;
@@ -88,7 +88,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         id.parent.setVisible(true); Thread thread = new Thread(id); thread.start();
     }
     @Override
-    public synchronized void println(String toPrint) {parent.setTitle("Generating Fractal: " + toPrint);}
+    public synchronized void publish(String message, double progress) {parent.setTitle("Generating Fractal: " + message);}
     @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {

@@ -31,4 +31,10 @@ public class ComplexFractalConfig extends Config {
         setWait(wait);
         setParams(config);
     }
+    @Override
+    public String toString() {
+        String representation = "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
+        for (ComplexFractalParams param : params) {representation += "\n" + param;} representation += "\n[EndFractals]";
+        return representation + "\n";
+    }
 }

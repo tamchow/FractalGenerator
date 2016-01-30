@@ -5,11 +5,11 @@ import in.tamchow.fractal.math.complex.Complex;
  */
 public class FunctionTerm {
     public final FunctionTermData[] functions = {new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * cos $ )"), new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"), new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"), new FunctionTermData("exp", "$v * ( exp $ )", "exp $ * ( $v + $vv )"), new FunctionTermData("sinh", "$v * ( cosh $ )", "( $v * ( sinh $ ) ) + ( $vv * ( cosh $ ) )"), new FunctionTermData("cosh", "$v * ( sinh $ )", "( $v * ( cosh $ ) ) + ( $vv * ( sinh $ ) )")};
-    String function, constant, variableCode;
+    String function, constant, variableCode, oldvariablecode;
     Polynomial coefficient, argument;
     String[][] consts;
-    public static FunctionTerm fromString(String function, String variableCode) {
-        FunctionTerm f = new FunctionTerm(); f.variableCode = variableCode;
+    public static FunctionTerm fromString(String function, String variableCode, String oldvariablecode) {
+        FunctionTerm f = new FunctionTerm(); f.variableCode = variableCode; f.oldvariablecode = oldvariablecode;
         f.coefficient = Polynomial.fromString(function.split(";")[0]);
         if (function.split(";").length == 4) {f.constant = function.split(";")[3];} else {f.constant = "0";}
         f.function = function.split(";")[1]; f.argument = Polynomial.fromString(function.split(";")[2]); return f;
@@ -28,7 +28,7 @@ public class FunctionTerm {
             System.arraycopy(constdec[i], 0, this.consts[i], 0, this.consts[i].length);
         }
     }
-    public String toString() {return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant + " )";}
+    public String toString() {return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant.trim() + " )";}
     public String derivative(int order) {
         coefficient.setConstdec(consts); argument.setConstdec(consts); String deriv = ""; switch (order) {
             case 1: deriv += "( # * fv ) + ( #v * f)"; break;

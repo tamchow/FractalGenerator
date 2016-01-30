@@ -21,4 +21,10 @@ public class ZoomParams implements Serializable {
         if (parts.length == 2) {return new ZoomParams(Matrix.fromString(parts[0]), Double.valueOf(parts[1]));}
         return new ZoomParams(Integer.valueOf(parts[0]), Integer.valueOf(parts[1]), Double.valueOf(parts[2]));
     }
+    @Override
+    public String toString() {
+        if (centre == null) {
+            return centre_x + " " + centre_y + " " + level;
+        } return centre + " " + level;
+    }
 }

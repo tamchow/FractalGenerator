@@ -24,11 +24,11 @@ public class Test {
         int resx = 1920, resy = 1080, iter = 32, switch_rate = 0;
         ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 500; String linetrap = null;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE, 4, 100, true, true);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, true, true, true);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
-        cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575}, true);
+        //cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
-        //cfg.createSmoothPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, new double[]{0.2, 0.4, 0.6, 0.8});
+        cfg.createSmoothPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, new double[]{0.2, 0.4, 0.6, 0.8});
         //cfg.setColor_density(cfg.calculateColorDensity());
         Complex constant = null;//new Complex("1.0,+0.0i");
         Complex trap = new Complex(0.15); int x_t = 4, y_t = 3;//func=poly

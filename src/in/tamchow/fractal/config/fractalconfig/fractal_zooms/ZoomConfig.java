@@ -17,4 +17,10 @@ public class ZoomConfig implements Serializable {
         ZoomConfig zoom = new ZoomConfig(); zoom.zooms = new ZoomParams[params.length];
         for (int i = 0; i < zoom.zooms.length; i++) {zoom.zooms[i] = ZoomParams.fromString(params[i]);} return zoom;
     }
+    @Override
+    public String toString() {
+        String representation = "[Zooms]"; for (ZoomParams zoom : zooms) {
+            representation += "\n" + zoom;
+        } representation += "\n[EndZooms]"; return representation;
+    }
 }

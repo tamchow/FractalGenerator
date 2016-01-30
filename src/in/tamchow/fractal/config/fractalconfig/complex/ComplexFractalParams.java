@@ -40,4 +40,8 @@ public class ComplexFractalParams implements Serializable {
     public void setZoomConfig(ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);
     }
+    @Override
+    public String toString() {
+        return "Threads:" + x_threads + "," + y_threads + "\nPostprocessing:" + postprocessMode + "\n" + zoomConfig + "\n" + initParams + "\n" + runParams + "\n";
+    }
 }

@@ -71,6 +71,10 @@ public class IFSFractalParams {
             params.colors[i] = Integer.valueOf(parts[3], 16);
         } return params;
     }
+    @Override
+    public String toString() {//TODO: toString()
+        return "";
+    }
     public void setZoomConfig(ZoomConfig config) {zoomConfig = new ZoomConfig(config);}
     public int getHeight() {
         return height;

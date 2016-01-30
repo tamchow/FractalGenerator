@@ -23,4 +23,10 @@ public class IFSFractalConfig extends Config {
     public IFSFractalConfig(int transtime, int fps, int wait, IFSFractalParams[] config) {
         setFps(fps); setTranstime(transtime); setWait(wait); setParams(config);
     }
+    @Override
+    public String toString() {
+        String representation = "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
+        for (IFSFractalParams param : params) {representation += "\n" + param;} representation += "\n[EndFractals]";
+        return representation + "\n";
+    }
 }
