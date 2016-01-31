@@ -38,7 +38,7 @@ public class ImageConfig extends Config implements DataFromString, Serializable 
         }
     }
     public String toString() {
-        String representation = "";
+        String representation = "[ImageConfig]\n";
         if (customDimensions()) {representation += "Dimensions:" + width + "," + height + "\n";}
         for (ImageParams param : params) {representation += param + "\n";} return representation;
     }

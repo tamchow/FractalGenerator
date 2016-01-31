@@ -17,67 +17,11 @@ public class ColorConfig implements Serializable {
     public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor) {
         initColorConfig(mode, color_density, num_colors, basecolor, false, false, false);
     }
-    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex, boolean cyclize) {
-        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
-        setNum_colors(num_colors); setBasecolor(basecolor); calcStep(); setCyclize(cyclize); initGradientPalette();
-        setMode(mode);
-        setExponentialSmoothing(true);
-    }
-    public void initGradientPalette() {
-        palette = new int[num_colors];
-        if (step == 0) {initShadePalette(); return;} int baseidx = num_colors / 2; int increment = 0;
-        for (int i = 0; i < baseidx; i++) {
-            palette[i] = Math.abs(basecolor - increment * step); increment++;
-        } increment = 0;
-        for (int i = baseidx; i < num_colors; i++) {palette[i] = basecolor + increment * step; increment++;}
-        if (isCyclize()) {cyclizePalette();}
-    }
-    private void initShadePalette() {
-        int baseidx = num_colors / 2; for (int i = baseidx - 1; i >= 0; i--) {
-            palette[i] = getTint(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
-        } for (int i = baseidx; i < num_colors; i++) {
-            palette[i] = getShade(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
-        } if (isCyclize()) {cyclizePalette();}
-    }
-    public boolean isCyclize() {return cyclize;}
-    public void setCyclize(boolean cyclize) {this.cyclize = cyclize; if (this.cyclize) {num_colors /= 2;}}
-    public int getTint(int color, double tint) {
-        int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
-        int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r + (255 - r) * tint);
-        int ng = (int) (g + (255 - g) * tint); int nb = (int) (b + (255 - b) * tint); return packRGB(nr, ng, nb);
-    }
-    public static int separateARGB(int color, int component) {return (color >> (component * 8)) & 0xFF;}
-    public static int packRGB(int r, int g, int b) {
-        return r << (Colors.RGBCOMPONENTS.RED * 8) | g << (Colors.RGBCOMPONENTS.GREEN * 8) | b;
-    }
-    public int getShade(int color, double shade) {
-        int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
-        int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r * (1 - shade));
-        int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade)); return packRGB(nr, ng, nb);
-    }
-    private void cyclizePalette() {
-        if (already_cyclized) {num_colors /= 2; already_cyclized = false;}
-        //mirror the palette about the last colour to make it cyclic.
-        num_colors *= 2; int[] tmp = new int[palette.length]; System.arraycopy(palette, 0, tmp, 0, tmp.length);
-        palette = new int[num_colors]; System.arraycopy(tmp, 0, palette, 0, tmp.length);
-        //Since 2*tmp.length==num_colors
-        for (int i = num_colors - 1, j = tmp.length - 1; i >= tmp.length && j >= 0; i--, j--) {
-            palette[i] = palette[j];
-        } already_cyclized = true;
-    }
-    private void calcStep() {
-        setStep((basecolor / num_colors) * color_density);
-    }
     public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex, cyclize);
     }
     public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize);
-    }
-    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex, boolean cyclize) {
-        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
-        setExponentialSmoothing(true); setCyclize(cyclize);
-        setNum_colors(num_colors); setBasecolor(basecolor); setStep(step); initGradientPalette(); setMode(mode);
     }
     public ColorConfig(Colors.CALCULATIONS mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(false);}
     public void setPalette(int[] palette, boolean preserve) {
@@ -111,15 +55,127 @@ public class ColorConfig implements Serializable {
             }
         } if (isCyclize()) {cyclizePalette();}
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int num_colors, boolean byParts, boolean logIndex, boolean cyclize) {
-        initColorConfig(mode, num_colors, byParts, logIndex, cyclize); setColor_density(calculateColorDensity());
+    public boolean isCyclize() {return cyclize;}
+    public void setCyclize(boolean cyclize) {this.cyclize = cyclize; if (this.cyclize) {num_colors /= 2;}}
+    public static int packRGB(int r, int g, int b) {return packARGB(0xff, r, g, b);}
+    public static int packARGB(int a, int r, int g, int b) {
+        return a << (Colors.RGBCOMPONENTS.ALPHA << 3) | r << (Colors.RGBCOMPONENTS.RED << 3) | g << (Colors.RGBCOMPONENTS.GREEN << 3) | b;
+        //int argb=a;argb = (argb << 8) + r;argb = (argb << 8) + g;argb = (argb << 8) + b;return argb;
+        //return alphaBlend(a,r,g,b,0x00000000);
     }
-    public int calculateColorDensity() {if (mode == Colors.CALCULATIONS.SIMPLE) {return 1;} return num_colors - 1;}
+    private void cyclizePalette() {
+        if (already_cyclized) {num_colors /= 2; already_cyclized = false;}
+        //mirror the palette about the last colour to make it cyclic.
+        num_colors *= 2; int[] tmp = new int[palette.length]; System.arraycopy(palette, 0, tmp, 0, tmp.length);
+        palette = new int[num_colors]; System.arraycopy(tmp, 0, palette, 0, tmp.length);
+        //Since 2*tmp.length==num_colors
+        for (int i = num_colors - 1, j = tmp.length - 1; i >= tmp.length && j >= 0; i--, j--) {
+            palette[i] = palette[j];
+        } already_cyclized = true;
+    }
+    public ColorConfig(Colors.CALCULATIONS mode, int num_colors, boolean byParts, boolean logIndex, boolean cyclize) {
+        initColorConfig(mode, num_colors, byParts, logIndex, cyclize); setColor_density(-1);
+    }
     public ColorConfig() {palette = null; initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, false, false, false);}
     public ColorConfig(ColorConfig old) {
         initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts(), old.isLogIndex(), old.isCyclize());
-        setExponentialSmoothing(old.isExponentialSmoothing());
-        setPalette(old.getPalette(), false); colors_corrected = old.colors_corrected;
+        setExponentialSmoothing(old.isExponentialSmoothing()); setPalette(old.getPalette(), false);
+        colors_corrected = old.colors_corrected;
+    }
+    public static double colorSeparation(int color1, int color2) {
+        int r1 = separateARGB(color1, Colors.RGBCOMPONENTS.RED), r2 = separateARGB(color2, Colors.RGBCOMPONENTS.RED),
+                g1 = separateARGB(color1, Colors.RGBCOMPONENTS.GREEN), g2 = separateARGB(color2, Colors.RGBCOMPONENTS.GREEN),
+                b1 = separateARGB(color1, Colors.RGBCOMPONENTS.BLUE), b2 = separateARGB(color2, Colors.RGBCOMPONENTS.BLUE);
+        return Math.sqrt((r2 - r1) * (r2 - r1) + (g2 - g1) * (g2 - g1) + (b2 - b1) * (b2 - b1));
+    }
+    public static int separateARGB(int color, int component) {return (color >> (component * 8)) & 0xFF;}
+    public static int alphaBlend(int fore, int back) {
+        return alphaBlend(separateARGB(fore, Colors.RGBCOMPONENTS.ALPHA), fore, back);
+    }
+    public static int alphaBlend(int alpha, int fore, int back) {
+        return alphaBlend(alpha, separateARGB(fore, Colors.RGBCOMPONENTS.RED), separateARGB(fore, Colors.RGBCOMPONENTS.GREEN), separateARGB(fore, Colors.RGBCOMPONENTS.BLUE), back);
+    }
+    public static int alphaBlend(int a, int r, int g, int b, int back) {return alphaBlend(a, 0xff, r, g, b, back);}
+    public static int alphaBlend(int a, int amax, int r, int g, int b, int back) {
+        return alphaBlend(a, amax, r, g, b, separateARGB(back, Colors.RGBCOMPONENTS.RED), separateARGB(back, Colors.RGBCOMPONENTS.GREEN), separateARGB(back, Colors.RGBCOMPONENTS.BLUE));
+    }
+    public static int alphaBlend(int a, int amax, int r, int g, int b, int br, int bg, int bb) {
+        float alpha = ((float) a) / amax;
+        int nr = Math.round((1 - alpha) * br + alpha * r), ng = Math.round((1 - alpha) * bg + alpha * g), nb = Math.round((1 - alpha) * bb + alpha * b);
+        return packARGB(a, nr, ng, nb);
+    }
+    public static int alphaBlend(int a, int r, int g, int b, int br, int bg, int bb) {
+        return alphaBlend(a, 0xff, r, g, b, br, bg, bb);
+    }
+    public static int toGray(int common) {return toRGB(common, common, common);}
+    public static int toRGB(int r, int g, int b) {
+        if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
+            r = MathUtils.boundsProtected(r, 256); g = MathUtils.boundsProtected(g, 256);
+            b = MathUtils.boundsProtected(b, 256);
+            //throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
+        } return packRGB(r, g, b);
+    }
+    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, boolean byParts) {
+        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);
+    }
+    public static int linearInterpolated(int fromcolor, int tocolor, double bias, boolean byParts) {
+        bias = (bias < 0) ? -bias : bias; bias = (bias > 1) ? bias - (long) bias : bias;
+        if (tocolor < fromcolor) {bias = 1 - bias;} if (byParts) {
+            int fr = separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED);
+            int fg = separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
+            int fb = separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
+            int tr = separateARGB(tocolor, Colors.RGBCOMPONENTS.RED);
+            int tg = separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN);
+            int tb = separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE);
+            int nr = Math.round((float) (tr * bias + fr * (1 - bias)));
+            int ng = Math.round((float) (tg * bias + fg * (1 - bias)));
+            int nb = Math.round((float) (tb * bias + fb * (1 - bias))); return toRGB(nr, ng, nb);
+        } else {
+            /*int fa= separateARGB(fromcolor, Colors.RGBCOMPONENTS.ALPHA);
+            int ta= separateARGB(tocolor, Colors.RGBCOMPONENTS.ALPHA);
+            int na= Math.round((float) (ta * bias + fa * (1 - bias)));*/
+            int na = MathUtils.boundsProtected((int) (bias * 255.0), 256);
+            //na=(int)(bias*255.0);na=(na<0)?0:((na>255)?255:na);
+            return alphaBlend(na, separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE));
+        }
+    }
+    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex, boolean cyclize) {
+        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
+        setNum_colors(num_colors); setBasecolor(basecolor); calcStep(); setCyclize(cyclize); initGradientPalette();
+        setMode(mode); setExponentialSmoothing(true);
+    }
+    public void initGradientPalette() {
+        palette = new int[num_colors]; if (step == 0) {initShadePalette(); return;} int baseidx = num_colors / 2;
+        int increment = 0; for (int i = 0; i < baseidx; i++) {
+            palette[i] = Math.abs(basecolor - increment * step); increment++;
+        } increment = 0;
+        for (int i = baseidx; i < num_colors; i++) {palette[i] = basecolor + increment * step; increment++;}
+        if (isCyclize()) {cyclizePalette();}
+    }
+    private void initShadePalette() {
+        int baseidx = num_colors / 2; for (int i = baseidx - 1; i >= 0; i--) {
+            palette[i] = getTint(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
+        } for (int i = baseidx; i < num_colors; i++) {
+            palette[i] = getShade(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
+        } if (isCyclize()) {cyclizePalette();}
+    }
+    public int getTint(int color, double tint) {
+        int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
+        int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r + (255 - r) * tint);
+        int ng = (int) (g + (255 - g) * tint); int nb = (int) (b + (255 - b) * tint); return packRGB(nr, ng, nb);
+    }
+    public int getShade(int color, double shade) {
+        int r = separateARGB(color, Colors.RGBCOMPONENTS.RED); int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
+        int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE); int nr = (int) (r * (1 - shade));
+        int ng = (int) (g * (1 - shade)); int nb = (int) (b * (1 - shade)); return packRGB(nr, ng, nb);
+    }
+    private void calcStep() {
+        setStep((basecolor / num_colors) * color_density);
+    }
+    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex, boolean cyclize) {
+        colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
+        setExponentialSmoothing(true); setCyclize(cyclize); setNum_colors(num_colors); setBasecolor(basecolor);
+        setStep(step); initGradientPalette(); setMode(mode);
     }
     public boolean isLogIndex() {return logIndex;}
     public void setLogIndex(boolean logIndex) {this.logIndex = logIndex;}
@@ -148,8 +204,11 @@ public class ColorConfig implements Serializable {
         return color_density;
     }
     public void setColor_density(int color_density) {
-        this.color_density = color_density;
+        if (color_density <= 0) {this.color_density = calculateColorDensity();} else {
+            this.color_density = color_density;
+        }
     }
+    public int calculateColorDensity() {return num_colors - 1;}
     public int getNum_colors() {
         return num_colors;
     }
@@ -164,38 +223,6 @@ public class ColorConfig implements Serializable {
     }
     public boolean isExponentialSmoothing() {return exponentialSmoothing;}
     public void setExponentialSmoothing(boolean exponentialSmoothing) {this.exponentialSmoothing = exponentialSmoothing;}
-    public static double colorSeparation(int color1, int color2) {
-        int r1 = separateARGB(color1, Colors.RGBCOMPONENTS.RED), r2 = separateARGB(color2, Colors.RGBCOMPONENTS.RED),
-                g1 = separateARGB(color1, Colors.RGBCOMPONENTS.GREEN), g2 = separateARGB(color2, Colors.RGBCOMPONENTS.GREEN),
-                b1 = separateARGB(color1, Colors.RGBCOMPONENTS.BLUE), b2 = separateARGB(color2, Colors.RGBCOMPONENTS.BLUE);
-        return Math.sqrt((r2 - r1) * (r2 - r1) + (g2 - g1) * (g2 - g1) + (b2 - b1) * (b2 - b1));
-    }
-    public static int packARGB(int a, int r, int g, int b) {return a << (Colors.RGBCOMPONENTS.ALPHA * 8) | r << (Colors.RGBCOMPONENTS.RED * 8) | g << (Colors.RGBCOMPONENTS.GREEN * 8) | b;}
-    public static int toGray(int common) {return toRGB(common, common, common);}
-    public static int toRGB(int r, int g, int b) {
-        if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
-            r = MathUtils.boundsProtected(r, 256); g = MathUtils.boundsProtected(g, 256);
-            b = MathUtils.boundsProtected(b, 256);
-            //throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
-        } return packRGB(r, g, b);
-    }
-    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, boolean byParts) {
-        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);
-    }
-    public static int linearInterpolated(int fromcolor, int tocolor, double bias, boolean byParts) {
-        bias = (bias < 0) ? -bias : bias; bias = (bias > 1) ? bias - (long) bias : bias;
-        if (tocolor < fromcolor) {bias = 1 - bias;} if (byParts) {
-            int fr = separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED);
-            int fg = separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
-            int fb = separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
-            int tr = separateARGB(tocolor, Colors.RGBCOMPONENTS.RED);
-            int tg = separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN);
-            int tb = separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE);
-            int nr = Math.round((float) (tr * bias + fr * (1 - bias)));
-            int ng = Math.round((float) (tg * bias + fg * (1 - bias)));
-            int nb = Math.round((float) (tb * bias + fb * (1 - bias))); return toRGB(nr, ng, nb);
-        } return Math.round((float) (tocolor * bias + fromcolor * (1 - bias)));
-    }
     public void createSmoothPalette(int[] control_colors, double[] control_points) {
         createSmoothPalette(control_colors, control_points, false);
     }
@@ -245,7 +272,7 @@ public class ColorConfig implements Serializable {
             } else if (palette_type == Colors.PALETTE.RANDOM_PALETTE) {
                 initRandomPalette(num_colors, true);
             } else {initGradientPalette();} colors_corrected = true;
-        }
+        } bias = (bias < 0) ? -bias : bias; bias = (bias > 1) ? bias - (long) bias : bias;
         double h0 = 0.5 * ((bias * bias) * (bias - 1)),
                 h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
@@ -270,8 +297,11 @@ public class ColorConfig implements Serializable {
             int nr = Math.round((float) Math.abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
             int ng = Math.round((float) Math.abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
             int nb = Math.round((float) Math.abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4)); return toRGB(nr, ng, nb);
-        } double color = (h0 * palette[index] + h1 * palette[index1] + h2 * palette[i2] + h3 * palette[i3]);
-        color = (color < 0) ? -color : color; return (int) color;
+        } else {
+            double alpha = Math.abs((h0 + h1 + h2 + h3) * bias) * 255.0;
+            //alpha=(alpha<0)?0:((alpha>255)?255:alpha);
+            return alphaBlend(MathUtils.boundsProtected((int) alpha, 0xff), separateARGB(palette[index], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index], Colors.RGBCOMPONENTS.BLUE), separateARGB(palette[index1], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index1], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index1], Colors.RGBCOMPONENTS.BLUE));
+        }
     }
     public Colors.PALETTE getPalette_type() {
         return palette_type;

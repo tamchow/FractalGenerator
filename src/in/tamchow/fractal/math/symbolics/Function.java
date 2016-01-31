@@ -84,6 +84,7 @@ public class Function {
             }
         } return degree;
     }
+    @Override
     public String toString() {
         String function = ""; for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             function += " " + signs.get(j) + " " + terms.get(i);

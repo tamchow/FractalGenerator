@@ -88,7 +88,9 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         id.parent.setVisible(true); Thread thread = new Thread(id); thread.start();
     }
     @Override
-    public synchronized void publish(String message, double progress) {parent.setTitle("Generating Fractal: " + message);}
+    public synchronized void publish(String message, double progress) {
+        parent.setTitle("Generating Fractal: " + message);
+    }
     @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {

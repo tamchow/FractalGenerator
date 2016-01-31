@@ -40,7 +40,7 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
             for (int j = 0; j < nx; j++) {
                 int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, j, ny, i);
                 SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-                master.getProgressPublisher().publish("Initiated thread: " + idx, idx); idx++; runner.start();
+                master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx); idx++; runner.start();
             }
         } try {
             synchronized (lock) {
@@ -115,7 +115,7 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
             } else {
                 buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
             } float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
-            master.progressPublisher.publish("Thread " + index + " has completed, total completion = " + completion + "%", completion);
+            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
         }
     }
 }

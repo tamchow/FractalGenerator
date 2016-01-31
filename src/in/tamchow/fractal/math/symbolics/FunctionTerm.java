@@ -28,6 +28,7 @@ public class FunctionTerm {
             System.arraycopy(constdec[i], 0, this.consts[i], 0, this.consts[i].length);
         }
     }
+    @Override
     public String toString() {return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant.trim() + " )";}
     public String derivative(int order) {
         coefficient.setConstdec(consts); argument.setConstdec(consts); String deriv = ""; switch (order) {

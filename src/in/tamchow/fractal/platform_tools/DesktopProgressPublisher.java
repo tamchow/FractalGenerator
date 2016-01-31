@@ -5,7 +5,5 @@ import in.tamchow.fractal.config.Publisher;
  */
 public class DesktopProgressPublisher implements Publisher {
     @Override
-    public synchronized void publish(String message, double progress) {
-        System.out.println(message);
-    }
+    public synchronized void publish(String message, double progress) {System.out.println(message);}
 }

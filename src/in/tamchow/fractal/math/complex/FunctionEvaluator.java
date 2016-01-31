@@ -2,7 +2,8 @@ package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 /**
- * Implements an iterative parser for functions described in ComplexOperations, making heavy use of string replacement;
+ * Implements an iterative evaluator for functions described in ComplexOperations,
+ * making heavy use of string replacement;
  */
 public class FunctionEvaluator {
     private String[][] constdec;

@@ -1,4 +1,6 @@
 package in.tamchow.fractal.imgutils;
+import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Colors;
 /**
  * Creates transitions between images.
  * Note: Images to be transitioned between must be of the same resolution. No scaling is implemented here.
@@ -24,11 +26,11 @@ public class Transition {
     public Animation getFrames() {
         return frames;
     }
-    public void setFrames(ImageData[] frames) {
-        this.frames.setFrames(frames);
-    }
     public void setFrames(Animation frames) {
         this.frames = frames;
+    }
+    public void setFrames(ImageData[] frames) {
+        this.frames.setFrames(frames);
     }
     public ImageData getImg2() {
         return img2;
@@ -108,6 +110,16 @@ public class Transition {
                     }
                 } tmp.setPixdata(pixdata); frames.addFrame(tmp);
             } frames.addFrame(img2); break; case NONE: frames.addFrame(img2); break;
+            case CROSSFADE: frames.clearFrames(); for (int i = 0; i <= numframes; i++) {
+                for (int j = 0; j < img2.getHeight(); j++) {
+                    for (int k = 0; k < img2.getWidth(); k++) {
+                        int r = (int) (ColorConfig.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * ((double) i / numframes) + ColorConfig.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * (1 - ((double) i / numframes)));
+                        int g = (int) (ColorConfig.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * ((double) i / numframes) + ColorConfig.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * (1 - ((double) i / numframes)));
+                        int b = (int) (ColorConfig.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * ((double) i / numframes) + ColorConfig.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * (1 - ((double) i / numframes)));
+                        tmp.setPixel(j, k, ColorConfig.packRGB(r, g, b));
+                    }
+                } frames.addFrame(tmp);
+            } break;
             default:
                 throw new IllegalArgumentException("Unrecognized transition type");
         }

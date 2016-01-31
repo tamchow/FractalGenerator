@@ -89,6 +89,7 @@ public class ConfigReader {
         if (trap_point != null) {complexFractalParams.initParams.setTrap_point(new Complex(trap_point));}
         if (trap_line != null) {complexFractalParams.initParams.setLinetrap(trap_line);}
         if (oldvariablecode != null) {complexFractalParams.initParams.setOldvariablecode(oldvariablecode);}
+        complexFractalParams.setPath(paramfile.getAbsolutePath());
         return complexFractalParams;
     }
     public static IFSFractalConfig getIFSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
@@ -118,6 +119,7 @@ public class ConfigReader {
         } String[] params = new String[lines.size()]; lines.toArray(params);
         IFSFractalParams ifsFractalParams = IFSFractalParams.fromString(params);
         if (zooms != null) {ifsFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
-        if (frameskip != null) {ifsFractalParams.setFrameskip(Integer.valueOf(frameskip));} return ifsFractalParams;
+        if (frameskip != null) {ifsFractalParams.setFrameskip(Integer.valueOf(frameskip));}
+        ifsFractalParams.setPath(paramfile.getAbsolutePath()); return ifsFractalParams;
     }
 }

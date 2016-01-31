@@ -74,10 +74,9 @@ public class Term {
     public void setConstant(boolean constant) {
         this.constant = constant;
     }
+    @Override
     public String toString() {
-        if (constant) {
-            return constval;
-        }
+        if (constant) {return constval;}
         return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
     }
 }

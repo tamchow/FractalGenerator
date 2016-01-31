@@ -115,6 +115,7 @@ public class Polynomial {
         }
         return ctr;
     }
+    @Override
     public String toString() {
         String polynomial = "";
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {

@@ -58,11 +58,11 @@ public class Main {
                                 threaded.generate();
                             } else {
                                 generator.generate(params);
-                            } File outputFile = new File(args[1] + "/Fractal_" + i + ".jpg");
+                            } File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostprocessMode() != ImageData.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getInterpolated().isByParts())), "jpg", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getInterpolated().isByParts())), "png", outputFile);
                             } else {
-                                ImageIO.write(ImageConverter.toImage(generator.getArgand()), "jpg", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getArgand()), "png", outputFile);
                             }
                         }
                     }
@@ -73,8 +73,8 @@ public class Main {
                     for (int i = 0; i < cfg.getParams().length; i++) {
                         IFSFractalParams params = cfg.getParams()[i];
                         IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
-                        generator.generate(); File outputFile = new File(args[1] + "/Fractal_" + i + ".jpg");
-                        ImageIO.write(ImageConverter.toImage(generator.getPlane()), "jpg", outputFile);
+                        generator.generate(); File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
+                        ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                     }
                 }
             } catch (IOException ioe) {System.out.println("I/O Error: " + ioe.getMessage());}

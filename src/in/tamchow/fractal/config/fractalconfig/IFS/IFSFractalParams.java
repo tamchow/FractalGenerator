@@ -6,20 +6,23 @@ import in.tamchow.fractal.math.matrix.Matrix;
  */
 public class IFSFractalParams {
     public ZoomConfig zoomConfig;
+    public String path;
     Matrix[] transforms, translators;
     double[] weights;
     int[] colors;
     long depth;
     int width, height, fps, frameskip;
     double zoom, zoomlevel, base_precision;
-    private IFSFractalParams() {setFrameskip(-1);}
+    private IFSFractalParams() {setFrameskip(-1); setPath("");}
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
             throw new IllegalArgumentException("Configuration object is not properly defined");
         } setColors(config.getColors()); setWeights(config.getWeights()); setTransforms(config.getTransforms());
         setTranslators(config.getTranslators()); setDepth(config.getDepth()); setFrameskip(config.getFrameskip());
-        setFps(config.getFps());
+        setFps(config.getFps()); setPath(config.getPath());
     }
+    public String getPath() {return path;}
+    public void setPath(String path) {this.path = path;}
     public int getFrameskip() {return frameskip;}
     public void setFrameskip(int frameskip) {this.frameskip = frameskip;}
     public long getDepth() {

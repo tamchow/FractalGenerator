@@ -37,17 +37,20 @@ public final class Complex extends Number implements Serializable, Comparable<Co
             }
         } catch (Exception e) {throw new IllegalArgumentException("Input Format Error", e);}
     }
+    @Override
     public int compareTo(Complex complex) {
         return (int) (this.modulus() - complex.modulus());
     }
     public double modulus() {
         return Math.sqrt((a * a) + (ib * ib));
     }
+    @Override
     public boolean equals(Object complex) {
         if (complex instanceof Complex) {
             if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {return true;}
         } return false;
     }
+    @Override
     public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
     public double arg() {
         return Math.atan2(ib, a); //return (arg < 0) ? arg + 2 * Math.PI : arg;

@@ -5,9 +5,7 @@ import in.tamchow.fractal.config.Config;
  */
 public class IFSFractalConfig extends Config {
     IFSFractalParams[] params;
-    public IFSFractalConfig(int transtime, int fps, int wait) {
-        setFps(fps); setTranstime(transtime); setWait(wait);
-    }
+    public IFSFractalConfig(int transtime, int fps, int wait) {setFps(fps); setTranstime(transtime); setWait(wait);}
     public IFSFractalConfig(IFSFractalConfig config) {
         setWait(config.getWait()); setFps(config.getFps()); setTranstime(config.transtime);
         setParams(config.getParams());
@@ -26,7 +24,7 @@ public class IFSFractalConfig extends Config {
     @Override
     public String toString() {
         String representation = "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
-        for (IFSFractalParams param : params) {representation += "\n" + param;} representation += "\n[EndFractals]";
-        return representation + "\n";
+        for (IFSFractalParams param : params) {representation += "\n" + param.getPath();}
+        representation += "\n[EndFractals]"; return representation + "\n";
     }
 }

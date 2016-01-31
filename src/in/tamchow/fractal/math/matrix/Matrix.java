@@ -52,6 +52,7 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
             }
         } return newMatrix;
     }
+    @Override
     public synchronized boolean equals(Object that) {
         if (that == null) {return false;} if (!(that instanceof Matrix)) {return false;} Matrix other = (Matrix) that;
         if (!(getNumColumns() == other.getNumColumns() && getNumRows() == other.getNumRows())) return false;
@@ -61,6 +62,7 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
             }
         } return true;
     }
+    @Override
     public String toString() {
         String matrix = ""; for (double[] aMatrixData : matrixData) {
             for (double anAMatrixData : aMatrixData) {matrix += anAMatrixData + ",";}
