@@ -503,7 +503,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE ||
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR ||
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE ||
-                        color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
+                        color.mode == Colors.CALCULATIONS.DOMAIN_COLORING_FAUX) {
                     mindist = 0; maxdist = mindist;
                 }
                 Complex z = (mode == Mode.RUDY || mode == Mode.RUDYBROT) ? new Complex(argand_map[i][j]) : new Complex(Complex.ZERO);
@@ -589,7 +589,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
                     case ORBIT_TRAP_MAX: case LINE_TRAP_MAX:
-                    case DOMAIN_COLORING: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
+                    case DOMAIN_COLORING_FAUX: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
                     case ORBIT_TRAP_AVG:
                     case LINE_TRAP_AVG: colortmp = getColor(i, j, c, pass, (mindist + maxdist) / 2, iterations); break;
                     case EPSILON_CROSS_LINEAR: case EPSILON_CROSS_SPLINE: case GAUSSIAN_INT_DISTANCE_LINEAR:
@@ -814,7 +814,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE ||
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR ||
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE ||
-                        color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
+                        color.mode == Colors.CALCULATIONS.DOMAIN_COLORING_FAUX) {
                     mindist = 0; maxdist = mindist;
                 }
                 fe.setZ_value(z.toString());
@@ -894,7 +894,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
                     case ORBIT_TRAP_MAX: case LINE_TRAP_MAX:
-                    case DOMAIN_COLORING: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
+                    case DOMAIN_COLORING_FAUX: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
                     case ORBIT_TRAP_AVG:
                     case LINE_TRAP_AVG: colortmp = getColor(i, j, c, pass, (mindist + maxdist) / 2, iterations); break;
                     case EPSILON_CROSS_LINEAR: case EPSILON_CROSS_SPLINE: case GAUSSIAN_INT_DISTANCE_LINEAR:
@@ -1022,7 +1022,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             case GAUSSIAN_INT_DISTANCE_SPLINE: colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount); break;
             case ORBIT_TRAP_AVG: case ORBIT_TRAP_MAX: case ORBIT_TRAP_MIN: case LINE_TRAP_MIN: case LINE_TRAP_MAX:
             case LINE_TRAP_AVG: colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount); break;
-            case DOMAIN_COLORING: colortmp = new HSL(HSL.hueFromAngle(last[0].arg() + Math.PI), last[0].modulus() / (2 * escape_radius), Math.min(Math.abs(last[0].imaginary()), Math.abs(last[0].real())) / Math.max(Math.abs(last[0].imaginary()), Math.abs(last[0].real()))).toRGB(); break;
+            case DOMAIN_COLORING: colortmp = new HSL(HSL.hueFromAngle(last[0].arg() + Math.PI), last[0].modulus() / (2 * modulusForPhase(last[0].arg())), Math.min(Math.abs(last[0].imaginary()), Math.abs(last[0].real())) / Math.max(Math.abs(last[0].imaginary()), Math.abs(last[0].real()))).toRGB(); break;
+            case DOMAIN_COLORING_FAUX: colortmp = new HSL(HSL.hueFromAngle(last[0].arg() + Math.PI), last[0].modulus() / (2 * escape_radius), (double) val / iterations).toRGB(); break;
             default: throw new IllegalArgumentException("invalid argument");
         } return colortmp;
     }
