@@ -16,17 +16,20 @@ public class HSL implements Serializable {
         return radianMeasure / (2 * Math.PI);
     }
     public static HSL fromRGB(int color) {
-        int ri = (color >> 16) & 0xFF; int gi = (color >> 8) & 0xFF; int bi = (color) & 0xFF; double r = ri / 255;
-        double g = gi / 255; double b = bi / 255; double max = (r > g && r > b) ? r : (g > b) ? g : b;
-        double min = (r < g && r < b) ? r : (g < b) ? g : b; double h, s, l; h = s = l = (max + min) / 2;
-        if (max == min) h = s = 0;
-        else {
-            double d = max - min; s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
-            if (r > g && r > b) h = (g - b) / d + (g < b ? 6 : 0);
-            else if (g > b) h = (b - r) / d + 2;
-            else h = (r - g) / d + 4; h /= 6;
-        } return new HSL(h, s, l);
+        int ri = ColorConfig.separateARGB(color, Colors.RGBCOMPONENTS.RED),
+                gi = ColorConfig.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
+                bi = ColorConfig.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
+                max = (ri > gi && ri > bi) ? ri : (gi > bi) ? gi : bi,
+                min = (ri < gi && ri < bi) ? ri : (gi < bi) ? gi : bi, c = max - min;
+        double r = ri / 255.0, g = gi / 255.0, b = bi / 255.0, h, s, l = 0.5 * (max + min);
+        if (c == 0) {h = 0; s = 0;} else {
+            s = c / (1.0 - Math.abs(2 * l - 1));
+            if (max == ri) {h = ((gi - bi) / c) % 6;} else if (max == gi) {h = ((bi - ri) / c) + 2;} else {
+                h = ((ri - gi) / c) + 4;
+            }
+        } h *= (1.0 / 6.0); return new HSL(h, s, l);
     }
+    public static double angleFromHue(double hue) {return hue * 2 * Math.PI;}
     @Override
     public boolean equals(Object other) {
         if (other instanceof HSL) {
@@ -37,8 +40,7 @@ public class HSL implements Serializable {
         } return false;
     }
     @Override
-    public String toString() {return "" + angleFromHue(hue) + "," + saturation + "," + lightness;}
-    public static double angleFromHue(double hue) {return hue * 2 * Math.PI;}
+    public String toString() {return hue + "," + saturation + "," + lightness;}
     public double getHue() {return hue;}
     public void setHue(double hue) {
         if (hue < 0) {hue += 1; setHue(hue);} if (hue > 1) {
@@ -56,15 +58,19 @@ public class HSL implements Serializable {
         if (lightness > 1) {lightness -= 1; setLightness(lightness);} this.lightness = lightness;
     }
     public int toRGB() {
-        double r, g, b; if (saturation == 0.0) r = g = b = lightness;
-        else {
-            double q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-            double p = 2 * lightness - q; r = hueToRGB(p, q, hue + 1 / 3); g = hueToRGB(p, q, hue);
-            b = hueToRGB(p, q, hue - 1 / 3);
-        } int ri = (int) r * 255; int gi = (int) g * 255; int bi = (int) b * 255; return ri << 16 | gi << 8 | bi;
-    }
-    private double hueToRGB(double p, double q, double t) {
-        if (t < 0.0f) t += 1.0f; if (t > 1.0f) t -= 1.0f; if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
-        if (t < 1.0f / 2.0f) return q; if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f; return p;
+        double chroma = (1 - Math.abs(2 * lightness - 1)) * saturation, h = hue * 6, x = chroma * (1 - Math.abs((((int) h) % 2) - 1));
+        int m = Math.round((float) (lightness - 0.5 * chroma)) * 255, r = m, g = m, b = m; if (h >= 0 && h < 1) {
+            r += Math.round((float) chroma * 255); g += Math.round((float) x * 255); b += 0;
+        } else if (h >= 1 && h < 2) {
+            g += Math.round((float) chroma * 255); r += Math.round((float) x * 255); b += 0;
+        } else if (h >= 2 && h < 3) {
+            g += Math.round((float) chroma * 255); b += Math.round((float) x * 255); r += 0;
+        } else if (h >= 3 && h < 4) {
+            b += Math.round((float) chroma * 255); g += Math.round((float) x * 255); r += 0;
+        } else if (h >= 4 && h < 5) {
+            b += Math.round((float) chroma * 255); r += Math.round((float) x * 255); g += 0;
+        } else if (h >= 5 && h < 6) {
+            r += Math.round((float) chroma * 255); b += Math.round((float) x * 255); g += 0;
+        } return ColorConfig.toRGB(r, g, b);
     }
 }

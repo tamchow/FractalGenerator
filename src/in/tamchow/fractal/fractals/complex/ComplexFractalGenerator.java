@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public final class ComplexFractalGenerator implements Serializable, Pannable {
     ColorConfig color;
     ArrayList<Complex> roots;
+    Complex[] boundary_elements;
     double zoom, zoom_factor, base_precision, scale;
     int center_x, center_y, lastConstantIdx, stripe_density, switch_rate;
     Mode mode;
@@ -58,12 +59,11 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
         argand = new LinearizedImageData(width, height); setMode(mode); resetCentre();
         setMaxiter(argand.getHeight() * argand.getWidth());
-        argand_map = new Complex[argand.getHeight()][argand.getWidth()]; populateMap();
+        argand_map = new Complex[argand.getHeight()][argand.getWidth()];
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
         setOldvariablecode(oldvariablecode); setTolerance(tolerance); roots = new ArrayList<>(); setColor(color);
-        setDegree(degree);
-        if (degree.equals(new Complex(-1, 0))) {
+        setDegree(degree); if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
         } lastConstant = new Complex(-1, 0);
         if (this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) {
@@ -76,12 +76,16 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         } setTrap_point(trap_point); useLineTrap = false; if (linetrap != null) {
             a = Double.valueOf(linetrap.split(",")[0]); b = Double.valueOf(linetrap.split(",")[1]);
             c = Double.valueOf(linetrap.split(",")[2]); useLineTrap = true;
-        }
+        } populateMap();
     }
     public void populateMap() {
         for (int i = 0; i < argand.getHeight(); i++) {
             for (int j = 0; j < argand.getWidth(); j++) {argand_map[i][j] = fromCooordinates(j, i);}
-        }
+        } ArrayList<Complex> temp = new ArrayList<>(); for (int i = 0; i < argand.getHeight(); i++) {
+            temp.add(argand_map[i][0]); temp.add(argand_map[i][argand_map[i].length - 1]);
+        } for (int i = 1; i < argand.getWidth() - 1; i++) {
+            temp.add(argand_map[0][i]); temp.add(argand_map[argand_map.length - 1][i]);
+        } boundary_elements = new Complex[temp.size()]; temp.toArray(boundary_elements);
     }
     public Complex fromCooordinates(int x, int y) {
         x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
@@ -103,6 +107,13 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point, String linetrap) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, linetrap);
         this.progressPublisher = progressPublisher;
+    }
+    public double modulusForPhase(double phase) {
+        for (Complex num : boundary_elements) {
+            if (Math.abs(phase - num.arg()) <= tolerance) {
+                return num.modulus();
+            }
+        } return Double.NaN;
     }
     public String getOldvariablecode() {return oldvariablecode;}
     public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
@@ -491,7 +502,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR ||
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE ||
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR ||
-                        color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE) {
+                        color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE ||
+                        color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
                     mindist = 0; maxdist = mindist;
                 }
                 Complex z = (mode == Mode.RUDY || mode == Mode.RUDYBROT) ? new Complex(argand_map[i][j]) : new Complex(Complex.ZERO);
@@ -545,7 +557,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     } else {
                         distance = Math.sqrt(ComplexOperations.distance_squared(ztmp, trap_point));
                         mindist = (Math.min(distance, mindist));
-                    } maxdist = (Math.max(distance, maxdist));
+                    } maxdist = (Math.max(distance, maxdist)); if (color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
+                        maxdist = Math.max(ztmp.modulus(), maxdist);
+                    }
                     if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {c = iterations; break;}
                     z = new Complex(ztmp); fe.setZ_value(z.toString());
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -574,8 +588,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 } int colortmp = 0x0; switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
-                    case ORBIT_TRAP_MAX:
-                    case LINE_TRAP_MAX: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
+                    case ORBIT_TRAP_MAX: case LINE_TRAP_MAX:
+                    case DOMAIN_COLORING: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
                     case ORBIT_TRAP_AVG:
                     case LINE_TRAP_AVG: colortmp = getColor(i, j, c, pass, (mindist + maxdist) / 2, iterations); break;
                     case EPSILON_CROSS_LINEAR: case EPSILON_CROSS_SPLINE: case GAUSSIAN_INT_DISTANCE_LINEAR:
@@ -799,7 +813,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR ||
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE ||
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR ||
-                        color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE) {
+                        color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE ||
+                        color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
                     mindist = 0; maxdist = mindist;
                 }
                 fe.setZ_value(z.toString());
@@ -850,7 +865,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     } else {
                         distance = Math.sqrt(ComplexOperations.distance_squared(ztmp, trap_point));
                         mindist = (Math.min(distance, mindist));
-                    } maxdist = (Math.max(distance, maxdist));
+                    } maxdist = (Math.max(distance, maxdist)); if (color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
+                        maxdist = Math.max(ztmp.modulus(), maxdist);
+                    }
                     if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {c = iterations; break;}
                     z = new Complex(ztmp); fe.setZ_value(z.toString());
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -876,8 +893,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 } int colortmp = 0x0; switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
-                    case ORBIT_TRAP_MAX:
-                    case LINE_TRAP_MAX: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
+                    case ORBIT_TRAP_MAX: case LINE_TRAP_MAX:
+                    case DOMAIN_COLORING: colortmp = getColor(i, j, c, pass, maxdist, iterations); break;
                     case ORBIT_TRAP_AVG:
                     case LINE_TRAP_AVG: colortmp = getColor(i, j, c, pass, (mindist + maxdist) / 2, iterations); break;
                     case EPSILON_CROSS_LINEAR: case EPSILON_CROSS_SPLINE: case GAUSSIAN_INT_DISTANCE_LINEAR:
@@ -1005,7 +1022,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             case GAUSSIAN_INT_DISTANCE_SPLINE: colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount); break;
             case ORBIT_TRAP_AVG: case ORBIT_TRAP_MAX: case ORBIT_TRAP_MIN: case LINE_TRAP_MIN: case LINE_TRAP_MAX:
             case LINE_TRAP_AVG: colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount); break;
-            case DOMAIN_COLORING: colortmp = new HSL(HSL.hueFromAngle(last[0].arg() + Math.PI), last[0].modulus() / escape_radius, Math.min(Math.abs(last[0].imaginary()), Math.abs(last[0].real())) / Math.max(Math.abs(last[0].imaginary()), Math.abs(last[0].real()))).toRGB(); break;
+            case DOMAIN_COLORING: colortmp = new HSL(HSL.hueFromAngle(last[0].arg() + Math.PI), last[0].modulus() / (2 * escape_radius), Math.min(Math.abs(last[0].imaginary()), Math.abs(last[0].real())) / Math.max(Math.abs(last[0].imaginary()), Math.abs(last[0].real()))).toRGB(); break;
             default: throw new IllegalArgumentException("invalid argument");
         } return colortmp;
     }

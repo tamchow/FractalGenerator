@@ -7,49 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Final update before next major release">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/ImageData.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/Transition.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/Transition.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/TransitionTypes.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/imgutils/TransitionTypes.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/DataFromString.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/DataFromString.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Publisher.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Publisher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/MathUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/LinearizedImageData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/LinearizedImageData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/Transition.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/Transition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/TransitionTypes.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/TransitionTypes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/MatrixOperations.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/MatrixOperations.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/RC4.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/RC4.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/HaltError.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/HaltError.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -82,11 +43,31 @@
       <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38757396">
-              <caret line="25" column="82" selection-start-line="25" selection-start-column="82" selection-end-line="25" selection-end-column="82" />
+            <state vertical-scroll-proportion="0.43491125">
+              <caret line="33" column="62" selection-start-line="33" selection-start-column="62" selection-end-line="33" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ComplexFractalGenerator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1028" column="257" selection-start-line="1028" selection-start-column="257" selection-end-line="1028" selection-end-column="257" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HSL.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="70" column="14" selection-start-line="70" selection-start-column="14" selection-end-line="70" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -145,7 +126,6 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalConfig.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalConfig.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" />
@@ -171,8 +151,9 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/imgutils/ImageData.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
       </list>
     </option>
@@ -241,6 +222,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -375,6 +357,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="helpers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FractalGenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FractalGenerator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fractal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="fractals" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -429,9 +433,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1188,13 +1191,8 @@
       <workItem from="1454073740021" duration="13266000" />
       <workItem from="1454121898432" duration="19000" />
       <workItem from="1454122006513" duration="12443000" />
-      <workItem from="1454228366292" duration="10191000" />
-    </task>
-    <task id="LOCAL-00074" summary="Final update before next major release">
-      <created>1451364920447</created>
-      <option name="number" value="00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1451364920447</updated>
+      <workItem from="1454228366292" duration="10373000" />
+      <workItem from="1454310779997" duration="10477000" />
     </task>
     <task id="LOCAL-00075" summary="Final update before next major release">
       <created>1451539839470</created>
@@ -1484,11 +1482,17 @@
       <option name="project" value="LOCAL" />
       <updated>1454144136034</updated>
     </task>
-    <option name="localTasksCounter" value="123" />
+    <task id="LOCAL-00123" summary="Final update before next major release">
+      <created>1454248638255</created>
+      <option name="number" value="00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1454248638278</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="696062000" />
+    <option name="totallyTimeSpent" value="706721000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1513,10 +1517,10 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.400982" sideWeight="0.48940998" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30408472" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30441898" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30408472" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30392158" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25189108" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25189108" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -1625,7 +1629,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.46655232">
           <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1637,19 +1640,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="69" column="1" selection-start-line="69" selection-start-column="1" selection-end-line="69" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.5415617">
           <caret line="19" column="105" selection-start-line="19" selection-start-column="105" selection-end-line="19" selection-end-column="105" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1684,7 +1678,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.74307305">
           <caret line="88" column="1" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1692,7 +1685,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6146096">
           <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1700,7 +1692,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.74307305">
           <caret line="25" column="1" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1708,7 +1699,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.76826197">
           <caret line="40" column="138" selection-start-line="40" selection-start-column="138" selection-end-line="40" selection-end-column="138" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1716,7 +1706,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31486145">
           <caret line="40" column="48" selection-start-line="40" selection-start-column="48" selection-end-line="40" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1724,7 +1713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17128463">
           <caret line="4" column="33" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1732,7 +1720,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.74559194">
           <caret line="30" column="1" selection-start-line="30" selection-start-column="1" selection-end-line="30" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1740,7 +1727,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17128463">
           <caret line="4" column="74" selection-start-line="4" selection-start-column="74" selection-end-line="4" selection-end-column="74" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1764,15 +1750,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4861461">
           <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/MathUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87153655">
-          <caret line="84" column="1" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1780,7 +1757,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.28463477">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1788,7 +1764,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29974812">
           <caret line="7" column="37" selection-start-line="7" selection-start-column="37" selection-end-line="7" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1796,7 +1771,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.68010074">
           <caret line="123" column="23" selection-start-line="123" selection-start-column="23" selection-end-line="123" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1804,7 +1778,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5138539">
           <caret line="12" column="90" selection-start-line="12" selection-start-column="90" selection-end-line="12" selection-end-column="90" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1812,7 +1785,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.25692695">
           <caret line="6" column="81" selection-start-line="6" selection-start-column="81" selection-end-line="6" selection-end-column="81" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1836,7 +1808,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="3.1259446">
           <caret line="78" column="23" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1844,7 +1815,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1852,7 +1822,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1860,7 +1829,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.47103274">
           <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1868,7 +1836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23929471">
           <caret line="15" column="50" selection-start-line="15" selection-start-column="50" selection-end-line="15" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1876,7 +1843,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.57178843">
           <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1919,7 +1885,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6146096">
           <caret line="76" column="40" selection-start-line="76" selection-start-column="40" selection-end-line="76" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1935,7 +1900,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.74307305">
           <caret line="55" column="1" selection-start-line="55" selection-start-column="1" selection-end-line="55" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1943,7 +1907,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.35768262">
           <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1971,88 +1934,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="48.325443">
-          <caret line="919" column="23" selection-start-line="919" selection-start-column="23" selection-end-line="919" selection-end-column="23" />
-          <folding>
-            <element signature="e#8689#8690#0" expanded="true" />
-            <element signature="e#8726#8727#0" expanded="true" />
-            <element signature="e#8786#8787#0" expanded="true" />
-            <element signature="e#8838#8839#0" expanded="true" />
-            <element signature="e#8881#8882#0" expanded="true" />
-            <element signature="e#8909#8910#0" expanded="true" />
-            <element signature="e#8940#8941#0" expanded="true" />
-            <element signature="e#8970#8971#0" expanded="true" />
-            <element signature="e#9014#9015#0" expanded="true" />
-            <element signature="e#9052#9053#0" expanded="true" />
-            <element signature="e#9090#9091#0" expanded="true" />
-            <element signature="e#9125#9126#0" expanded="true" />
-            <element signature="e#9180#9181#0" expanded="true" />
-            <element signature="e#9228#9229#0" expanded="true" />
-            <element signature="e#9265#9266#0" expanded="true" />
-            <element signature="e#9298#9299#0" expanded="true" />
-            <element signature="e#9331#9332#0" expanded="true" />
-            <element signature="e#9360#9361#0" expanded="true" />
-            <element signature="e#9405#9406#0" expanded="true" />
-            <element signature="e#9454#9455#0" expanded="true" />
-            <element signature="e#9489#9490#0" expanded="true" />
-            <element signature="e#9521#9522#0" expanded="true" />
-            <element signature="e#9570#9571#0" expanded="true" />
-            <element signature="e#9612#9613#0" expanded="true" />
-            <element signature="e#9653#9654#0" expanded="true" />
-            <element signature="e#9686#9687#0" expanded="true" />
-            <element signature="e#10048#10049#0" expanded="true" />
-            <element signature="e#10084#10085#0" expanded="true" />
-            <element signature="e#10142#10143#0" expanded="true" />
-            <element signature="e#10205#10206#0" expanded="true" />
-            <element signature="e#11429#11430#0" expanded="true" />
-            <element signature="e#11457#11458#0" expanded="true" />
-            <element signature="e#11498#11499#0" expanded="true" />
-            <element signature="e#11532#11533#0" expanded="true" />
-            <element signature="e#11562#11563#0" expanded="true" />
-            <element signature="e#11589#11590#0" expanded="true" />
-            <element signature="e#11628#11629#0" expanded="true" />
-            <element signature="e#11660#11661#0" expanded="true" />
-            <element signature="e#11697#11698#0" expanded="true" />
-            <element signature="e#11731#11732#0" expanded="true" />
-            <element signature="e#11784#11785#0" expanded="true" />
-            <element signature="e#11830#11831#0" expanded="true" />
-            <element signature="e#11864#11865#0" expanded="true" />
-            <element signature="e#11895#11896#0" expanded="true" />
-            <element signature="e#11942#11943#0" expanded="true" />
-            <element signature="e#11982#11983#0" expanded="true" />
-            <element signature="e#12022#12023#0" expanded="true" />
-            <element signature="e#12059#12060#0" expanded="true" />
-            <element signature="e#12118#12119#0" expanded="true" />
-            <element signature="e#12170#12171#0" expanded="true" />
-            <element signature="e#12205#12206#0" expanded="true" />
-            <element signature="e#12234#12235#0" expanded="true" />
-            <element signature="e#12363#12364#0" expanded="true" />
-            <element signature="e#12392#12393#0" expanded="true" />
-            <element signature="e#12677#12678#0" expanded="true" />
-            <element signature="e#12708#12709#0" expanded="true" />
-            <element signature="e#12752#12753#0" expanded="true" />
-            <element signature="e#12792#12793#0" expanded="true" />
-            <element signature="e#12823#12824#0" expanded="true" />
-            <element signature="e#12854#12855#0" expanded="true" />
-            <element signature="e#12898#12899#0" expanded="true" />
-            <element signature="e#12938#12939#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2928994">
           <caret line="55" column="35" selection-start-line="55" selection-start-column="35" selection-end-line="56" selection-end-column="65" />
           <folding>
-            <element signature="e#16312#16313#0" expanded="true" />
-            <element signature="e#16377#16378#0" expanded="true" />
-            <element signature="e#20118#20119#0" expanded="true" />
-            <element signature="e#20153#20154#0" expanded="true" />
-            <element signature="e#20216#20217#0" expanded="true" />
-            <element signature="e#20264#20265#0" expanded="true" />
+            <element signature="e#16233#16234#0" expanded="false" />
+            <element signature="e#16298#16299#0" expanded="false" />
+            <element signature="e#19900#19901#0" expanded="false" />
+            <element signature="e#19935#19936#0" expanded="false" />
+            <element signature="e#19998#19999#0" expanded="false" />
+            <element signature="e#20046#20047#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2061,14 +1953,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8994083">
           <caret line="53" column="1" selection-start-line="53" selection-start-column="1" selection-end-line="53" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/MathUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="14" selection-start-line="70" selection-start-column="14" selection-end-line="70" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1028" column="257" selection-start-line="1028" selection-start-column="257" selection-end-line="1028" selection-end-column="257" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38757396">
-          <caret line="25" column="82" selection-start-line="25" selection-start-column="82" selection-end-line="25" selection-end-column="82" />
+        <state vertical-scroll-proportion="0.43491125">
+          <caret line="33" column="62" selection-start-line="33" selection-start-column="62" selection-end-line="33" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
