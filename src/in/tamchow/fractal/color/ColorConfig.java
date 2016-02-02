@@ -61,7 +61,6 @@ public class ColorConfig implements Serializable {
     public static int packARGB(int a, int r, int g, int b) {
         return a << (Colors.RGBCOMPONENTS.ALPHA << 3) | r << (Colors.RGBCOMPONENTS.RED << 3) | g << (Colors.RGBCOMPONENTS.GREEN << 3) | b;
         //int argb=a;argb = (argb << 8) + r;argb = (argb << 8) + g;argb = (argb << 8) + b;return argb;
-        //return alphaBlend(a,r,g,b,0x00000000);
     }
     private void cyclizePalette() {
         if (already_cyclized) {num_colors /= 2; already_cyclized = false;}
@@ -92,10 +91,10 @@ public class ColorConfig implements Serializable {
     public static int alphaBlend(int fore, int back) {
         return alphaBlend(separateARGB(fore, Colors.RGBCOMPONENTS.ALPHA), fore, back);
     }
-    public static int alphaBlend(int alpha, int fore, int back) {
-        return alphaBlend(alpha, separateARGB(fore, Colors.RGBCOMPONENTS.RED), separateARGB(fore, Colors.RGBCOMPONENTS.GREEN), separateARGB(fore, Colors.RGBCOMPONENTS.BLUE), back);
+    public static int alphaBlend(int alpha, int fore, int back) {return alphaBlend(alpha, 0xff, fore, back);}
+    public static int alphaBlend(int alpha, int amax, int fore, int back) {
+        return alphaBlend(alpha, amax, separateARGB(fore, Colors.RGBCOMPONENTS.RED), separateARGB(fore, Colors.RGBCOMPONENTS.GREEN), separateARGB(fore, Colors.RGBCOMPONENTS.BLUE), back);
     }
-    public static int alphaBlend(int a, int r, int g, int b, int back) {return alphaBlend(a, 0xff, r, g, b, back);}
     public static int alphaBlend(int a, int amax, int r, int g, int b, int back) {
         return alphaBlend(a, amax, r, g, b, separateARGB(back, Colors.RGBCOMPONENTS.RED), separateARGB(back, Colors.RGBCOMPONENTS.GREEN), separateARGB(back, Colors.RGBCOMPONENTS.BLUE));
     }
@@ -104,6 +103,7 @@ public class ColorConfig implements Serializable {
         int nr = Math.round((1 - alpha) * br + alpha * r), ng = Math.round((1 - alpha) * bg + alpha * g), nb = Math.round((1 - alpha) * bb + alpha * b);
         return packARGB(a, nr, ng, nb);
     }
+    public static int alphaBlend(int a, int r, int g, int b, int back) {return alphaBlend(a, 0xff, r, g, b, back);}
     public static int alphaBlend(int a, int r, int g, int b, int br, int bg, int bb) {
         return alphaBlend(a, 0xff, r, g, b, br, bg, bb);
     }
@@ -134,7 +134,7 @@ public class ColorConfig implements Serializable {
             /*int fa= separateARGB(fromcolor, Colors.RGBCOMPONENTS.ALPHA);
             int ta= separateARGB(tocolor, Colors.RGBCOMPONENTS.ALPHA);
             int na= Math.round((float) (ta * bias + fa * (1 - bias)));*/
-            int na = MathUtils.boundsProtected((int) (bias * 255.0), 256);
+            int na = MathUtils.boundsProtected((int) (bias * 255.0), 0xff);
             //na=(int)(bias*255.0);na=(na<0)?0:((na>255)?255:na);
             return alphaBlend(na, separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE));
         }

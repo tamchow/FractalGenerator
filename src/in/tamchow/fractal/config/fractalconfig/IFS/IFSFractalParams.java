@@ -76,37 +76,17 @@ public class IFSFractalParams {
     }
     @Override
     public String toString() {//TODO: toString()
-        return "";
+        String representation = (frameskip > 0) ? "Frameskip:" + frameskip : ""; return representation;
     }
     public void setZoomConfig(ZoomConfig config) {zoomConfig = new ZoomConfig(config);}
-    public int getHeight() {
-        return height;
-    }
-    public void setHeight(int height) {
-        this.height = height;
-    }
-    public int getWidth() {
-        return width;
-    }
-    public void setWidth(int width) {
-        this.width = width;
-    }
-    public double getZoom() {
-        return zoom;
-    }
-    public void setZoom(double zoom) {
-        this.zoom = zoom;
-    }
-    public double getZoomlevel() {
-        return zoomlevel;
-    }
-    public void setZoomlevel(double zoomlevel) {
-        this.zoomlevel = zoomlevel;
-    }
-    public double getBase_precision() {
-        return base_precision;
-    }
-    public void setBase_precision(double base_precision) {
-        this.base_precision = base_precision;
-    }
+    public int getHeight() {return height;}
+    public void setHeight(int height) {this.height = height;}
+    public int getWidth() {return width;}
+    public void setWidth(int width) {this.width = width;}
+    public double getZoom() {return zoom;}
+    public void setZoom(double zoom) {this.zoom = zoom;}
+    public double getZoomlevel() {return zoomlevel;}
+    public void setZoomlevel(double zoomlevel) {this.zoomlevel = zoomlevel;}
+    public double getBase_precision() {return base_precision;}
+    public void setBase_precision(double base_precision) {this.base_precision = base_precision;}
 }

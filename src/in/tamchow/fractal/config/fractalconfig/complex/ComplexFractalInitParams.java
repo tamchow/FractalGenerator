@@ -62,7 +62,7 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
     @Override
     public String toString() {//TODO: toString()
-        return "";
+        return "[Initconfig]\n" + "[EndInitconfig]";
     }
     public String getLinetrap() {return linetrap;}
     public void setLinetrap(String linetrap) {this.linetrap = linetrap;}
