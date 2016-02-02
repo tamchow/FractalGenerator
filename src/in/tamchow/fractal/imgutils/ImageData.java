@@ -1,5 +1,6 @@
 package in.tamchow.fractal.imgutils;
 import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.MathUtils;
 
@@ -80,6 +81,7 @@ public class ImageData implements Serializable, Pannable {
                     case WEIGHTED_AVERAGE: processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2)); break;
                     case INTERPOLATED_AVERAGE: processed.setPixel(i, j, ColorConfig.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (long) biases[i][j], byParts)); break;
                     case INTERPOLATED: processed.setPixel(i, j, ColorConfig.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts)); break;
+                    case NEGATIVE: processed.setPixel(i, j, ColorConfig.toRGB(0xff - ColorConfig.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED), 0xff - ColorConfig.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), 0xff - ColorConfig.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE))); break;
                     case NONE: break;
                     default: throw new IllegalArgumentException("Unsupported Post Processing type");
                 }
@@ -135,5 +137,5 @@ public class ImageData implements Serializable, Pannable {
     public ImageData subImage(int x_res, int y_res) {
         ImageData subImage = new ImageData(this); subImage.pan(0, 0); return subImage;
     }
-    public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NONE}
+    public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NEGATIVE, NONE}
 }

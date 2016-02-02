@@ -8,6 +8,7 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalRunParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
+import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
@@ -55,7 +56,7 @@ public class Test {
         } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         File pic = new File("D:/Fractal.png"); try {
-            ImageIO.write(ImageConverter.toImage(jgen.getArgand()/*.getPostProcessed(ImageData.PostProcessMode.INTERPOLATED_AVERAGE, jgen.getNormalized_escapes(), jgen.getColor().isByParts())*/), "png", pic);
+            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.NEGATIVE, jgen.getNormalized_escapes(), jgen.getColor().isByParts())), "png", pic);
         } catch (Exception e) {e.printStackTrace();} long endtime = System.currentTimeMillis();
         System.out.println("Writing image took:" + (endtime - gentime) + "ms");
     }

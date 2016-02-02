@@ -58,6 +58,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         argand = new LinearizedImageData(width, height); setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()];
+
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
         setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
@@ -99,7 +100,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
     }
     public void resetCentre_Offset() {centre_offset = new Complex(Complex.ZERO);}
-    public void setColor(ColorConfig color) {this.color = new ColorConfig(color);}
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, null);
         this.progressPublisher = progressPublisher;
@@ -112,6 +112,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, linetrap);
         this.progressPublisher = progressPublisher;
     }
+    public ColorConfig getColor() {return color;}
+    public void setColor(ColorConfig color) {this.color = new ColorConfig(color);}
     public double modulusForPhase(double phase) {
         for (Complex num : boundary_elements) {
             if (Math.abs(phase - num.arg()) <= tolerance) {
