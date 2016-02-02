@@ -55,13 +55,13 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         this.progressPublisher = progressPublisher;
     }
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Complex degree, ColorConfig color, int switch_rate, Complex trap_point, String linetrap) {
-        setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
-        setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
         argand = new LinearizedImageData(width, height); setMode(mode); resetCentre();
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()];
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
+        setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
+        setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
         setOldvariablecode(oldvariablecode); setTolerance(tolerance); roots = new ArrayList<>(); setColor(color);
         setDegree(degree); if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
@@ -228,7 +228,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         return base_precision;
     }
     public void setBase_precision(double base_precision) {
-        this.base_precision = base_precision;
+        if (base_precision <= 0) {
+            this.base_precision = calculateBasePrecision();
+        } else {this.base_precision = base_precision;}
+    }
+    public double calculateBasePrecision() {
+        return ((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
     public ImageData getArgand() {
         return argand;
@@ -1049,9 +1054,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}
-    }
-    public void resetBasePrecision() {
-        setBase_precision((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
     public void mandelbrotToJulia(Matrix constant, double level) {zoom(constant, level); changeMode(centre_offset); resetCentre();}
     private void changeMode(Complex lastConstant) {

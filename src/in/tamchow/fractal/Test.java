@@ -23,7 +23,7 @@ public class Test {
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"}, {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
         int resx = 1920, resy = 1080, iter = 32, switch_rate = 0;
         ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
-        double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 200; String linetrap = null;
+        double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1; String linetrap = null;
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE, 4, 2500, true, true, true);
         //cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);

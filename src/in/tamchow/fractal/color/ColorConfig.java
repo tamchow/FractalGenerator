@@ -200,9 +200,7 @@ public class ColorConfig implements Serializable {
     public int[] getPalette() {
         return palette;
     }
-    public int getColor_density() {
-        return color_density;
-    }
+    public int getColor_density() {return color_density;}
     public void setColor_density(int color_density) {
         if (color_density <= 0) {this.color_density = calculateColorDensity();} else {
             this.color_density = color_density;
