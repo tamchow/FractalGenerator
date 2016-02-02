@@ -55,13 +55,13 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         this.progressPublisher = progressPublisher;
     }
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Complex degree, ColorConfig color, int switch_rate, Complex trap_point, String linetrap) {
-        argand = new LinearizedImageData(width, height); setMode(mode); resetCentre();
+        argand = new LinearizedImageData(width, height); setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()];
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
         setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
-        setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor)));
+        setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor))); resetCentre();
         setOldvariablecode(oldvariablecode); setTolerance(tolerance); roots = new ArrayList<>(); setColor(color);
         setDegree(degree); if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
