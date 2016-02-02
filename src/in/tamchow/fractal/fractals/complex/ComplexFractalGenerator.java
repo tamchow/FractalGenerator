@@ -61,7 +61,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
         setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
-        setConsts(consts); setScale((int) (base_precision * Math.pow(zoom, zoom_factor))); resetCentre();
+        setConsts(consts); setScale((int) (this.base_precision * Math.pow(zoom, zoom_factor))); resetCentre();
         setOldvariablecode(oldvariablecode); setTolerance(tolerance); roots = new ArrayList<>(); setColor(color);
         setDegree(degree); if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
