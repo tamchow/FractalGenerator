@@ -45,6 +45,6 @@ public class ComplexFractalParams implements Serializable {
     }
     @Override
     public String toString() {
-        return "Threads:" + x_threads + "," + y_threads + "\nPostprocessing:" + postprocessMode + "\n" + zoomConfig + "\n" + initParams + "\n" + runParams + "\n";
+        return "Threads:" + x_threads + "," + y_threads + "\nPostprocessing:" + postprocessMode + "\n" + ((zoomConfig != null) ? (zoomConfig + "\n") : "") + initParams + "\n" + runParams + "\n";
     }
 }

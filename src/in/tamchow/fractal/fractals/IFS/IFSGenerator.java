@@ -7,6 +7,7 @@ import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.LinearizedImageData;
 import in.tamchow.fractal.imgutils.Pannable;
+import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 
@@ -99,7 +100,7 @@ public class IFSGenerator implements Serializable, Pannable {
         } Matrix point = new Matrix(initial); for (long i = 0; i <= depth; i++) {
             int index = MathUtils.weightedRandom(params.getWeights()); int[] coord = toCooordinates(point);
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
-            point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
+            modifyPoint(point, index);
             if (point.equals(initial) || i == depth || isOutOfBounds(point)) {completion = true; break;}
             publishProgress(i);
         }
@@ -118,6 +119,16 @@ public class IFSGenerator implements Serializable, Pannable {
         float completion = (((float) val) / depth) * 100.0f;
         progressPublisher.publish("% completion= " + completion + "%", completion);
     }
+    private void modifyPoint(Matrix point, int index) {
+        if (params.isIfsMode()) {
+            double x = point.get(0, 0), y = point.get(1, 0);
+            FunctionEvaluator fe = FunctionEvaluator.prepareIFS("x", x, y);
+            point.set(0, 0, fe.evaluateForIFS(params.getXfunctions()[index])); fe.setVariableCode("y");
+            fe.setZ_value(y + ""); point.set(1, 0, fe.evaluateForIFS(params.getYfunctions()[index]));
+        } else {
+            point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
+        }
+    }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
         Animation animation = new Animation(params.getFps()); for (long i = 0; i <= depth && (!completion); i++) {
@@ -132,7 +143,7 @@ public class IFSGenerator implements Serializable, Pannable {
         } Matrix point = new Matrix(initial); int index = MathUtils.weightedRandom(params.getWeights());
         int[] coord = toCooordinates(point);
         plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
-        point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
+        modifyPoint(point, index);
         if (point.equals(initial) || isOutOfBounds(point)) completion = true;
     }
     @Override

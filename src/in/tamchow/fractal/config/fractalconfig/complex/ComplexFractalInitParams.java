@@ -61,8 +61,18 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public String getOldvariablecode() {return oldvariablecode;}
     public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
     @Override
-    public String toString() {//TODO: toString()
-        return "[Initconfig]\n" + "[EndInitconfig]";
+    public String toString() {
+        String representation = "[Initconfig]\n" + width + "\n" + height + "\n" + zoom + "\n" + zoom_factor + "\n";
+        representation += base_precision + "\n" + fractal_mode + "\n" + function + "\n" + constantsToString() + "\n" + variableCode + "\n";
+        representation += "Old_variable_code:" + oldvariablecode + "\n" + tolerance + "\n" + degree + "\n" + color + "\n" + "Switch_Mode_Rate:" + switch_rate + "\n" + "Trap_point:" + trap_point + "\n";
+        if (linetrap != null) {representation += "Trap_line:" + linetrap + "\n";} return representation;
+    }
+    private String constantsToString() {
+        String representation = ""; for (String[] constant : consts) {
+            for (String s : constant) {
+                representation += s + ":";
+            } representation = representation.substring(0, representation.length() - 1) + ";";
+        } representation = representation.substring(0, representation.length() - 1); return representation;
     }
     public String getLinetrap() {return linetrap;}
     public void setLinetrap(String linetrap) {this.linetrap = linetrap;}

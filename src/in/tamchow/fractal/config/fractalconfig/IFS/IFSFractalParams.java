@@ -8,6 +8,8 @@ public class IFSFractalParams {
     public ZoomConfig zoomConfig;
     public String path;
     Matrix[] transforms, translators;
+    boolean ifsMode;
+    String[] yfunctions, xfunctions;
     double[] weights;
     int[] colors;
     long depth;
@@ -62,21 +64,50 @@ public class IFSFractalParams {
     public int getFps() {return fps;}
     public void setFps(int fps) {this.fps = fps;}
     public static IFSFractalParams fromString(String[] input) {
-        IFSFractalParams params = new IFSFractalParams(); params.setWidth(Integer.valueOf(input[0]));
-        params.setHeight(Integer.valueOf(input[1])); params.setBase_precision(Double.valueOf(input[2]));
-        params.setZoom(Double.valueOf(input[3])); params.setZoomlevel(Double.valueOf(input[4]));
-        params.setDepth(Long.valueOf(input[5])); params.setFps(Integer.valueOf(input[6]));
-        params.transforms = new Matrix[input.length - 7]; params.translators = new Matrix[input.length - 7];
-        params.colors = new int[input.length - 7]; params.weights = new double[input.length - 7];
-        for (int i = 7; i < input.length; i++) {
-            String[] parts = input[i].split(" "); params.transforms[i] = Matrix.fromString(parts[0]);
-            params.translators[i] = Matrix.fromString(parts[1]); params.weights[i] = Double.valueOf(parts[2]);
-            params.colors[i] = Integer.valueOf(parts[3], 16);
+        IFSFractalParams params = new IFSFractalParams(); params.setIfsMode(Boolean.valueOf(input[0]));
+        params.setWidth(Integer.valueOf(input[1])); params.setHeight(Integer.valueOf(input[2]));
+        params.setBase_precision(Double.valueOf(input[3])); params.setZoom(Double.valueOf(input[4]));
+        params.setZoomlevel(Double.valueOf(input[5])); params.setDepth(Long.valueOf(input[6]));
+        params.setFps(Integer.valueOf(input[7])); if (params.isIfsMode()) {
+            params.xfunctions = new String[input.length - 8]; params.yfunctions = new String[input.length - 8];
+            params.colors = new int[input.length - 8]; params.weights = new double[input.length - 8];
+            for (int i = 8; i < input.length; i++) {
+                String[] parts = input[i].split(" "); params.xfunctions[i] = parts[0]; params.yfunctions[i] = parts[1];
+                params.weights[i] = Double.valueOf(parts[2]); params.colors[i] = Integer.valueOf(parts[3], 16);
+            }
+        } else {
+            params.transforms = new Matrix[input.length - 8]; params.translators = new Matrix[input.length - 8];
+            params.colors = new int[input.length - 8]; params.weights = new double[input.length - 8];
+            for (int i = 8; i < input.length; i++) {
+                String[] parts = input[i].split(" "); params.transforms[i] = Matrix.fromString(parts[0]);
+                params.translators[i] = Matrix.fromString(parts[1]); params.weights[i] = Double.valueOf(parts[2]);
+                params.colors[i] = Integer.valueOf(parts[3], 16);
+            }
         } return params;
     }
+    public boolean isIfsMode() {return ifsMode;}
+    public void setIfsMode(boolean ifsMode) {this.ifsMode = ifsMode;}
+    public String[] getYfunctions() {return yfunctions;}
+    public void setYfunctions(String[] yfunctions) {this.yfunctions = yfunctions;}
+    public String[] getXfunctions() {return xfunctions;}
+    public void setXfunctions(String[] xfunctions) {
+        this.xfunctions = xfunctions;
+    }
     @Override
-    public String toString() {//TODO: toString()
-        String representation = (frameskip > 0) ? "Frameskip:" + frameskip : ""; return representation;
+    public String toString() {
+        String representation = (frameskip > 0) ? "Frameskip:" + frameskip : "";
+        representation += "\n" + ifsMode + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps;
+        if (ifsMode) {
+            for (int i = 0; i < weights.length; i++) {
+                representation += "\n" + xfunctions[i] + " " + yfunctions[i] + " " + weights[i] + " " + colors[i];
+            }
+        } else {
+            for (int i = 0; i < weights.length; i++) {
+                representation += "\n" + transforms[i] + " " + translators[i] + " " + weights[i] + " " + colors[i];
+            }
+        } if (zoomConfig != null) {
+            representation += "\n" + zoomConfig;
+        } return representation;
     }
     public void setZoomConfig(ZoomConfig config) {zoomConfig = new ZoomConfig(config);}
     public int getHeight() {return height;}

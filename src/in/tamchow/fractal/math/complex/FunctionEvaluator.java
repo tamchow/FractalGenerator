@@ -10,6 +10,9 @@ public class FunctionEvaluator {
     private String z_value, oldvalue, variableCode, oldvariablecode;
     private boolean hasBeenSubstituted;
     private boolean advancedDegree;
+    public FunctionEvaluator(String variable, String variableCode, String[][] varconst) {
+        this(variable, variableCode, varconst, true);
+    }
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, boolean advancedDegree) {
         setZ_value(variable);
         setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(variableCode + "_p");
@@ -28,6 +31,20 @@ public class FunctionEvaluator {
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
         setZ_value(variable); setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
         hasBeenSubstituted = false; setAdvancedDegree(advancedDegree);
+    }
+    public static FunctionEvaluator prepareIFS(String variableCode, double x, double y) {
+        String[][] varconst = {{"0", "0"}};
+        FunctionEvaluator fe = new FunctionEvaluator(variableCode, x + "", varconst);
+        fe.addConstant(new String[]{"r", Math.sqrt(x * x + y * y) + ""});
+        fe.addConstant(new String[]{"t", Math.atan2(y, x) + ""});
+        fe.addConstant(new String[]{"p", Math.atan2(x, y) + ""}); return fe;
+    }
+    public void addConstant(String[] constant) {
+        String[][] tmpconsts = new String[constdec.length][2]; for (int i = 0; i < constdec.length; i++) {
+            System.arraycopy(constdec[i], 0, tmpconsts[i], 0, tmpconsts.length);
+        } constdec = new String[tmpconsts.length + 1][2]; for (int i = 0; i < tmpconsts.length; i++) {
+            System.arraycopy(tmpconsts[i], 0, constdec[i], 0, constdec.length);
+        } System.arraycopy(constant, 0, constdec[constdec.length - 1], 0, constant.length);
     }
     public String getOldvariablecode() {return oldvariablecode;}
     public void setOldvariablecode(String oldvariablecode) {this.oldvariablecode = oldvariablecode;}
@@ -97,6 +114,9 @@ public class FunctionEvaluator {
     }
     public void setConstdec(String[][] constdec) {
         this.constdec = constdec;
+    }
+    public double evaluateForIFS(String expr) {
+        return evaluate(expr, false).modulus();
     }
     public Complex evaluate(String expr, boolean isSymbolic) {
         String subexpr = substitute(expr, isSymbolic); Complex ztmp; int flag = 0; do {

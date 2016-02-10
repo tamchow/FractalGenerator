@@ -22,7 +22,7 @@ public class ComplexFractalConfig extends Config {
     }
     @Override
     public String toString() {
-        String representation = "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
+        String representation = "[ComplexFractalConfig]" + "\n" + "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
         for (ComplexFractalParams param : params) {representation += "\n" + param.getPath();}
         representation += "\n[EndFractals]"; return representation + "\n";
     }

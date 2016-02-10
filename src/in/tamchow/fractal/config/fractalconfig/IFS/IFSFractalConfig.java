@@ -23,7 +23,7 @@ public class IFSFractalConfig extends Config {
     }
     @Override
     public String toString() {
-        String representation = "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
+        String representation = "[IFSFractalConfig]" + "\n" + "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
         for (IFSFractalParams param : params) {representation += "\n" + param.getPath();}
         representation += "\n[EndFractals]"; return representation + "\n";
     }

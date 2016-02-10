@@ -37,6 +37,15 @@ public class MatrixOperations {
         }
         return new Matrix(scalared);
     }
+    public static Matrix power(Matrix matrix, int power) {
+        if (power == 0) {
+            return Matrix.identityMatrix(matrix.size());
+        } if (power < 0) {
+            matrix = matrix.inverse(); power = -power;
+        } for (int i = 1; i <= power; i++) {
+            matrix = multiply(matrix, matrix);
+        } return matrix;
+    }
     public static Matrix multiply(Matrix m1, Matrix m2) {
         double sum;
         if (m1.getNumColumns() != m2.getNumRows()) {

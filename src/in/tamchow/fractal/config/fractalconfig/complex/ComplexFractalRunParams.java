@@ -67,8 +67,8 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
     }
     public ComplexFractalRunParams() {initParams(128, 2.0);}
     @Override
-    public String toString() {//TODO: toString()
-        return "[Runconfig]\n" + "[EndRunconfig]";
+    public String toString() {
+        return "[Runconfig]\n" + start_x + "\n" + end_x + "\n" + start_y + "\n" + end_y + "\n" + iterations + "\n" + escape_radius + "\n" + constant + "[EndRunconfig]";
     }
     /**
      * @param params: Pass in -1 for escape_radius in case of Newton Fractal Mode
