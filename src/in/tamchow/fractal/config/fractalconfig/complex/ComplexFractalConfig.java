@@ -1,9 +1,11 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.Config;
+
+import java.io.Serializable;
 /**
  * Configuration for the fractal
  */
-public class ComplexFractalConfig extends Config {
+public class ComplexFractalConfig extends Config implements Serializable {
     ComplexFractalParams[] params;
     public ComplexFractalConfig(int transtime, int fps, int wait) {setFps(fps); setTranstime(transtime); setWait(wait);}
     public ComplexFractalConfig(ComplexFractalConfig config) {

@@ -1,9 +1,11 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.Config;
+
+import java.io.Serializable;
 /**
  * Holds configuration for an IFS fractal
  */
-public class IFSFractalConfig extends Config {
+public class IFSFractalConfig extends Config implements Serializable {
     IFSFractalParams[] params;
     public IFSFractalConfig(int transtime, int fps, int wait) {setFps(fps); setTranstime(transtime); setWait(wait);}
     public IFSFractalConfig(IFSFractalConfig config) {

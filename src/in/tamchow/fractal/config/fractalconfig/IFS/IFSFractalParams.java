@@ -1,10 +1,12 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.math.matrix.Matrix;
+
+import java.io.Serializable;
 /**
  * Holds Parameters for an IFS fractal
  */
-public class IFSFractalParams {
+public class IFSFractalParams implements Serializable {
     public ZoomConfig zoomConfig;
     public String path;
     Matrix[] transforms, translators;
