@@ -101,7 +101,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             Matrix point = new Matrix(new double[][]{{((((double) x) - center_x) / scale)}, {((center_y - ((double) y)) / scale)}});
             Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
             point = MatrixOperations.multiply(rotor, point);
-            return ComplexOperations.add(centre_offset, new Complex(point.get(0, 1), point.get(1, 1)));
+            return ComplexOperations.add(centre_offset, new Complex(point.get(0, 0), point.get(1, 0)));
         }
     }
     public void resetCentre() {
@@ -1060,7 +1060,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         point = ComplexOperations.subtract(point, centre_offset); if (params.initParams.skew != 0) {
             Matrix coords = new Matrix(new double[][]{{point.real()}, {point.imaginary()}});
             Matrix rotor = Matrix.rotationMatrix2D(-params.initParams.skew);
-            coords = MatrixOperations.multiply(rotor, coords); point = new Complex(coords.get(0, 1), coords.get(1, 1));
+            coords = MatrixOperations.multiply(rotor, coords); point = new Complex(coords.get(0, 0), coords.get(1, 0));
         } int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
         x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
         return new int[]{x, y};
