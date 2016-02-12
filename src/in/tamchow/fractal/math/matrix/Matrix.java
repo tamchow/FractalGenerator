@@ -31,7 +31,7 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     public void setMatrixData(double[][] matrixData) {
         this.matrixData = new double[matrixData.length][matrixData[0].length];
         for (int i = 0; i < matrixData.length; i++) {
-            System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData.length);
+            System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData[i].length);
         }
     }
     public Matrix(int rows, int columns) {

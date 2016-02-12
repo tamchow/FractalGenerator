@@ -98,7 +98,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         if (params.initParams.skew == 0) {
             return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
         } else {
-            Matrix point = new Matrix(new double[][]{{((((double) x) - center_x) / scale)}, {((center_y - ((double) y)) / scale)}});
+            double[][] matrix = new double[2][1]; matrix[0][0] = ((((double) x) - center_x) / scale);
+            matrix[1][0] = ((center_y - ((double) y)) / scale); Matrix point = new Matrix(matrix);
             Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
             point = MatrixOperations.multiply(rotor, point);
             return ComplexOperations.add(centre_offset, new Complex(point.get(0, 0), point.get(1, 0)));

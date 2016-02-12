@@ -33,7 +33,7 @@ public class Test {
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
         //cfg.setColor_density(-1);
         Complex constant = null;//new Complex("1.0,+0.0i");
-        Complex trap = new Complex(0.15); int x_t = 4, y_t = 3;//func=poly
+        Complex trap = new Complex(0.15); int x_t = 4, y_t = 3; double skew = Math.PI / 4;//func=poly
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
@@ -41,6 +41,7 @@ public class Test {
         } long inittime = System.currentTimeMillis(); ComplexFractalGenerator jgen;
         ComplexFractalParams jgenParams = null; if (def) {
             jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null);
+            jgenParams.initParams.skew = skew;
             if (constant != null) { jgenParams.runParams = new ComplexFractalRunParams(iter, escrad, constant);} else {
                 jgenParams.runParams = new ComplexFractalRunParams(iter, escrad);
             } jgenParams.x_threads = x_t; jgenParams.y_threads = y_t;
