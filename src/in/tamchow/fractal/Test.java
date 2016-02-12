@@ -22,7 +22,7 @@ public class Test {
     public static void main(String[] args) {
         String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + e", variableCode = "z", poly = "{1:z:3};+;{d:z:1};+;{e:z:0}", poly2 = "{f:z:0};sin;{1:z:1}", func2 = "z ^ 3 + e";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"}, {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
-        int resx = 1920, resy = 1080, iter = 32, switch_rate = 0;
+        int resx = 640, resy = 480, iter = 32, switch_rate = 0;
         ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1; String linetrap = null;
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, true, true, false);

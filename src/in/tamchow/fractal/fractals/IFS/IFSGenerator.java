@@ -47,8 +47,11 @@ public class IFSGenerator implements Serializable, Pannable {
     public Matrix fromCooordinates(int x, int y) {
         x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
         double[][] matrixData = new double[2][1]; matrixData[0][0] = ((((double) x) - center_x) / scale);
-        matrixData[1][0] = ((center_y - ((double) y)) / scale);
-        return MatrixOperations.add(new Matrix(matrixData), centre_offset);
+        matrixData[1][0] = ((center_y - ((double) y)) / scale); if (params.getSkew() != 0) {
+            return MatrixOperations.add(MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()), new Matrix(matrixData)), centre_offset);
+        } else {
+            return MatrixOperations.add(new Matrix(matrixData), centre_offset);
+        }
     }
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2); setCenter_y(plane.getHeight() / 2); double[][] matrixData = new double[2][1];
@@ -67,7 +70,12 @@ public class IFSGenerator implements Serializable, Pannable {
         return base_precision;
     }
     public void setBase_precision(double base_precision) {
-        this.base_precision = base_precision;
+        if (base_precision <= 0) {
+            this.base_precision = calculateBasePrecision();
+        } else {this.base_precision = base_precision;}
+    }
+    public double calculateBasePrecision() {
+        return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
     }
     public double getZoom_factor() {
         return zoom_factor;
@@ -90,9 +98,6 @@ public class IFSGenerator implements Serializable, Pannable {
     public Matrix getCentre_offset() {return centre_offset;}
     public void setCentre_offset(Matrix centre_offset) {this.centre_offset = new Matrix(centre_offset);}
     public ImageData getPlane() {return plane;}
-    public void resetBasePrecision() {
-        setBase_precision((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
-    }
     public void generate() {
         if (initial == null) {
             Random random = new Random();
@@ -110,7 +115,9 @@ public class IFSGenerator implements Serializable, Pannable {
         return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
     public int[] toCooordinates(Matrix point) {
-        point = MatrixOperations.subtract(point, centre_offset);
+        point = MatrixOperations.subtract(point, centre_offset); if (params.getSkew() != 0) {
+            point = MatrixOperations.multiply(Matrix.rotationMatrix2D(-params.getSkew()), point);
+        }
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
         x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
         return new int[]{x, y};

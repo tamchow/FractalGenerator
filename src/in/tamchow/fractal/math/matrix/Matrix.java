@@ -37,6 +37,11 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     public Matrix(int rows, int columns) {
         setNumRows(rows); setNumColumns(columns); matrixData = new double[this.rows][this.columns];
     }
+    public static Matrix rotationMatrix2D(double angle) {
+        double[][] matrixData = new double[2][2]; matrixData[0][0] = Math.cos(angle);
+        matrixData[0][1] = -Math.sin(angle); matrixData[1][0] = Math.sin(angle); matrixData[1][1] = Math.cos(angle);
+        return new Matrix(matrixData);
+    }
     public static Matrix identityMatrix(int order) {
         int rows = Math.round((float) Math.sqrt(order)), columns = rows; Matrix matrix = new Matrix(rows, columns);
         for (int i = 0; i < rows; i++) {

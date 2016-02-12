@@ -3,6 +3,8 @@ import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.math.matrix.Matrix;
+import in.tamchow.fractal.math.matrix.MatrixOperations;
 
 import java.io.Serializable;
 /**
@@ -101,6 +103,31 @@ public class ImageData implements Serializable, Pannable {
         int[] pixels = new int[pixdata.length * pixdata[0].length]; for (int i = 0; i < pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
         } return pixels;
+    }
+    public Matrix fromCooordinates(int x, int y) {
+        double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
+        int center_x = getWidth() / 2, center_y = getHeight() / 2; x = MathUtils.boundsProtected(x, getWidth());
+        y = MathUtils.boundsProtected(y, getHeight()); double[][] matrixData = new double[2][1];
+        matrixData[0][0] = ((((double) x) - center_x) / scale); matrixData[1][0] = ((center_y - ((double) y)) / scale);
+        return new Matrix(matrixData);
+    }
+    public int[] toCooordinates(Matrix point) {
+        double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
+        int center_x = getWidth() / 2, center_y = getHeight() / 2;
+        int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
+        x = MathUtils.boundsProtected(x, getWidth()); y = MathUtils.boundsProtected(y, getHeight());
+        return new int[]{x, y};
+    }
+    public ImageData getRotatedImage(double angle) {
+        double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle)); int w = getWidth(), h = getHeight();
+        int neww = (int) Math.floor(w * cos + h * sin), newh = (int) Math.floor(h * cos + w * sin);
+        ImageData rotated = new ImageData(neww, newh); Matrix rotor = Matrix.rotationMatrix2D(angle);
+        for (int i = 0; i < getHeight(); i++) {
+            for (int j = 0; j < getWidth(); j++) {
+                Matrix coords = fromCooordinates(j, i); coords = MatrixOperations.multiply(rotor, coords);
+                int[] rcoords = toCooordinates(coords); rotated.setPixel(rcoords[1], rcoords[0], getPixel(i, j));
+            }
+        } return rotated;
     }
     public int getPixel(int i) {return getPixel(i / pixdata[0].length, i % pixdata[0].length);}
     public void setPixel(int i, int val) {setPixel(i / pixdata[0].length, i % pixdata[0].length, val);}

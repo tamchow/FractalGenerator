@@ -14,6 +14,7 @@ import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
+import in.tamchow.fractal.math.matrix.MatrixOperations;
 import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
@@ -94,7 +95,14 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     }
     public Complex fromCooordinates(int x, int y) {
         x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
-        return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
+        if (params.initParams.skew == 0) {
+            return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
+        } else {
+            Matrix point = new Matrix(new double[][]{{((((double) x) - center_x) / scale)}, {((center_y - ((double) y)) / scale)}});
+            Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
+            point = MatrixOperations.multiply(rotor, point);
+            return ComplexOperations.add(centre_offset, new Complex(point.get(0, 1), point.get(1, 1)));
+        }
     }
     public void resetCentre() {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
@@ -1049,8 +1057,11 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         return colortmp;
     }
     public int[] toCooordinates(Complex point) {
-        point = ComplexOperations.subtract(point, centre_offset);
-        int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
+        point = ComplexOperations.subtract(point, centre_offset); if (params.initParams.skew != 0) {
+            Matrix coords = new Matrix(new double[][]{{point.real()}, {point.imaginary()}});
+            Matrix rotor = Matrix.rotationMatrix2D(-params.initParams.skew);
+            coords = MatrixOperations.multiply(rotor, coords); point = new Complex(coords.get(0, 1), coords.get(1, 1));
+        } int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
         x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
         return new int[]{x, y};
     }
