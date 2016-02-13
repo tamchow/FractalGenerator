@@ -116,7 +116,7 @@ public class IFSGenerator implements Serializable, Pannable {
     }
     public int[] toCooordinates(Matrix point) {
         point = MatrixOperations.subtract(point, centre_offset); if (params.getSkew() != 0) {
-            point = MatrixOperations.multiply(Matrix.rotationMatrix2D(-params.getSkew()), point);
+            point = MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()).inverse(), point);
         }
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
         x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
