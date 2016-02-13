@@ -8,11 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 /**
- * Interpreter for custom BFk-family language christened "BrainSext"(raw pun and acronym for "Brains Extended",
- * capable of interpreting PBrain, BrainFlow, pure BFk (directly),
- * command sets from Extended BFk,and  a set of extended behaviour from PointerLang
+ * Interpreter for custom BF-family language christened "BrainSext"(raw pun and acronym for "Brains Extended",
+ * capable of interpreting PBrain, BrainFlow, pure BF (directly),
+ * equivalent command sets from Extended BF,and  a set of extended behaviour from PointerLang
  * <a href="http://codegolf.stackexchange.com/questions/52277/write-an-interpreter-for-my-new-esoteric-language-pointerlang?rq=1">here</a>>
- * (with replacement by equivalent commands)
+ * (with replacement by equivalent or extended command codes)
  *
  * Example "Hello World" program:
  *
@@ -151,7 +151,9 @@ public class BrainSext {
                     setOutput("Input error: " + e.getMessage() + "\n", ERROR);
                 } break; case '.': setOutput((char) operand[ptr] + "", OUTPUT); break;
                 case '"': setOutput(operand[ptr] + "", OUTPUT); break; case '!': System.out.print(operand[ptr]); break;
-                case '\\': String halterror = "Program signalled HALT at " + i + "\n"; setOutput(halterror, ERROR); throw new HaltError(halterror);
+                case '\\': String halterror = "Program signalled HALT at " + i + "\n"; setOutput(halterror, ERROR); if (!silent) {
+                    throw new HaltError(halterror);
+                } break;
                 default: if (!numAfter(i)) {
                     setOutput("Unrecognized character at " + i + "\n", ERROR);
                 }
