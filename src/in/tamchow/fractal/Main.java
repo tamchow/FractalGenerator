@@ -60,7 +60,7 @@ public class Main {
                                 generator.generate(params);
                             } File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostprocessMode() != ImageData.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getInterpolated().isByParts())), "png", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getInterpolated().getByParts())), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand()), "png", outputFile);
                             }

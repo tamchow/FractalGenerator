@@ -71,7 +71,7 @@ public class ImageData implements Serializable, Pannable {
     public int getHeight() {if (pixdata == null) {return -1;} return pixdata.length;}
     public int getWidth() {if (pixdata == null) {return -1;} return pixdata[0].length;}
     public int[] getRow(int row) {row = MathUtils.boundsProtected(row, getHeight()); return pixdata[row];}
-    public ImageData getPostProcessed(PostProcessMode mode, double[][] biases, boolean byParts) {
+    public ImageData getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {
         ImageData processed = new ImageData(this); if (mode == PostProcessMode.NONE) {return processed;}
         for (int i = 1; i < processed.getPixdata().length - 1; i++) {
             for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {

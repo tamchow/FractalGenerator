@@ -58,7 +58,7 @@ public class LinearizedImageData extends ImageData implements Serializable {
     @Override
     public void setPixel(int i, int val) {pixdata[i] = val;}
     @Override
-    public LinearizedImageData getPostProcessed(PostProcessMode mode, double[][] biases, boolean byParts) {
+    public LinearizedImageData getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {
         return new LinearizedImageData(toImageData().getPostProcessed(mode, biases, byParts));
     }
 }

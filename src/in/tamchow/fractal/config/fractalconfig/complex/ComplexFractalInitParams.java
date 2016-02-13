@@ -57,7 +57,7 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     }
     public ComplexFractalInitParams() {
         String func = "z ^ 2 + c"; String[][] consts = {{"c", "-0.8,+0.156i"}};
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE, 19, 16, true, true, false);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE, 19, 16, 0, true, false);
         cfg.setPalette(new int[]{ColorConfig.toRGB(66, 30, 15), ColorConfig.toRGB(25, 7, 26), ColorConfig.toRGB(9, 1, 47), ColorConfig.toRGB(4, 4, 73), ColorConfig.toRGB(0, 7, 100), ColorConfig.toRGB(12, 44, 138), ColorConfig.toRGB(24, 82, 177), ColorConfig.toRGB(57, 125, 209), ColorConfig.toRGB(134, 181, 229), ColorConfig.toRGB(211, 236, 248), ColorConfig.toRGB(241, 233, 191), ColorConfig.toRGB(248, 201, 95), ColorConfig.toRGB(255, 170, 0), ColorConfig.toRGB(204, 128, 0), ColorConfig.toRGB(153, 87, 0), ColorConfig.toRGB(106, 52, 3)}, false);
         initParams(1921, 1081, 10, 0, 540, ComplexFractalGenerator.Mode.JULIA, func, consts, "z", "z_p", 1e-5, new Complex("-1"), cfg, 0, Complex.ZERO, null, 0);
     }

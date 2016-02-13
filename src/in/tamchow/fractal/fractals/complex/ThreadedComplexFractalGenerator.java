@@ -67,9 +67,9 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
                                     } for (int k = 0; k < master.escapedata[i][j] - 1; k += 1) {
                                         hue3 += ((double) histogram[k]) / total;
                                     }
-                                    int colortmp1 = ColorConfig.linearInterpolated(master.color.createIndex(hue, 0, 1, scaling), master.color.createIndex(hue2, 0, 1, scaling), normalized_count - (int) normalized_count, master.color.isByParts());
-                                    int colortmp2 = ColorConfig.linearInterpolated(master.color.createIndex(hue3, 0, 1, scaling), master.color.createIndex(hue, 0, 1, scaling), normalized_count - (int) normalized_count, master.color.isByParts());
-                                    colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, normalized_count - (int) normalized_count, master.color.isByParts());
+                                    int colortmp1 = ColorConfig.linearInterpolated(master.color.createIndex(hue, 0, 1, scaling), master.color.createIndex(hue2, 0, 1, scaling), normalized_count - (int) normalized_count, master.color.getByParts());
+                                    int colortmp2 = ColorConfig.linearInterpolated(master.color.createIndex(hue3, 0, 1, scaling), master.color.createIndex(hue, 0, 1, scaling), normalized_count - (int) normalized_count, master.color.getByParts());
+                                    colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, normalized_count - (int) normalized_count, master.color.getByParts());
                                 } else {
                                     colortmp = master.color.splineInterpolated(master.color.createIndex(hue, 0, 1, scaling), normalized_count - (int) normalized_count);
                                 } master.argand.setPixel(i, j, colortmp);

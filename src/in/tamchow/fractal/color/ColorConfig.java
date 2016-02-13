@@ -8,22 +8,22 @@ import java.io.Serializable;
  * Holds colour configuration for  custom palettes
  */
 public class ColorConfig implements Serializable {
-    public int basecolor, step, color_density, num_colors;
+    public int basecolor, step, color_density, num_colors, byParts;
     public Colors.CALCULATIONS mode;
     public Colors.PALETTE palette_type;
     public int[] palette;
-    public boolean byParts, logIndex, exponentialSmoothing, cyclize;
+    public boolean logIndex, exponentialSmoothing, cyclize;
     boolean colors_corrected, already_cyclized;
     public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor) {
-        initColorConfig(mode, color_density, num_colors, basecolor, false, false, false);
+        initColorConfig(mode, color_density, num_colors, basecolor, 0, false, false);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex, boolean cyclize) {
+    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex, cyclize);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex, boolean cyclize) {
+    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(false);}
+    public ColorConfig(Colors.CALCULATIONS mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(0);}
     public void setPalette(int[] palette, boolean preserve) {
         if (!preserve) {
             this.palette = new int[palette.length]; setNum_colors(palette.length);
@@ -35,10 +35,10 @@ public class ColorConfig implements Serializable {
             System.arraycopy(palette, 0, this.palette, tmpPalette.length, this.palette.length - tmpPalette.length);
         }
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, boolean byParts, boolean logIndex, boolean cyclize) {
+    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, num_colors, byParts, logIndex, cyclize); setColor_density(color_density);
     }
-    private void initColorConfig(Colors.CALCULATIONS mode, int num_colors, boolean byParts, boolean logIndex, boolean cyclize) {
+    private void initColorConfig(Colors.CALCULATIONS mode, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setNum_colors(num_colors);
         setExponentialSmoothing(true); setCyclize(cyclize); initRandomPalette(num_colors, false); setMode(mode);
     }
@@ -72,12 +72,12 @@ public class ColorConfig implements Serializable {
             palette[i] = palette[j];
         } already_cyclized = true;
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int num_colors, boolean byParts, boolean logIndex, boolean cyclize) {
+    public ColorConfig(Colors.CALCULATIONS mode, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, num_colors, byParts, logIndex, cyclize); setColor_density(-1);
     }
-    public ColorConfig() {palette = null; initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, false, false, false);}
+    public ColorConfig() {palette = null; initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, 0, false, false);}
     public ColorConfig(ColorConfig old) {
-        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.isByParts(), old.isLogIndex(), old.isCyclize());
+        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.getByParts(), old.isLogIndex(), old.isCyclize());
         setExponentialSmoothing(old.isExponentialSmoothing()); setPalette(old.getPalette(), false);
         colors_corrected = old.colors_corrected;
     }
@@ -115,12 +115,12 @@ public class ColorConfig implements Serializable {
             //throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
         } return packRGB(r, g, b);
     }
-    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, boolean byParts) {
+    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, int byParts) {
         return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);
     }
-    public static int linearInterpolated(int fromcolor, int tocolor, double bias, boolean byParts) {
+    public static int linearInterpolated(int fromcolor, int tocolor, double bias, int byParts) {
         bias = (bias < 0) ? -bias : bias; bias = (bias > 1) ? bias - (long) bias : bias;
-        if (tocolor < fromcolor) {bias = 1 - bias;} if (byParts) {
+        if (tocolor < fromcolor) {bias = 1 - bias;} if (byParts == 0) {
             int fr = separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED);
             int fg = separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
             int fb = separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
@@ -139,7 +139,25 @@ public class ColorConfig implements Serializable {
             return alphaBlend(na, separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE));
         }
     }
-    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, boolean byParts, boolean logIndex, boolean cyclize) {
+    public int basicInterpolateColor(int fromColor, int toColor, double bias) {
+        if (logIndex) {
+            return basicInterpolateIndex(indexOfColor(fromColor), indexOfColor(toColor), bias);
+        } else {
+            if (fromColor > toColor) {int tmpIndex = fromColor; fromColor = toColor; toColor = tmpIndex;}
+            return getColor(fromColor + Math.round((float) (Math.abs(toColor - fromColor) * bias)));
+        }
+    }
+    public int indexOfColor(int color) {
+        for (int i = 0; i < palette.length; i++) {
+            if (color == palette[i]) return i;
+        } return -1;
+    }
+    public int basicInterpolateIndex(int fromIndex, int toIndex, double bias) {
+        if (fromIndex > toIndex) {int tmpIndex = fromIndex; fromIndex = toIndex; toIndex = tmpIndex;}
+        return getColor(fromIndex + Math.round((float) (Math.abs(toIndex - fromIndex) * bias)));
+    }
+    public int getColor(int index) {return palette[MathUtils.boundsProtected(index, palette.length)];}
+    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
         setNum_colors(num_colors); setBasecolor(basecolor); calcStep(); setCyclize(cyclize); initGradientPalette();
         setMode(mode); setExponentialSmoothing(true);
@@ -172,17 +190,17 @@ public class ColorConfig implements Serializable {
     private void calcStep() {
         setStep((basecolor / num_colors) * color_density);
     }
-    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, boolean byParts, boolean logIndex, boolean cyclize) {
+    private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
         colors_corrected = false; setByParts(byParts); setLogIndex(logIndex); setColor_density(color_density);
         setExponentialSmoothing(true); setCyclize(cyclize); setNum_colors(num_colors); setBasecolor(basecolor);
         setStep(step); initGradientPalette(); setMode(mode);
     }
     public boolean isLogIndex() {return logIndex;}
     public void setLogIndex(boolean logIndex) {this.logIndex = logIndex;}
-    public boolean isByParts() {
+    public int getByParts() {
         return byParts;
     }
-    public void setByParts(boolean byParts) {
+    public void setByParts(int byParts) {
         this.byParts = byParts;
     }
     public int getBasecolor() {
@@ -238,7 +256,7 @@ public class ColorConfig implements Serializable {
                 int c_p = (c == 0) ? controls.length - 1 : c - 1, c_n = (cnext == controls.length - 1) ? 0 : cnext + 1;
                 palette[i] = splineInterpolated(controls[c], controls[cnext], controls[c_p], controls[c_n], ((double) Math.abs(i - controls[c])) / Math.abs(controls[cnext] - controls[c]));
             } else {
-                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(i - controls[c]), Math.abs(controls[cnext] - controls[c]), isByParts());
+                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(i - controls[c]), Math.abs(controls[cnext] - controls[c]), getByParts());
             }
         } if (isCyclize()) {cyclizePalette();}
     }
@@ -250,7 +268,6 @@ public class ColorConfig implements Serializable {
         double idx = ComplexOperations.divide(ComplexOperations.principallog(exp), ComplexOperations.principallog(base)).modulus();
         return (int) (idx * color_density) % num_colors;
     }
-    public int getColor(int index) {return palette[MathUtils.boundsProtected(index, palette.length)];}
     public int splineInterpolated(int index, double bias) {
         return splineInterpolated(index, index + 1, bias);
     }
@@ -277,8 +294,7 @@ public class ColorConfig implements Serializable {
                 h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
         index = MathUtils.boundsProtected(index, palette.length);
         index1 = MathUtils.boundsProtected(index1, palette.length); i2 = MathUtils.boundsProtected(i2, palette.length);
-        i3 = MathUtils.boundsProtected(i3, palette.length);
-        if (byParts) {
+        i3 = MathUtils.boundsProtected(i3, palette.length); if (byParts == 0) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
             r1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.RED);
             r2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.RED);
@@ -295,21 +311,21 @@ public class ColorConfig implements Serializable {
             int nr = Math.round((float) Math.abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
             int ng = Math.round((float) Math.abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
             int nb = Math.round((float) Math.abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4)); return toRGB(nr, ng, nb);
-        } else {
+        } else if (byParts > 0) {
             double alpha = Math.abs((h0 + h1 + h2 + h3) * bias) * 255.0;
             //alpha=(alpha<0)?0:((alpha>255)?255:alpha);
             return alphaBlend(MathUtils.boundsProtected((int) alpha, 0xff), separateARGB(palette[index], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index], Colors.RGBCOMPONENTS.BLUE), separateARGB(palette[index1], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index1], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index1], Colors.RGBCOMPONENTS.BLUE));
+        } else {
+            return basicInterpolateIndex(index, index1, bias);
         }
     }
-    public Colors.PALETTE getPalette_type() {
-        return palette_type;
-    }
+    public Colors.PALETTE getPalette_type() {return palette_type;}
     public void setPalette_type(Colors.PALETTE palette_type) {
         this.palette_type = palette_type;
     }
     public void fromString(String[] colors) {
         palette_type = Colors.PALETTE.valueOf(colors[0]); mode = Colors.CALCULATIONS.valueOf(colors[1]);
-        byParts = Boolean.valueOf(colors[2]); exponentialSmoothing = Boolean.valueOf(colors[3]);
+        byParts = Integer.valueOf(colors[2]); exponentialSmoothing = Boolean.valueOf(colors[3]);
         logIndex = Boolean.valueOf(colors[4]); cyclize = Boolean.valueOf(colors[5]); switch (palette_type) {
             case RANDOM_PALETTE: initColorConfig(mode, Integer.valueOf(colors[6]), byParts, logIndex, cyclize); setColor_density(Integer.valueOf(colors[6])); break;
             case CUSTOM_PALETTE: String[] parts = colors[6].split(";"); int[] colorset = new int[parts.length]; for (int i = 0; i < colorset.length; i++) {

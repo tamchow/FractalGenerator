@@ -47,7 +47,7 @@ public class IFSGenerator implements Serializable, Pannable {
     public Matrix fromCooordinates(int x, int y) {
         x = MathUtils.boundsProtected(x, plane.getWidth()); y = MathUtils.boundsProtected(y, plane.getHeight());
         double[][] matrixData = new double[2][1]; matrixData[0][0] = ((((double) x) - center_x) / scale);
-        matrixData[1][0] = ((center_y - ((double) y)) / scale); if (params.getSkew() != 0) {
+        matrixData[1][0] = ((center_y - ((double) y)) / scale); if (!(Math.abs(params.getSkew()) == 0)) {
             return MatrixOperations.add(MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()), new Matrix(matrixData)), centre_offset);
         } else {
             return MatrixOperations.add(new Matrix(matrixData), centre_offset);
@@ -115,7 +115,7 @@ public class IFSGenerator implements Serializable, Pannable {
         return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
     public int[] toCooordinates(Matrix point) {
-        point = MatrixOperations.subtract(point, centre_offset); if (params.getSkew() != 0) {
+        point = MatrixOperations.subtract(point, centre_offset); if (!(Math.abs(params.getSkew()) == 0)) {
             point = MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()).inverse(), point);
         }
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));

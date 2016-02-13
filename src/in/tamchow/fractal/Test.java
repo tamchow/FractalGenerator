@@ -25,15 +25,15 @@ public class Test {
         int resx = 640, resy = 480, iter = 32, switch_rate = 0;
         ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1; String linetrap = null;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, true, true, false);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.EPSILON_CROSS_SPLINE, 4, 10000000, 0, true, false);
         //cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
-        //cfg.setColor_density(-1);
+        cfg.setColor_density(-1);
         Complex constant = null;//new Complex("1.0,+0.0i");
-        Complex trap = new Complex(0.15); int x_t = 4, y_t = 3; double skew = Math.PI / 4;//func=poly
+        Complex trap = new Complex(0.15); int x_t = 4, y_t = 3; double skew = Math.PI / 2;//func=poly
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
@@ -57,7 +57,7 @@ public class Test {
         } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         File pic = new File("D:/Fractal.png"); try {
-            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.NEGATIVE, jgen.getNormalized_escapes(), jgen.getColor().isByParts())), "png", pic);
+            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.NEGATIVE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
         } catch (Exception e) {e.printStackTrace();} long endtime = System.currentTimeMillis();
         System.out.println("Writing image took:" + (endtime - gentime) + "ms");
     }

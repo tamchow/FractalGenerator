@@ -88,7 +88,7 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     private int changeSign(int val) {if (val % 2 == 0) {return 1;} return -1;}
     public double determinant() {return determinant(this);}
     public double determinant(Matrix matrix) {
-        if (!matrix.isSquare()) throw new IllegalArgumentException("matrix need to be square.");
+        if (!matrix.isSquare()) throw new IllegalArgumentException("Matrix needs to be square.");
         if (matrix.size() == 1) {
             return matrix.get(0, 0);
         } if (matrix.size() == 2) {
