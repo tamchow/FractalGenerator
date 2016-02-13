@@ -33,24 +33,16 @@ public class Animation {
     public void setFrame(int idx, ImageData frame) {
         frames.set(idx, new ImageData(frame));
     }
-    public void removeFrame(int idx) {
-        frames.remove(idx);
-    }
-    public void removeFrame(ImageData frame) {
-        frames.remove(frame);
-    }
+    public void removeFrame(int idx) {frames.remove(idx);}
+    public void removeFrame(ImageData frame) {frames.remove(frame);}
     public ImageData[] getFrames() {
         ImageData[] tmp = new ImageData[frames.size()]; for (int i = 0; i < frames.size(); i++) {tmp[i] = getFrame(i);}
         return tmp;}
-    public ImageData getFrame(int idx) {
-        return frames.get(idx);
-    }
+    public ImageData getFrame(int idx) {return frames.get(idx);}
     public void setFrames(ImageData[] frames) {
         clearFrames(); for (ImageData imgdat : frames) {addFrame(imgdat);}}
-    public void addFrame(ImageData frame) {
-        frames.add(new ImageData(frame));
-    }
-    public void clearFrames() {
-        frames.clear();
-    }
+    public void addFrame(ImageData frame) {frames.add(new ImageData(frame));}
+    public void clearFrames() {frames.clear();}
+    @Override
+    public String toString() {return "" + fps + "," + frames.size();}
 }

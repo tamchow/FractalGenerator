@@ -106,10 +106,13 @@ public class ConfigReader {
             ifsFractalParams[i] = getIFSParamFromFile(new File(specCfg.get(i)));
         } ifsFractalConfig.setParams(ifsFractalParams); return ifsFractalConfig;}
     public static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
-        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>(); String frameskip = null;
+        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
+        String frameskip = null, post_process_mode = null;
         while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Frameskip:")) {
                 frameskip = line.substring("Frameskip:".length()).trim();
+            } if (line.startsWith("Postprocessing:")) {
+                post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
@@ -120,6 +123,9 @@ public class ConfigReader {
         IFSFractalParams ifsFractalParams = IFSFractalParams.fromString(params);
         if (zooms != null) {ifsFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (frameskip != null) {ifsFractalParams.setFrameskip(Integer.valueOf(frameskip));}
+        if (post_process_mode != null) {
+            ifsFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+        }
         ifsFractalParams.setPath(paramfile.getAbsolutePath()); return ifsFractalParams;
     }
 }

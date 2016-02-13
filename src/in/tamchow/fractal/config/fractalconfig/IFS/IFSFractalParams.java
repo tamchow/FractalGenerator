@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
+import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
  */
 public class IFSFractalParams implements Serializable {
     public ZoomConfig zoomConfig;
+    public ImageData.PostProcessMode postprocessMode;
     public String path;
     Matrix[] transforms, translators;
     boolean ifsMode;
@@ -27,7 +29,11 @@ public class IFSFractalParams implements Serializable {
         } setColors(config.getColors()); setWeights(config.getWeights()); setTransforms(config.getTransforms());
         setTranslators(config.getTranslators()); setDepth(config.getDepth()); setFrameskip(config.getFrameskip());
         setFps(config.getFps()); setPath(config.getPath()); setSkew(config.getSkew());
+        setPostprocessMode(config.getPostprocessMode());
+
     }
+    public ImageData.PostProcessMode getPostprocessMode() {return postprocessMode;}
+    public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {this.postprocessMode = postprocessMode;}
     public double getSkew() {return skew;}
     public void setSkew(double skew) {this.skew = skew;}
     public String getPath() {return path;}
@@ -103,6 +109,7 @@ public class IFSFractalParams implements Serializable {
     @Override
     public String toString() {
         String representation = (frameskip > 0) ? "Frameskip:" + frameskip : "";
+        representation += (postprocessMode != null) ? "Postprocessing:" + postprocessMode : "";
         representation += "\n" + ifsMode + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {
             for (int i = 0; i < weights.length; i++) {

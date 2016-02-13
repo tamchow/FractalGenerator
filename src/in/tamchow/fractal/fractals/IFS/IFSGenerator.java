@@ -19,7 +19,7 @@ import java.util.Random;
 public class IFSGenerator implements Serializable, Pannable {
     ImageData plane;
     IFSFractalParams params;
-    Matrix centre_offset, initial;
+    Matrix centre_offset, initial, point;
     int center_x, center_y;
     double zoom, zoom_factor, base_precision, scale;
     long depth;
@@ -31,7 +31,7 @@ public class IFSGenerator implements Serializable, Pannable {
     private void initIFS(IFSFractalParams params) {
         plane = new LinearizedImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
-        setBase_precision(params.getBase_precision()); initial = null; completion = false;
+        setBase_precision(params.getBase_precision()); initial = null; completion = false; point = null;
         if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
     }
     public void zoom(ZoomParams zoom) {
@@ -105,7 +105,7 @@ public class IFSGenerator implements Serializable, Pannable {
         } Matrix point = new Matrix(initial); for (long i = 0; i <= depth; i++) {
             int index = MathUtils.weightedRandom(params.getWeights()); int[] coord = toCooordinates(point);
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
-            modifyPoint(point, index);
+            point = modifyPoint(point, index);
             if (point.equals(initial) || i == depth || isOutOfBounds(point)) {completion = true; break;}
             publishProgress(i);
         }
@@ -126,7 +126,7 @@ public class IFSGenerator implements Serializable, Pannable {
         float completion = (((float) val) / depth) * 100.0f;
         progressPublisher.publish("% completion= " + completion + "%", completion);
     }
-    private void modifyPoint(Matrix point, int index) {
+    private Matrix modifyPoint(Matrix point, int index) {
         if (params.isIfsMode()) {
             double x = point.get(0, 0), y = point.get(1, 0);
             FunctionEvaluator fe = FunctionEvaluator.prepareIFS("x", x, y);
@@ -134,7 +134,7 @@ public class IFSGenerator implements Serializable, Pannable {
             fe.setZ_value(y + ""); point.set(1, 0, fe.evaluateForIFS(params.getYfunctions()[index]));
         } else {
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
-        }
+        } return point;
     }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
@@ -147,10 +147,12 @@ public class IFSGenerator implements Serializable, Pannable {
         if (initial == null) {
             Random random = new Random();
             initial = fromCooordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
-        } Matrix point = new Matrix(initial); int index = MathUtils.weightedRandom(params.getWeights());
+        } if (point == null) {
+            point = new Matrix(initial);
+        } int index = MathUtils.weightedRandom(params.getWeights());
         int[] coord = toCooordinates(point);
         plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
-        modifyPoint(point, index);
+        point = modifyPoint(point, index);
         if (point.equals(initial) || isOutOfBounds(point)) completion = true;
     }
     @Override
