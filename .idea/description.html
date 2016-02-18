@@ -6,7 +6,7 @@
 
     There are also Buddhabrot techniques ( naive algorithm ) for each of the above.
     <br>
-    There are 32 different colouring schemes, 14 have linear interpolation, 16 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics (symbolic differentiation) backend.
+    There are 36 different colouring schemes, 15 have linear interpolation, 17 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics (symbolic differentiation) backend.
 
 Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
 The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation.
@@ -42,34 +42,35 @@ Indexing of colours can be linear or logarithmic. Colors can be interpolated dir
     <br>
     Colors currently available are based on:
     <ol>
-    <li>Simple mode: iteration count is used as a direct index into the palette (interpolation available as SIMPLE_SMOOTH</li>
-    <li>Division of 0xffffff by integer or fractional iteration count (interpolation available)</li>
+    <li>Simple mode: iteration count is used as a direct index into the palette (interpolation available as SIMPLE_SMOOTH)</li>
+    <li>Division of 0xffffffff by integer or fractional iteration count (interpolation available)</li>
     <li>Bit-shift mode with results similar to division by integer or fractional iteration count (interpolation available)</li>
     <li>High contrast Grayscale mode</li>
     <li>Low Contrast Grayscale Mode</li>
     <li>Full custom or base-step, or linear-interpolated control points gradient palette mode by fractional iteration count (interpolation available)</li>
     <li>Randomized palette mode by fractional iteration count (interpolation available)</li>
     <li>Newton Mode - maximum modulus (linear or spline) or root reached</li>
+    <li>Domain coloring- standard or faux on basis of lightness parameter</li>
+    <li>Histogram Coloring or Rank-Order color mapping (linear and spline interpolation available)</li>
     </ol>
     <br>
 The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
     <br>
-    Support for IFS Affine Transform fractals such as the fern is in place.
+    Support for IFS Affine Transform or function-based fractals such as the fern is in place.
 
-    Multithreading -- A class enabling multithreaded fractal generation has been included, but there is no output.
-    Will have to be debugged.
+    Multithreading -- Available for complex number fractals! Use is encouraged, but memory requirements are a bit high.
+    Not available for IFS fractals (seems counterintuitive).
 
     More standard coloring methods are there, such as:
     <ol>
-    <li>Triangle Area Inequality</li>
-    <li>Curvature Average</li>
-    <li>Stripe Average</li>
+        <li>Triangle Area Inequality</li>
+        <li>Curvature Average</li>
+        <li>Stripe Average</li>
         <li>Orbit and line traps (min.,max.,average)</li>
-    <li>Histogram</li>
         <li>Gaussian Distance</li>
         <li>Epsilon Cross Distance</li>
     </ol>
-    Also, these modes support Catmull-Rom Spline interpolation.
+    Also, these modes support Catmull-Rom Spline and linear interpolation.
 
     Distance Estimation has been included, but as it involves differentiation and so uses the same backend as Newton Fractals, it is subject to
     the same constraints on polynomials and style of input. This method produces grayscale or color images.
@@ -88,7 +89,7 @@ The final is distance estimation based grayscale or palette coloring, which is s
     Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
     </p>
     <p>
-    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].jpg</pre> in the output directory specified in the CMD arguments to the program.
+    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].png</pre>(except for animated IFS fractals, which are output frame-by-frame into a folder) in the output directory specified in the CMD arguments to the program.
 </p>
 
 <p>
@@ -100,7 +101,8 @@ The final is distance estimation based grayscale or palette coloring, which is s
     However, saving of the fractal image and zooming in the viewer are both supported but untested.
     All input to the application is currently handled by:
     <ol>
-    <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
+        <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
+        <li>Or use the pre-configured test shell script</li>
     </ol>
 
 Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in .ini files.
