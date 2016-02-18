@@ -111,6 +111,17 @@ public class ImageData implements Serializable, Pannable {
         matrixData[0][0] = ((((double) x) - center_x) / scale); matrixData[1][0] = ((center_y - ((double) y)) / scale);
         return new Matrix(matrixData);
     }
+    public ImageData falseColor(ImageData[] channels) {
+        return falseColor(channels[0], channels[1], channels[2]);
+    }
+    public ImageData falseColor(ImageData r, ImageData g, ImageData b) {
+        ImageData falseColored = new ImageData(r.getWidth(), r.getHeight());
+        for (int i = 0; i < falseColored.getHeight(); i++) {
+            for (int j = 0; j < falseColored.getWidth(); j++) {
+                falseColored.setPixel(i, j, ColorConfig.toRGB(ColorConfig.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), ColorConfig.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), ColorConfig.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+            }
+        } return falseColored;
+    }
     public int[] toCooordinates(Matrix point) {
         double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
         int center_x = getWidth() / 2, center_y = getHeight() / 2;

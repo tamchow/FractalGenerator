@@ -59,7 +59,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         argand = new LinearizedImageData(width, height); setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()];
-
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()]; setVariableCode(variableCode);
         setZoom(zoom); setZoom_factor(zoom_factor); setFunction(function); setBase_precision(base_precision);
@@ -68,7 +67,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setDegree(degree); if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
         } lastConstant = new Complex(-1, 0);
-        if (this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) {
+        if ((this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) || (color.isLogIndex() && (!(mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT)))) {
             setStripe_density(this.color.getColor_density()); this.color.setColor_density(-1);
         } else {setStripe_density(-1);} mandelbrotToJulia = false; juliaToMandelbrot = false;
         if (!(switch_rate == 0 || switch_rate == -1 || switch_rate == 1)) {
@@ -108,7 +107,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     public void resetCentre() {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
     }
-    public void resetCentre_Offset() {centre_offset = new Complex(Complex.ZERO);}
+    public void resetCentre_Offset() {centre_offset = new Complex(0);}
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, null);
         this.progressPublisher = progressPublisher;
@@ -289,7 +288,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         if (mode != Mode.NEWTON && mode != Mode.NEWTONBROT && mode != Mode.JULIA_NOVA && mode != Mode.JULIA_NOVABROT && mode != Mode.MANDELBROT_NOVA && mode != Mode.MANDELBROT_NOVABROT && (color.getMode() != Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() != Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) && degree.equals(new Complex(-1, 0)) && (!color.isExponentialSmoothing())) {
             degree = new FunctionEvaluator(variableCode, consts, oldvariablecode, advancedDegree).getDegree(function);
         }
-        if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+        if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
             histogram = new int[iterations + 2];
         } switch (mode) {
             case MANDELBROT: case RUDY: case RUDYBROT:
@@ -300,22 +299,46 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             case SECANT: case SECANTBROT: secantGenerate(start_x, end_x, start_y, end_y, iterations); break;
             default: throw new IllegalArgumentException("Unknown fractal render mode");
         }
-        if (!params.useThreadedGenerator() && (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR)) {
+        if (!params.useThreadedGenerator() && (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE)) {
             double scaling = Math.pow(zoom, zoom_factor);
             int total = 0; for (int i = 0; i < iterations; i += 1) {total += histogram[i];}
+            if (color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+                System.arraycopy(MathUtils.rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
+            }
             for (int i = start_y; i < end_y; i++) {
                 for (int j = start_x; j < end_x; j++) {
-                    double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
-                    for (int k = 0; k < escapedata[i][j]; k += 1) {hue += ((double) histogram[k]) / total;}
-                    double normalized_count = normalized_escapes[i][j]; int colortmp;
-                    if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
-                        for (int k = 0; k < escapedata[i][j] + 1; k += 1) {hue2 += ((double) histogram[k]) / total;}
-                        for (int k = 0; k < escapedata[i][j] - 1; k += 1) {hue3 += ((double) histogram[k]) / total;}
-                        int colortmp1 = ColorConfig.linearInterpolated(color.createIndex(hue, 0, 1, scaling), color.createIndex(hue2, 0, 1, scaling), normalized_count - (int) normalized_count, color.getByParts());
-                        int colortmp2 = ColorConfig.linearInterpolated(color.createIndex(hue3, 0, 1, scaling), color.createIndex(hue, 0, 1, scaling), normalized_count - (int) normalized_count, color.getByParts());
-                        colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, normalized_count - (int) normalized_count, color.getByParts());
+                    int colortmp = 0; double normalized_count = normalized_escapes[i][j];
+                    int pi = i, pj = j - 1, ni = i, nj = j + 1;
+                    if (pj < 0) {pi = (i == 0) ? i : i - 1; pj = escapedata[pi].length - 1;}
+                    if (nj >= escapedata[i].length) {ni = (i == escapedata.length - 1) ? i : i + 1; nj = 0;}
+                    int ep = escapedata[pi][pj], en = escapedata[ni][nj], e = escapedata[i][j];
+                    if (color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+                        if (color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR) {
+                            int color1 = color.getColor(color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling)), color2 = color.getColor(color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling)), color3 = color.getColor(color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling));
+                            int colortmp1 = ColorConfig.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, color.getByParts());
+                            int colortmp2 = ColorConfig.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, color.getByParts());
+                            if (color.isLogIndex()) {
+                                colortmp = ColorConfig.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, color.getByParts());
+                            } else {colortmp = color2;}
+                        } else {
+                            int idxp = color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling),
+                                    idxn = color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling), idxt = Math.min(idxp, idxn);
+                            colortmp = color.splineInterpolated(color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
+                        }
                     } else {
-                        colortmp = color.splineInterpolated(color.createIndex(hue, 0, 1, scaling), normalized_count - (int) normalized_count);
+                        double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
+                        for (int k = 0; k < e; k += 1) {hue += ((double) histogram[k]) / total;}
+                        for (int k = 0; k < en; k += 1) {hue2 += ((double) histogram[k]) / total;}
+                        for (int k = 0; k < ep; k += 1) {hue3 += ((double) histogram[k]) / total;}
+                    if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                        int colortmp1 = ColorConfig.linearInterpolated(color.getColor(color.createIndex(hue, 0, 1, scaling)), color.getColor(color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, color.getByParts());
+                        int colortmp2 = ColorConfig.linearInterpolated(color.getColor(color.createIndex(hue3, 0, 1, scaling)), color.getColor(color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, color.getByParts());
+                        colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, color.getByParts());
+                    } else {
+                        int idxp = color.createIndex(hue3, 0, 1, scaling),
+                                idxn = color.createIndex(hue2, 0, 1, scaling), idxt = Math.min(idxp, idxn);
+                        colortmp = color.splineInterpolated(color.createIndex(hue, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
+                    }
                     } argand.setPixel(i, j, colortmp);
                 }
             }
@@ -329,13 +352,13 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             if (Function.isSpecialFunction(function)) {
                 Function func = Function.fromString(function, variableCode, oldvariablecode); func.setConsts(consts);
                 function = func.toString();
-                if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
+                if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
                 functionderiv = func.derivative(1);
             } else {
                 Polynomial poly = Polynomial.fromString(function); poly.setConstdec(consts);
                 poly.setVariableCode(variableCode); poly.setOldvariablecode(oldvariablecode);
                 function = poly.toString();
-                if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = poly.getDegree();}
+                if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = poly.getDegree();}
                 functionderiv = poly.derivative().toString();
             }
         }
@@ -343,7 +366,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         long ctr = 0; outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z = argand_map[i][j], zd = new Complex(Complex.ONE), ztmp2 = new Complex(Complex.ZERO), ztmpd2 = new Complex(Complex.ZERO), z2 = new Complex(Complex.ZERO);
+                Complex z = argand_map[i][j], zd = new Complex(1), ztmp2 = new Complex(0), ztmpd2 = new Complex(0), z2 = new Complex(0);
                 int c = 0; fe.setZ_value(z.toString()); fe.setOldvalue(ztmp2 + "");
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                     fed.setZ_value(zd.toString()); fed.setOldvalue(ztmpd2 + "");
@@ -369,7 +392,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         Complex d = fed.evaluate(functionderiv, false);
                         ztmpd = ComplexOperations.subtract(ztmpd, ComplexOperations.divide(ComplexOperations.multiply(e, ComplexOperations.subtract(ztmpd, ztmpd2)), ComplexOperations.subtract(e, d)));
                     } fe.setZ_value(ztmp + "");
-                    s += Math.exp(-ComplexOperations.divide(Complex.ONE, ComplexOperations.subtract(z, ztmp)).modulus());
+                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -408,7 +431,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                             if (indexOfRoot(ztmp) == -1) {roots.add(ztmp);}
                         } break;
                     } z = new Complex(ztmp); fe.setZ_value(z.toString()); fe.setOldvalue(ztmp2 + "");
-                    if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
+                    if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                         zd = new Complex(ztmpd); fed.setZ_value(ztmpd.toString()); lastd.pop();
                         ztmpd2 = (lastd.size() > 0) ? lastd.peek() : ztmpd2; lastd.push(zd);
                         fed.setOldvalue(ztmpd2 + "");
@@ -424,7 +447,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {pass[k] = last.pop();} if (last.size() < 3) {
                     for (int m = last.size(); m < pass.length; m++) {
-                        pass[m] = m == 0 ? new Complex(Complex.ZERO) : pass[m - 1];
+                        pass[m] = m == 0 ? new Complex(0) : pass[m - 1];
                     }
                 } pass[0] = new Complex(z);
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -501,13 +524,13 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             if (Function.isSpecialFunction(function)) {
                 Function func = Function.fromString(function, variableCode, oldvariablecode); func.setConsts(consts);
                 function = func.toString();
-                if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
+                if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
                 functionderiv = func.derivative(1);
             } else {
                 Polynomial poly = Polynomial.fromString(function); poly.setConstdec(consts);
                 poly.setVariableCode(variableCode); poly.setOldvariablecode(oldvariablecode);
                 function = poly.toString();
-                if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = poly.getDegree();}
+                if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = poly.getDegree();}
                 functionderiv = poly.derivative().toString();
             }
         }
@@ -526,8 +549,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         color.mode == Colors.CALCULATIONS.DOMAIN_COLORING_FAUX) {
                     mindist = 0; maxdist = mindist;
                 }
-                Complex z = (mode == Mode.RUDY || mode == Mode.RUDYBROT) ? new Complex(argand_map[i][j]) : new Complex(Complex.ZERO);
-                Complex zd = new Complex(Complex.ONE), ztmp2 = new Complex(Complex.ZERO), ztmpd2 = new Complex(Complex.ZERO), z2 = new Complex(Complex.ZERO);
+                Complex z = (mode == Mode.RUDY || mode == Mode.RUDYBROT) ? new Complex(argand_map[i][j]) : new Complex(0);
+                Complex zd = new Complex(1), ztmp2 = new Complex(0), ztmpd2 = new Complex(0), z2 = new Complex(0);
                 setLastConstant(argand_map[i][j]); fe.setZ_value(z.toString()); fe.setOldvalue(ztmp2 + "");
                 fe.setConstdec(this.consts);
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -549,7 +572,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     } last.push(z); Complex ztmp = fe.evaluate(function, false);
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                         zd = fed.evaluate(functionderiv, false);
-                    } last.push(ztmp); s += Math.exp(-ztmp.modulus()); double distance = 0; if (useLineTrap) {
+                    } last.push(ztmp);
+                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
                         mindist = (Math.min(distance, mindist));
@@ -588,7 +613,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     } publishProgress(ctr, i, start_x, end_x, j, start_y, end_y); c++; if (ctr > maxiter) {break outer;}
                     ctr++;
                 }
-                if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                     histogram[c]++;}
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {
@@ -596,7 +621,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 }
                 if (last.size() < 3) {
                     for (int m = last.size(); m < pass.length; m++) {
-                        pass[m] = m == 0 ? new Complex(Complex.ZERO) : pass[m - 1];
+                        pass[m] = m == 0 ? new Complex(0) : pass[m - 1];
                     }
                 }
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -604,7 +629,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 } escapedata[i][j] = c; if (color.isExponentialSmoothing()) {
                     normalized_escapes[i][j] = s;
                 } else {
-                    normalized_escapes[i][j] = getNormalized(c, iterations, pass[0], escape_radius);
+                    normalized_escapes[i][j] = getNormalized(c, iterations, pass, escape_radius);
                 } int colortmp = 0x0; switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
@@ -628,7 +653,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         String functionderiv = "", functionderiv2 = ""; if (Function.isSpecialFunction(function)) {
             Function func = Function.fromString(function, variableCode, oldvariablecode); func.setConsts(consts);
             function = func.toString();
-            if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
+            if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
             functionderiv = func.derivative(1);
             if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                 functionderiv2 = func.derivative(2);
@@ -636,8 +661,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         } else {
         Polynomial polynomial = Polynomial.fromString(function); polynomial.setConstdec(consts);
             polynomial.setVariableCode(variableCode); polynomial.setOldvariablecode(oldvariablecode);
-            function = polynomial.toString();
-            if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {
+            function = polynomial.toString(); if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {
                 degree = polynomial.getDegree();
             }
             functionderiv = polynomial.derivative() + "";
@@ -650,7 +674,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             constant = ComplexOperations.divide(Complex.ONE, degree);
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode, advancedDegree);
-        long ctr = 0; Complex toadd = new Complex(Complex.ZERO);
+        long ctr = 0; Complex toadd = new Complex(0);
         Complex lastConstantBackup = new Complex(getLastConstant());
         if (mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT) {toadd = new Complex(getLastConstant());}
         outer:
@@ -666,10 +690,10 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     mindist = 0; maxdist = mindist;
                 }
                 boolean useJulia = false, useMandelbrot = false;
-                Complex z = argand_map[i][j], zd = new Complex(Complex.ONE), ztmp2 = new Complex(Complex.ZERO), ztmpd2 = new Complex(Complex.ZERO), z2 = new Complex(Complex.ZERO);
+                Complex z = argand_map[i][j], zd = new Complex(1), ztmp2 = new Complex(0), ztmpd2 = new Complex(0), z2 = new Complex(0);
                 int c = 0; fe.setZ_value(z.toString()); fe.setOldvalue(ztmp2 + "");
                 if (mode == Mode.MANDELBROT_NOVA || mode == Mode.MANDELBROT_NOVABROT) {
-                    toadd = argand_map[i][j]; z = new Complex(Complex.ZERO);
+                    toadd = argand_map[i][j]; z = new Complex(0);
                 }
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                     fed.setZ_value(zd.toString()); fed.setOldvalue(ztmpd2 + "");
@@ -701,7 +725,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                             ztmpd = ComplexOperations.add(ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false))), toadd);
                         }
                     } fe.setZ_value(ztmp + "");
-                    s += Math.exp(-ComplexOperations.divide(Complex.ONE, ComplexOperations.subtract(z, ztmp)).modulus());
+                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -749,7 +773,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     } publishProgress(ctr, i, start_x, end_x, j, start_y, end_y); c++; if (ctr > maxiter) {break outer;}
                     ctr++; maxModulus = z.modulus() > maxModulus ? z.modulus() : maxModulus;
                 }
-                if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                     histogram[c]++;
                 } if (roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
@@ -758,7 +782,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {pass[k] = last.pop();} if (last.size() < 3) {
                     for (int m = last.size(); m < pass.length; m++) {
-                        pass[m] = m == 0 ? new Complex(Complex.ZERO) : pass[m - 1];
+                        pass[m] = m == 0 ? new Complex(0) : pass[m - 1];
                     }
                 } pass[0] = new Complex(z);
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -812,13 +836,13 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             if (Function.isSpecialFunction(function)) {
                 Function func = Function.fromString(function, variableCode, oldvariablecode); func.setConsts(consts);
                 function = func.toString();
-                if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
+                if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = func.getDegree();}
                 functionderiv = func.derivative(1);
             } else {
                 Polynomial poly = Polynomial.fromString(function); poly.setConstdec(consts);
                 poly.setVariableCode(variableCode); poly.setOldvariablecode(oldvariablecode);
                 function = poly.toString();
-                if (degree.equals(new Complex("-1")) && (!color.isExponentialSmoothing())) {degree = poly.getDegree();}
+                if (degree.equals(new Complex(-1)) && (!color.isExponentialSmoothing())) {degree = poly.getDegree();}
                 functionderiv = poly.derivative().toString();
             }
         }
@@ -826,7 +850,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         long ctr = 0; Complex lastConstantBackup = getLastConstant(); outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                Complex z = argand_map[i][j], zd = new Complex(Complex.ONE), ztmp2 = new Complex(Complex.ZERO), ztmpd2 = new Complex(Complex.ZERO), z2 = new Complex(Complex.ZERO);
+                Complex z = argand_map[i][j], zd = new Complex(1), ztmp2 = new Complex(0), ztmpd2 = new Complex(0), z2 = new Complex(0);
                 double s = 0, mindist = escape_radius, maxdist = mindist, lbnd = 0, ubnd = 0; int c = 0x0;
                 if (color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR ||
                         color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE ||
@@ -857,7 +881,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     Complex ztmp = fe.evaluate(function, false);
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                         zd = fed.evaluate(functionderiv, false);
-                    } last.push(ztmp); s += Math.exp(-ztmp.modulus()); double distance = 0; if (useLineTrap) {
+                    } last.push(ztmp);
+                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
                         mindist = (Math.min(distance, mindist));
@@ -896,12 +922,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     } publishProgress(ctr, i, start_x, end_x, j, start_y, end_y); c++; if (ctr > maxiter) {break outer;}
                     ctr++;
                 }
-                if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                     histogram[c]++;}
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {pass[k] = last.pop();} if (last.size() < 3) {
                     for (int m = last.size(); m < pass.length; m++) {
-                        pass[m] = m == 0 ? new Complex(Complex.ZERO) : pass[m - 1];
+                        pass[m] = m == 0 ? new Complex(0) : pass[m - 1];
                     }
                 }
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -909,7 +935,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 } escapedata[i][j] = c; if (color.isExponentialSmoothing()) {
                     normalized_escapes[i][j] = s;
                 } else {
-                    normalized_escapes[i][j] = getNormalized(c, iterations, pass[0], escape_radius);
+                    normalized_escapes[i][j] = getNormalized(c, iterations, pass, escape_radius);
                 } int colortmp = 0x0; switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
@@ -929,24 +955,19 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-    public ColorConfig getInterpolated() {return color;}
-    public double getNormalized(int val, int iterations, Complex z, double escape) {
-        double renormalized; if (!color.isLogIndex()) {
-            if (degree.equals(Complex.ZERO) || degree.equals(Complex.ONE)) {
+    public double getNormalized(int val, int iterations, Complex[] z_values, double escape) {
+        Complex z = z_values[0]; double degree = this.degree.modulus(); if (escape < zoom) {
+            degree = Math.log(z.modulus() * z.modulus()) / Math.log(z_values[1].modulus() * z_values[1].modulus());
+        } double renormalized;
+        if (!color.isLogIndex() || (mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT)) {
+            if (degree == 0 || degree == 1) {
                 renormalized = val + ((double) val / iterations);
             } else {
-                renormalized = (val + 1) + ComplexOperations.divide(new Complex(Math.log(Math.log(z.modulus()) / Math.log(escape))), ComplexOperations.principallog(degree)).modulus();
+                renormalized = val - (Math.log(Math.log(z.modulus() / Math.log(escape))) / Math.log(degree));
                 if (renormalized - (long) renormalized == 0) {renormalized += ((double) val / iterations);}
             }
         } else {
-            if (mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT) {
-            if (degree.equals(Complex.ZERO) || degree.equals(Complex.ONE)) {
-                renormalized = val + ((double) val / iterations);
-            } else {
-                renormalized = (val + 1) + ComplexOperations.divide(new Complex(Math.log(Math.log(z.modulus()) / Math.log(escape))), ComplexOperations.principallog(degree)).modulus();
-                if (renormalized - (long) renormalized == 0) {renormalized += ((double) val / iterations);}
-            }
-            } else {renormalized = val + (0.5 + 0.5 * (Math.sin(z.arg()) * color.color_density));}
+            renormalized = val + (0.5 + 0.5 * (Math.sin(z.arg()) * stripe_density));
         } return renormalized;
     }
     public int[] getHistogram() {return histogram;}
@@ -959,7 +980,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         if (color.isExponentialSmoothing() || mode == Mode.NEWTON || mode == Mode.NEWTONBROT || mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT || mode == Mode.MANDELBROT_NOVA || mode == Mode.MANDELBROT_NOVABROT) {
             smoothcount = normalized_escapes[i][j]; renormalized = smoothcount;
         } else {
-            renormalized = getNormalized(val, iterations, last[0], escape_radius); if (color.isLogIndex()) {
+            renormalized = getNormalized(val, iterations, last, escape_radius); if (color.isLogIndex()) {
                 smoothcount = (renormalized > 0) ? Math.abs(Math.log(renormalized)) : ComplexOperations.principallog(new Complex(renormalized, 0)).modulus();
             } else {smoothcount = renormalized;}
         }
@@ -996,8 +1017,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         colortmp = (distance > Math.sqrt(ComplexOperations.distance_squared(last[0], last[2]))) ? 0xffffff : 0x000000;
                     }} else {
                     colortmp = (distance > Math.sqrt(ComplexOperations.distance_squared(centre_offset, last[2]))) ? 0xffffff : 0x000000;}*/
-            } break; case COLOR_HISTOGRAM:
-            case COLOR_HISTOGRAM_LINEAR: colortmp = 0x000000; break;//Don't need to deal with this here, it's post-calculated
+            } break; case COLOR_HISTOGRAM: case COLOR_HISTOGRAM_LINEAR: case RANK_ORDER_LINEAR:
+            case RANK_ORDER_SPLINE: colortmp = 0x000000; break;//Don't need to deal with this here, it's post-calculated
             case COLOR_NEWTON_STRIPES: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.num_colors, ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
                 break;
             case COLOR_NEWTON_NORMALIZED: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, val, iterations, color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, val, iterations, color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts()); break;

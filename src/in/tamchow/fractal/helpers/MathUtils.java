@@ -55,6 +55,34 @@ public class MathUtils {
             int factors = 0; for (int j = 2; j < i; j++) {if (i % j == 0) {++factors;}} if (factors == 0) {return i;}
         } return -1;
     }
+    static void quickSort(int[][] arr, int low, int high) {
+        if (arr == null || arr.length == 0) return; if (low >= high) return;
+        // pick the pivot
+        int middle = low + (high - low) / 2; int pivot = arr[middle][1];
+        // make left < pivot and right > pivot
+        int i = low, j = high; while (i <= j) {
+            while (arr[i][1] < pivot) {i++;} while (arr[j][1] > pivot) {j--;} if (i <= j) {
+                int[] temp = new int[2]; System.arraycopy(arr[i], 0, temp, 0, temp.length);//temp=arr[i]
+                System.arraycopy(arr[j], 0, arr[i], 0, arr[i].length);//arr[i]=arr[j]
+                System.arraycopy(temp, 0, arr[j], 0, arr[j].length);//arr[j]=temp
+                i++; j--;
+            }
+        }// recursively sort the 2 subparts
+        if (low < j) quickSort(arr, low, j); if (high > i) quickSort(arr, i, high);
+    }
+    public static int indexOf(int[] data, int element) {
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] == element) {return i;}
+        } return -1;
+    }
+    public static int[] rankListFromHistogram(int[] histogram) {
+        int[][] map = new int[histogram.length][2]; for (int i = 0; i < histogram.length; i++) {
+            map[i][0] = i; map[i][1] = histogram[i];
+        } quickSort(map, 0, map.length - 1); int[] rankList = new int[histogram.length];
+        for (int i = 0; i < rankList.length; i++) {
+            rankList[i] = map[i][0];
+        } return rankList;
+    }
     public int[] mostEfficientfactor(int a) {
         int num_factors = 0; for (int i = 1; i <= a; i++) {if (a % i == 0) num_factors++;}
         int[] factors = new int[num_factors]; num_factors = 0;
