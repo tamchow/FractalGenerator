@@ -2,6 +2,7 @@ package in.tamchow.fractal.fractals;
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
+import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.Pannable;
 /**
@@ -28,8 +29,17 @@ public class FractalPanningHelper {
                 start_y = toPan.getArgand().getHeight() - y_dist; end_y = toPan.getArgand().getHeight();
             } start_x = 0; end_x = toPan.getArgand().getWidth(); panner.generate(start_x, end_x, start_y, end_y);
             return toPan.getArgand();
-        } else if (toPanthis instanceof IFSGenerator) {
+        } else if (toPanthis instanceof IFSGenerator || toPanthis instanceof ComplexBrotFractalGenerator) {
             IFSGenerator toPan = (IFSGenerator) toPanthis; try {
+                ImageData plane = new ImageData(toPan.getPlane());
+                plane.pan(toPan.getParams().getWidth(), toPan.getParams().getHeight(), x_dist, y_dist); return plane;
+            } catch (UnsupportedOperationException rangeViolation) {
+                //buffer exhausted, so we re-render completely
+                toPan.pan(x_dist, y_dist); toPan.generate();
+                return toPan.getPlane().subImage(toPan.getParams().getWidth(), toPan.getParams().getHeight());
+            }
+        } else if (toPanthis instanceof ComplexBrotFractalGenerator) {
+            ComplexBrotFractalGenerator toPan = (ComplexBrotFractalGenerator) toPanthis; try {
                 ImageData plane = new ImageData(toPan.getPlane());
                 plane.pan(toPan.getParams().getWidth(), toPan.getParams().getHeight(), x_dist, y_dist); return plane;
             } catch (UnsupportedOperationException rangeViolation) {

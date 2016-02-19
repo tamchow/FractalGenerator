@@ -3,15 +3,15 @@ import in.tamchow.fractal.imgutils.ImageData;
 
 import java.io.Serializable;
 /**
- * Holds a part of a fractal image for threaded generation, along with the render coordinates
+ * Holds a part of a fractal's data for threaded generation, along with the render coordinates
  */
-public final class PartImage implements Serializable {
+public final class PartComplexFractalData implements Serializable {
     ImageData imageData;
     int[][] escapedata;
     double[][] normalized_escapes;
     int[] histogram;
     int startx, endx, starty, endy;
-    public PartImage(int[][] escapedata, double[][] normalized_escapes, ImageData imageData, int startx, int endx, int starty, int endy) {
+    public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, ImageData imageData, int startx, int endx, int starty, int endy) {
         this.startx = startx; this.endx = endx; this.starty = starty; this.endy = endy;
         initData(escapedata, normalized_escapes); this.imageData = new ImageData(imageData);
     }
@@ -24,7 +24,7 @@ public final class PartImage implements Serializable {
             System.arraycopy(normalized_escapes[i], 0, this.normalized_escapes[i], 0, this.normalized_escapes[i].length);
         }
     }
-    public PartImage(int[][] escapedata, double[][] normalized_escapes, int[] histogram, int startx, int endx, int starty, int endy) {
+    public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, int[] histogram, int startx, int endx, int starty, int endy) {
         this.startx = startx; this.endx = endx; this.starty = starty; this.endy = endy;
         initData(escapedata, normalized_escapes); this.histogram = new int[histogram.length];
         System.arraycopy(histogram, 0, this.histogram, 0, this.histogram.length);

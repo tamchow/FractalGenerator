@@ -32,7 +32,7 @@ public class IFSGenerator implements Serializable, Pannable {
         plane = new LinearizedImageData(params.getWidth(), params.getHeight()); resetCentre();
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision()); initial = null; completion = false; point = null;
-        if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
+        if (params.zoomConfig.zooms != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}

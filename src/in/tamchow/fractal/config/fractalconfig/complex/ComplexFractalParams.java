@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class ComplexFractalParams implements Serializable {
     public ComplexFractalRunParams runParams;
     public ComplexFractalInitParams initParams;
-    public ZoomConfig zoomConfig;
+    public ZoomConfig zoomConfig = new ZoomConfig();
     public int x_threads, y_threads;
     public ImageData.PostProcessMode postprocessMode;
     public String path;
@@ -29,7 +29,9 @@ public class ComplexFractalParams implements Serializable {
     public ComplexFractalParams(ComplexFractalParams params) {
         this.initParams = new ComplexFractalInitParams(params.initParams);
         this.runParams = new ComplexFractalRunParams(params.runParams); this.x_threads = params.x_threads;
-        this.y_threads = params.y_threads; this.zoomConfig = new ZoomConfig(params.zoomConfig);
+        this.y_threads = params.y_threads; if (params.zoomConfig.zooms != null) {
+            this.zoomConfig = new ZoomConfig(params.zoomConfig);
+        }
         setPostprocessMode(params.getPostprocessMode()); setPath(params.getPath());
     }
     public String getPath() {return path;}

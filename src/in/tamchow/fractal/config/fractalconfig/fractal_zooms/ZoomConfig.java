@@ -6,9 +6,7 @@ import java.io.Serializable;
 public class ZoomConfig implements Serializable {
     public ZoomParams[] zooms;
     public ZoomConfig() {}
-    public ZoomConfig(ZoomConfig old) {
-        setZooms(old.zooms);
-    }
+    public ZoomConfig(ZoomConfig old) {setZooms(old.zooms);}
     public void setZooms(ZoomParams[] zooms) {
         this.zooms = new ZoomParams[zooms.length];
         for (int i = 0; i < zooms.length; i++) {this.zooms[i] = new ZoomParams(zooms[i]);}
@@ -22,5 +20,12 @@ public class ZoomConfig implements Serializable {
         String representation = "[Zooms]"; for (ZoomParams zoom : zooms) {
             representation += "\n" + zoom;
         } representation += "\n[EndZooms]"; return representation;
+    }
+    public void addZoom(ZoomParams zoom) {
+        ZoomParams[] tmp = new ZoomParams[this.zooms.length]; for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = new ZoomParams(this.zooms[i]);
+        } this.zooms = new ZoomParams[tmp.length + 1]; for (int i = 0; i < tmp.length; i++) {
+            this.zooms[i] = new ZoomParams(tmp[i]);
+        } this.zooms[tmp.length] = zoom;
     }
 }

@@ -1,5 +1,6 @@
 package in.tamchow.fractal.helpers;
 import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.util.Random;
 /**
@@ -82,6 +83,9 @@ public class MathUtils {
         for (int i = 0; i < rankList.length; i++) {
             rankList[i] = map[i][0];
         } return rankList;
+    }
+    public static Matrix complexToMatrix(Complex data) {
+        return new Matrix(new double[][]{{data.real()}, {data.imaginary()}});
     }
     public int[] mostEfficientfactor(int a) {
         int num_factors = 0; for (int i = 1; i <= a; i++) {if (a % i == 0) num_factors++;}

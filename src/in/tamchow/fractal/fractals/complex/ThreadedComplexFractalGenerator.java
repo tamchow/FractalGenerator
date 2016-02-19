@@ -13,14 +13,14 @@ import java.io.Serializable;
 public final class ThreadedComplexFractalGenerator implements Serializable {
     final ComplexFractalGenerator master;
     private final Object lock = new Lock();
-    PartImage[] buffer;
+    PartComplexFractalData[] buffer;
     long iterations;
     double escape_radius;
     Complex constant;
     int nx, ny;
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
         this.master = master; this.iterations = iterations; this.escape_radius = escape_radius;
-        this.constant = constant; nx = x_threads; ny = y_threads; buffer = new PartImage[nx * ny];
+        this.constant = constant; nx = x_threads; ny = y_threads; buffer = new PartComplexFractalData[nx * ny];
     }
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master) {
         this(master, master.getParams());
@@ -29,10 +29,10 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
         this.master = master; this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
         this.constant = config.runParams.constant; nx = config.x_threads; ny = config.y_threads;
-        buffer = new PartImage[nx * ny];
+        buffer = new PartComplexFractalData[nx * ny];
     }
     private int countCompletedThreads() {
-        int ctr = 0; for (PartImage partImage : buffer) {if (partImage != null) ctr++;} return ctr;
+        int ctr = 0; for (PartComplexFractalData partImage : buffer) {if (partImage != null) ctr++;} return ctr;
     }
     public void generate() {generate(0, master.argand.getWidth(), 0, master.argand.getHeight());}
     public void generate(int startx, int endx, int starty, int endy) {
@@ -48,14 +48,14 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
                 while (!allComplete()) {lock.wait(1000);} lock.notifyAll();
                 int[] histogram = new int[(int) iterations + 2]; int total = 0;
                 if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                    for (PartImage partImage : buffer) {
+                    for (PartComplexFractalData partImage : buffer) {
                         for (int i = 0; i < histogram.length; i++) {histogram[i] += partImage.histogram[i];}
                     }
                 } for (int i = 0; i < iterations; i++) {total += histogram[i];}
                 if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                     System.arraycopy(MathUtils.rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
-                }
-                double scaling = Math.pow(master.zoom, master.zoom_factor); for (PartImage partImage : buffer) {
+                } double scaling = Math.pow(master.zoom, master.zoom_factor);
+                for (PartComplexFractalData partImage : buffer) {
                     for (int i = partImage.starty; i < partImage.endy; i++) {
                         for (int j = partImage.startx; j < partImage.endx; j++) {
                             master.escapedata[i][j] = partImage.escapedata[i][j];
@@ -107,7 +107,7 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
         }
     }
     public boolean allComplete() {
-        for (PartImage partImage : buffer) {
+        for (PartComplexFractalData partImage : buffer) {
             if (partImage == null) {return false;}
         } return true;
     }
@@ -123,7 +123,7 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
             this.starty = starty;
             this.endx = endx;
             this.endy = endy;
-            this.copyOfMaster = new ComplexFractalGenerator(master.getParams(), master.getProgressPublisher());
+            this.copyOfMaster = new ComplexFractalGenerator(new ComplexFractalParams(master.getParams()), master.getProgressPublisher());
         }
         public void start() {
             if (executor == null) {executor = new Thread(this);} executor.start();
@@ -134,9 +134,9 @@ public final class ThreadedComplexFractalGenerator implements Serializable {
         }
         void onCompletion() {
             if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
-                buffer[index] = new PartImage(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
             } float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
         }

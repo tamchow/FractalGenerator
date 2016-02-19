@@ -4,10 +4,14 @@ import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
+import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalConfig;
+import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
+import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
+import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerator;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
@@ -49,7 +53,7 @@ public class Main {
                 } else if (ConfigReader.isFileComplexFractalConfig(input)) {
                     if (args.length == 1) {
                         System.err.println("No output directory specified for batch mode"); System.exit(3);
-                    } if (args.length == 2 && args[1].equalsIgnoreCase("-v")) {
+                    } else if (args.length == 2 && args[1].equalsIgnoreCase("-v")) {
                         ImageDisplay.show(ConfigReader.getComplexFractalConfigFromFile(input), "Fractal");
                     } else {
                         ComplexFractalConfig cfg = ConfigReader.getComplexFractalConfigFromFile(input);
@@ -66,6 +70,27 @@ public class Main {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getColor().getByParts())), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand()), "png", outputFile);
+                            }
+                        }
+                    }
+                } else if (ConfigReader.isFileComplexBrotFractalConfig(input)) {
+                    if (args.length == 1) {
+                        System.err.println("No output directory specified for batch mode"); System.exit(3);
+                    } else {
+                        ComplexBrotFractalConfig cfg = ConfigReader.getComplexBrotFractalConfigFromFile(input);
+                        for (int i = 0; i < cfg.getParams().length; i++) {
+                            ComplexBrotFractalParams params = cfg.getParams()[i];
+                            ComplexBrotFractalGenerator generator = new ComplexBrotFractalGenerator(params, new DesktopProgressPublisher());
+                            if (params.useThreadedGenerator()) {
+                                ThreadedComplexBrotFractalGenerator threaded = new ThreadedComplexBrotFractalGenerator(generator);
+                                threaded.generate();
+                            } else {
+                                generator.generate();
+                            } File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
+                            if (params.getPostProcessMode() != ImageData.PostProcessMode.NONE) {
+                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), generator.getNormalized_escapes(), params.getByParts())), "png", outputFile);
+                            } else {
+                                ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                             }
                         }
                     }

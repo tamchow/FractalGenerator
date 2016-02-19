@@ -3,6 +3,8 @@ import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
+import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalConfig;
+import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.imgutils.ImageData;
@@ -21,6 +23,9 @@ public class ConfigReader {
         return new Scanner(file).nextLine().equals("[ImageConfig]");}
     public static boolean isFileComplexFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[ComplexFractalConfig]");}
+    public static boolean isFileComplexBrotFractalConfig(File file) throws FileNotFoundException {
+        return new Scanner(file).nextLine().equals("[ComplexBrotFractalConfig]");
+    }
     public static boolean isFileIFSFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[IFSFractalConfig]");}
     public static ImageConfig getImageConfigFromFile(File cfgfile) throws FileNotFoundException {
@@ -127,5 +132,41 @@ public class ConfigReader {
             ifsFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
         }
         ifsFractalParams.setPath(paramfile.getAbsolutePath()); return ifsFractalParams;
+    }
+    public static ComplexBrotFractalConfig getComplexBrotFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
+        Scanner in = new Scanner(cfgfile); ArrayList<String> lines = new ArrayList<>();
+        if (!in.nextLine().equals("[ComplexBrotFractalConfig]")) {return null;} while (in.hasNext()) {
+            String line = in.nextLine(); if (!line.startsWith("#")) {
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
+            }
+        } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
+        List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        ComplexBrotFractalConfig complexBrotFractalConfig = new ComplexBrotFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
+        ComplexBrotFractalParams[] complexBrotFractalParams = new ComplexBrotFractalParams[specCfg.size()];
+        for (int i = 0; i < complexBrotFractalParams.length; i++) {
+            complexBrotFractalParams[i] = getComplexBrotParamFromFile(new File(specCfg.get(i)));
+        } complexBrotFractalConfig.setParams(complexBrotFractalParams); return complexBrotFractalConfig;
+    }
+    private static ComplexBrotFractalParams getComplexBrotParamFromFile(File paramfile) throws FileNotFoundException {
+        Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
+        String post_process_mode = null, constant = null; while (in.hasNext()) {
+            String line = in.nextLine(); if (line.startsWith("Postprocessing:")) {
+                post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
+            } if (line.startsWith("Newton_constant:")) {
+                post_process_mode = line.substring("Newton_constant:".length()).trim(); continue;
+            } if (!line.startsWith("#")) {
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
+            }
+        } String[] zooms = null; if (lines.indexOf("[Zooms]") >= 0) {
+            List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));
+            zooms = new String[zoomsConfig.size()]; zoomsConfig.toArray(zooms);
+        } String[] params = new String[lines.size()]; lines.toArray(params);
+        ComplexBrotFractalParams complexBrotFractalParams = new ComplexBrotFractalParams();
+        complexBrotFractalParams.fromString(params);
+        if (zooms != null) {complexBrotFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
+        if (constant != null) {complexBrotFractalParams.setNewton_constant(new Complex(constant));}
+        if (post_process_mode != null) {
+            complexBrotFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+        } complexBrotFractalParams.setPath(paramfile.getAbsolutePath()); return complexBrotFractalParams;
     }
 }

@@ -48,7 +48,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     public ComplexFractalGenerator(ComplexFractalParams params, Publisher progressPublisher) {
         this.params = params;
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.oldvariablecode, params.initParams.tolerance, params.initParams.degree, params.initParams.color, params.initParams.switch_rate, params.initParams.trap_point, params.initParams.linetrap);
-        if (params.zoomConfig != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
+        if (params.zoomConfig.zooms != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
         this.progressPublisher = progressPublisher;
     }
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, ColorConfig color, Publisher progressPublisher) {
@@ -67,7 +67,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setDegree(degree); if (degree.equals(new Complex(-1, 0))) {
             setAdvancedDegree(true);
         } lastConstant = new Complex(-1, 0);
-        if ((this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) || (color.isLogIndex() && (!(mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT)))) {
+        if ((this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) || ((!this.color.isExponentialSmoothing()) && (this.color.isLogIndex() && (!(mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT))))) {
             setStripe_density(this.color.getColor_density()); this.color.setColor_density(-1);
         } else {setStripe_density(-1);} mandelbrotToJulia = false; juliaToMandelbrot = false;
         if (!(switch_rate == 0 || switch_rate == -1 || switch_rate == 1)) {
@@ -977,12 +977,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     public int getColor(int i, int j, int val, Complex[] last, double escape_radius, int iterations) {
         int colortmp, colortmp1, colortmp2, color1, color2, color3, index;
         double renormalized, lbnd = 0, ubnd = 1, calc, scaling = Math.pow(zoom, zoom_factor), smoothcount;
-        if (color.isExponentialSmoothing() || mode == Mode.NEWTON || mode == Mode.NEWTONBROT || mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT || mode == Mode.MANDELBROT_NOVA || mode == Mode.MANDELBROT_NOVABROT) {
-            smoothcount = normalized_escapes[i][j]; renormalized = smoothcount;
-        } else {
-            renormalized = getNormalized(val, iterations, last, escape_radius); if (color.isLogIndex()) {
+        renormalized = normalized_escapes[i][j]; smoothcount = renormalized;
+        if ((!(color.isExponentialSmoothing() || mode == Mode.NEWTON || mode == Mode.NEWTONBROT || mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT || mode == Mode.MANDELBROT_NOVA || mode == Mode.MANDELBROT_NOVABROT)) && color.isLogIndex()) {
                 smoothcount = (renormalized > 0) ? Math.abs(Math.log(renormalized)) : ComplexOperations.principallog(new Complex(renormalized, 0)).modulus();
-            } else {smoothcount = renormalized;}
         }
         switch (color.getMode()) {
             case SIMPLE: colortmp = color.getColor(color.createIndex(val, 0, iterations, scaling)); break;
@@ -1096,15 +1093,32 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setMode((mode == Mode.BUDDHABROT || mode == Mode.RUDYBROT) ? Mode.JULIABROT : ((mode == Mode.MANDELBROT || mode == Mode.RUDY) ? Mode.JULIA : mode));
     }
     public void zoom(Matrix centre_offset, double level) {
+        if (params.zoomConfig.zooms == null) {
+            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(centre_offset, level)});
+        } else {
+            params.zoomConfig.addZoom(new ZoomParams(centre_offset, level));
+        }
         zoom(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0)), level);
     }
     public void zoom(Complex centre_offset, double level) {
+        if (params.zoomConfig.zooms == null) {
+            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(MathUtils.complexToMatrix(centre_offset), level)});
+        } else {
+            params.zoomConfig.addZoom(new ZoomParams(MathUtils.complexToMatrix(centre_offset), level));
+        }
         setCentre_offset(centre_offset); setZoom_factor(level); setScale(base_precision * Math.pow(zoom, zoom_factor));
+        //setCenter_x(toCooordinates(centre_offset)[0]);setCenter_y(toCooordinates(centre_offset)[1]);
         populateMap();
     }
     public void mandelbrotToJulia(int cx, int cy, double level) {zoom(cx, cy, level); changeMode(centre_offset); resetCentre();}
     public void zoom(int cx, int cy, double level) {
+        if (params.zoomConfig.zooms == null) {
+            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(cx, cy, level)});
+        } else {
+            params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
+        }
         cx = MathUtils.boundsProtected(cx, argand.getWidth()); cy = MathUtils.boundsProtected(cy, argand.getHeight());
+        //setCenter_x(cx);setCenter_y(cy);
         setCentre_offset(fromCooordinates(cx, cy)); setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor)); populateMap();
     }

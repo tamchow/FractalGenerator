@@ -33,8 +33,7 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
     }
     public void initParams(long iterations, double escape_radius, Complex constant) {
         this.iterations = iterations;
-        this.escape_radius = escape_radius;
-        this.constant = new Complex(constant);
+        this.escape_radius = escape_radius; this.constant = (constant != null) ? new Complex(constant) : null;
         fully_configured = false;
     }
     public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius) {
