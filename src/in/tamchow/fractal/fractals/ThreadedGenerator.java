@@ -11,6 +11,7 @@ public abstract class ThreadedGenerator {
     public abstract class SlaveRunner extends Thread {
         public Thread executor;
         public int index;
+        public SlaveRunner(int index) {this.index = index;}
         public void start() {
             if (executor == null) {executor = new Thread(this);} executor.start();
         }

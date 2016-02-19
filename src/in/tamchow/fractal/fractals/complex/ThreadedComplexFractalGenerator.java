@@ -32,15 +32,11 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         buffer = new PartComplexFractalData[nx * ny];
     }
     private static final class Lock {}
-    @Override
-    public int countCompletedThreads() {
-        int ctr = 0; for (PartComplexFractalData partImage : buffer) {if (partImage != null) ctr++;} return ctr;
-    }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexFractalGenerator copyOfMaster;
         int startx, starty, endx, endy;
         public SlaveRunner(int index, int startx, int endx, int starty, int endy) {
-            this.index = index; this.startx = startx; this.starty = starty; this.endx = endx; this.endy = endy;
+            super(index); this.startx = startx; this.starty = starty; this.endx = endx; this.endy = endy;
             this.copyOfMaster = new ComplexFractalGenerator(new ComplexFractalParams(master.getParams()), master.getProgressPublisher());
         }
         @Override
@@ -57,6 +53,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             } float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
         }
+    }
+    @Override
+    public int countCompletedThreads() {
+        int ctr = 0; for (PartComplexFractalData partImage : buffer) {if (partImage != null) ctr++;} return ctr;
     }
     public void generate() {generate(0, master.argand.getWidth(), 0, master.argand.getHeight());}
     public void generate(int startx, int endx, int starty, int endy) {

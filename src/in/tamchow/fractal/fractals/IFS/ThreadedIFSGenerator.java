@@ -15,7 +15,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         int index;
         IFSGenerator copyOfMaster;
         public SlaveRunner(int index) {
-            this.index = index; long iterations;
+            super(index); long iterations;
             copyOfMaster = new IFSGenerator(new IFSFractalParams(master.getParams()), master.getProgressPublisher());
             if (index == data.length - 1) {
                 iterations = copyOfMaster.getDepth() % threads;
