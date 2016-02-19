@@ -42,6 +42,8 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         matrixData[0][1] = -Math.sin(angle); matrixData[1][0] = Math.sin(angle); matrixData[1][1] = Math.cos(angle);
         return new Matrix(matrixData);
     }
+    public static Matrix nullMatrix(int order) {return nullMatrix(order, order);}
+    public static Matrix nullMatrix(int rows, int colums) {return new Matrix(rows, colums);}
     public static Matrix identityMatrix(int order) {
         int rows = Math.round((float) Math.sqrt(order)), columns = rows; Matrix matrix = new Matrix(rows, columns);
         for (int i = 0; i < rows; i++) {

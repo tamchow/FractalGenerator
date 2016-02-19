@@ -56,6 +56,8 @@ public class IFSGenerator implements Serializable, Pannable {
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2); setCenter_y(plane.getHeight() / 2); double[][] matrixData = new double[2][1];
         matrixData[0][0] = 0; matrixData[1][0] = 0; setCentre_offset(new Matrix(matrixData));}
+    public Publisher getProgressPublisher() {return progressPublisher;}
+    public void setProgressPublisher(Publisher progressPublisher) {this.progressPublisher = progressPublisher;}
     public void setWidth(int width) {
         IFSFractalParams modified = new IFSFractalParams(params); modified.setWidth(width); initIFS(modified);
     }

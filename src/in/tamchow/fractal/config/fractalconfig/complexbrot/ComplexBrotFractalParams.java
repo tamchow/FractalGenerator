@@ -14,9 +14,10 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     int width, height, num_threads, switch_rate;
     ImageData.PostProcessMode postProcessMode;
     int byParts;
+    long num_points;
     Complex newton_constant;
     ZoomConfig zoomConfig;
-    long[] num_points, iterations;
+    long[] iterations;
     double zoom, zoom_level, base_precision, tolerance, skew;
     String function;
     String variableCode;
@@ -25,10 +26,10 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     ComplexFractalGenerator.Mode mode;
     String[][] constants;
     boolean anti;
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, long[] num_points, long[] iterations, double zoom, double zoom_level, double base_precision, double tolerance, double skew, String function, String variableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, long num_points, long[] iterations, double zoom, double zoom_level, double base_precision, double tolerance, double skew, String function, String variableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
         this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, tolerance, skew, function, variableCode, variableCode + "_p", mode, constants, anti);
     }
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, long[] num_points, long[] iterations, double zoom, double zoom_level, double base_precision, double tolerance, double skew, String function, String variableCode, String oldVariableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, long num_points, long[] iterations, double zoom, double zoom_level, double base_precision, double tolerance, double skew, String function, String variableCode, String oldVariableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
         setWidth(width); setHeight(height); setNum_threads(num_threads); setSwitch_rate(switch_rate);
         setNum_points(num_points); setIterations(iterations); setZoom(zoom); setZoom_level(zoom_level);
         setBase_precision(base_precision); setTolerance(tolerance); setSkew(skew); setFunction(function);
@@ -75,11 +76,8 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public void setHeight(int height) {this.height = height;}
     public int getNum_threads() {return num_threads;}
     public void setNum_threads(int num_threads) {this.num_threads = num_threads;}
-    public long[] getNum_points() {return num_points;}
-    public void setNum_points(long[] num_points) {
-        this.num_points = new long[num_points.length];
-        System.arraycopy(num_points, 0, this.num_points, 0, this.num_points.length);
-    }
+    public long getNum_points() {return num_points;}
+    public void setNum_points(long num_points) {this.num_points = num_points;}
     public long[] getIterations() {return iterations;}
     public void setIterations(long[] iterations) {
         this.iterations = new long[iterations.length];

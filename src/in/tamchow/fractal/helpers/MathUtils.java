@@ -87,6 +87,9 @@ public class MathUtils {
     public static Matrix complexToMatrix(Complex data) {
         return new Matrix(new double[][]{{data.real()}, {data.imaginary()}});
     }
+    public static Complex matrixToComplex(Matrix data) {
+        return new Complex(data.get(0, 0), data.get(1, 0));
+    }
     public int[] mostEfficientfactor(int a) {
         int num_factors = 0; for (int i = 1; i <= a; i++) {if (a % i == 0) num_factors++;}
         int[] factors = new int[num_factors]; num_factors = 0;

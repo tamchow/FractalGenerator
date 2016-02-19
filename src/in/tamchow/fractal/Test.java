@@ -33,7 +33,7 @@ public class Test {
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
         //cfg.setColor_density(-1);
         Complex constant = null;//new Complex("1.0,+0.0i");
-        Complex trap = new Complex(0.15); int x_t = 1, y_t = 2; double skew = 0 * Math.PI; func = func2;
+        Complex trap = new Complex(0.15); int x_t = 2, y_t = 2; double skew = 0 * Math.PI; func = func2;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
             try {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
@@ -57,7 +57,7 @@ public class Test {
         } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         File pic = new File("D:/Fractal.png"); try {
-            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.NONE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
+            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.INTERPOLATED, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
         } catch (Exception e) {e.printStackTrace();} long endtime = System.currentTimeMillis();
         System.out.println("Writing image took:" + (endtime - gentime) + "ms");
         /*for(int i=0;i<jgen.getEscapedata().length;i++){

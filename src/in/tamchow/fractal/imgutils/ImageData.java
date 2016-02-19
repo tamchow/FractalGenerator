@@ -114,6 +114,13 @@ public class ImageData implements Serializable, Pannable {
     public ImageData falseColor(ImageData[] channels) {
         return falseColor(channels[0], channels[1], channels[2]);
     }
+    public void add(ImageData toAdd) {
+        for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
+            for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
+                setPixel(i, j, getPixel(i, j) + toAdd.getPixel(i, j));
+            }
+        }
+    }
     public ImageData falseColor(ImageData r, ImageData g, ImageData b) {
         ImageData falseColored = new ImageData(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {

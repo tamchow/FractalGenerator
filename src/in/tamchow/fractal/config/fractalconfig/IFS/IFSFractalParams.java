@@ -17,7 +17,11 @@ public class IFSFractalParams implements Serializable {
     double[] weights;
     int[] colors;
     long depth;
-    int width, height, fps, frameskip;
+    int width;
+    int height;
+    int fps;
+    int frameskip;
+    int threads;
     double zoom;
     double zoomlevel;
     double base_precision;
@@ -100,6 +104,9 @@ public class IFSFractalParams implements Serializable {
     }
     public boolean isIfsMode() {return ifsMode;}
     public void setIfsMode(boolean ifsMode) {this.ifsMode = ifsMode;}
+    public int getThreads() {return threads;}
+    public void setThreads(int threads) {this.threads = threads;}
+    public boolean useThreadedGenerator() {return threads > 1;}
     public String[] getYfunctions() {return yfunctions;}
     public void setYfunctions(String[] yfunctions) {this.yfunctions = yfunctions;}
     public String[] getXfunctions() {return xfunctions;}

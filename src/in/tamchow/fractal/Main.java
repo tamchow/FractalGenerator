@@ -8,6 +8,7 @@ import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalCon
 import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
+import in.tamchow.fractal.fractals.IFS.ThreadedIFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
@@ -102,6 +103,9 @@ public class Main {
                         IFSFractalParams params = cfg.getParams()[i];
                         IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
                         if (params.getFrameskip() > 0) {
+                            if (generator.getParams().getFrameskip() > 0) {
+                                throw new UnsupportedOperationException("Animations cannot be generated in multithreaded mode,\n" + "Due to risk of corrupted output.");
+                            }
                             Animation frames = generator.generateAnimation();
                             File animationMetaData = new File(args[1] + "/Fractal_" + i + "/animation.cfg");
                             BufferedWriter writer = new BufferedWriter(new FileWriter(animationMetaData));
@@ -115,7 +119,12 @@ public class Main {
                                 }
                             }
                         } else {
-                            generator.generate(); File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
+                            if (params.useThreadedGenerator()) {
+                                ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
+                                threaded.generate();
+                            } else {
+                                generator.generate();
+                            } File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostprocessMode() != ImageData.PostProcessMode.NONE) {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostprocessMode(), null, 0)), "png", outputFile);
                             } else {

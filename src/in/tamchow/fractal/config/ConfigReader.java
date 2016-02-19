@@ -112,10 +112,12 @@ public class ConfigReader {
         } ifsFractalConfig.setParams(ifsFractalParams); return ifsFractalConfig;}
     public static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String frameskip = null, post_process_mode = null;
+        String frameskip = null, post_process_mode = null, threads = null;
         while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Frameskip:")) {
                 frameskip = line.substring("Frameskip:".length()).trim();
+            } if (line.startsWith("Threads:")) {
+                threads = line.substring("Threads:".length()).trim();
             } if (line.startsWith("Postprocessing:")) {
                 post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
@@ -128,6 +130,7 @@ public class ConfigReader {
         IFSFractalParams ifsFractalParams = IFSFractalParams.fromString(params);
         if (zooms != null) {ifsFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (frameskip != null) {ifsFractalParams.setFrameskip(Integer.valueOf(frameskip));}
+        if (threads != null) {ifsFractalParams.setThreads(Integer.valueOf(threads));}
         if (post_process_mode != null) {
             ifsFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
         }
@@ -149,9 +152,11 @@ public class ConfigReader {
     }
     private static ComplexBrotFractalParams getComplexBrotParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String post_process_mode = null, constant = null; while (in.hasNext()) {
+        String post_process_mode = null, constant = null, threads = null; while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Postprocessing:")) {
                 post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
+            } if (line.startsWith("Threads:")) {
+                threads = line.substring("Threads:".length()).trim();
             } if (line.startsWith("Newton_constant:")) {
                 post_process_mode = line.substring("Newton_constant:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
@@ -165,6 +170,7 @@ public class ConfigReader {
         complexBrotFractalParams.fromString(params);
         if (zooms != null) {complexBrotFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (constant != null) {complexBrotFractalParams.setNewton_constant(new Complex(constant));}
+        if (threads != null) {complexBrotFractalParams.setNum_threads(Integer.valueOf(threads));}
         if (post_process_mode != null) {
             complexBrotFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
         } complexBrotFractalParams.setPath(paramfile.getAbsolutePath()); return complexBrotFractalParams;

@@ -94,15 +94,11 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     }
     public Complex fromCooordinates(int x, int y) {
         x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
-        if (Math.abs(params.initParams.skew) <= tolerance) {
-            return ComplexOperations.add(centre_offset, new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale)));
-        } else {
-            double[][] matrix = new double[2][1]; matrix[0][0] = ((((double) x) - center_x) / scale);
-            matrix[1][0] = ((center_y - ((double) y)) / scale); Matrix point = new Matrix(matrix);
+        Complex point = new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale));
+        if (Math.abs(params.initParams.skew) > tolerance) {
             Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
-            point = MatrixOperations.multiply(rotor, point);
-            return ComplexOperations.add(centre_offset, new Complex(point.get(0, 0), point.get(1, 0)));
-        }
+            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));
+        } return ComplexOperations.add(centre_offset, point);
     }
     public void resetCentre() {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
@@ -1077,9 +1073,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     }
     public int[] toCooordinates(Complex point) {
         point = ComplexOperations.subtract(point, centre_offset); if (Math.abs(params.initParams.skew) >= tolerance) {
-            Matrix coords = new Matrix(new double[][]{{point.real()}, {point.imaginary()}});
             Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew).inverse();
-            coords = MatrixOperations.multiply(rotor, coords); point = new Complex(coords.get(0, 0), coords.get(1, 0));
+            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));
         } int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
         x = MathUtils.boundsProtected(x, argand.getWidth()); y = MathUtils.boundsProtected(y, argand.getHeight());
         return new int[]{x, y};

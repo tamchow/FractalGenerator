@@ -11,13 +11,15 @@ import java.io.Serializable;
  */
 public class ComplexBrotFractalGenerator implements Serializable, Pannable {
     ComplexBrotFractalParams params;
-    Publisher publisher;
+    Publisher progressPublisher;
     ImageData plane;
     int[][] escape_data;
     double[][] normalized_escapes;
     public ComplexBrotFractalGenerator(ComplexBrotFractalParams params, Publisher publisher) {
-        this.params = params; this.publisher = publisher;
+        this.params = params; setProgressPublisher(publisher);
     }
+    public Publisher getProgressPublisher() {return progressPublisher;}
+    public void setProgressPublisher(Publisher progressPublisher) {this.progressPublisher = progressPublisher;}
     public int[][] getEscape_data() {return escape_data;}
     public double[][] getNormalized_escapes() {return normalized_escapes;}
     public ComplexBrotFractalParams getParams() {
