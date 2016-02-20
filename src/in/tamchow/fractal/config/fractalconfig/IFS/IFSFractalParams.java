@@ -34,7 +34,6 @@ public class IFSFractalParams implements Serializable {
         setTranslators(config.getTranslators()); setDepth(config.getDepth()); setFrameskip(config.getFrameskip());
         setFps(config.getFps()); setPath(config.getPath()); setSkew(config.getSkew());
         setPostprocessMode(config.getPostprocessMode()); setThreads(config.getThreads());
-
     }
     public ImageData.PostProcessMode getPostprocessMode() {return postprocessMode;}
     public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {this.postprocessMode = postprocessMode;}
