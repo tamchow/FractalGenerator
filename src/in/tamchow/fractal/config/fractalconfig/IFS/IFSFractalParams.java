@@ -33,7 +33,7 @@ public class IFSFractalParams implements Serializable {
         } setColors(config.getColors()); setWeights(config.getWeights()); setTransforms(config.getTransforms());
         setTranslators(config.getTranslators()); setDepth(config.getDepth()); setFrameskip(config.getFrameskip());
         setFps(config.getFps()); setPath(config.getPath()); setSkew(config.getSkew());
-        setPostprocessMode(config.getPostprocessMode());
+        setPostprocessMode(config.getPostprocessMode()); setThreads(config.getThreads());
 
     }
     public ImageData.PostProcessMode getPostprocessMode() {return postprocessMode;}
@@ -80,6 +80,8 @@ public class IFSFractalParams implements Serializable {
     }
     public int getFps() {return fps;}
     public void setFps(int fps) {this.fps = fps;}
+    public int getThreads() {return threads;}
+    public void setThreads(int threads) {this.threads = threads;}
     public static IFSFractalParams fromString(String[] input) {
         IFSFractalParams params = new IFSFractalParams(); params.setIfsMode(Boolean.valueOf(input[0]));
         params.setWidth(Integer.valueOf(input[1])); params.setHeight(Integer.valueOf(input[2]));
@@ -104,8 +106,6 @@ public class IFSFractalParams implements Serializable {
     }
     public boolean isIfsMode() {return ifsMode;}
     public void setIfsMode(boolean ifsMode) {this.ifsMode = ifsMode;}
-    public int getThreads() {return threads;}
-    public void setThreads(int threads) {this.threads = threads;}
     public boolean useThreadedGenerator() {return threads > 1;}
     public String[] getYfunctions() {return yfunctions;}
     public void setYfunctions(String[] yfunctions) {this.yfunctions = yfunctions;}
