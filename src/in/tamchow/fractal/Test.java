@@ -25,13 +25,13 @@ public class Test {
         int resx = 640, resy = 480, iter = 32, switch_rate = 0;
         ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.MANDELBROT;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 200; String linetrap = null;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, 0, true, true);
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.EPSILON_CROSS_LINEAR, 4, 2500, 0, true, false);
         //cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
-        //cfg.setColor_density(-1);
+        cfg.setColor_density(-1);
         Complex constant = null;//new Complex("1.0,+0.0i");
         Complex trap = new Complex(0.15); int x_t = 2, y_t = 2; double skew = 0 * Math.PI; func = func2;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
@@ -47,7 +47,7 @@ public class Test {
             } jgenParams.x_threads = x_t; jgenParams.y_threads = y_t;
             jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
         } else {jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());}
-        long starttime = System.currentTimeMillis(); jgen.zoom(new Complex("-0.77568377,+0.13646737i"), 1);
+        long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         if (def) {
             if (jgenParams.useThreadedGenerator()) {

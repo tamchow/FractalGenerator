@@ -10,7 +10,8 @@ public class ZoomParams implements Serializable {
     public Matrix centre;
     public double level;
     public ZoomParams(ZoomParams old) {
-        centre_x = old.centre_x; centre_y = old.centre_y; level = old.level; centre = new Matrix(old.centre);
+        centre_x = old.centre_x; centre_y = old.centre_y; level = old.level;
+        centre = (old.centre == null) ? null : new Matrix(old.centre);
     }
     public ZoomParams(int centre_x, int centre_y, double level) {
         this.centre_x = centre_x; this.centre_y = centre_y; this.level = level; this.centre = null;

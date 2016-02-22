@@ -199,7 +199,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     public int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
         //for multithreading purposes
         int start_x = startx, end_x, start_y = starty, end_y;
-        int x_dist = (endx - startx) / nx, y_dist = (endy - starty) / ny;
+        int x_dist = Math.round((float) (endx - startx) / nx), y_dist = Math.round((float) (endy - starty) / ny);
         if (ix == (nx - 1)) {
             start_x += (nx - 1) * x_dist; end_x = endx;
         } else {start_x += ix * x_dist; end_x = (ix + 1) * x_dist;} if (iy == (ny - 1)) {
