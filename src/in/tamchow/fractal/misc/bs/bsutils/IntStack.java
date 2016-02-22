@@ -1,16 +1,17 @@
 package in.tamchow.fractal.misc.bs.bsutils;
 import java.util.EmptyStackException;
 /**
- * A stack of ints, especially for bs.
+ * A stack of ints, especially for BS' Stack-extended version.
  */
 public class IntStack {
     int[] elements;
     int top;
-    public IntStack(int capacity) {elements = new int[capacity]; resetTop();}
+    public IntStack(int capacity) {elements = new int[capacity]; erase(); resetTop();}
     public void resetTop() {top = elements.length;}
-    public void pushN(int[] values) {
-        for (int i = 0; i < values.length; i++) {push(values[i]);}
+    public void erase() {
+        for (int i = 0; i < elements.length; i++) {elements[i] = -1;}
     }
+    public void pushN(int[] values) {for (int value : values) {push(value);}}
     public void push(int value) {
         if (isFull()) throw new IndexOutOfBoundsException("Overflow Exception"); elements[--top] = value;
     }
@@ -55,5 +56,5 @@ public class IntStack {
             if (i > 0) size++;
         } return size;
     }
-    public void clear() {int capacity = elements.length; elements = new int[capacity]; resetTop();}
+    public void clear() {int capacity = elements.length; elements = new int[capacity]; erase(); resetTop();}
 }

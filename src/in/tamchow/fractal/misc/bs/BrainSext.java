@@ -87,20 +87,25 @@ public class BrainSext {
                 } break; case 'u': for (int j = 0; j < code.length() && j < operand.length; j++) {
                     code += "" + (char) operand[j];
                 } initMemory(); continue outer;
-                case '(': procidx[proctr] = i + 1; i = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]) + 1; if (i == 0) {
+                case '(': procidx[proctr] = i + 1; i = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]); if (i < 0) {
                     setOutput("Unmatched ( for procedure declaration at " + i + "\n", ERROR);
-                } i = MathUtils.boundsProtected(i, code.length()); proctr++; break;
+                } else {i = MathUtils.boundsProtected(i, code.length()); proctr++;} break;
                 case ')': break;//skip this over, index will be updated anyway
                 case '[': if (StringManipulator.findMatchingCloser('[', code, i - 1) == -1) {
                     setOutput("Unmatched [ at " + i + "\n", ERROR);
-                } if (operand[ptr] == 0) {
-                    i = StringManipulator.findMatchingCloser('[', code, i + 1) + 1;
-                } continue outer; case ']': if (StringManipulator.findMatchingOpener(']', code, i - 1) == -1) {
+                } else {
+                    if (operand[ptr] == 0) {
+                        i = StringManipulator.findMatchingCloser('[', code, i + 1);
+                    }
+                } break; case ']': if (StringManipulator.findMatchingOpener(']', code, i - 1) == -1) {
                     setOutput("Unmatched ] at " + i + "\n", ERROR);
-                } i = StringManipulator.findMatchingOpener(']', code, i - 1) + 1; continue outer;
+                } else {i = StringManipulator.findMatchingOpener(']', code, i - 1);} break;
                 case ':': codebackup = code; itmp = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]); if (itmp == -1) {
                     setOutput("Unmatched ) for procedure call at " + i + "\n", ERROR);
-                } code = codebackup.substring(procidx[MathUtils.boundsProtected(operand[ptr], procidx.length)], itmp - 1); execute(); i = itmp; code = codebackup; continue outer;
+                } else {
+                    code = codebackup.substring(procidx[MathUtils.boundsProtected(operand[ptr], procidx.length)], itmp);
+                    execute(); i = itmp; code = codebackup;
+                } continue outer;
                 case 'C': operand[ptr] = (operand[ptr] + "").charAt(0);
                 case 'I': operand[ptr] = Integer.valueOf("" + (char) operand[ptr]);
                 case '@': i = jumpIndex(i, false); continue outer;
@@ -199,7 +204,7 @@ public class BrainSext {
             if (relative) {i += StringManipulator.getNumFromIndex(code, i + 1);} else {
                 i = StringManipulator.getNumFromIndex(code, i + 1);
             } i = indexAfterSkipLiteral(i, i); i = MathUtils.boundsProtected(i, code.length());
-        } else {i = operand[ptr]; i = MathUtils.boundsProtected(i, code.length());} return i;
+        } else {i = storage; i = MathUtils.boundsProtected(i, code.length());} return i;
     }
     boolean numAfter(int i) {
         return ((i + 1 < code.length() - 1) && (Character.isDigit(code.charAt(i + 1)) || code.charAt(i + 1) == '_'));
