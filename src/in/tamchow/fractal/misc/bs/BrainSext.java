@@ -2,6 +2,7 @@ package in.tamchow.fractal.misc.bs;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.misc.bs.bserrors.HaltError;
+import in.tamchow.fractal.misc.bs.bsutils.IntStack;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,12 +33,13 @@ public class BrainSext {
     public static final int OUTPUT = 0, ERROR = 1;
     String code, codebackup, output, errors;
     int[] procidx, operand;
+    IntStack stack;
     int ptr, proctr, itmp, size, errorCount;
     boolean silent;
     private int storage;
     public BrainSext(boolean silent) {
         code = ""; codebackup = code; size = 65536; procidx = new int[size]; initMemory(); ptr = 0; proctr = 0;
-        itmp = 0; storage = -1; this.silent = silent;
+        itmp = 0; storage = -1; this.silent = silent; stack = new IntStack(size);
     }
     void initMemory() {operand = new int[size]; for (int i = 0; i < operand.length; i++) {operand[i] = -1;}}
     public static void main(String[] args) {
@@ -63,7 +65,7 @@ public class BrainSext {
         } catch (FileNotFoundException e) {errorCount++; errors += e.getMessage();}
     }
     public void execute() {
-        int[] tmp = new int[operand.length];
+        int[] tmp = new int[operand.length]; int num;
         //filter comments first
         while (code.contains("{") && code.contains("}")) {
             int i1 = code.indexOf('{'), i2 = code.indexOf('}'); code = code.replace(code.substring(i1, i2 + 1), "");
@@ -74,6 +76,7 @@ public class BrainSext {
         } outer:
         for (int i = 0; i < code.length(); ) {
             switch (code.charAt(i)) {
+                case '~': int temp = operand[ptr]; operand[ptr] = operand[MathUtils.boundsProtected(storage, operand.length)]; operand[MathUtils.boundsProtected(storage, operand.length)] = temp; break;
                 case '#': String data = ""; for (int k : operand) {
                     data += k;
                 } data = data.replace("-1", ""); operand[ptr] = data.hashCode(); break;
@@ -97,7 +100,7 @@ public class BrainSext {
                 } i = StringManipulator.findMatchingOpener(']', code, i - 1) + 1; continue outer;
                 case ':': codebackup = code; itmp = StringManipulator.findMatchingCloser('(', codebackup, procidx[operand[ptr]]); if (itmp == -1) {
                     setOutput("Unmatched ) for procedure call at " + i + "\n", ERROR);
-                } operand[ptr] = MathUtils.boundsProtected(operand[ptr], procidx.length); code = codebackup.substring(procidx[operand[ptr]], itmp - 1); execute(); i = itmp; code = codebackup; continue outer;
+                } code = codebackup.substring(procidx[MathUtils.boundsProtected(operand[ptr], procidx.length)], itmp - 1); execute(); i = itmp; code = codebackup; continue outer;
                 case 'C': operand[ptr] = (operand[ptr] + "").charAt(0);
                 case 'I': operand[ptr] = Integer.valueOf("" + (char) operand[ptr]);
                 case '@': i = jumpIndex(i, false); continue outer;
@@ -139,9 +142,29 @@ public class BrainSext {
                 } else {operand[ptr] /= 1;} break; case '%': if (numAfter(i)) {
                     i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
                     operand[ptr] %= StringManipulator.getNumFromIndex(code, i + 1);
-                } else {operand[ptr] %= 1;} break;
-                case '^': ptr = operand[ptr]; ptr = MathUtils.boundsProtected(ptr, size); break;
-                case '&': operand[ptr] = MathUtils.boundsProtected(operand[ptr], size); operand[ptr] = operand[operand[ptr]]; break;
+                } else {operand[ptr] %= 1;} break; case '^': ptr = MathUtils.boundsProtected(operand[ptr], size); break;
+                case '&': operand[ptr] = operand[MathUtils.boundsProtected(operand[ptr], size)]; break;
+                case 'M': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
+                    num = StringManipulator.getNumFromIndex(code, i + 1);
+                } else {num = Math.abs(storage);} System.arraycopy(stack.popN(num), 0, operand, ptr, num); break;
+                case 'W': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
+                    num = StringManipulator.getNumFromIndex(code, i + 1);
+                } else {
+                    num = Math.abs(storage);
+                } int[] stmp = new int[num]; System.arraycopy(operand, ptr, stmp, 0, num); stack.pushN(stmp); break;
+                case 'K': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
+                    num = StringManipulator.getNumFromIndex(code, i + 1);
+                } else {num = Math.abs(storage);} System.arraycopy(stack.peekN(num), 0, operand, ptr, num); break;
+                case 'D': if (numAfter(i)) {
+                    i = indexAfterSkipLiteral(i, StringManipulator.getNumFromIndex(code, i + 1));
+                    num = StringManipulator.getNumFromIndex(code, i + 1);
+                } else {num = Math.abs(storage);} stack.duplicateN(num); break; case 'R': stack.reverse(); break;
+                case 'X': stack.clear(); break;
+                case '\'': System.arraycopy(stack.dumpStack(), 0, operand, 0, operand.length); break;
+                case '`': stack.initStack(operand); break;
                 case ';': int c = 0; if (numAfter(i)) {
                     c = StringManipulator.getNumFromIndex(code, i); i = indexAfterSkipLiteral(i, c);
                 } if (c > 0) {i = StringManipulator.nthIndex(code, ']', i, c);} else if (c < 0) {

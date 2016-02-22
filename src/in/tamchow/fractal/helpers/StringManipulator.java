@@ -42,10 +42,10 @@ public class StringManipulator {
             } if (counter == 0) {return closeIndex;} closeIndex++;
         } return -1;}
     public static int getNumFromIndex(String str, int idx) {
-        String num = ""; boolean neg = false; if (str.charAt(idx) == '_') {neg = true; idx++;}
+        String num = ""; boolean negative = false; if (str.charAt(idx) == '_') {negative = true; idx++;}
         for (int i = idx; i < str.length(); i++) {
             char current = str.charAt(i); if (Character.isDigit(current)) {num += current;} else {break;}
-        } if (neg) {
+        } if (negative) {
             return -Integer.valueOf(num);
         } return Integer.valueOf(num);
     }
