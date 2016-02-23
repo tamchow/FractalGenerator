@@ -105,7 +105,7 @@ public class IFSFractalParams implements Serializable {
     }
     public boolean isIfsMode() {return ifsMode;}
     public void setIfsMode(boolean ifsMode) {this.ifsMode = ifsMode;}
-    public boolean useThreadedGenerator() {return threads > 1;}
+    public boolean useThreadedGenerator() {return (threads > 1) && (frameskip < 0);}
     public String[] getYfunctions() {return yfunctions;}
     public void setYfunctions(String[] yfunctions) {this.yfunctions = yfunctions;}
     public String[] getXfunctions() {return xfunctions;}
@@ -114,7 +114,7 @@ public class IFSFractalParams implements Serializable {
     }
     @Override
     public String toString() {
-        String representation = (frameskip > 0) ? "Frameskip:" + frameskip : "";
+        String representation = (frameskip >= 0) ? "Frameskip:" + frameskip : "";
         representation += (postprocessMode != null) ? "Postprocessing:" + postprocessMode : "";
         representation += "\n" + ifsMode + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {

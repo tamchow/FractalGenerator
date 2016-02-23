@@ -3,6 +3,7 @@ import in.tamchow.fractal.color.ColorConfig;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.config.Publisher;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalInitParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.helpers.MathUtils;
@@ -38,7 +39,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     int[][] escapedata;
     Complex[][] argand_map;
     Complex centre_offset, degree, lastConstant, trap_point;
-    boolean advancedDegree, mandelbrotToJulia, juliaToMandelbrot, useLineTrap;
+    boolean advancedDegree, mandelbrotToJulia, juliaToMandelbrot, useLineTrap, silencer;
     int[] histogram;
     double[][] normalized_escapes;
     double a, b, c;
@@ -51,11 +52,20 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         if (params.zoomConfig.zooms != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
         this.progressPublisher = progressPublisher;
     }
+    @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, ColorConfig color, Publisher progressPublisher) {
-        initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1, 0), color, 0, Complex.ZERO, null);
+        //initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1, 0), color, 0, Complex.ZERO, null);
+        //this.progressPublisher = progressPublisher;
+        //ComplexFractalParams params=new ComplexFractalParams();
+        //params.initParams=new ComplexFractalInitParams(width,height,zoom,zoom_factor,base_precision,mode,function,consts,variableCode,oldvariablecode,tolerance,color,0,Complex.ZERO,null,0);
+        this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, color, 0, Complex.ZERO, null, 0), null), progressPublisher);
+    }
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
+        initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, null);
         this.progressPublisher = progressPublisher;
     }
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Complex degree, ColorConfig color, int switch_rate, Complex trap_point, String linetrap) {
+        silencer = params.useThreadedGenerator();
         argand = new LinearizedImageData(width, height); setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
         argand_map = new Complex[argand.getHeight()][argand.getWidth()];
@@ -104,10 +114,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
     }
     public void resetCentre_Offset() {centre_offset = new Complex(0);}
-    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
-        initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, null);
-        this.progressPublisher = progressPublisher;
-    }
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, String linetrap) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, Complex.ZERO, linetrap);
         this.progressPublisher = progressPublisher;

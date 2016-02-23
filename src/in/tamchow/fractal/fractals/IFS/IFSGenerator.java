@@ -23,7 +23,7 @@ public class IFSGenerator implements Serializable, Pannable {
     int center_x, center_y;
     double zoom, zoom_factor, base_precision, scale;
     long depth;
-    boolean completion;
+    boolean completion, silencer;
     Publisher progressPublisher;
     public IFSGenerator(IFSFractalParams params, Publisher progressPublisher) {
         setParams(params); initIFS(params); this.progressPublisher = progressPublisher;
@@ -33,6 +33,7 @@ public class IFSGenerator implements Serializable, Pannable {
         setDepth(params.getDepth()); setZoom(params.getZoom()); setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision()); initial = null; completion = false; point = null;
         if (params.zoomConfig.zooms != null) {for (ZoomParams zoom : params.zoomConfig.zooms) {zoom(zoom);}}
+        silencer = params.useThreadedGenerator();
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {zoom(zoom.centre_x, zoom.centre_y, zoom.level);} else {zoom(zoom.centre, zoom.level);}
@@ -125,8 +126,10 @@ public class IFSGenerator implements Serializable, Pannable {
         return new int[]{x, y};
     }
     public synchronized void publishProgress(long val) {
+        if (!silencer) {
         float completion = (((float) val) / depth) * 100.0f;
-        progressPublisher.publish("% completion= " + completion + "%", completion);
+            progressPublisher.publish("% completion= " + completion + "%", completion);
+        }
     }
     private Matrix modifyPoint(Matrix point, int index) {
         if (params.isIfsMode()) {
@@ -140,9 +143,9 @@ public class IFSGenerator implements Serializable, Pannable {
     }
     public boolean isComplete() {return completion;}
     public Animation generateAnimation() {
+        int frameskip = Math.abs(params.getFrameskip()) + 1;//to skip 1 frame, it must divide by 2, etc.
         Animation animation = new Animation(params.getFps()); for (long i = 0; i <= depth && (!completion); i++) {
-            generateStep(); publishProgress(i);
-            if (params.getFrameskip() > 0 && i % params.getFrameskip() == 0) {animation.addFrame(plane);}
+            generateStep(); publishProgress(i); if (i % frameskip == 0) {animation.addFrame(plane);}
         } return animation;
     }
     public void generateStep() {

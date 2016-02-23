@@ -55,6 +55,9 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point, String linetrap, double skew) {
         initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1), color, switch_rate, trap_point, linetrap, skew);
     }
+    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, ColorConfig color, int switch_rate, Complex trap_point, String linetrap, double skew) {
+        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1), color, switch_rate, trap_point, linetrap, skew);
+    }
     public ComplexFractalInitParams() {
         String func = "z ^ 2 + c"; String[][] consts = {{"c", "-0.8,+0.156i"}};
         ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE, 19, 16, 0, true, false);
