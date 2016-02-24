@@ -23,15 +23,16 @@ public class Test {
         String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + e", variableCode = "z", poly = "{1:z:3};+;{d:z:1};+;{e:z:0}", poly2 = "{f:z:0};sin;{1:z:1}", func2 = "z ^ 2 + e";
         String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"}, {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
         int resx = 640, resy = 480, iter = 32, switch_rate = 0;
-        ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.MANDELBROT;
-        double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 200; String linetrap = null;
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.EPSILON_CROSS_LINEAR, 4, 2500, 0, true, false);
-        //cfg.setExponentialSmoothing(false);
+        ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
+        double escrad = 10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 200; String linetrap = null;
+        //Note to self: Do NOT use TIA and Exp. Smoothing together.
+        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, 0, false, false);
+        cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
-        cfg.setColor_density(-1);
+        //cfg.setColor_density(-1);//let there be the proper color_density!
         Complex constant = null;//new Complex("1.0,+0.0i");
         Complex trap = new Complex(0.15); int x_t = 2, y_t = 2; double skew = 0 * Math.PI; func = func2;
         boolean def = (args.length == 0); ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0); if (!def) {
@@ -57,7 +58,7 @@ public class Test {
         } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         File pic = new File("D:/Fractal.png"); try {
-            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.INTERPOLATED, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
+            ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.NONE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
         } catch (Exception e) {e.printStackTrace();} long endtime = System.currentTimeMillis();
         System.out.println("Writing image took:" + (endtime - gentime) + "ms");
         /*for(int i=0;i<jgen.getEscapedata().length;i++){

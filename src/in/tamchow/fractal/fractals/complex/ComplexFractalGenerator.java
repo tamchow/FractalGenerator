@@ -958,9 +958,10 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
     }
     public double getNormalized(int val, int iterations, Complex[] z_values, double escape) {
-        Complex z = z_values[0]; double degree = this.degree.modulus(); if (escape < zoom) {
+        Complex z = z_values[0]; /*double degree = this.degree.modulus(); if (escape < zoom) {
             degree = Math.log(z.modulus() * z.modulus()) / Math.log(z_values[1].modulus() * z_values[1].modulus());
-        } double renormalized;
+        }*/
+        double renormalized, degree = Math.log(z.modulus() * z.modulus()) / Math.log(z_values[1].modulus() * z_values[1].modulus());
         if (!color.isLogIndex() || (mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT)) {
             if (degree == 0 || degree == 1) {
                 renormalized = val + ((double) val / iterations);
