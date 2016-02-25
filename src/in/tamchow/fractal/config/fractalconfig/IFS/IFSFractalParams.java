@@ -8,11 +8,13 @@ import java.io.Serializable;
  * Holds Parameters for an IFS fractal
  */
 public class IFSFractalParams implements Serializable {
+    public final String VARIABLE_CODES = "x:y:r:t:p";
     public ZoomConfig zoomConfig;
     public ImageData.PostProcessMode postprocessMode;
     public String path;
     Matrix[] transforms, translators;
     boolean ifsMode;
+    String x_code, y_code, r_code, t_code, p_code;
     String[] yfunctions, xfunctions;
     double[] weights;
     int[] colors;
@@ -26,15 +28,31 @@ public class IFSFractalParams implements Serializable {
     double zoomlevel;
     double base_precision;
     double skew;
-    private IFSFractalParams() {setFrameskip(-1); setPath("");}
+    private IFSFractalParams() {
+        setFrameskip(-1); setPath(""); setX_code(VARIABLE_CODES.split(":")[0]); setY_code(VARIABLE_CODES.split(":")[1]);
+        setR_code(VARIABLE_CODES.split(":")[2]); setT_code(VARIABLE_CODES.split(":")[3]);
+        setP_code(VARIABLE_CODES.split(":")[4]);
+    }
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
             throw new IllegalArgumentException("Configuration object is not properly defined");
         } setColors(config.getColors()); setWeights(config.getWeights()); setTransforms(config.getTransforms());
         setTranslators(config.getTranslators()); setDepth(config.getDepth()); setFrameskip(config.getFrameskip());
         setFps(config.getFps()); setPath(config.getPath()); setSkew(config.getSkew());
-        setPostprocessMode(config.getPostprocessMode()); setThreads(config.getThreads());
+        setPostprocessMode(config.getPostprocessMode()); setThreads(config.getThreads()); setX_code(config.getX_code());
+        setY_code(config.getY_code()); setR_code(config.getR_code()); setT_code(config.getT_code());
+        setP_code(config.getP_code());
     }
+    public String getX_code() {return x_code;}
+    public void setX_code(String x_code) {this.x_code = x_code;}
+    public String getY_code() {return y_code;}
+    public void setY_code(String y_code) {this.y_code = y_code;}
+    public String getR_code() {return r_code;}
+    public void setR_code(String r_code) {this.r_code = r_code;}
+    public String getT_code() {return t_code;}
+    public void setT_code(String t_code) {this.t_code = t_code;}
+    public String getP_code() {return p_code;}
+    public void setP_code(String p_code) {this.p_code = p_code;}
     public ImageData.PostProcessMode getPostprocessMode() {return postprocessMode;}
     public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {this.postprocessMode = postprocessMode;}
     public double getSkew() {return skew;}
@@ -82,7 +100,13 @@ public class IFSFractalParams implements Serializable {
     public int getThreads() {return threads;}
     public void setThreads(int threads) {this.threads = threads;}
     public static IFSFractalParams fromString(String[] input) {
-        IFSFractalParams params = new IFSFractalParams(); params.setIfsMode(Boolean.valueOf(input[0]));
+        IFSFractalParams params = new IFSFractalParams(); //params.setIfsMode(Boolean.valueOf(input[0]));
+        String[] ifsData = input[0].split(":"); if (ifsData.length == 1) {
+            params.setIfsMode(Boolean.valueOf(input[0]));
+        } else {
+            params.setIfsMode(Boolean.valueOf(ifsData[0])); params.setX_code(ifsData[1]); params.setY_code(ifsData[2]);
+            params.setR_code(ifsData[3]); params.setT_code(ifsData[4]); params.setP_code(ifsData[5]);
+        }
         params.setWidth(Integer.valueOf(input[1])); params.setHeight(Integer.valueOf(input[2]));
         params.setBase_precision(Double.valueOf(input[3])); params.setZoom(Double.valueOf(input[4]));
         params.setZoomlevel(Double.valueOf(input[5])); params.setDepth(Long.valueOf(input[6]));
@@ -116,7 +140,7 @@ public class IFSFractalParams implements Serializable {
     public String toString() {
         String representation = (frameskip >= 0) ? "Frameskip:" + frameskip : "";
         representation += (postprocessMode != null) ? "Postprocessing:" + postprocessMode : "";
-        representation += "\n" + ifsMode + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
+        representation += "\n" + ((ifsMode) ? ifsMode + ":" + createCodeString() : ifsMode) + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {
             for (int i = 0; i < weights.length; i++) {
                 representation += "\n" + xfunctions[i] + " " + yfunctions[i] + " " + weights[i] + " " + colors[i];
@@ -128,6 +152,9 @@ public class IFSFractalParams implements Serializable {
         } if (zoomConfig != null) {
             representation += "\n" + zoomConfig;
         } return representation;
+    }
+    private String createCodeString() {
+        return getX_code() + ":" + getY_code() + ":" + getR_code() + ":" + getT_code() + ":" + getP_code();
     }
     public void setZoomConfig(ZoomConfig config) {zoomConfig = new ZoomConfig(config);}
     public int getHeight() {return height;}

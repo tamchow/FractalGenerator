@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Holds colour configuration for  custom palettes
  */
-public class ColorConfig implements Serializable {
+public class Color_Utils_Config implements Serializable {
     public int basecolor, step, color_density, num_colors, byParts;
     public double periodicity, phase_shift;
     public Colors.CALCULATIONS mode;
@@ -15,16 +15,16 @@ public class ColorConfig implements Serializable {
     public int[] palette;
     public boolean logIndex, exponentialSmoothing, cyclize;
     boolean colors_corrected, already_cyclized;
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor) {
         initColorConfig(mode, color_density, num_colors, basecolor, 0, false, false);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex, cyclize);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(0);}
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int[] palette) {setPalette(palette, false); setMode(mode); setByParts(0);}
     public void setPalette(int[] palette, boolean preserve) {
         if (!preserve) {
             this.palette = new int[palette.length]; setNum_colors(palette.length);
@@ -36,13 +36,13 @@ public class ColorConfig implements Serializable {
             System.arraycopy(palette, 0, this.palette, tmpPalette.length, this.palette.length - tmpPalette.length);
         }
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
         this(mode, color_density, num_colors, byParts, logIndex, cyclize, 0);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, double periodicity) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, double periodicity) {
         this(mode, color_density, num_colors, byParts, logIndex, cyclize, periodicity, 0.0);
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, double periodicity, double phase_shift) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, double periodicity, double phase_shift) {
         initColorConfig(mode, num_colors, byParts, logIndex, cyclize); setColor_density(color_density);
         setPeriodicity(periodicity); setPhase_shift(phase_shift);
     }
@@ -82,11 +82,11 @@ public class ColorConfig implements Serializable {
             palette[i] = palette[j];
         } already_cyclized = true;
     }
-    public ColorConfig(Colors.CALCULATIONS mode, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, num_colors, byParts, logIndex, cyclize); setColor_density(-1);
     }
-    public ColorConfig() {palette = null; initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, 0, false, false);}
-    public ColorConfig(ColorConfig old) {
+    public Color_Utils_Config() {palette = null; initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, 0, false, false);}
+    public Color_Utils_Config(Color_Utils_Config old) {
         initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.getByParts(), old.isLogIndex(), old.isCyclize());
         setExponentialSmoothing(old.isExponentialSmoothing()); setPalette(old.getPalette(), false);
         colors_corrected = old.colors_corrected;

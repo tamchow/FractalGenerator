@@ -32,12 +32,12 @@ public class FunctionEvaluator {
         setZ_value(variable); setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
         hasBeenSubstituted = false; setAdvancedDegree(advancedDegree);
     }
-    public static FunctionEvaluator prepareIFS(String variableCode, double x, double y) {
+    public static FunctionEvaluator prepareIFS(String variableCode, String r_code, String t_code, String p_code, double x, double y) {
         String[][] varconst = {{"0", "0"}};
         FunctionEvaluator fe = new FunctionEvaluator(variableCode, x + "", varconst);
-        fe.addConstant(new String[]{"r", Math.sqrt(x * x + y * y) + ""});
-        fe.addConstant(new String[]{"t", Math.atan2(y, x) + ""});
-        fe.addConstant(new String[]{"p", Math.atan2(x, y) + ""}); return fe;
+        fe.addConstant(new String[]{r_code, Math.sqrt(x * x + y * y) + ""});
+        fe.addConstant(new String[]{t_code, Math.atan2(y, x) + ""});
+        fe.addConstant(new String[]{p_code, Math.atan2(x, y) + ""}); return fe;
     }
     public void addConstant(String[] constant) {
         String[][] tmpconsts = new String[constdec.length][2]; for (int i = 0; i < constdec.length; i++) {

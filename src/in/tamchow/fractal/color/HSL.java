@@ -16,9 +16,9 @@ public class HSL implements Serializable {
         return radianMeasure / (2 * Math.PI);
     }
     public static HSL fromRGB(int color) {
-        int ri = ColorConfig.separateARGB(color, Colors.RGBCOMPONENTS.RED),
-                gi = ColorConfig.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
-                bi = ColorConfig.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
+        int ri = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.RED),
+                gi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
+                bi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
                 max = (ri > gi && ri > bi) ? ri : (gi > bi) ? gi : bi,
                 min = (ri < gi && ri < bi) ? ri : (gi < bi) ? gi : bi, c = max - min;
         double r = ri / 255.0, g = gi / 255.0, b = bi / 255.0, h, s, l = 0.5 * (max + min);
@@ -71,6 +71,6 @@ public class HSL implements Serializable {
             b += Math.round((float) chroma * 255); r += Math.round((float) x * 255); g += 0;
         } else if (h >= 5 && h < 6) {
             r += Math.round((float) chroma * 255); b += Math.round((float) x * 255); g += 0;
-        } return ColorConfig.toRGB(r, g, b);
+        } return Color_Utils_Config.toRGB(r, g, b);
     }
 }

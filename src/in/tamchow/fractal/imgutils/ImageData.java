@@ -1,5 +1,5 @@
 package in.tamchow.fractal.imgutils;
-import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.MathUtils;
@@ -81,9 +81,9 @@ public class ImageData implements Serializable, Pannable {
                 switch (mode) {
                     case AVERAGE: processed.setPixel(i, j, (int) average); break;
                     case WEIGHTED_AVERAGE: processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2)); break;
-                    case INTERPOLATED_AVERAGE: processed.setPixel(i, j, ColorConfig.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (long) biases[i][j], byParts)); break;
-                    case INTERPOLATED: processed.setPixel(i, j, ColorConfig.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts)); break;
-                    case NEGATIVE: processed.setPixel(i, j, ColorConfig.toRGB(0xff - ColorConfig.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED), 0xff - ColorConfig.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), 0xff - ColorConfig.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE))); break;
+                    case INTERPOLATED_AVERAGE: processed.setPixel(i, j, Color_Utils_Config.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (long) biases[i][j], byParts)); break;
+                    case INTERPOLATED: processed.setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts)); break;
+                    case NEGATIVE: processed.setPixel(i, j, Color_Utils_Config.toRGB(0xff - Color_Utils_Config.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED), 0xff - Color_Utils_Config.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), 0xff - Color_Utils_Config.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE))); break;
                     case NONE: break;
                     default: throw new IllegalArgumentException("Unsupported Post Processing type");
                 }
@@ -125,7 +125,7 @@ public class ImageData implements Serializable, Pannable {
         ImageData falseColored = new ImageData(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
-                falseColored.setPixel(i, j, ColorConfig.toRGB(ColorConfig.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), ColorConfig.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), ColorConfig.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                falseColored.setPixel(i, j, Color_Utils_Config.toRGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
             }
         } return falseColored;
     }

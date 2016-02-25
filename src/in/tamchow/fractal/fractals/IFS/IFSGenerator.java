@@ -134,8 +134,8 @@ public class IFSGenerator implements Serializable, Pannable {
     private Matrix modifyPoint(Matrix point, int index) {
         if (params.isIfsMode()) {
             double x = point.get(0, 0), y = point.get(1, 0);
-            FunctionEvaluator fe = FunctionEvaluator.prepareIFS("x", x, y);
-            point.set(0, 0, fe.evaluateForIFS(params.getXfunctions()[index])); fe.setVariableCode("y");
+            FunctionEvaluator fe = FunctionEvaluator.prepareIFS(params.getX_code(), params.getR_code(), params.getT_code(), params.getP_code(), x, y);
+            point.set(0, 0, fe.evaluateForIFS(params.getXfunctions()[index])); fe.setVariableCode(params.getY_code());
             fe.setZ_value(y + ""); point.set(1, 0, fe.evaluateForIFS(params.getYfunctions()[index]));
         } else {
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);

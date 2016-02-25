@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.complex;
-import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
@@ -95,10 +95,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                                 if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                                     if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR) {
                                         int color1 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling)), color2 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling)), color3 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling));
-                                        int colortmp1 = ColorConfig.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, master.color.getByParts());
-                                        int colortmp2 = ColorConfig.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, master.color.getByParts());
+                                        int colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, master.color.getByParts());
+                                        int colortmp2 = Color_Utils_Config.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, master.color.getByParts());
                                         if (master.color.isLogIndex()) {
-                                            colortmp = ColorConfig.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, master.color.getByParts());
+                                            colortmp = Color_Utils_Config.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, master.color.getByParts());
                                         } else {colortmp = color2;}
                                     } else {
                                         int idxp = master.color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling),
@@ -111,9 +111,9 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                                     for (int k = 0; k < en; k += 1) {hue2 += ((double) histogram[k]) / total;}
                                     for (int k = 0; k < ep; k += 1) {hue3 += ((double) histogram[k]) / total;}
                                 if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
-                                    int colortmp1 = ColorConfig.linearInterpolated(master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
-                                    int colortmp2 = ColorConfig.linearInterpolated(master.color.getColor(master.color.createIndex(hue3, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
-                                    colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, master.color.getByParts());
+                                    int colortmp1 = Color_Utils_Config.linearInterpolated(master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
+                                    int colortmp2 = Color_Utils_Config.linearInterpolated(master.color.getColor(master.color.createIndex(hue3, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
+                                    colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, master.color.getByParts());
                                 } else {
                                     int idxp = master.color.createIndex(hue3, 0, 1, scaling),
                                             idxn = master.color.createIndex(hue2, 0, 1, scaling), idxt = Math.min(idxp, idxn);

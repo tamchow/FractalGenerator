@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.complex;
-import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.config.Publisher;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
  * Various (21) Coloring modes*/
 public final class ComplexFractalGenerator implements Serializable, Pannable {
-    ColorConfig color;
+    Color_Utils_Config color;
     ArrayList<Complex> roots;
     Complex[] boundary_elements;
     double zoom, zoom_factor, base_precision, scale;
@@ -53,18 +53,18 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         this.progressPublisher = progressPublisher;
     }
     @Deprecated
-    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, ColorConfig color, Publisher progressPublisher) {
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Color_Utils_Config color, Publisher progressPublisher) {
         //initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1, 0), color, 0, Complex.ZERO, null);
         //this.progressPublisher = progressPublisher;
         //ComplexFractalParams params=new ComplexFractalParams();
         //params.initParams=new ComplexFractalInitParams(width,height,zoom,zoom_factor,base_precision,mode,function,consts,variableCode,oldvariablecode,tolerance,color,0,Complex.ZERO,null,0);
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, color, 0, Complex.ZERO, null, 0), null), progressPublisher);
     }
-    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, null);
         this.progressPublisher = progressPublisher;
     }
-    private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Complex degree, ColorConfig color, int switch_rate, Complex trap_point, String linetrap) {
+    private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Complex degree, Color_Utils_Config color, int switch_rate, Complex trap_point, String linetrap) {
         silencer = params.useThreadedGenerator();
         argand = new LinearizedImageData(width, height); setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
@@ -114,16 +114,16 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setCenter_x(argand.getWidth() / 2); setCenter_y(argand.getHeight() / 2); resetCentre_Offset();
     }
     public void resetCentre_Offset() {centre_offset = new Complex(0);}
-    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, String linetrap) {
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, String linetrap) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, Complex.ZERO, linetrap);
         this.progressPublisher = progressPublisher;
     }
-    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, ColorConfig color, Publisher progressPublisher, int switch_rate, Complex trap_point, String linetrap) {
+    public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, Complex trap_point, String linetrap) {
         initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, new Complex(-1, 0), color, switch_rate, trap_point, linetrap);
         this.progressPublisher = progressPublisher;
     }
-    public ColorConfig getColor() {return color;}
-    public void setColor(ColorConfig color) {this.color = new ColorConfig(color);}
+    public Color_Utils_Config getColor() {return color;}
+    public void setColor(Color_Utils_Config color) {this.color = new Color_Utils_Config(color);}
     public double modulusForPhase(double phase) {
         for (Complex num : boundary_elements) {
             if (Math.abs(phase - num.arg()) <= tolerance) {
@@ -317,10 +317,10 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     if (color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                         if (color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR) {
                             int color1 = color.getColor(color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling)), color2 = color.getColor(color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling)), color3 = color.getColor(color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling));
-                            int colortmp1 = ColorConfig.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, color.getByParts());
-                            int colortmp2 = ColorConfig.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, color.getByParts());
+                            int colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, color.getByParts());
+                            int colortmp2 = Color_Utils_Config.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, color.getByParts());
                             if (color.isLogIndex()) {
-                                colortmp = ColorConfig.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, color.getByParts());
+                                colortmp = Color_Utils_Config.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, color.getByParts());
                             } else {colortmp = color2;}
                         } else {
                             int idxp = color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling),
@@ -333,9 +333,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         for (int k = 0; k < en; k += 1) {hue2 += ((double) histogram[k]) / total;}
                         for (int k = 0; k < ep; k += 1) {hue3 += ((double) histogram[k]) / total;}
                     if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
-                        int colortmp1 = ColorConfig.linearInterpolated(color.getColor(color.createIndex(hue, 0, 1, scaling)), color.getColor(color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, color.getByParts());
-                        int colortmp2 = ColorConfig.linearInterpolated(color.getColor(color.createIndex(hue3, 0, 1, scaling)), color.getColor(color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, color.getByParts());
-                        colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, color.getByParts());
+                        int colortmp1 = Color_Utils_Config.linearInterpolated(color.getColor(color.createIndex(hue, 0, 1, scaling)), color.getColor(color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, color.getByParts());
+                        int colortmp2 = Color_Utils_Config.linearInterpolated(color.getColor(color.createIndex(hue3, 0, 1, scaling)), color.getColor(color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, color.getByParts());
+                        colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, color.getByParts());
                     } else {
                         int idxp = color.createIndex(hue3, 0, 1, scaling),
                                 idxn = color.createIndex(hue2, 0, 1, scaling), idxt = Math.min(idxp, idxn);
@@ -988,19 +988,19 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             case SIMPLE: colortmp = color.getColor(color.createIndex(val, 0, iterations, scaling)); break;
             case SIMPLE_SMOOTH_LINEAR: colortmp = getInterpolated(color.createIndex(val, 0, iterations, scaling), smoothcount); break;
             case SIMPLE_SMOOTH_SPLINE: colortmp = color.splineInterpolated(color.createIndex(val, 0, iterations, scaling), smoothcount); break;
-            case COLOR_DIVIDE_DIRECT: val = (val == 0) ? iterations + 1 : (val - 1 == 0) ? iterations + 2 : val; color1 = (0xffffff / val); color2 = (0xffffff / (val + 1)); color3 = (0xffffff / (val - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
-            case COLOR_DIVIDE_NORMALIZED: color1 = (int) (0xffffff / renormalized); color2 = (int) (0xffffff / (renormalized + 1)); color3 = (int) (0xffffff / (renormalized - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
-            case COLOR_GRAYSCALE_HIGH_CONTRAST: colortmp = ColorConfig.toGray(val * iterations); break;
+            case COLOR_DIVIDE_DIRECT: val = (val == 0) ? iterations + 1 : (val - 1 == 0) ? iterations + 2 : val; color1 = (0xffffff / val); color2 = (0xffffff / (val + 1)); color3 = (0xffffff / (val - 1)); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
+            case COLOR_DIVIDE_NORMALIZED: color1 = (int) (0xffffff / renormalized); color2 = (int) (0xffffff / (renormalized + 1)); color3 = (int) (0xffffff / (renormalized - 1)); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
+            case COLOR_GRAYSCALE_HIGH_CONTRAST: colortmp = Color_Utils_Config.toGray(val * iterations); break;
             case SIMPLE_DISTANCE_ESTIMATION: calc = Math.abs((double) val / iterations); if (calc > 1) {
                 calc = calc - 1;
             } colortmp1 = (int) (calc * 255); if (calc > 0.5) {
-                colortmp = ColorConfig.toRGB(colortmp1, 255, colortmp1);
+                colortmp = Color_Utils_Config.toRGB(colortmp1, 255, colortmp1);
             } else {
-                colortmp = ColorConfig.toRGB(0, colortmp1, 0);
+                colortmp = Color_Utils_Config.toRGB(0, colortmp1, 0);
             } break;
-            case COLOR_MULTIPLY_DIRECT: color1 = ColorConfig.toGray(val); color2 = ColorConfig.toGray(val + 1); color3 = ColorConfig.toGray(Math.abs((val - 1))); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
-            case COLOR_MULTIPLY_NORMALIZED: color1 = ColorConfig.toGray((int) Math.abs(renormalized)); color2 = ColorConfig.toGray((int) Math.abs(renormalized + 1)); color3 = ColorConfig.toGray((int) Math.abs(renormalized - 1)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
-            case COLOR_GRAYSCALE_LOW_CONTRAST: colortmp = ColorConfig.toGray(val); break;
+            case COLOR_MULTIPLY_DIRECT: color1 = Color_Utils_Config.toGray(val); color2 = Color_Utils_Config.toGray(val + 1); color3 = Color_Utils_Config.toGray(Math.abs((val - 1))); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
+            case COLOR_MULTIPLY_NORMALIZED: color1 = Color_Utils_Config.toGray((int) Math.abs(renormalized)); color2 = Color_Utils_Config.toGray((int) Math.abs(renormalized + 1)); color3 = Color_Utils_Config.toGray((int) Math.abs(renormalized - 1)); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts()); break;
+            case COLOR_GRAYSCALE_LOW_CONTRAST: colortmp = Color_Utils_Config.toGray(val); break;
             case DISTANCE_ESTIMATION_GRAYSCALE:
             case DISTANCE_ESTIMATION_COLOR: double distance; if ((mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT)) {
                 distance = Math.abs(Math.sqrt(Math.pow(last[0].modulus(), 2) / Math.pow(last[1].modulus(), 2)) * 0.5 * Math.log(Math.pow(last[0].modulus(), 2)));
@@ -1008,7 +1008,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 distance = Math.abs(last[0].modulus() * Math.log(last[0].modulus())) / Math.log(last[1].modulus());
             } if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE) {
                 color1 = (int) Math.abs((distance - (long) distance) * 255); if (color1 > 255) color1 %= 255;
-                colortmp = ColorConfig.toRGB(color1, color1, color1);
+                colortmp = Color_Utils_Config.toRGB(color1, color1, color1);
             } else {
                 index = color.createIndex((distance - (long) distance), lbnd, ubnd, scaling);
                 colortmp = color.splineInterpolated(index, distance - (long) distance);
@@ -1019,10 +1019,10 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     colortmp = (distance > Math.sqrt(ComplexOperations.distance_squared(centre_offset, last[2]))) ? 0xffffff : 0x000000;}*/
             } break; case COLOR_HISTOGRAM: case COLOR_HISTOGRAM_LINEAR: case RANK_ORDER_LINEAR:
             case RANK_ORDER_SPLINE: colortmp = 0x000000; break;//Don't need to deal with this here, it's post-calculated
-            case COLOR_NEWTON_STRIPES: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.num_colors, ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+            case COLOR_NEWTON_STRIPES: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.num_colors, ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
                 break;
-            case COLOR_NEWTON_NORMALIZED: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, val, iterations, color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, val, iterations, color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts()); break;
-            case COLOR_NEWTON_CLASSIC: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = ColorConfig.linearInterpolated(color1, color2, val, iterations, color.getByParts()); colortmp2 = ColorConfig.linearInterpolated(color3, color1, val, iterations, color.getByParts()); colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts()); break;
+            case COLOR_NEWTON_NORMALIZED: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, val, iterations, color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, val, iterations, color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts()); break;
+            case COLOR_NEWTON_CLASSIC: color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations)); color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) (val + 1) / iterations)); color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) Math.abs(val - 1) / iterations)); colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, val, iterations, color.getByParts()); colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, val, iterations, color.getByParts()); colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts()); break;
             case CURVATURE_AVERAGE_LINEAR:
             case CURVATURE_AVERAGE_SPLINE: lbnd = -Math.PI; ubnd = Math.PI; index = color.createIndex(escape_radius, lbnd, ubnd, scaling); if (color.getMode() == Colors.CALCULATIONS.CURVATURE_AVERAGE_LINEAR) {
                 colortmp = getInterpolated(index, smoothcount);
@@ -1073,9 +1073,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         int color1, color2, color3, colortmp1, colortmp2, colortmp,
                 index2 = MathUtils.boundsProtected(index + 1, color.getNum_colors()); color1 = color.getColor(index);
         color2 = color.getColor(index2); color3 = MathUtils.boundsProtected(index - 1, color.getNum_colors());
-        colortmp1 = ColorConfig.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-        colortmp2 = ColorConfig.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-        colortmp = ColorConfig.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+        colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
+        colortmp2 = Color_Utils_Config.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
+        colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
         return colortmp;
     }
     public int[] toCooordinates(Complex point) {

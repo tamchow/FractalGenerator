@@ -1,5 +1,5 @@
 package in.tamchow.fractal;
-import in.tamchow.fractal.color.ColorConfig;
+import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
@@ -26,7 +26,7 @@ public class Test {
         ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
         double escrad = 10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 200; String linetrap = null;
         //Note to self: Do NOT use TIA and Exp. Smoothing together.
-        ColorConfig cfg = new ColorConfig(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, 0, false, false);
+        Color_Utils_Config cfg = new Color_Utils_Config(Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR, 4, 2500, 0, false, false);
         cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
@@ -67,5 +67,5 @@ public class Test {
             }System.out.println();
         }*/
     }
-    static int rgb(int r, int g, int b) {return ColorConfig.toRGB(r, g, b);}
+    static int rgb(int r, int g, int b) {return Color_Utils_Config.toRGB(r, g, b);}
 }
