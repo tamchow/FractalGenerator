@@ -30,8 +30,10 @@ public class ComplexOperations {
     public static double distance_squared(Complex z1, Complex z2) {
         return (Math.pow(z1.real() - z2.real(), 2) + Math.pow(z1.imaginary() - z2.imaginary(), 2));
     }
+    public static Complex tan(Complex z) {return divide(sin(z), cos(z));}
     public static Complex sin(Complex z) {return new Complex(Math.sin(z.real()) * Math.cosh(z.imaginary()), Math.cos(z.real()) * Math.sinh(z.imaginary()));}
-    public static Complex cos(Complex z) {return new Complex(Math.cos(z.real()) * Math.cosh(z.imaginary()), Math.sin(z.real()) * Math.sinh(z.imaginary()));}
+    public static Complex cos(Complex z) {return new Complex(Math.cos(z.real()) * Math.cosh(z.imaginary()), -Math.sin(z.real()) * Math.sinh(z.imaginary()));}
+    public static Complex tanh(Complex z) {return divide(sinh(z), cosh(z));}
     public static Complex sinh(Complex z) {return new Complex(Math.sinh(z.real()) * Math.cos(z.imaginary()), Math.cosh(z.real()) * Math.sin(z.imaginary()));}
     public static Complex cosh(Complex z) {return new Complex(Math.cosh(z.real()) * Math.cos(z.imaginary()), Math.sinh(z.real()) * Math.sin(z.imaginary()));}
     public static Complex flip(Complex z) {return new Complex(z.imaginary(), z.real());}

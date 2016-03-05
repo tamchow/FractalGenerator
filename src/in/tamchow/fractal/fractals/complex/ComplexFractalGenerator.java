@@ -908,18 +908,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         colortmp=color.splineInterpolated(index,smoothcount-(long)smoothcount);}}*/
                 if (escape_radius < trap_point.modulus() * base_precision && val > 0) {
                     smoothcount = Math.abs(val - escape_radius);
-                    if (color.getMode() == Colors.CALCULATIONS.EPSILON_CROSS_LINEAR) {
-                        colortmp = getInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount);
-                    } else {
-                        colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount);
-                    }
                 } else {
                     smoothcount = Math.log(1 + escape_radius);
-                    if (color.getMode() == Colors.CALCULATIONS.EPSILON_CROSS_LINEAR) {
-                        colortmp = getInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount);
-                    } else {
-                        colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount);
-                    }
+                } if (color.getMode() == Colors.CALCULATIONS.EPSILON_CROSS_LINEAR) {
+                    colortmp = getInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount);
+                } else {
+                    colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount);
                 } break;
             case GAUSSIAN_INT_DISTANCE_LINEAR: colortmp = getInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount); break;
             case GAUSSIAN_INT_DISTANCE_SPLINE: colortmp = color.splineInterpolated(color.createIndex(escape_radius - (long) escape_radius, lbnd, ubnd, scaling), smoothcount - (long) smoothcount); break;

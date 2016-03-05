@@ -172,6 +172,12 @@ public class FunctionEvaluator {
                     } break;
                     case "cosh": ztmp = ComplexOperations.cosh(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
                         ++i;
+                    } break;
+                    case "tan": ztmp = ComplexOperations.tan(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "tanh": ztmp = ComplexOperations.tanh(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
                     } break; case "inv": ztmp = ztmp.inverse(); if (i < (processed.length - 1)) {++i;} break;
                     case "conj": ztmp = ztmp.conjugate(); if (i < (processed.length - 1)) {++i;} break;
                     case "re": ztmp = new Complex(ztmp.real(), 0); if (i < (processed.length - 1)) {++i;} break;
