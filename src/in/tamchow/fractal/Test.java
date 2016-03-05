@@ -54,8 +54,8 @@ public class Test {
             if (jgenParams.useThreadedGenerator()) {
                 ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(jgen);
                 threaded.generate();
-            } else {jgen.generate(jgenParams);}
-        } else {jgen.generate(fccfg.getParams()[0]);} long gentime = System.currentTimeMillis();
+            } else {jgen.generate();}
+        } else {jgen.generate();} long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         File pic = new File("D:/Fractal.png"); try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(ImageData.PostProcessMode.NONE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);

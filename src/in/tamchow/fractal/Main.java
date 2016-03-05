@@ -65,7 +65,7 @@ public class Main {
                                 ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator);
                                 threaded.generate();
                             } else {
-                                generator.generate(params);
+                                generator.generate();
                             } File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostprocessMode() != ImageData.PostProcessMode.NONE) {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostprocessMode(), generator.getNormalized_escapes(), generator.getColor().getByParts())), "png", outputFile);
@@ -88,11 +88,7 @@ public class Main {
                             } else {
                                 generator.generate();
                             } File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
-                            if (params.getPostProcessMode() != ImageData.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), generator.getNormalized_escapes(), params.getByParts())), "png", outputFile);
-                            } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
-                            }
                         }
                     }
                 } else if (ConfigReader.isFileIFSFractalConfig(input)) {

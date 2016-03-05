@@ -152,13 +152,11 @@ public class ConfigReader {
     }
     private static ComplexBrotFractalParams getComplexBrotParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String post_process_mode = null, constant = null, threads = null; while (in.hasNext()) {
-            String line = in.nextLine(); if (line.startsWith("Postprocessing:")) {
-                post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
-            } if (line.startsWith("Threads:")) {
+        String constant = null, threads = null; while (in.hasNext()) {
+            String line = in.nextLine(); if (line.startsWith("Threads:")) {
                 threads = line.substring("Threads:".length()).trim();
             } if (line.startsWith("Newton_constant:")) {
-                post_process_mode = line.substring("Newton_constant:".length()).trim(); continue;
+                constant = line.substring("Newton_constant:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
                 if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
             }
@@ -171,8 +169,6 @@ public class ConfigReader {
         if (zooms != null) {complexBrotFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (constant != null) {complexBrotFractalParams.setNewton_constant(new Complex(constant));}
         if (threads != null) {complexBrotFractalParams.setNum_threads(Integer.valueOf(threads));}
-        if (post_process_mode != null) {
-            complexBrotFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
-        } complexBrotFractalParams.setPath(paramfile.getAbsolutePath()); return complexBrotFractalParams;
+        complexBrotFractalParams.setPath(paramfile.getAbsolutePath()); return complexBrotFractalParams;
     }
 }

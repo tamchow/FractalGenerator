@@ -4,4 +4,5 @@ package in.tamchow.fractal.config;
  */
 public interface Publisher {
     void publish(String message, double progress);
+    void publish(String message, double progress, Object... args);
 }

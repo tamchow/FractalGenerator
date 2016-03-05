@@ -3,8 +3,7 @@ import in.tamchow.fractal.fractals.ThreadedGenerator;
 
 import java.io.Serializable;
 /**
- * Multihreaded Complex Brot Fractal generator
- * TODO: Implement
+ * Multithreaded Complex Brot Fractal generator
  */
 public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator implements Serializable {
     ComplexBrotFractalGenerator master;
@@ -23,13 +22,13 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
                 num_points = copyOfMaster.getParams().getNum_points() % threads;
             } else {
                 num_points = copyOfMaster.getParams().getNum_points() / threads;
-            } copyOfMaster.getParams().setNum_points(num_points);
+            } copyOfMaster.setDepth(num_points);
         }
         @Override
-        public void run() {
-        }
+        public void run() {copyOfMaster.generate();}
         @Override
         public void onCompletion() {
+            data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
         }
@@ -47,11 +46,23 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         } try {
             synchronized (lock) {
                 while (!allComplete()) {lock.wait(1000);} lock.notifyAll();
-            }
+            } for (PartComplexBrotFractalData part : data) {
+                for (int i = 0; i < master.bases.length; i++) {
+                    master.bases[i] = addDDA(master.bases[i], part.bases[i]);
+                }
+            } master.createImage();
         } catch (Exception e) {
             e.printStackTrace();
             //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
     }
-
+    private int[][] addDDA(int[][] a, int[][] b) {
+        if (a.length != b.length || a[0].length != b[0].length) {
+            throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
+        } int[][] c = new int[a.length][a[0].length]; for (int i = 0; i < c.length; i++) {
+            for (int j = 0; j < c[i].length; j++) {
+                c[i][j] = a[i][j] + b[i][j];
+            }
+        } return c;
+    }
 }

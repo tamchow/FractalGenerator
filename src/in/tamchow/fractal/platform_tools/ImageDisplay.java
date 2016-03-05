@@ -92,6 +92,10 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         parent.setTitle("Generating Fractal: " + message);
     }
     @Override
+    public synchronized void publish(String message, double progress, Object... args) {
+        parent.setTitle("Generating Fractal: " + String.format(message, args));
+    }
+    @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {
             if (!fractal_mode) {
@@ -114,7 +118,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
                     threaded.generate();
                 } else {
-                    current.generate(fracconf.getParams()[i]);
+                    current.generate();
                 } todraw = ImageConverter.toImage(current.getArgand());
                 zoomedin = false; paint(this.getGraphics());
                 try {Thread.sleep(1000 * fracconf.getWait());} catch (InterruptedException ignored) {}

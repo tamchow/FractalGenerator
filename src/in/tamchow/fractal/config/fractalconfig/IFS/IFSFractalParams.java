@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Holds Parameters for an IFS fractal
  */
 public class IFSFractalParams implements Serializable {
-    public final String VARIABLE_CODES = "x:y:r:t:p";
+    public static final String VARIABLE_CODES = "x:y:r:t:p";
     public ZoomConfig zoomConfig;
     public ImageData.PostProcessMode postprocessMode;
     public String path;

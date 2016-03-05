@@ -19,6 +19,9 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
+    public FunctionEvaluator(String variableCode, String[][] varconst) {
+        this(variableCode, varconst, true);
+    }
     public FunctionEvaluator(String variableCode, String[][] varconst, boolean advancedDegree) {
         setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(variableCode + "_p");
         hasBeenSubstituted = false;
@@ -27,6 +30,9 @@ public class FunctionEvaluator {
     public FunctionEvaluator(String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
         setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);
         hasBeenSubstituted = false; setAdvancedDegree(advancedDegree);
+    }
+    public FunctionEvaluator(String variable, String variableCode, String[][] varconst, String oldvariablecode) {
+        this(variable, variableCode, varconst, oldvariablecode, true);
     }
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
         setZ_value(variable); setConstdec(varconst); setVariableCode(variableCode); setOldvariablecode(oldvariablecode);

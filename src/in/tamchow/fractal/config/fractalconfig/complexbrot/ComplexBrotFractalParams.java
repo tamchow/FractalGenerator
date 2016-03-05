@@ -2,30 +2,24 @@ package in.tamchow.fractal.config.fractalconfig.complexbrot;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
-import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
 /**
- * Holds parameters for a complex brot fractal
+ * Holds parameters for a complex Brot fractal
  * TODO: Implement
  */
 public class ComplexBrotFractalParams implements Serializable, DataFromString {
-    int width, height, num_threads, switch_rate;
-    ImageData.PostProcessMode postProcessMode;
-    int byParts;
-    long num_points;
-    Complex newton_constant;
-    ZoomConfig zoomConfig;
-    long[] iterations;
-    double zoom, zoom_level, base_precision, tolerance, skew;
-    String function;
-    String variableCode;
-    String oldVariableCode;
-    String path;
-    ComplexFractalGenerator.Mode mode;
-    String[][] constants;
-    boolean anti;
+    public ZoomConfig zoomConfig;
+    public int width, height, num_threads, switch_rate, byParts;
+    public long num_points;
+    public Complex newton_constant;
+    public long[] iterations;
+    public double zoom, zoom_level, base_precision, skew, tolerance;
+    public String function, variableCode, oldVariableCode, path;
+    public ComplexFractalGenerator.Mode mode;
+    public String[][] constants;
+    public boolean anti;
     public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, long num_points, long[] iterations, double zoom, double zoom_level, double base_precision, double tolerance, double skew, String function, String variableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
         this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, tolerance, skew, function, variableCode, variableCode + "_p", mode, constants, anti);
     }
@@ -39,13 +33,11 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ComplexBrotFractalParams() {}
     public ComplexBrotFractalParams(ComplexBrotFractalParams old) {
         this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getMode(), old.getConstants(), old.isAnti());
-        setPath(old.getPath()); setPostprocessMode(old.getPostProcessMode());
+        setPath(old.getPath());
         setNewton_constant(old.getNewton_constant());
     }
     public Complex getNewton_constant() {return newton_constant;}
     public void setNewton_constant(Complex newton_constant) {this.newton_constant = newton_constant;}
-    public ImageData.PostProcessMode getPostProcessMode() {return postProcessMode;}
-    public void setPostprocessMode(ImageData.PostProcessMode postProcessMode) {this.postProcessMode = postProcessMode;}
     public int getSwitch_rate() {return switch_rate;}
     public void setSwitch_rate(int switch_rate) {this.switch_rate = switch_rate;}
     public double getTolerance() {return tolerance;}
