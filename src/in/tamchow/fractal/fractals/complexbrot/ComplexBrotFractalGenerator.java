@@ -141,7 +141,7 @@ public class ComplexBrotFractalGenerator implements Serializable, Pannable {
     }
     private int closestRootIndex(Complex z) {
         int leastDistanceIdx = 0; double leastDistance = ComplexOperations.distance_squared(z, roots.get(0));
-        for (int i = 0; i < roots.size(); i++) {
+        for (int i = 1; i < roots.size(); i++) {
             double distance = ComplexOperations.distance_squared(z, roots.get(i));
             if (distance < leastDistance) {leastDistance = distance; leastDistanceIdx = i;}
         } return leastDistanceIdx;

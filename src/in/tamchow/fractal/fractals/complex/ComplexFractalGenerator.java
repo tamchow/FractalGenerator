@@ -25,8 +25,8 @@ import java.util.ArrayList;
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
  * Various (21) Coloring modes*/
 public final class ComplexFractalGenerator implements Serializable, Pannable {
+    static ArrayList<Complex> roots;
     Color_Utils_Config color;
-    ArrayList<Complex> roots;
     Complex[] boundary_elements;
     double zoom, zoom_factor, base_precision, scale;
     int center_x, center_y, lastConstantIdx, stripe_density, switch_rate;
@@ -275,7 +275,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         Complex d = fed.evaluate(functionderiv, false);
                         ztmpd = ComplexOperations.subtract(ztmpd, ComplexOperations.divide(ComplexOperations.multiply(e, ComplexOperations.subtract(ztmpd, ztmpd2)), ComplexOperations.subtract(e, d)));
                     } fe.setZ_value(ztmp + "");
-                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    s += Math.exp(-ztmp.modulus() - 0.5 / ComplexOperations.subtract(z, ztmp).modulus());
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -327,7 +327,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 } if (roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
-                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                //double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {pass[k] = last.pop();} if (last.size() < 3) {
                     for (int m = last.size(); m < pass.length; m++) {
@@ -337,11 +337,11 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                     pass[1] = new Complex(zd); pass[2] = new Complex(centre_offset);
                 } escapedata[i][j] = c;
-                Complex root = (roots.size() == 0) ? pass[1] : roots.get(closestRootIndex(pass[0]));
-                double d0 = ComplexOperations.distance_squared(pass[2], root);
-                double d1 = ComplexOperations.distance_squared(root, pass[0]);
+                //Complex root = (roots.size() == 0) ? pass[1] : roots.get(closestRootIndex(pass[0]));
+                double d0 = ComplexOperations.distance_squared(pass[2], pass[1]);
+                double d1 = ComplexOperations.distance_squared(pass[1], pass[0]);
                 if (color.isExponentialSmoothing()) {normalized_escapes[i][j] = s;} else {
-                    normalized_escapes[i][j] = c + Math.abs((Math.log(tolerance) - Math.log(d0)) / (Math.log(d1) - Math.log(d0)));
+                    normalized_escapes[i][j] = c + (Math.log(tolerance) - Math.log(d0)) / (Math.log(d1) - Math.log(d0));
                 } int colortmp = 0x0; switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN: colortmp = getColor(i, j, c, pass, mindist, iterations); break;
@@ -597,7 +597,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                             ztmpd = ComplexOperations.add(ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false))), toadd);
                         }
                     } fe.setZ_value(ztmp + "");
-                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    s += Math.exp(-ztmp.modulus() - 0.5 / ComplexOperations.subtract(z, ztmp).modulus());
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -627,7 +627,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         distance = Math.sqrt(ComplexOperations.distance_squared(ztmp, trap_point));
                         mindist = (Math.min(distance, mindist));
                     } maxdist = (Math.max(distance, maxdist));
-                    if (fe.evaluate(function, false).modulus() <= tolerance/*&&roots.size()<(int)degree.modulus()*/) {
+                    if (fe.evaluate(function, false).modulus() <= tolerance) {
                         if (color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_STRIPES || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_NORMALIZED) {
                             if (indexOfRoot(ztmp) == -1) {roots.add(ztmp);}
                         } break;
@@ -645,10 +645,11 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 }
                 if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                     histogram[c]++;
-                } if (roots.size() == 0) {
+                }
+                if (roots.size() == 0 && (color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_STRIPES || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_NORMALIZED)) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
-                double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
+                //double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
                 Complex[] pass = new Complex[3];
                 for (int k = 0; k < last.size() && k < pass.length; k++) {pass[k] = last.pop();} if (last.size() < 3) {
                     for (int m = last.size(); m < pass.length; m++) {
@@ -658,9 +659,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                     pass[1] = new Complex(zd); pass[2] = new Complex(centre_offset);
                 } escapedata[i][j] = c;
-                Complex root = (roots.size() == 0) ? pass[1] : roots.get(closestRootIndex(pass[0]));
-                double d0 = ComplexOperations.distance_squared(pass[2], root);
-                double d1 = ComplexOperations.distance_squared(root, pass[0]);
+                //Complex root = (roots.size() == 0) ? pass[1] : roots.get(closestRootIndex(pass[0]));
+                double d0 = ComplexOperations.distance_squared(pass[2], pass[1]);
+                double d1 = ComplexOperations.distance_squared(pass[1], pass[0]);
                 if (color.isExponentialSmoothing()) {normalized_escapes[i][j] = s;} else {
                     normalized_escapes[i][j] = c + Math.abs((Math.log(tolerance) - Math.log(d0)) / (Math.log(d1) - Math.log(d0)));
                 } int colortmp = 0x0; switch (color.getMode()) {
@@ -695,7 +696,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     }
     private int closestRootIndex(Complex z) {
         int leastDistanceIdx = 0; double leastDistance = ComplexOperations.distance_squared(z, roots.get(0));
-        for (int i = 0; i < roots.size(); i++) {
+        for (int i = 1; i < roots.size(); i++) {
             double distance = ComplexOperations.distance_squared(z, roots.get(i));
             if (distance < leastDistance) {leastDistance = distance; leastDistanceIdx = i;}
         } return leastDistanceIdx;
