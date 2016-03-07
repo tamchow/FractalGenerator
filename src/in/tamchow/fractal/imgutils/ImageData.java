@@ -111,6 +111,20 @@ public class ImageData implements Serializable, Pannable {
         matrixData[0][0] = ((((double) x) - center_x) / scale); matrixData[1][0] = ((center_y - ((double) y)) / scale);
         return new Matrix(matrixData);
     }
+    public void drawLine(int from_x, int from_y, int to_x, int to_y, int color) {
+        int deltax = Math.abs(to_x - from_x), deltay = Math.abs(to_y - from_y),
+                numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y, yinc1, yinc2; if (deltax >= deltay) {
+            numpixels = deltax + 1; d = (2 * deltay) - deltax; dinc1 = deltay << 1; dinc2 = (deltay - deltax) << 1;
+            xinc1 = 1; xinc2 = 1; yinc1 = 0; yinc2 = 1;
+        } else {
+            numpixels = deltay + 1; d = (2 * deltax) - deltay; dinc1 = deltax << 1; dinc2 = (deltax - deltay) << 1;
+            xinc1 = 0; xinc2 = 1; yinc1 = 1; yinc2 = 1;
+        } if (from_x > to_x) {xinc1 = -xinc1; xinc2 = -xinc2;} if (from_y > to_y) {yinc1 = -yinc1; yinc2 = -yinc2;}
+        x = from_x; y = from_y; for (int i = 1; i <= numpixels; ++i) {
+            setPixel(y, x, color);
+            if (d < 0) {d += dinc1; x += xinc1; y += yinc1;} else {d += dinc2; x += xinc2; y += yinc2;}
+        }
+    }
     public ImageData falseColor(ImageData[] channels) {
         return falseColor(channels[0], channels[1], channels[2]);
     }

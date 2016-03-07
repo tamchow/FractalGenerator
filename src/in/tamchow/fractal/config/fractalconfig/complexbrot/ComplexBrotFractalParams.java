@@ -2,6 +2,7 @@ package in.tamchow.fractal.config.fractalconfig.complexbrot;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
+import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  */
 public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ZoomConfig zoomConfig;
+    public ImageData.PostProcessMode postprocessMode;
     public int width, height, num_threads, switch_rate, byParts;
     public long num_points;
     public Complex newton_constant;
@@ -30,12 +32,16 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setVariableCode(variableCode); setOldVariableCode(oldVariableCode); setMode(mode); setConstants(constants);
         setAnti(anti);
     }
-    public ComplexBrotFractalParams() {}
+    public ComplexBrotFractalParams() {
+        setPath(""); setPostprocessMode(ImageData.PostProcessMode.NONE);
+    }
     public ComplexBrotFractalParams(ComplexBrotFractalParams old) {
         this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getMode(), old.getConstants(), old.isAnti());
-        setPath(old.getPath());
+        setPath(old.getPath()); setPostprocessMode(old.getPostprocessMode());
         setNewton_constant(old.getNewton_constant());
     }
+    public ImageData.PostProcessMode getPostprocessMode() {return postprocessMode;}
+    public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {this.postprocessMode = postprocessMode;}
     public Complex getNewton_constant() {return newton_constant;}
     public void setNewton_constant(Complex newton_constant) {this.newton_constant = newton_constant;}
     public int getSwitch_rate() {return switch_rate;}

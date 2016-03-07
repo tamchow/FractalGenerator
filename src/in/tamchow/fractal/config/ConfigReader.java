@@ -6,6 +6,8 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
+import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalConfig;
+import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
@@ -28,6 +30,9 @@ public class ConfigReader {
     }
     public static boolean isFileIFSFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[IFSFractalConfig]");}
+    public static boolean isFileLSFractalConfig(File file) throws FileNotFoundException {
+        return new Scanner(file).nextLine().equals("[LSFractalConfig]");
+    }
     public static ImageConfig getImageConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile); String dimensions = null;
         ArrayList<String> lines = new ArrayList<>(); if (!in.nextLine().equals("[ImageConfig]")) {return null;}
@@ -57,7 +62,7 @@ public class ConfigReader {
             complexFractalParams[i] = getComplexParamFromFile(new File(specCfg.get(i)));
         } complexFractalConfig.setParams(complexFractalParams); return complexFractalConfig;
     }
-    public static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
+    private static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
         String thread_data = null, post_process_mode = null, switch_rate = null, trap_point = null, trap_line = null, oldvariablecode = null;
         while (in.hasNext()) {
@@ -110,7 +115,7 @@ public class ConfigReader {
         for (int i = 0; i < ifsFractalParams.length; i++) {
             ifsFractalParams[i] = getIFSParamFromFile(new File(specCfg.get(i)));
         } ifsFractalConfig.setParams(ifsFractalParams); return ifsFractalConfig;}
-    public static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
+    private static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
         String frameskip = null, post_process_mode = null, threads = null;
         while (in.hasNext()) {
@@ -152,9 +157,11 @@ public class ConfigReader {
     }
     private static ComplexBrotFractalParams getComplexBrotParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile); ArrayList<String> lines = new ArrayList<>();
-        String constant = null, threads = null; while (in.hasNext()) {
+        String constant = null, threads = null, post_process_mode = null; while (in.hasNext()) {
             String line = in.nextLine(); if (line.startsWith("Threads:")) {
                 threads = line.substring("Threads:".length()).trim();
+            } if (line.startsWith("Postprocessing:")) {
+                post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
             } if (line.startsWith("Newton_constant:")) {
                 constant = line.substring("Newton_constant:".length()).trim(); continue;
             } if (!line.startsWith("#")) {
@@ -169,6 +176,40 @@ public class ConfigReader {
         if (zooms != null) {complexBrotFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));}
         if (constant != null) {complexBrotFractalParams.setNewton_constant(new Complex(constant));}
         if (threads != null) {complexBrotFractalParams.setNum_threads(Integer.valueOf(threads));}
+        if (post_process_mode != null) {
+            complexBrotFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+        }
         complexBrotFractalParams.setPath(paramfile.getAbsolutePath()); return complexBrotFractalParams;
+    }
+    public static LSFractalConfig getLSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
+        Scanner in = new Scanner(cfgfile); ArrayList<String> lines = new ArrayList<>();
+        if (!in.nextLine().equals("[LSFractalConfig]")) {return null;} while (in.hasNext()) {
+            String line = in.nextLine(); if (!line.startsWith("#")) {
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
+            }
+        } List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
+        List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        LSFractalConfig ifsFractalConfig = new LSFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
+        LSFractalParams[] ifsFractalParams = new LSFractalParams[specCfg.size()];
+        for (int i = 0; i < ifsFractalParams.length; i++) {
+            ifsFractalParams[i] = getLSParamFromFile(new File(specCfg.get(i)));
+        } ifsFractalConfig.setParams(ifsFractalParams); return ifsFractalConfig;
+    }
+    private static LSFractalParams getLSParamFromFile(File file) throws FileNotFoundException {
+        Scanner in = new Scanner(file); ArrayList<String> lines = new ArrayList<>();
+        String post_process_mode = null, fps = null; while (in.hasNext()) {
+            String line = in.nextLine(); if (line.startsWith("Postprocessing:")) {
+                post_process_mode = line.substring("Postprocessing:".length()).trim(); continue;
+            } if (line.startsWith("FPS:")) {
+                fps = line.substring("FPS:".length()).trim(); continue;
+            } if (!line.startsWith("#")) {
+                if (line.contains("#")) {line = line.substring(0, line.indexOf("#")).trim();} lines.add(line);
+            }
+        } String[] params = new String[lines.size()]; lines.toArray(params);
+        LSFractalParams lsFractalParams = new LSFractalParams(); lsFractalParams.fromString(params);
+        if (post_process_mode != null) {
+            lsFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+        } if (fps != null) {lsFractalParams.setFps(Integer.valueOf(fps));}
+        lsFractalParams.setPath(file.getAbsolutePath()); return lsFractalParams;
     }
 }

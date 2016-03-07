@@ -31,7 +31,7 @@ public class IFSFractalParams implements Serializable {
     private IFSFractalParams() {
         setFrameskip(-1); setPath(""); setX_code(VARIABLE_CODES.split(":")[0]); setY_code(VARIABLE_CODES.split(":")[1]);
         setR_code(VARIABLE_CODES.split(":")[2]); setT_code(VARIABLE_CODES.split(":")[3]);
-        setP_code(VARIABLE_CODES.split(":")[4]);
+        setP_code(VARIABLE_CODES.split(":")[4]); setPostprocessMode(ImageData.PostProcessMode.NONE);
     }
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
