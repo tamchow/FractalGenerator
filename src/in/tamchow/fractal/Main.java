@@ -20,6 +20,7 @@ import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
 import in.tamchow.fractal.misc.bs.BrainSext;
+import in.tamchow.fractal.misc.primes.PrimeCounter;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 import in.tamchow.fractal.platform_tools.ImageDisplay;
@@ -39,6 +40,9 @@ public class Main {
         if (args[0].equalsIgnoreCase("/BS")) {
             String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             BrainSext.main(modArgs);
+        } else if (args[0].equalsIgnoreCase("/primecount") || args[0].equalsIgnoreCase("/pc")) {
+            String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
+            PrimeCounter.main(modArgs);
         } else if (args[0].equalsIgnoreCase("/encrypt") || args[0].equalsIgnoreCase("/decrypt")) {
             String[] modArgs = new String[args.length - 1]; System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             try {EncryptDecryptFile.main(modArgs);} catch (IOException ioe) {
