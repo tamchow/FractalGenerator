@@ -2,7 +2,7 @@
 <head>
     A <b>Java</b> fractal generator (currently UI-silent, with configuration through a file),
     that implements display of custom functions,
-    with constant declaration processing, in Mandelbrot, Newton,Secant,Nova (both Mandelbrot and Julia types) and Julia modes, and an experimental IFS render system.
+    with constant declaration processing, in Mandelbrot, Newton,Secant,Nova (both Mandelbrot and Julia types) and Julia modes, and an experimental IFS/LS render system.
 
     There are also Buddhabrot techniques ( naive algorithm ) for each of the above.
     <br>
@@ -58,7 +58,8 @@ The final is distance estimation based grayscale or palette coloring, which is s
     <br>
     Support for IFS Affine Transform or function-based fractals such as the fern is in place.
 
-    Multithreading -- Available for complex number fractals and IFS fractals (not including animations)! Use is encouraged, but memory requirements are a bit high.
+    Multithreading -- Available for complex number fractals and IFS fractals
+    (not including L-System ones and animations)! Use is encouraged, but memory requirements are a bit high.
 
     More standard coloring methods are there, such as:
     <ol>
@@ -88,7 +89,7 @@ The final is distance estimation based grayscale or palette coloring, which is s
     Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
     </p>
     <p>
-    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].png</pre>(except for animated IFS fractals, which are output frame-by-frame into a folder) in the output directory specified in the CMD arguments to the program.
+    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].png</pre>(except for animated IFS and/or L-System fractals, which are output frame-by-frame into a folder) in the output directory specified in the CMD arguments to the program.
 </p>
 
 <p>
