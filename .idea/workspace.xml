@@ -6,8 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Prime Counter utility added under misc&#10;L-System Fractal Generator facility added">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="$PROJECT_DIR$/.idea/description.html" />
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Documentation updated">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
@@ -43,8 +42,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor vertical-scroll-proportion="0.8068182">
-                <caret line="61" column="160" selection-start-line="61" selection-start-column="160" selection-end-line="61" selection-end-column="160" />
+              <first_editor vertical-scroll-proportion="0.8390151">
+                <caret line="62" column="182" selection-start-line="62" selection-start-column="182" selection-end-line="62" selection-end-column="182" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -1054,13 +1053,7 @@
       <workItem from="1456902584665" duration="590000" />
       <workItem from="1457155988557" duration="10166000" />
       <workItem from="1457256461821" duration="5269000" />
-      <workItem from="1457343590186" duration="6121000" />
-    </task>
-    <task id="LOCAL-00111" summary="Final update before next major release">
-      <created>1453213126739</created>
-      <option name="number" value="00111" />
-      <option name="project" value="LOCAL" />
-      <updated>1453213126739</updated>
+      <workItem from="1457343590186" duration="6388000" />
     </task>
     <task id="LOCAL-00112" summary="Final update before next major release">
       <created>1453214568980</created>
@@ -1350,11 +1343,17 @@
       <option name="project" value="LOCAL" />
       <updated>1457349429269</updated>
     </task>
-    <option name="localTasksCounter" value="160" />
+    <task id="LOCAL-00160" summary="Documentation updated">
+      <created>1457349770846</created>
+      <option name="number" value="00160" />
+      <option name="project" value="LOCAL" />
+      <updated>1457349770846</updated>
+    </task>
+    <option name="localTasksCounter" value="161" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="810260000" />
+    <option name="totallyTimeSpent" value="810527000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1417,7 +1416,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="degree parameter isn't required anymore, it is calculated from the function itself." />
     <MESSAGE value="added math utility classes for implementing newton fractals later" />
     <MESSAGE value="added math utility classes for implementing newton fractals later&#10;bugfixes&#10;added math utility classes for implementing IFS fractals later" />
     <MESSAGE value="Implementing color configuration class for custom palettes option" />
@@ -1442,7 +1440,8 @@
     <MESSAGE value="Improvement for Newton Fractals&#10;" />
     <MESSAGE value="tan and tanh added&#10;" />
     <MESSAGE value="Prime Counter utility added under misc&#10;L-System Fractal Generator facility added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Prime Counter utility added under misc&#10;L-System Fractal Generator facility added" />
+    <MESSAGE value="Documentation updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Documentation updated" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1849,8 +1848,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor vertical-scroll-proportion="0.8068182">
-            <caret line="61" column="160" selection-start-line="61" selection-start-column="160" selection-end-line="61" selection-end-column="160" />
+          <first_editor vertical-scroll-proportion="0.8390151">
+            <caret line="62" column="182" selection-start-line="62" selection-start-column="182" selection-end-line="62" selection-end-column="182" />
             <folding />
           </first_editor>
           <second_editor />

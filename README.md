@@ -59,6 +59,7 @@ To run:
 
 <pre>java -jar FractalGenerator.jar [switches] [path-to-fractal-config-file] [options] [output-directory]</pre>
 
+Or, you can just use the included <pre>test.bat</pre> file which is provided along with the <pre>.jar</pre>
 Note that a <pre>-test</pre> or <pre>-t</pre> option without switches or other arguments will run the currently-configured test fractal which will be output as: <pre>D:/Fractal.png</pre>
 </p>
 </html>
