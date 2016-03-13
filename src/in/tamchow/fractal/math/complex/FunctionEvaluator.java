@@ -178,6 +178,24 @@ public class FunctionEvaluator {
                     } break;
                     case "tanh": ztmp = ComplexOperations.tanh(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
                         ++i;
+                    } break;
+                    case "sec": ztmp = ComplexOperations.sec(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "sech": ztmp = ComplexOperations.sech(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "cosec": ztmp = ComplexOperations.cosec(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "cosech": ztmp = ComplexOperations.cosech(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "cot": ztmp = ComplexOperations.cot(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
+                    } break;
+                    case "coth": ztmp = ComplexOperations.coth(new Complex(processed[i + 1])); if (i < (processed.length - 1)) {
+                        ++i;
                     } break; case "inv": ztmp = ztmp.inverse(); if (i < (processed.length - 1)) {++i;} break;
                     case "conj": ztmp = ztmp.conjugate(); if (i < (processed.length - 1)) {++i;} break;
                     case "re": ztmp = new Complex(ztmp.real(), 0); if (i < (processed.length - 1)) {++i;} break;

@@ -57,5 +57,12 @@ public class StringManipulator {
         int ctr = 0; for (int i = idx; i < s.length(); i++) {if (ctr == n) {return i;} if (s.charAt(i) == c) {ctr++;}}
         return -1;
     }
-    private int count_char(char c, String str) {
-        int ctr = 0; for (int i = 0; i < str.length(); i++) {if (c == str.charAt(ctr)) {ctr++;}} return ctr;}}
+    private static int count_char(char c, String str) {
+        int ctr = 0; for (int i = 0; i < str.length(); i++) {if (c == str.charAt(ctr)) {ctr++;}} return ctr;
+    }
+    public static String format(String toFormat, String[][] details) {
+        String formatted = ""; for (String[] detail : details) {
+            formatted = toFormat.replace(detail[0], detail[1]);
+        } return formatted;
+    }
+}

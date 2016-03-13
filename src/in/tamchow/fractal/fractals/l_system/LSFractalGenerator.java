@@ -22,7 +22,7 @@ public class LSFractalGenerator {
         generations = new String[params.getDepth()]; generations[0] = params.getAxiom(); this.publisher = publisher;
     }
     public void generate() {
-        for (int i = 0; i < generations.length; ) {
+        for (int i = 0, k = 1; i < generations.length - 1 && k < generations.length; ++i, ++k) {
             for (int j = 0; j < generations[i].length(); ++j) {
                 String toEvolve = generations[i].charAt(j) + ""; UnitGrammar evolutions = getGrammarForCode(toEvolve);
                 if (evolutions == null) {
@@ -35,8 +35,8 @@ public class LSFractalGenerator {
                         throw new LSGrammarException("Malformed Transformation Rule.");
                     } else {
                         evolution = evolutions.transformRules[MathUtils.boundsProtected(MathUtils.weightedRandom(evolutions.getWeights()), evolutions.transformRules.length)];
-                    } generations[++i] = generations[i].replace(toEvolve, evolution.transformTo);
-                } publishprogress(i);
+                    } generations[k] = generations[i].replace(toEvolve, evolution.transformTo);
+                } publishprogress(i + 1);
             }
         }
     }

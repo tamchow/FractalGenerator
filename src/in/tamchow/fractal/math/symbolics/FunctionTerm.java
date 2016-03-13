@@ -1,10 +1,17 @@
 package in.tamchow.fractal.math.symbolics;
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 /**
  * Support for transcendental functions for derivative-requiring fractal modes
  */
 public class FunctionTerm {
-    public final FunctionTermData[] functions = {new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * cos $ )"), new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"), new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"), new FunctionTermData("exp", "$v * ( exp $ )", "exp $ * ( $v + $vv )"), new FunctionTermData("sinh", "$v * ( cosh $ )", "( $v * ( sinh $ ) ) + ( $vv * ( cosh $ ) )"), new FunctionTermData("cosh", "$v * ( sinh $ )", "( $v * ( cosh $ ) ) + ( $vv * ( sinh $ ) )")};
+    public final FunctionTermData[] functions = {new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * cos $ )"), new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"), new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"), new FunctionTermData("exp", "$v * ( exp $ )", "exp $ * ( $v + $vv )"), new FunctionTermData("sinh", "$v * ( cosh $ )", "( $v * ( sinh $ ) ) + ( $vv * ( cosh $ ) )"), new FunctionTermData("cosh", "$v * ( sinh $ )", "( $v * ( cosh $ ) ) + ( $vv * ( sinh $ ) )"),
+                                                 /**
+                                                  * Below functions do not have second derivatives implemented.
+                                                  * (i.e., 1st & 2nd order derivatives are the same (to prevent odd exceptions)).
+                                                  * Use composites of above functions to emulate below functions if absolutely necessary.
+                                                 */
+                                                 new FunctionTermData("tan", "$v * ( ( sec $ ) ^ 2 )", "$v * ( ( sec $ ) ^ 2 )"), new FunctionTermData("tanh", "$v * ( ( sech $ ) ^ 2 )", "$v * ( ( sech $ ) ^ 2 )"), new FunctionTermData("sec", "$v * ( ( sec $ ) * ( tan $ ) )", "$v * ( ( sec $ ) * ( tan $ ) )"), new FunctionTermData("sech", "$v * ( - ( tanh $ ) * ( sech $ ) )", "$v * ( - ( tanh $ ) * ( sech $ ) )"), new FunctionTermData("cosec", "$v * ( - ( cosec $ ) * ( cot $ ) )", "$v * ( - ( cosec $ ) * ( cot $ ) )"), new FunctionTermData("cosech", "$v * ( - ( cosech $ ) * ( coth $ ) )", "$v * ( - ( cosech $ ) * ( coth $ ) )")};
     String function, constant, variableCode, oldvariablecode;
     Polynomial coefficient, argument;
     String[][] consts;
@@ -35,15 +42,9 @@ public class FunctionTerm {
             case 1: deriv += "( # * fv ) + ( #v * f)"; break;
             case 2: deriv += "( # * fvv ) + ( 2 * ( #v * fv ) ) + ( #vv * f )"; break;
             default: throw new IllegalArgumentException("Only 1st and 2nd order derivatives are supported");
-        } deriv = deriv.replace("fvv", "( " + functions[getUsedFunctionTermIndex(function)].derivative2.trim() + " )");
-        deriv = deriv.replace("fv", "( " + functions[getUsedFunctionTermIndex(function)].derivative1.trim() + " )");
-        deriv = deriv.replace("f", "( " + function.trim() + " $ )");
-        deriv = deriv.replace("#vv", "( " + coefficient.derivative().derivative().toString().trim() + " )");
-        deriv = deriv.replace("#v", "( " + coefficient.derivative().toString().trim() + " )");
-        deriv = deriv.replace("#", "( " + coefficient.toString().trim() + " )");
-        deriv = deriv.replace("$vv", "( " + argument.derivative().derivative().toString().trim() + " )");
-        deriv = deriv.replace("$v", "( " + argument.derivative().toString().trim() + " )");
-        deriv = deriv.replace("$", "( " + argument.toString().trim() + " )"); return deriv;
+        }
+        final String[][] REPLACEMENTS = {{"fvv", "( " + functions[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"}, {"fv", "( " + functions[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"}, {"f", "( " + function.trim() + " $ )"}, {"#vv", "( " + coefficient.derivative().derivative().toString().trim() + " )"}, {"#v", "( " + coefficient.derivative().toString().trim() + " )"}, {"#", "( " + coefficient.toString().trim() + " )"}, {"$vv", "( " + argument.derivative().derivative().toString().trim() + " )"}, {"$v", "( " + argument.derivative().toString().trim() + " )"}, {"$", "( " + argument.toString().trim() + " )"}};
+        return StringManipulator.format(deriv, REPLACEMENTS);
     }
     public Complex getDegree() {return coefficient.getDegree();}
     private class FunctionTermData {
