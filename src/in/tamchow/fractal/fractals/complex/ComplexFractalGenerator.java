@@ -234,7 +234,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
     }
     public void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
-        FixedStack last = new FixedStack(iterations + 2); FixedStack lastd = new FixedStack(iterations + 2);
+        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
+        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -403,7 +404,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     }
     public void setLastConstantIdx(int lastConstantIdx) {this.lastConstantIdx = lastConstantIdx;}
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        FixedStack last = new FixedStack(iterations + 2); FixedStack lastd = new FixedStack(iterations + 2);
+        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
+        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -543,7 +545,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                 functionderiv2 = polynomial.derivative().derivative() + "";
             }
-        } FixedStack last = new FixedStack(iterations + 2); FixedStack lastd = new FixedStack(iterations + 2);
+        }
+        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
+        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         if (constant != null && constant.equals(Complex.ZERO)) {
             constant = ComplexOperations.divide(Complex.ONE, degree);
@@ -702,7 +706,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         } return leastDistanceIdx;
     }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        FixedStack last = new FixedStack(iterations + 2); FixedStack lastd = new FixedStack(iterations + 2);
+        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
+        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
