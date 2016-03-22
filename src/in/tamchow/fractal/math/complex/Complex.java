@@ -49,6 +49,17 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         }
     }
 
+    public static Complex random() {
+        return random(Complex.ZERO, Complex.ONE);
+    }
+
+    public static Complex random(Complex lowerBound, Complex upperBound) {
+        double modulusRange = upperBound.modulus() - lowerBound.modulus(), argRange = upperBound.arg() - lowerBound.arg();
+        double randomModulus = Math.random() * modulusRange, randomArg = Math.random() * argRange;
+        Complex randomComplex = new Complex();
+        randomComplex.initComplex(randomModulus, randomArg, true);
+        return randomComplex;
+    }
     public void initComplex(double a, double ib, boolean cis) {
         if (cis) {
             Complex value = ComplexOperations.multiply(new Complex(a), ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(ib))));
@@ -59,6 +70,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public Complex negated() {
         return new Complex(-a, -ib);
     }
+
     public double real() {
         return a;
     }
@@ -87,6 +99,11 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         if (complex instanceof Complex) {
             if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {return true;}
         } return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (Double.doubleToRawLongBits(a) ^ Double.doubleToRawLongBits(ib));
     }
     @Override
     public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
