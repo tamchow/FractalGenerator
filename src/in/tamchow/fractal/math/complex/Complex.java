@@ -56,6 +56,9 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         } else {this.a = a; this.ib = ib;}
     }
 
+    public Complex negated() {
+        return new Complex(-a, -ib);
+    }
     public double real() {
         return a;
     }

@@ -238,16 +238,21 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
         String functionderiv = "";
+        Complex degree = null;
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
             if (Function.isSpecialFunction(function)) {
                 Function func = Function.fromString(function, variableCode, oldvariablecode); func.setConsts(consts);
                 function = func.toString(); functionderiv = func.derivative(1);
+                degree = func.getDegree();
             } else {
                 Polynomial poly = Polynomial.fromString(function); poly.setConstdec(consts);
                 poly.setVariableCode(variableCode); poly.setOldvariablecode(oldvariablecode);
                 function = poly.toString(); functionderiv = poly.derivative().toString();
+                degree = poly.getDegree();
             }
-        } FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
+        }
+        degree = (degree == null) ? fe.getDegree(function) : degree;
+        FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         long ctr = 0; outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -265,18 +270,28 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                         color.mode == Colors.CALCULATIONS.CURVATURE_AVERAGE_SPLINE) {
                     mindist = 0; maxdist = mindist;
                 } while (c <= iterations) {
-                    Complex ztmp = new Complex(z), ztmpd = new Complex(zd); last.pop();
+                    Complex ztmp, ztmpd = new Complex(zd);
+                    last.pop();
                     ztmp2 = (last.size() > 0) ? last.peek() : ztmp2; last.push(z); fe.setOldvalue(ztmp2 + "");
                     last.pop(); if (last.size() > 1) {last.pop(); z2 = last.peek(); last.push(ztmp2);} last.push(z);
                     Complex a = fe.evaluate(function, false); fe.setZ_value(ztmp2.toString());
                     Complex b = fe.evaluate(function, false);
-                    ztmp = ComplexOperations.subtract(ztmp, ComplexOperations.divide(ComplexOperations.multiply(a, ComplexOperations.subtract(ztmp, ztmp2)), ComplexOperations.subtract(a, b)));
+                    ztmp = ComplexOperations.subtract(z,
+                            ComplexOperations.divide(
+                                    ComplexOperations.multiply(a,
+                                            ComplexOperations.subtract(z, ztmp2)),
+                                    ComplexOperations.subtract(a, b)));
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                         Complex e = fed.evaluate(functionderiv, false); fed.setZ_value(ztmpd2.toString());
                         Complex d = fed.evaluate(functionderiv, false);
                         ztmpd = ComplexOperations.subtract(ztmpd, ComplexOperations.divide(ComplexOperations.multiply(e, ComplexOperations.subtract(ztmpd, ztmpd2)), ComplexOperations.subtract(e, d)));
                     } fe.setZ_value(ztmp + "");
-                    s += Math.exp(-ztmp.modulus() - 0.5 / ComplexOperations.subtract(z, ztmp).modulus());
+                    //s += Math.exp(-ztmp.modulus() - 0.5 / ComplexOperations.subtract(z, ztmp).modulus());
+                    s += ComplexOperations.power(color.getSmoothing_base(),
+                            ComplexOperations.add(ztmp,
+                                    ComplexOperations.divide(
+                                            new Complex(0.5),
+                                            (ComplexOperations.subtract(z, ztmp)))).negated()).modulus();
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -293,7 +308,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     if (color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR || color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE) {
                         mindist += 0.5 * Math.sin(ztmp.arg() * stripe_density) + 0.5;
                     } else if (color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR || color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE) {
-                        Complex degree = ComplexOperations.divide(ztmp, z);
+                        //Complex degree = ComplexOperations.divide(ztmp, z);
                         lbnd = Math.abs(ComplexOperations.power(z, degree).modulus() - getLastConstant().modulus());
                         ubnd = ComplexOperations.power(z, degree).modulus() + getLastConstant().modulus();
                         mindist += (ztmp.modulus() - lbnd) / (ubnd - lbnd);
@@ -325,7 +340,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 }
                 if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
                     histogram[c]++;
-                } if (roots.size() == 0) {
+                }
+                if ((color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_STRIPES || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_NORMALIZED) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
@@ -456,7 +472,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                         zd = fed.evaluate(functionderiv, false);
                     } last.push(ztmp);
-                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    //s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    s += ComplexOperations.power(color.getSmoothing_base(),
+                            ComplexOperations.add(ztmp,
+                                    ComplexOperations.divide(
+                                            new Complex(0.5),
+                                            (ComplexOperations.subtract(z, ztmp)))).negated()).modulus();
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -601,7 +622,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                             ztmpd = ComplexOperations.add(ComplexOperations.subtract(zd, ComplexOperations.divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false))), toadd);
                         }
                     } fe.setZ_value(ztmp + "");
-                    s += Math.exp(-ztmp.modulus() - 0.5 / ComplexOperations.subtract(z, ztmp).modulus());
+                    //s += Math.exp(-ztmp.modulus() - 0.5 / ComplexOperations.subtract(z, ztmp).modulus());
+                    s += ComplexOperations.power(color.getSmoothing_base(),
+                            ComplexOperations.add(ztmp,
+                                    ComplexOperations.divide(
+                                            new Complex(0.5),
+                                            (ComplexOperations.subtract(z, ztmp)))).negated()).modulus();
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
@@ -650,7 +676,7 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 if (color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                     histogram[c]++;
                 }
-                if (roots.size() == 0 && (color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_STRIPES || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_NORMALIZED)) {
+                if ((color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_STRIPES || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_NORMALIZED) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = ComplexOperations.divide(ComplexOperations.principallog(argand_map[i][j]), ComplexOperations.principallog(z)).modulus();
@@ -754,7 +780,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                     if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                         zd = fed.evaluate(functionderiv, false);
                     } last.push(ztmp);
-                    s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    //s += Math.exp(-(ztmp.modulus() + 0.5 / (ComplexOperations.subtract(z, ztmp).modulus())));
+                    s += ComplexOperations.power(color.getSmoothing_base(),
+                            ComplexOperations.add(ztmp,
+                                    ComplexOperations.divide(
+                                            new Complex(0.5),
+                                            (ComplexOperations.subtract(z, ztmp)))).negated()).modulus();
                     double distance = 0; if (useLineTrap) {
                         distance = Math.abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= Math.sqrt(this.a * this.a + this.b * this.b);
