@@ -1,5 +1,4 @@
 package in.tamchow.fractal.imgutils;
-
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
@@ -8,39 +7,32 @@ import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 
 import java.io.Serializable;
-
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed ARGB in hex values as pixels.
  */
 public class ImageData implements Serializable, Pannable {
     private String path;
     private int[][] pixdata;
-
     public ImageData() {
         path = "";
         pixdata = new int[640][480];
     }
-
     public ImageData(int w, int h) {
         path = "";
         pixdata = new int[h][w];
     }
-
     public ImageData(int[][] pixdata) {
         path = "";
         setPixdata(pixdata);
     }
-
     public ImageData(ImageData img) {
         setPixdata(img.getPixdata());
         path = img.getPath();
     }
-
     public ImageData(String path) {
         this.path = path;
         pixdata = null;
     }
-
     public static ImageData fromHSL(HSL[][] input) {
         ImageData img = new ImageData(input[0].length, input.length);
         for (int i = 0; i < input.length; i++) {
@@ -50,26 +42,21 @@ public class ImageData implements Serializable, Pannable {
         }
         return img;
     }
-
     public String getPath() {
         return path;
     }
-
     public void setPath(String path) {
         this.path = path;
     }
-
     public int[][] getPixdata() {
         return pixdata;
     }
-
     public void setPixdata(int[][] pixdata) {
         this.pixdata = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-
     public void fill(int color) {
         for (int i = 0; i < pixdata.length; i++) {
             for (int j = 0; j < pixdata[i].length; j++) {
@@ -77,13 +64,11 @@ public class ImageData implements Serializable, Pannable {
             }
         }
     }
-
     public void drawRect(int startx, int starty, int endx, int endy, int thickness, int color) {
         int oldcolor = pixdata[(endy - starty) / 2][(endx - startx) / 2];
         fillRect(startx, starty, endx, endy, color);
         fillRect(startx + thickness, starty + thickness, endx - thickness, endy - thickness, oldcolor);
     }
-
     public void fillRect(int startx, int starty, int endx, int endy, int color) {
         for (int i = starty; i < endy; i++) {
             for (int j = startx; j < endx; j++) {
@@ -91,7 +76,6 @@ public class ImageData implements Serializable, Pannable {
             }
         }
     }
-
     public void setPixel(int y, int x, int val) {
         if (y < 0) {
             y += getHeight();
@@ -111,7 +95,6 @@ public class ImageData implements Serializable, Pannable {
         }
         pixdata[y][x] = val;
     }
-
     public HSL[][] toHSL() {
         HSL[][] output = new HSL[pixdata.length][pixdata[0].length];
         for (int i = 0; i < output.length; i++) {
@@ -121,7 +104,6 @@ public class ImageData implements Serializable, Pannable {
         }
         return output;
     }
-
     public int getPixel(int y, int x) {
         if (x < 0) {
             y -= x / getWidth();
@@ -134,26 +116,22 @@ public class ImageData implements Serializable, Pannable {
         y = MathUtils.boundsProtected(y, getHeight());
         return pixdata[y][x];
     }
-
     public int getHeight() {
         if (pixdata == null) {
             return -1;
         }
         return pixdata.length;
     }
-
     public int getWidth() {
         if (pixdata == null) {
             return -1;
         }
         return pixdata[0].length;
     }
-
     public int[] getRow(int row) {
         row = MathUtils.boundsProtected(row, getHeight());
         return pixdata[row];
     }
-
     public ImageData getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {
         ImageData processed = new ImageData(this);
         if (mode == PostProcessMode.NONE) {
@@ -189,7 +167,6 @@ public class ImageData implements Serializable, Pannable {
         }
         return processed;
     }
-
     public void setSize(int height, int width) {
         int[][] tmp = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
@@ -200,14 +177,12 @@ public class ImageData implements Serializable, Pannable {
             System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-
     public void setPixdata(int[] pixdata, int scan) {
         this.pixdata = new int[pixdata.length / scan][scan];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata, i * scan, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-
     public int[] getPixels() {
         int[] pixels = new int[pixdata.length * pixdata[0].length];
         for (int i = 0; i < pixdata.length; i++) {
@@ -215,7 +190,6 @@ public class ImageData implements Serializable, Pannable {
         }
         return pixels;
     }
-
     public Matrix fromCooordinates(int x, int y) {
         double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
         int center_x = getWidth() / 2, center_y = getHeight() / 2;
@@ -226,7 +200,6 @@ public class ImageData implements Serializable, Pannable {
         matrixData[1][0] = ((center_y - ((double) y)) / scale);
         return new Matrix(matrixData);
     }
-
     public void drawLine(int from_x, int from_y, int to_x, int to_y, int color) {
         int deltax = Math.abs(to_x - from_x), deltay = Math.abs(to_y - from_y),
                 numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y, yinc1, yinc2;
@@ -272,11 +245,9 @@ public class ImageData implements Serializable, Pannable {
             }
         }
     }
-
     public ImageData falseColor(ImageData[] channels) {
         return falseColor(channels[0], channels[1], channels[2]);
     }
-
     public void add(ImageData toAdd) {
         for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
             for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
@@ -284,7 +255,6 @@ public class ImageData implements Serializable, Pannable {
             }
         }
     }
-
     public ImageData falseColor(ImageData r, ImageData g, ImageData b) {
         ImageData falseColored = new ImageData(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {
@@ -294,7 +264,6 @@ public class ImageData implements Serializable, Pannable {
         }
         return falseColored;
     }
-
     public int[] toCooordinates(Matrix point) {
         double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
         int center_x = getWidth() / 2, center_y = getHeight() / 2;
@@ -303,7 +272,6 @@ public class ImageData implements Serializable, Pannable {
         y = MathUtils.boundsProtected(y, getHeight());
         return new int[]{x, y};
     }
-
     public ImageData getRotatedImage(double angle) {
         double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
         int w = getWidth(), h = getHeight();
@@ -320,31 +288,25 @@ public class ImageData implements Serializable, Pannable {
         }
         return rotated;
     }
-
     public int getPixel(int i) {
         return getPixel(i / pixdata[0].length, i % pixdata[0].length);
     }
-
     public void setPixel(int i, int val) {
         setPixel(i / pixdata[0].length, i % pixdata[0].length, val);
     }
-
     @Override
     public void pan(int distance, double angle) {
         pan(distance, angle, false);
     }
-
     @Override
     public void pan(int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-
     @Override
     public void pan(int x_dist, int y_dist) {
         pan(getWidth(), getHeight(), x_dist, y_dist);
     }
-
     public void pan(int x_res, int y_res, int x_dist, int y_dist) {
         if (x_res + x_dist >= getWidth() || y_res + y_dist >= getHeight() || x_res + x_dist < 0 || y_res + y_dist < 0) {
             throw new UnsupportedOperationException("Panning out of range");
@@ -360,21 +322,17 @@ public class ImageData implements Serializable, Pannable {
             setPixdata(tmp.getPixdata());
         }
     }
-
     public void pan(int x_res, int y_res, int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         pan(x_res, y_res, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-
     public void pan(int x_res, int y_res, int distance, double angle) {
         pan(x_res, y_res, distance, angle, false);
     }
-
     public ImageData subImage(int x_res, int y_res) {
         ImageData subImage = new ImageData(this);
         subImage.pan(0, 0);
         return subImage;
     }
-
     public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NEGATIVE, NONE}
 }

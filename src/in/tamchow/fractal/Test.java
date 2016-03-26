@@ -1,5 +1,4 @@
 package in.tamchow.fractal;
-
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.ConfigReader;
@@ -16,7 +15,6 @@ import in.tamchow.fractal.platform_tools.ImageConverter;
 
 import javax.imageio.ImageIO;
 import java.io.File;
-
 /**
  * Test class, handles CMDLINE input.
  */
@@ -97,7 +95,6 @@ public class Test {
             }System.out.println();
         }*/
     }
-
     static int rgb(int r, int g, int b) {
         return Color_Utils_Config.toRGB(r, g, b);
     }

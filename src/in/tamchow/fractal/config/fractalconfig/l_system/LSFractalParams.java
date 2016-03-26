@@ -1,9 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
-
 import in.tamchow.fractal.imgutils.ImageData;
 
 import java.io.Serializable;
-
 /**
  * Holds Parameters for an LS fractal
  */
@@ -20,7 +18,6 @@ public class LSFractalParams implements Serializable {
     int fps;
     double init_angle;
     UnitGrammar[] grammar;
-
     public LSFractalParams(LSFractalParams old) {
         setPath(old.getPath());
         setPostprocessMode(old.getPostprocessMode());
@@ -32,88 +29,68 @@ public class LSFractalParams implements Serializable {
         setDepth(old.getDepth());
         setGrammar(old.getGrammar());
     }
-
     public LSFractalParams() {
         setPath("");
         setPostprocessMode(ImageData.PostProcessMode.NONE);
         setFps(0);
     }
-
     public String getAxiom() {
         return axiom;
     }
-
     public void setAxiom(String axiom) {
         this.axiom = axiom;
     }
-
     public int getDepth() {
         return depth;
     }
-
     public void setDepth(int depth) {
         this.depth = depth;
     }
-
     public UnitGrammar[] getGrammar() {
         return grammar;
     }
-
     public void setGrammar(UnitGrammar[] grammar) {
         this.grammar = new UnitGrammar[grammar.length];
         for (int i = 0; i < this.grammar.length; i++) {
             this.grammar[i] = new UnitGrammar(grammar[i]);
         }
     }
-
     public double getInit_angle() {
         return init_angle;
     }
-
     public void setInit_angle(double init_angle) {
         this.init_angle = init_angle;
     }
-
     public int getWidth() {
         return width;
     }
-
     public void setWidth(int width) {
         this.width = width;
     }
-
     public int getHeight() {
         return height;
     }
-
     public void setHeight(int height) {
         this.height = height;
     }
-
     public int getInit_length() {
         return init_length;
     }
-
     public void setInit_length(int init_length) {
         this.init_length = init_length;
     }
-
     public ImageData.PostProcessMode getPostprocessMode() {
         return postprocessMode;
     }
-
     public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {
         this.postprocessMode = postprocessMode;
     }
-
     public String getPath() {
         return path;
     }
-
     public void setPath(String path) {
         this.path = path;
     }
-
     public void fromString(String[] data) {
         String[] init = data[0].split(",");
         if (init.length == 6) {
@@ -154,31 +131,24 @@ public class LSFractalParams implements Serializable {
             grammar[i - 1] = new UnitGrammar(data[i]);
         }
     }
-
     public int getFps() {
         return fps;
     }
-
     public void setFps(int fps) {
         this.fps = fps;
     }
-
     public int getFore_color() {
         return fore_color;
     }
-
     public void setFore_color(int fore_color) {
         this.fore_color = fore_color;
     }
-
     public int getBack_color() {
         return back_color;
     }
-
     public void setBack_color(int back_color) {
         this.back_color = back_color;
     }
-
     @Override
     public String toString() {
         String representation = String.format("%d%n%d%n%d%n%d%n%dn%d%n%f%n",

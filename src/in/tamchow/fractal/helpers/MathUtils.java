@@ -1,10 +1,8 @@
 package in.tamchow.fractal.helpers;
-
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.util.Random;
-
 /**
  * Weighted Random Number generator and approximations,prime number calculator
  */
@@ -12,7 +10,6 @@ public class MathUtils {
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
-
     public static String numberLineRepresentation(float number, int precision) {
         int g = (int) number, d = Math.round((number - g) * precision), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
         String h = "", q = "" + g;
@@ -23,27 +20,22 @@ public class MathUtils {
         for (; i < precision + b; i++) q += " ";
         return q + (g + 1) + "\n" + h;
     }
-
     public static int[] diamondPuzzleSolver(int sum, int product, int low, int high) {
         for (int a = low; a <= high; a++) {
             for (int b = low; b <= high; b++) if (a + b == sum && a * b == product) return new int[]{a, b};
         }
         return null;
     }
-
     public static int[] diamondPuzzleSolverQuadratic(int sum, int product) {
         int x = sum + (int) Math.sqrt(sum * sum - 4 * product);
         return new int[]{x / 2, sum - x / 2};
     }
-
     public static boolean approxEquals(Complex a, Complex b, double tolerance) {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }
-
     public static int weightedRandom(double[] weights) {
         return (int) weightedRandom(null, weights);
     }
-
     public static double weightedRandom(double[] values, double[] weights) {
         int factor = 0, pidx = 0;
         double sum = 0.0;
@@ -68,11 +60,9 @@ public class MathUtils {
         }
         return rand[new Random().nextInt(rand.length)];
     }
-
     public static int[] translateCoordinates(int x, int y, int ix, int iy, int fx, int fy) {
         return new int[]{(int) (((double) x / ix) * fx), (int) (((double) y / iy) * fy)};
     }
-
     public static int firstPrimeFrom(int from) {
         for (int i = from; i > 0; i++) {
             int factors = 0;
@@ -87,7 +77,6 @@ public class MathUtils {
         }
         return -1;
     }
-
     static void quickSort(int[][] arr, int low, int high) {
         if (arr == null || arr.length == 0) return;
         if (low >= high) return;
@@ -115,7 +104,6 @@ public class MathUtils {
         if (low < j) quickSort(arr, low, j);
         if (high > i) quickSort(arr, i, high);
     }
-
     public static int indexOf(int[] data, int element) {
         for (int i = 0; i < data.length; i++) {
             if (data[i] == element) {
@@ -124,7 +112,6 @@ public class MathUtils {
         }
         return -1;
     }
-
     public static int[] rankListFromHistogram(int[] histogram) {
         int[][] map = new int[histogram.length][2];
         for (int i = 0; i < histogram.length; i++) {
@@ -138,15 +125,12 @@ public class MathUtils {
         }
         return rankList;
     }
-
     public static Matrix complexToMatrix(Complex data) {
         return new Matrix(new double[][]{{data.real()}, {data.imaginary()}});
     }
-
     public static Complex matrixToComplex(Matrix data) {
         return new Complex(data.get(0, 0), data.get(1, 0));
     }
-
     public int[] mostEfficientfactor(int a) {
         int num_factors = 0;
         for (int i = 1; i <= a; i++) {
@@ -169,7 +153,6 @@ public class MathUtils {
         quickSort(data, 0, data.length - 1);
         return new int[]{data[0].a, data[0].b};
     }
-
     void quickSort(FactorData[] arr, int low, int high) {
         if (arr == null || arr.length == 0) return;
         if (low >= high) return;
@@ -196,16 +179,13 @@ public class MathUtils {
         if (low < j) quickSort(arr, low, j);
         if (high > i) quickSort(arr, i, high);
     }
-
     private class FactorData {
         int a, b, sum;
-
         public FactorData(int a, int b) {
             this.a = a;
             this.b = b;
             this.sum = a + b;
         }
-
         public FactorData(FactorData old) {
             a = old.a;
             b = old.b;

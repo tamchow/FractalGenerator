@@ -1,8 +1,6 @@
 package in.tamchow.fractal.fractals.IFS;
-
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
-
 /**
  * Threaded IFS Fractal Generator
  */
@@ -10,12 +8,10 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     IFSGenerator master;
     PartIFSData[] data;
     int threads;
-
     public ThreadedIFSGenerator(IFSGenerator generator) {
         master = generator;
         threads = master.getParams().getThreads();
     }
-
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
@@ -24,12 +20,10 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         }
         return ctr;
     }
-
     @Override
     public boolean allComplete() {
         return (countCompletedThreads() == threads);
     }
-
     public void generate() {
         int idx = 0;
         for (int i = 0; i < threads; i++) {
@@ -53,11 +47,9 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
     }
-
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         int index;
         IFSGenerator copyOfMaster;
-
         public SlaveRunner(int index) {
             super(index);
             long iterations;
@@ -69,7 +61,6 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             }
             copyOfMaster.setDepth(iterations);
         }
-
         @Override
         public void run() {
             if (copyOfMaster.getParams().getFrameskip() > 0) {
@@ -78,7 +69,6 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
                 copyOfMaster.generate();
             }
         }
-
         @Override
         public void onCompletion() {
             data[index] = new PartIFSData(copyOfMaster.getPlane());

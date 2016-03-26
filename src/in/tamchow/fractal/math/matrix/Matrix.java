@@ -1,30 +1,24 @@
 package in.tamchow.fractal.math.matrix;
-
 import in.tamchow.fractal.helpers.StringManipulator;
 
 import java.io.Serializable;
-
 /**
  * Holds a rectangular matrix
  */
 public final class Matrix implements Serializable, Comparable<Matrix> {
     private int rows, columns;
     private double[][] matrixData;
-
     public Matrix(double[][] matrixData) {
         initMatrix(matrixData.length, matrixData[0].length, matrixData);
     }
-
     public Matrix(Matrix old) {
         initMatrix(old.getNumRows(), old.getNumColumns(), old.getMatrixData());
     }
-
     public Matrix(int rows, int columns) {
         setNumRows(rows);
         setNumColumns(columns);
         matrixData = new double[this.rows][this.columns];
     }
-
     public static Matrix rotationMatrix2D(double angle) {
         double[][] matrixData = new double[2][2];
         matrixData[0][0] = Math.cos(angle);
@@ -33,15 +27,12 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         matrixData[1][1] = Math.cos(angle);
         return new Matrix(matrixData);
     }
-
     public static Matrix nullMatrix(int order) {
         return nullMatrix(order, order);
     }
-
     public static Matrix nullMatrix(int rows, int colums) {
         return new Matrix(rows, colums);
     }
-
     public static Matrix identityMatrix(int order) {
         int rows = Math.round((float) Math.sqrt(order)), columns = rows;
         Matrix matrix = new Matrix(rows, columns);
@@ -56,7 +47,6 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return matrix;
     }
-
     public static Matrix fromString(String matrix) {
         matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
         String[] rows = StringManipulator.split(matrix, ";");
@@ -72,44 +62,35 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return newMatrix;
     }
-
     private void initMatrix(int rows, int columns, double[][] matrixData) {
         setMatrixData(matrixData);
         setNumRows(rows);
         setNumColumns(columns);
     }
-
     public int getNumRows() {
         return rows;
     }
-
     public void setNumRows(int rows) {
         this.rows = rows;
     }
-
     public int getNumColumns() {
         return columns;
     }
-
     public void setNumColumns(int columns) {
         this.columns = columns;
     }
-
     public double[][] getMatrixData() {
         return matrixData;
     }
-
     public void setMatrixData(double[][] matrixData) {
         this.matrixData = new double[matrixData.length][matrixData[0].length];
         for (int i = 0; i < matrixData.length; i++) {
             System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData[i].length);
         }
     }
-
     public synchronized void set(int i, int j, double value) {
         matrixData[i][j] = value;
     }
-
     public Matrix transpose() {
         Matrix transposedMatrix = new Matrix(getNumColumns(), getNumRows());
         for (int i = 0; i < getNumRows(); i++) {
@@ -119,11 +100,9 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return transposedMatrix;
     }
-
     public boolean isSquare() {
         return rows == columns;
     }
-
     public Matrix createSubMatrix(int excluding_row, int excluding_col) {
         Matrix mat = new Matrix(getNumRows() - 1, getNumColumns() - 1);
         int r = -1;
@@ -138,22 +117,18 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return mat;
     }
-
     public int size() {
         return rows * columns;
     }
-
     private int changeSign(int val) {
         if (val % 2 == 0) {
             return 1;
         }
         return -1;
     }
-
     public double determinant() {
         return determinant(this);
     }
-
     public double determinant(Matrix matrix) {
         if (!matrix.isSquare()) throw new IllegalArgumentException("Matrix needs to be square.");
         if (matrix.size() == 1) {
@@ -168,11 +143,9 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return sum;
     }
-
     public Matrix inverse() {
         return MatrixOperations.multiply(cofactor().transpose(), 1.0 / determinant());
     }
-
     public Matrix cofactor() {
         Matrix mat = new Matrix(getNumRows(), getNumColumns());
         for (int i = 0; i < getNumRows(); i++) {
@@ -182,7 +155,6 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return mat;
     }
-
     @Override
     public synchronized boolean equals(Object that) {
         if (that == null) {
@@ -200,7 +172,6 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return true;
     }
-
     @Override
     public String toString() {
         String matrix = "";
@@ -212,11 +183,9 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }//remove trailing ','}
         return "[" + matrix.substring(0, matrix.length() - 1) + "]";//remove trailing ';'
     }
-
     public synchronized double get(int i, int j) {
         return matrixData[i][j];
     }
-
     @Override
     public int compareTo(Matrix other) {
         if (other == null) {
@@ -228,7 +197,6 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
             return (int) (other.sumAllElements() - sumAllElements());
         }
     }
-
     private double sumAllElements() {
         double sum = 0;
         for (double[] row : matrixData) {

@@ -1,8 +1,6 @@
 package in.tamchow.fractal.math;
-
 import java.io.Serializable;
 import java.util.EmptyStackException;
-
 /**
  * A generic fixed-length stack
  */
@@ -15,7 +13,6 @@ public class FixedStack<E> implements Serializable {
      * Stack top pointer
      */
     private int top;
-
     /**
      * Parameterized constructor. No default constructor.
      *
@@ -27,7 +24,6 @@ public class FixedStack<E> implements Serializable {
         setSize(capacity);
         resetTop(false);
     }
-
     /**
      * Resets the stack top pointer depending on whether the stack is empty or full
      *
@@ -36,7 +32,6 @@ public class FixedStack<E> implements Serializable {
     private void resetTop(boolean notEmpty) {
         top = notEmpty ? 0 : elements.length;
     }
-
     /**
      * Note: Setting the size <b>WILL CLEAR THE STACK</b>.
      *
@@ -48,7 +43,6 @@ public class FixedStack<E> implements Serializable {
         this.elements = (E[]) new Object[Math.abs(size)];
         resetTop(false);
     }
-
     /**
      * Has the same effect as {@link FixedStack#setSize(int)},
      * but does not reinitialize the elements array
@@ -62,7 +56,6 @@ public class FixedStack<E> implements Serializable {
         }
         resetTop(false);
     }
-
     /**
      * Pushes a set of values onto the stack
      *
@@ -73,7 +66,6 @@ public class FixedStack<E> implements Serializable {
             push(value);
         }
     }
-
     /**
      * Pushes a value onto the stack
      *
@@ -83,7 +75,6 @@ public class FixedStack<E> implements Serializable {
         if (isFull()) throw new StackOverflowException();
         elements[--top] = value;
     }
-
     /**
      * Checks whether the stack is full
      *
@@ -92,7 +83,6 @@ public class FixedStack<E> implements Serializable {
     public boolean isFull() {
         return (top == 0);
     }
-
     /**
      * Pops a set of values from the stack
      *
@@ -106,7 +96,6 @@ public class FixedStack<E> implements Serializable {
         }
         return values;
     }
-
     /**
      * Pops a value from the stack
      *
@@ -118,7 +107,6 @@ public class FixedStack<E> implements Serializable {
         elements[top++] = null;
         return value;
     }
-
     /**
      * Checks whether the stack is empty
      *
@@ -127,7 +115,6 @@ public class FixedStack<E> implements Serializable {
     public boolean isEmpty() {
         return (top == elements.length);
     }
-
     /**
      * Peeks at a set of values on the stack
      *
@@ -142,7 +129,6 @@ public class FixedStack<E> implements Serializable {
         }
         return values;
     }
-
     /**
      * Peeks at a value on the stack at a particular index
      *
@@ -153,7 +139,6 @@ public class FixedStack<E> implements Serializable {
         if (isEmpty()) throw new EmptyStackException();
         return elements[top - n];
     }
-
     /**
      * Duplicates the n topmost elements of the stack, top-down.
      *
@@ -164,14 +149,12 @@ public class FixedStack<E> implements Serializable {
             duplicate();
         }
     }
-
     /**
      * Duplicates the topmost element of the stack
      */
     public void duplicate() {
         push(peek());
     }
-
     /**
      * Peeks at a value on the stack
      *
@@ -181,7 +164,6 @@ public class FixedStack<E> implements Serializable {
         if (isEmpty()) throw new EmptyStackException();
         return elements[top];
     }
-
     /**
      * Reverses the stack
      *
@@ -195,7 +177,6 @@ public class FixedStack<E> implements Serializable {
         }
         initStack(reversed);
     }
-
     /**
      * Initializes the stack with the supplied set of values
      *
@@ -207,7 +188,6 @@ public class FixedStack<E> implements Serializable {
         setSize(elements.length);
         pushN(elements);
     }
-
     /**
      * Dumps the stack elements to the caller
      *
@@ -216,7 +196,6 @@ public class FixedStack<E> implements Serializable {
     public E[] dumpStack() {
         return elements;
     }
-
     /**
      * Provides the current number of elements on the stack
      *
@@ -225,7 +204,6 @@ public class FixedStack<E> implements Serializable {
     public int size() {
         return elements.length - top;
     }
-
     /**
      * More conventional stack size calculation.
      * Use not recommended.
@@ -240,7 +218,6 @@ public class FixedStack<E> implements Serializable {
         }
         return size;
     }
-
     /**
      * Alias for {@link FixedStack#erase()}
      *
@@ -250,7 +227,6 @@ public class FixedStack<E> implements Serializable {
         erase();
     }
 }
-
 /**
  * Custom Stack Overflow Exception class
  */
@@ -261,7 +237,6 @@ class StackOverflowException extends IndexOutOfBoundsException {
     public StackOverflowException() {
         this("Stack Overflow");
     }
-
     /**
      * Constructs the exception with a custom message
      *

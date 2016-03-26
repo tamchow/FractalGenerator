@@ -1,16 +1,13 @@
 package in.tamchow.fractal.imgutils;
-
 import in.tamchow.fractal.helpers.MathUtils;
 
 import java.io.Serializable;
-
 /**
  * Holds an image as an SDA, extends ImageData
  */
 public class LinearizedImageData extends ImageData implements Serializable {
     private int[] pixdata;
     private int width;
-
     public LinearizedImageData(ImageData source) {
         if (source instanceof LinearizedImageData) {
             this.width = source.getWidth();
@@ -24,13 +21,11 @@ public class LinearizedImageData extends ImageData implements Serializable {
             }
         }
     }
-
     public LinearizedImageData(int[] pixdata, int width) {
         this.width = width;
         this.pixdata = new int[pixdata.length];
         System.arraycopy(pixdata, 0, this.pixdata, 0, this.pixdata.length);
     }
-
     public LinearizedImageData(int[][] pixels) {
         pixdata = new int[pixels.length * pixels[0].length];
         width = pixels[0].length;
@@ -38,17 +33,14 @@ public class LinearizedImageData extends ImageData implements Serializable {
             System.arraycopy(pixels[i], 0, pixdata, i * width, width);
         }
     }
-
     public LinearizedImageData(int width, int height) {
         this.width = width;
         pixdata = new int[height * width];
     }
-
     @Override
     public int[] getPixels() {
         return pixdata;
     }
-
     @Override
     public int[][] getPixdata() {
         int[][] pixels = new int[pixdata.length / width][width];
@@ -57,21 +49,17 @@ public class LinearizedImageData extends ImageData implements Serializable {
         }
         return pixels;
     }
-
     public ImageData toImageData() {
         return new ImageData(getPixdata());
     }
-
     @Override
     public int getWidth() {
         return width;
     }
-
     @Override
     public int getHeight() {
         return pixdata.length / width;
     }
-
     @Override
     public int getPixel(int y, int x) {
         if (x < 0) {
@@ -85,7 +73,6 @@ public class LinearizedImageData extends ImageData implements Serializable {
         y = MathUtils.boundsProtected(y, getHeight());
         return pixdata[y * width + x];
     }
-
     @Override
     public void setPixel(int y, int x, int val) {
         if (x < 0) {
@@ -99,17 +86,14 @@ public class LinearizedImageData extends ImageData implements Serializable {
         y = MathUtils.boundsProtected(y, getHeight());
         pixdata[y * width + x] = val;
     }
-
     @Override
     public int getPixel(int i) {
         return pixdata[i];
     }
-
     @Override
     public void setPixel(int i, int val) {
         pixdata[i] = val;
     }
-
     @Override
     public LinearizedImageData getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {
         return new LinearizedImageData(toImageData().getPostProcessed(mode, biases, byParts));

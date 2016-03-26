@@ -1,5 +1,4 @@
 package in.tamchow.fractal;
-
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
@@ -31,7 +30,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 /**
  * Production Main Class: Handles Images, Complex and IFS Fractals.
  * Max. of 2 required arguments, not including switches or flags

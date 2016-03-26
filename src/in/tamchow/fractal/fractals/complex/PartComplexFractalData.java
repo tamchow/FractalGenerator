@@ -1,9 +1,7 @@
 package in.tamchow.fractal.fractals.complex;
-
 import in.tamchow.fractal.imgutils.ImageData;
 
 import java.io.Serializable;
-
 /**
  * Holds a part of a fractal's data for threaded generation, along with the render coordinates
  */
@@ -13,7 +11,6 @@ public final class PartComplexFractalData implements Serializable {
     double[][] normalized_escapes;
     int[] histogram;
     int startx, endx, starty, endy;
-
     public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, ImageData imageData, int startx, int endx, int starty, int endy) {
         this.startx = startx;
         this.endx = endx;
@@ -22,7 +19,6 @@ public final class PartComplexFractalData implements Serializable {
         initData(escapedata, normalized_escapes);
         this.imageData = new ImageData(imageData);
     }
-
     public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, int[] histogram, int startx, int endx, int starty, int endy) {
         this.startx = startx;
         this.endx = endx;
@@ -32,7 +28,6 @@ public final class PartComplexFractalData implements Serializable {
         this.histogram = new int[histogram.length];
         System.arraycopy(histogram, 0, this.histogram, 0, this.histogram.length);
     }
-
     private void initData(int[][] escapedata, double[][] normalized_escapes) {
         this.escapedata = new int[escapedata.length][escapedata[0].length];
         for (int i = 0; i < escapedata.length; i++) {

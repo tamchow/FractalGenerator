@@ -1,5 +1,4 @@
 package in.tamchow.fractal.misc.primes;
-
 /**
  * PrimeCounter - an application/library to calculate the number of prime numbers below a certain number,
  * also mathematically known as pi(x), where x is a natural number greater than one.
@@ -31,7 +30,6 @@ public class PrimeCounter {
      * For further documentation, see {@link #PrimeCounter(int, int, int, int, int)}
      */
     public final int NUM_THREADS, LOW_LIM, SPLIT_LIM, HIGH_LIM, REDUCE_FACTOR;
-
     /**
      * Default constructor. Sets default values for the parameters.
      * The values used are experimentally determined for best performance on the author's system.
@@ -39,7 +37,6 @@ public class PrimeCounter {
     public PrimeCounter() {
         this(0xF, 0x8_000, 0x80, 0x1_000_0000, 0x4);
     }
-
     /**
      * Parameterized Constructor - configures calculation parameters
      *
@@ -56,7 +53,6 @@ public class PrimeCounter {
         this.HIGH_LIM = HIGH_LIM;
         this.REDUCE_FACTOR = REDUCE_FACTOR;
     }
-
     /**
      * Main method: accepts user input and shows total execution time taken
      *
@@ -79,7 +75,6 @@ public class PrimeCounter {
         }
         System.out.format(TOTAL_OUTPUT_FORMAT, total_time / 1e9);
     }
-
     /**
      * Private testing and timer function
      *
@@ -93,7 +88,6 @@ public class PrimeCounter {
         System.out.format(TEST_FORMAT, MAX, ps, ((end - start) / 1E9));
         return end - start;
     }
-
     /**
      * Checks for completion of threads
      *
@@ -106,7 +100,6 @@ public class PrimeCounter {
         }
         return true;
     }
-
     /**
      * Checks if the parameter is prime or not.
      * 2,3,5,7 are hardcoded as factors.
@@ -124,7 +117,6 @@ public class PrimeCounter {
             return true;
         }
     }
-
     /**
      * Calculates primes using the atandard Sieve of Eratosthenes.
      * Uses 2,3,5,7 wheel factorization for elimination (hardcoded for performance reasons)
@@ -164,7 +156,6 @@ public class PrimeCounter {
         }
         return (n + 1 - ctr);
     }
-
     /**
      * Generates and counts primes using an optimized but naive iterative algorithm.
      * Uses MultiThreading for arguments above LOW_LIM
@@ -212,7 +203,6 @@ public class PrimeCounter {
         }
         return ctr;
     }
-
     /**
      * Calculates primes using bitmasked Sieve of Eratosthenes.
      *
@@ -241,7 +231,6 @@ public class PrimeCounter {
         }
         return pi;
     }
-
     private static final class Lock {
     }
 }

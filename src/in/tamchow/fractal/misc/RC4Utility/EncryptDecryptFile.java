@@ -1,8 +1,6 @@
 package in.tamchow.fractal.misc.RC4Utility;
-
 import java.io.*;
 import java.util.ArrayList;
-
 /**
  * Does file encryption/decryption using the RC4 class
  */

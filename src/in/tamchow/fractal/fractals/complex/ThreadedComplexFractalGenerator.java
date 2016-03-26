@@ -1,5 +1,4 @@
 package in.tamchow.fractal.fractals.complex;
-
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
@@ -9,7 +8,6 @@ import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
-
 /**
  * Multithreading for the fractal generator
  */
@@ -20,7 +18,6 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     double escape_radius;
     Complex constant;
     int nx, ny;
-
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
         this.master = master;
         this.iterations = iterations;
@@ -30,11 +27,9 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         ny = y_threads;
         buffer = new PartComplexFractalData[nx * ny];
     }
-
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master) {
         this(master, master.getParams());
     }
-
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config) {
         this.master = master;
         this.iterations = config.runParams.iterations;
@@ -44,7 +39,6 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         ny = config.y_threads;
         buffer = new PartComplexFractalData[nx * ny];
     }
-
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
@@ -53,11 +47,9 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         }
         return ctr;
     }
-
     public void generate() {
         generate(0, master.argand.getWidth(), 0, master.argand.getHeight());
     }
-
     public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
         for (int i = 0; i < ny; i++) {
@@ -158,19 +150,15 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
     }
-
     @Override
     public boolean allComplete() {
         return (countCompletedThreads() == (nx * ny));
     }
-
     private static final class Lock {
     }
-
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexFractalGenerator copyOfMaster;
         int startx, starty, endx, endy;
-
         public SlaveRunner(int index, int startx, int endx, int starty, int endy) {
             super(index);
             this.startx = startx;
@@ -179,13 +167,11 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             this.endy = endy;
             this.copyOfMaster = new ComplexFractalGenerator(new ComplexFractalParams(master.getParams()), master.getProgressPublisher());
         }
-
         @Override
         public void run() {
             copyOfMaster.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
             onCompletion();
         }
-
         @Override
         public void onCompletion() {
             if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {

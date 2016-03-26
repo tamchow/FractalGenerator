@@ -1,7 +1,5 @@
 package in.tamchow.fractal.config;
-
 import java.io.*;
-
 /**
  * Writes configuration files from configuration objects in human-readable or serialized format
  */
@@ -19,7 +17,6 @@ public class ConfigWriter {
             e.printStackTrace();
         }
     }
-
     public static void writeSerialized(Config config, File output) {
         try {
             if (!output.exists()) {

@@ -1,30 +1,24 @@
 package in.tamchow.fractal.color;
-
 import in.tamchow.fractal.helpers.StringManipulator;
 
 import java.io.Serializable;
-
 /**
  * Holds information about an HSL color
  */
 public class HSL implements Serializable {
     double hue, saturation, lightness;
-
     public HSL(double hue, double saturation, double lightness) {
         setHue(hue);
         setSaturation(saturation);
         setLightness(lightness);
     }
-
     public static HSL fromString(String hsl) {
         String[] parts = StringManipulator.split(hsl, ",");
         return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
     }
-
     public static double hueFromAngle(double radianMeasure) {
         return radianMeasure / (2 * Math.PI);
     }
-
     public static HSL fromRGB(int color) {
         int ri = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.RED),
                 gi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
@@ -48,11 +42,9 @@ public class HSL implements Serializable {
         h *= (1.0 / 6.0);
         return new HSL(h, s, l);
     }
-
     public static double angleFromHue(double hue) {
         return hue * 2 * Math.PI;
     }
-
     @Override
     public boolean equals(Object other) {
         if (other instanceof HSL) {
@@ -63,16 +55,13 @@ public class HSL implements Serializable {
         }
         return false;
     }
-
     @Override
     public String toString() {
         return hue + "," + saturation + "," + lightness;
     }
-
     public double getHue() {
         return hue;
     }
-
     public void setHue(double hue) {
         if (hue < 0) {
             hue += 1;
@@ -84,11 +73,9 @@ public class HSL implements Serializable {
         }
         this.hue = hue;
     }
-
     public double getSaturation() {
         return saturation;
     }
-
     public void setSaturation(double saturation) {
         if (saturation < 0) {
             saturation += 1;
@@ -100,11 +87,9 @@ public class HSL implements Serializable {
         }
         this.saturation = saturation;
     }
-
     public double getLightness() {
         return lightness;
     }
-
     public void setLightness(double lightness) {
         if (lightness < 0) {
             lightness += 1;
@@ -116,7 +101,6 @@ public class HSL implements Serializable {
         }
         this.lightness = lightness;
     }
-
     public int toRGB() {
         double chroma = (1 - Math.abs(2 * lightness - 1)) * saturation, h = hue * 6, x = chroma * (1 - Math.abs((((int) h) % 2) - 1));
         int m = Math.round((float) (lightness - 0.5 * chroma)) * 255, r = m, g = m, b = m;

@@ -1,5 +1,4 @@
 package in.tamchow.fractal.fractals.l_system;
-
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
@@ -8,7 +7,6 @@ import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.graphics.Turtle;
-
 /**
  * generates L-System Fractals. Does not implement panning or zooming, as those make no sense
  */
@@ -18,7 +16,6 @@ public class LSFractalGenerator {
     Turtle turtle;
     String[] generations;
     Publisher publisher;
-
     public LSFractalGenerator(LSFractalParams params, Publisher publisher) {
         this.params = params;
         canvas = new ImageData(params.getWidth(), params.getHeight());
@@ -28,7 +25,6 @@ public class LSFractalGenerator {
         generations[0] = params.getAxiom();
         this.publisher = publisher;
     }
-
     public void generate() {
         for (int i = 0, k = 1; i < generations.length - 1 && k < generations.length; ++i, ++k) {
             for (int j = 0; j < generations[i].length(); ++j) {
@@ -51,12 +47,10 @@ public class LSFractalGenerator {
             }
         }
     }
-
     private void publishprogress(int progress) {
         float completion = ((float) (progress)) * 100.0f / generations.length;
         publisher.publish("Completion = " + completion + " %", completion);
     }
-
     private UnitGrammar getGrammarForCode(String code) {
         for (UnitGrammar grammar : params.getGrammar()) {
             if (grammar.code.equals(code)) {
@@ -65,15 +59,12 @@ public class LSFractalGenerator {
         }
         return null;
     }
-
     public void drawState(int index) {
         drawState(getStateAtIndex(index));
     }
-
     public String getStateAtIndex(int index) {
         return generations[MathUtils.boundsProtected(index, generations.length)];
     }
-
     public void drawState(String stateToDraw) {
         double segmentlength = params.getInit_length() * Math.cos(params.getInit_angle()) / stateToDraw.length();
         for (int i = 0; i < stateToDraw.length(); ++i) {
@@ -94,7 +85,6 @@ public class LSFractalGenerator {
             turtle.draw(grammar.command, data);
         }
     }
-
     public Animation drawStatesAsAnimation() {
         if (params.getFps() <= 0) {
             throw new UnsupportedOperationException("FPS of 0 or below is illegal.");
@@ -106,11 +96,9 @@ public class LSFractalGenerator {
         }
         return frames;
     }
-
     public ImageData getCanvas() {
         return canvas;
     }
-
     public LSFractalParams getParams() {
         return params;
     }

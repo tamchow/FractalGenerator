@@ -1,10 +1,8 @@
 package in.tamchow.fractal.math.symbolics;
-
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.util.ArrayList;
-
 /**
  * Holds a transcendental function chain
  */
@@ -14,7 +12,6 @@ public class Function {
     String[][] consts;
     String z_value;
     String variableCode, oldvariablecode;
-
     public Function(String variable, String variableCode, String oldvariablecode, String[][] varconst) {
         setZ_value(variable);
         setConsts(varconst);
@@ -23,16 +20,13 @@ public class Function {
         terms = new ArrayList<>();
         signs = new ArrayList<>();
     }
-
     public Function() {
         terms = new ArrayList<>();
         signs = new ArrayList<>();
     }
-
     public static boolean isSpecialFunction(String function) {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
-
     public static Function fromString(String function, String variableCode, String oldvariablecode) {
         Function poly = new Function();
         String[] tokens = StringManipulator.split(function, "|");
@@ -48,60 +42,47 @@ public class Function {
         }
         return poly;
     }
-
     public String getOldvariablecode() {
         return oldvariablecode;
     }
-
     public void setOldvariablecode(String oldvariablecode) {
         this.oldvariablecode = oldvariablecode;
     }
-
     public String getZ_value() {
         return z_value;
     }
-
     public void setZ_value(String z_value) {
         this.z_value = z_value;
     }
-
     public String[][] getConsts() {
         return consts;
     }
-
     public void setConsts(String[][] constdec) {
         consts = new String[constdec.length][constdec[0].length];
         for (int i = 0; i < this.consts.length; i++) {
             System.arraycopy(constdec[i], 0, consts[i], 0, consts[i].length);
         }
     }
-
     public String getVariableCode() {
         return variableCode;
     }
-
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-
     public ArrayList<String> getSigns() {
         return signs;
     }
-
     public void setSigns(ArrayList<String> signs) {
         this.signs.clear();
         this.signs.addAll(signs);
     }
-
     public ArrayList<FunctionTerm> getTerms() {
         return terms;
     }
-
     public void setTerms(ArrayList<FunctionTerm> terms) {
         this.terms.clear();
         this.terms.addAll(terms);
     }
-
     public String derivative(int order) {
         String deriv = "";
         switch (order) {
@@ -126,7 +107,6 @@ public class Function {
         }
         return deriv;
     }
-
     public Complex getDegree() {
         Complex degree = new Complex(Complex.ZERO);
         for (FunctionTerm term : terms) {
@@ -137,7 +117,6 @@ public class Function {
         }
         return degree;
     }
-
     @Override
     public String toString() {
         String function = "";

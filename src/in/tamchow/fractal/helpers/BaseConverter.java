@@ -9,7 +9,6 @@ public class BaseConverter {
     public static final int RESTRICTED_CHARS_COUNT = 84, MAX_LOOKUP_LENGTH = Character.MAX_VALUE - RESTRICTED_CHARS_COUNT;
     protected static final String negativeBaseErrorMessage = "Negative or zero base values are illegal - supplied bases were %d & %d.", invalidInputNumberErrorMessage = "The supplied number (%s) for base conversion is invalid.", tooLargeBaseForLookupErrorMessage = "Not enough available characters for substitution. Number of available characters is %d , minimum required number is %d";
     private static String lookup = "0123456789ABCDEFGHIJKLMNOPQRSTWXYZabcdefghijklmnopqrstwxyz+/=,?!;:\"'^`~|\\@#$%&*_<>(){}";
-
     private static void updateLookup(int base) {
         if (base > MAX_LOOKUP_LENGTH) {//Substitution and digit lookup may be impossible, so we we throw an exception here
             throw new IllegalArgumentException(String.format(tooLargeBaseForLookupErrorMessage, lookup.length(), base));
@@ -32,15 +31,12 @@ public class BaseConverter {
             throw new IllegalArgumentException(String.format(tooLargeBaseForLookupErrorMessage, lookup.length(), base));
         }
     }
-
     public static long convertToNumber(String inputNumber, int from_base) {
         return convertToNumber(inputNumber, from_base, true);
     }
-
     private static boolean isNegative(String number) {
         return number.startsWith("-");
     }
-
     public static long convertToNumber(String inputNumber, int from_base, boolean checkIfNegative) {
         String copyOfInput = inputNumber;
         boolean isNegative = checkIfNegative ? isNegative(inputNumber) : false;
@@ -62,7 +58,6 @@ public class BaseConverter {
         }
         return isNegative ? -number : number;
     }
-
     private static int countDigits(long number, int to_base) {
         int num_digits = 0;
         while (number > 0) {
@@ -71,7 +66,6 @@ public class BaseConverter {
         }
         return num_digits;
     }
-
     private static int[] createDigits(long number, int to_base) {
         int[] digits = new int[countDigits(number, to_base)];
         int num_digits = 0;
@@ -81,11 +75,9 @@ public class BaseConverter {
         }
         return digits;
     }
-
     public static String changeBase(String inputNumber, int from_base, int to_base) {
         return changeBase(inputNumber, from_base, to_base, true);
     }
-
     private static boolean isInvalidInputNumber(String inputNumber, int from_base) {
         //there should be no more than 1 - sign, which should have been removed already if it exists
         return inputNumber.contains("-") ||
@@ -94,7 +86,6 @@ public class BaseConverter {
                 //there should be no characters in the string which indicate values for a digit greater than the current base
                 (!inputNumber.matches(String.format("^[%s]*$", lookup.substring(0, from_base))));
     }
-
     public static String changeBase(String inputNumber, int from_base, int to_base, boolean substituteNumerics) {
         String copyOfInput = inputNumber;
         boolean isNegative = isNegative(inputNumber);

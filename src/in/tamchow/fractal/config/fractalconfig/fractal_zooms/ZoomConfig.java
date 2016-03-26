@@ -1,20 +1,15 @@
 package in.tamchow.fractal.config.fractalconfig.fractal_zooms;
-
 import java.io.Serializable;
-
 /**
  * Holds a set of fractal zooms
  */
 public class ZoomConfig implements Serializable {
     public ZoomParams[] zooms;
-
     public ZoomConfig() {
     }
-
     public ZoomConfig(ZoomConfig old) {
         setZooms(old.zooms);
     }
-
     public static ZoomConfig fromString(String[] params) {
         ZoomConfig zoom = new ZoomConfig();
         zoom.zooms = new ZoomParams[params.length];
@@ -23,14 +18,12 @@ public class ZoomConfig implements Serializable {
         }
         return zoom;
     }
-
     public void setZooms(ZoomParams[] zooms) {
         this.zooms = new ZoomParams[zooms.length];
         for (int i = 0; i < zooms.length; i++) {
             this.zooms[i] = new ZoomParams(zooms[i]);
         }
     }
-
     @Override
     public String toString() {
         String representation = "[Zooms]";
@@ -40,7 +33,6 @@ public class ZoomConfig implements Serializable {
         representation += "\n[EndZooms]";
         return representation;
     }
-
     public void addZoom(ZoomParams zoom) {
         ZoomParams[] tmp = new ZoomParams[this.zooms.length];
         for (int i = 0; i < tmp.length; i++) {

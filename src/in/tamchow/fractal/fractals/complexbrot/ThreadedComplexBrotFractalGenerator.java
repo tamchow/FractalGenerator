@@ -1,9 +1,7 @@
 package in.tamchow.fractal.fractals.complexbrot;
-
 import in.tamchow.fractal.fractals.ThreadedGenerator;
 
 import java.io.Serializable;
-
 /**
  * Multithreaded Complex Brot Fractal generator
  */
@@ -11,12 +9,10 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     ComplexBrotFractalGenerator master;
     PartComplexBrotFractalData[] data;
     int threads;
-
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
         threads = master.getParams().getNum_threads();
     }
-
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
@@ -25,12 +21,10 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         }
         return ctr;
     }
-
     @Override
     public boolean allComplete() {
         return (countCompletedThreads() == threads);
     }
-
     public void generate() {
         int idx = 0;
         for (int i = 0; i < threads; i++) {
@@ -57,7 +51,6 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
     }
-
     private int[][] addDDA(int[][] a, int[][] b) {
         if (a.length != b.length || a[0].length != b[0].length) {
             throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
@@ -70,11 +63,9 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         }
         return c;
     }
-
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         int index;
         ComplexBrotFractalGenerator copyOfMaster;
-
         public SlaveRunner(int index) {
             super(index);
             long num_points;
@@ -86,12 +77,10 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             }
             copyOfMaster.setDepth(num_points);
         }
-
         @Override
         public void run() {
             copyOfMaster.generate();
         }
-
         @Override
         public void onCompletion() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases());

@@ -1,5 +1,4 @@
 package in.tamchow.fractal.platform_tools;
-
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
@@ -16,7 +15,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 /**
  * Swing app to display images & complex number fractals
  */
@@ -31,11 +29,9 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     ComplexFractalGenerator current;
     private boolean running, fractal_mode, zoomedin;
     private double zoomin;
-
     public ImageDisplay(Config config, int width, int height) {
         initDisplay(config, width, height);
     }
-
     public ImageDisplay(Config config) {
         if (config instanceof ImageConfig) {
             int width, height;
@@ -56,7 +52,6 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             initDisplay(config, ((ComplexFractalConfig) config).getParams()[0].initParams.width, ((ComplexFractalConfig) config).getParams()[0].initParams.height);
         }
     }
-
     public static void show(Config config, String title) {
         ImageDisplay id = new ImageDisplay(config);
         JScrollPane scrollPane = new JScrollPane(id);
@@ -76,7 +71,6 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         Thread thread = new Thread(id);
         thread.start();
     }
-
     private void initDisplay(Config config, int width, int height) {
         if (config instanceof ImageConfig) {
             try {
@@ -126,17 +120,14 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             }
         }
     }
-
     @Override
     public synchronized void publish(String message, double progress) {
         parent.setTitle("Generating Fractal: " + message);
     }
-
     @Override
     public synchronized void publish(String message, double progress, Object... args) {
         parent.setTitle("Generating Fractal: " + String.format(message, args));
     }
-
     @Override
     public void run() {
         for (int i = ctr; i < rimg.length; ) {
@@ -200,19 +191,15 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             i++;
         }
     }
-
     public void paint(Graphics g) {
         g.drawImage(todraw, 0, 0, null);
     }
-
     public Dimension getPreferredSize() {
         return new Dimension(width, height);
     }
-
     @Override
     public void keyTyped(KeyEvent e) {
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         System.out.println("Key pressed:" + e.getKeyChar());
@@ -230,11 +217,9 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             }
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
     }
-
     @Override
     public void mouseClicked(MouseEvent e) {
         if (fractal_mode) {
@@ -253,19 +238,15 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             }
         }
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
     }
-
     @Override
     public void mouseEntered(MouseEvent e) {
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
     }

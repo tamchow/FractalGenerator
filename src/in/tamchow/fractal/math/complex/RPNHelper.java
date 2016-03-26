@@ -1,7 +1,5 @@
 package in.tamchow.fractal.math.complex;
-
 import in.tamchow.fractal.math.FixedStack;
-
 /**
  * Supports dyadic operations on complex numbers as expressions in RPN format
  */
@@ -14,7 +12,6 @@ public class RPNHelper {
             new Operator("/", 5, Associativity.LEFT),
             new Operator("^", 10, Associativity.RIGHT)
     };
-
     public static Complex evaluateRPN(String[] tokens) {
         if (tokens.length == 0) {
             throw new UnsupportedOperationException("Blank");
@@ -27,11 +24,9 @@ public class RPNHelper {
         }*/
         return evaluateRPN(tks);
     }
-
     public static Complex evaluateInfix(String[] infix) {
         return evaluateRPN(infixToRPN(infix));
     }
-
     public static Complex evaluateRPN(FixedStack<String> tkstack) {
         String tk = tkstack.pop();
         Complex x, y;
@@ -62,11 +57,9 @@ public class RPNHelper {
         }
         return x;
     }
-
     private static boolean contains(String token) {
         return getByToken(token) != null;
     }
-
     /**
      * Test if a certain is an operator .
      *
@@ -76,7 +69,6 @@ public class RPNHelper {
     private static boolean isOperator(String token) {
         return contains(token);
     }
-
     private static Operator getByToken(String token) {
         for (Operator operator : OPERATORS) {
             if (operator.symbol.equals(token)) {
@@ -85,7 +77,6 @@ public class RPNHelper {
         }
         return null;
     }
-
     /**
      * Test the associativity of a certain operator token .
      *
@@ -99,7 +90,6 @@ public class RPNHelper {
         }
         return getByToken(token).associativity == type;
     }
-
     /**
      * Compare precendece of two operators.
      *
@@ -116,7 +106,6 @@ public class RPNHelper {
         }
         return getByToken(token1).precedence - getByToken(token2).precedence;
     }
-
     private static int countOccurrencesOfParentheses(String[] inputTokens) {
         int ctr = 0;
         for (String token : inputTokens) {
@@ -126,7 +115,6 @@ public class RPNHelper {
         }
         return ctr;
     }
-
     public static String[] infixToRPN(String[] inputTokens) {
         String[] out = new String[inputTokens.length - countOccurrencesOfParentheses(inputTokens)];
         int outCtr = 0;
@@ -165,20 +153,17 @@ public class RPNHelper {
         }
         return out;
     }
-
     private enum Associativity {
         LEFT, RIGHT
     }
-
     private static class Operator {
         private String symbol;
         private int precedence;
         private Associativity associativity;
-
         public Operator(String symbol, int precedence, Associativity associativity) {
             this.symbol = symbol;
             this.precedence = precedence;
-            this.associativity=associativity;
+            this.associativity = associativity;
         }
     }
 }

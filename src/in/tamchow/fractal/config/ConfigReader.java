@@ -1,5 +1,4 @@
 package in.tamchow.fractal.config;
-
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
@@ -19,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 /**
  * Reads the configuration of fractals or images from a file
  */
@@ -27,23 +25,18 @@ public class ConfigReader {
     public static boolean isFileImageConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[ImageConfig]");
     }
-
     public static boolean isFileComplexFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[ComplexFractalConfig]");
     }
-
     public static boolean isFileComplexBrotFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[ComplexBrotFractalConfig]");
     }
-
     public static boolean isFileIFSFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[IFSFractalConfig]");
     }
-
     public static boolean isFileLSFractalConfig(File file) throws FileNotFoundException {
         return new Scanner(file).nextLine().equals("[LSFractalConfig]");
     }
-
     public static ImageConfig getImageConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
         String dimensions = null;
@@ -75,7 +68,6 @@ public class ConfigReader {
         }
         return imageConfig;
     }
-
     public static ComplexFractalConfig getComplexFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -101,7 +93,6 @@ public class ConfigReader {
         complexFractalConfig.setParams(complexFractalParams);
         return complexFractalConfig;
     }
-
     private static ComplexFractalParams getComplexParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -178,7 +169,6 @@ public class ConfigReader {
         complexFractalParams.setPath(paramfile.getAbsolutePath());
         return complexFractalParams;
     }
-
     public static IFSFractalConfig getIFSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -204,7 +194,6 @@ public class ConfigReader {
         ifsFractalConfig.setParams(ifsFractalParams);
         return ifsFractalConfig;
     }
-
     private static IFSFractalParams getIFSParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -252,7 +241,6 @@ public class ConfigReader {
         ifsFractalParams.setPath(paramfile.getAbsolutePath());
         return ifsFractalParams;
     }
-
     public static ComplexBrotFractalConfig getComplexBrotFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -278,7 +266,6 @@ public class ConfigReader {
         complexBrotFractalConfig.setParams(complexBrotFractalParams);
         return complexBrotFractalConfig;
     }
-
     private static ComplexBrotFractalParams getComplexBrotParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -328,7 +315,6 @@ public class ConfigReader {
         complexBrotFractalParams.setPath(paramfile.getAbsolutePath());
         return complexBrotFractalParams;
     }
-
     public static LSFractalConfig getLSFractalConfigFromFile(File cfgfile) throws FileNotFoundException {
         Scanner in = new Scanner(cfgfile);
         ArrayList<String> lines = new ArrayList<>();
@@ -354,7 +340,6 @@ public class ConfigReader {
         ifsFractalConfig.setParams(ifsFractalParams);
         return ifsFractalConfig;
     }
-
     private static LSFractalParams getLSParamFromFile(File file) throws FileNotFoundException {
         Scanner in = new Scanner(file);
         ArrayList<String> lines = new ArrayList<>();

@@ -1,5 +1,4 @@
 package in.tamchow.fractal.misc.bs;
-
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.FixedStack;
@@ -9,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-
 /**
  * Interpreter for custom BF-family language christened "BrainSext"(raw pun and acronym for "Brains Extended",
  * capable of interpreting PBrain, BrainFlow, pure BF (directly),
@@ -39,7 +37,6 @@ public class BrainSext {
     int ptr, proctr, itmp, size, errorCount;
     boolean silent;
     private int storage;
-
     public BrainSext(boolean silent) {
         code = "";
         codebackup = code;
@@ -53,7 +50,6 @@ public class BrainSext {
         this.silent = silent;
         stack = new FixedStack<>(size);
     }
-
     public static void main(String[] args) {
         BrainSext executor = new BrainSext(false);
         if (args.length == 0) {
@@ -77,28 +73,23 @@ public class BrainSext {
         }
         executor.execute();
     }
-
     void initMemory() {
         operand = new int[size];
         for (int i = 0; i < operand.length; i++) {
             operand[i] = -1;
         }
     }
-
     public boolean isSilent() {
         return silent;
     }
-
     public void setSilent(boolean silent) {
         this.silent = silent;
     }
-
     public void setMemory(int[] data) {
         size = data.length;
         operand = new int[size];
         System.arraycopy(data, 0, operand, 0, size);
     }
-
     void readFile(String path) {
         File input = new File(path);
         try {
@@ -112,7 +103,6 @@ public class BrainSext {
             errors += e.getMessage();
         }
     }
-
     public void execute() {
         int[] tmp = new int[operand.length];
         int num;
@@ -453,19 +443,16 @@ public class BrainSext {
             i++;
         }
     }
-
     private Integer[] toObjects(int[] values) {
         Integer[] ovalues = new Integer[values.length];
         for (int i = 0; i < ovalues.length; ++i) ovalues[i] = values[i];
         return ovalues;
     }
-
     private int[] toPrimitives(Integer[] ovalues) {
         int[] values = new int[ovalues.length];
         for (int i = 0; i < values.length; ++i) values[i] = ovalues[i];
         return values;
     }
-
     void setOutput(String output, int mode) {
         switch (mode) {
             case ERROR:
@@ -479,28 +466,22 @@ public class BrainSext {
                 break;
         }
     }
-
     public int getErrorCount() {
         return errorCount;
     }
-
     public String getOutput() {
         return output;
     }
-
     public String getErrors() {
         return errors;
     }
-
     boolean fromInt(int val) {
         return val > 0;
     }
-
     int toInt(boolean val) {
         if (val) return 1;
         return 0;
     }
-
     int jumpIndex(int i, boolean relative) {
         if ((i + 1 < code.length() - 1) && Character.isDigit(code.charAt(i + 1))) {
             if (relative) {
@@ -516,11 +497,9 @@ public class BrainSext {
         }
         return i;
     }
-
     boolean numAfter(int i) {
         return ((i + 1 < code.length() - 1) && (Character.isDigit(code.charAt(i + 1)) || code.charAt(i + 1) == '_'));
     }
-
     int indexAfterSkipLiteral(int index, int literal) {
         return index + (literal + "").length();
     }

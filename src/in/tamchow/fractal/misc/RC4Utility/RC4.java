@@ -1,19 +1,15 @@
 package in.tamchow.fractal.misc.RC4Utility;
-
 /**
  * Implements simple RC4 encryption/decryption
  */
 public class RC4 {
     private int[] key, config;
-
     public RC4(byte[] key) {
         initRC4(key);
     }
-
     public RC4() {
         initRC4(new byte[]{2, 4, 6, 8, 16, 32, 64});
     }
-
     private void initRC4(byte[] key) {
         if (key.length == 0 || key.length > 256) {
             throw new IllegalArgumentException("Key length out of range");
@@ -22,7 +18,6 @@ public class RC4 {
         config = new int[key.length];
         populateKey();
     }
-
     private void populateKey() {
         for (int i = 0; i < key.length; i++) {
             key[i] = i;
@@ -35,7 +30,6 @@ public class RC4 {
             key[j] = tmp;
         }
     }
-
     public String process(String input) {
         byte[] toprocess = new byte[input.length()];
         for (int i = 0; i < toprocess.length; i++) {
@@ -48,7 +42,6 @@ public class RC4 {
         }
         return output;
     }
-
     public byte[] process(byte[] input) {
         byte[] output = new byte[input.length];
         int i = 0, j = 0;

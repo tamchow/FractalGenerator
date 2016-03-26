@@ -1,5 +1,4 @@
 package in.tamchow.fractal.fractals.complex;
-
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
@@ -23,7 +22,6 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 /**
  * The actual fractal plotter for Julia, Newton, Nova (both Mandelbrot and Julia variants),Secant and Mandelbrot Sets using an iterative algorithm.
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
@@ -51,7 +49,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     Publisher progressPublisher;
     ComplexFractalParams params;
     private String variableCode, oldvariablecode;
-
     public ComplexFractalGenerator(ComplexFractalParams params, Publisher progressPublisher) {
         this.params = params;
         initFractal(params.initParams.width, params.initParams.height, params.initParams.zoom, params.initParams.zoom_factor, params.initParams.base_precision, params.initParams.fractal_mode, params.initParams.function, params.initParams.consts, params.initParams.variableCode, params.initParams.oldvariablecode, params.initParams.tolerance, params.initParams.color, params.initParams.switch_rate, params.initParams.trap_point, params.initParams.linetrap);
@@ -62,7 +59,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         this.progressPublisher = progressPublisher;
     }
-
     @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Color_Utils_Config color, Publisher progressPublisher) {
         //initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1, 0), color, 0, Complex.ZERO, null);
@@ -71,22 +67,18 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         //params.initParams=new ComplexFractalInitParams(width,height,zoom,zoom_factor,base_precision,mode,function,consts,variableCode,oldvariablecode,tolerance,color,0,Complex.ZERO,null,0);
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, color, 0, Complex.ZERO, null, 0), null), progressPublisher);
     }
-
     @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, Complex trap_point) {
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, null, 0), null), progressPublisher);
     }
-
     @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, String linetrap) {
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, Complex.ZERO, linetrap, 0), null), progressPublisher);
     }
-
     @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, Complex trap_point, String linetrap) {
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, 0), null), progressPublisher);
     }
-
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Color_Utils_Config color, int switch_rate, Complex trap_point, String linetrap) {
         silencer = params.useThreadedGenerator();
         argand = new LinearizedImageData(width, height);
@@ -138,15 +130,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         populateMap();
     }
-
     public Color_Utils_Config getColor() {
         return color;
     }
-
     public void setColor(Color_Utils_Config color) {
         this.color = new Color_Utils_Config(color);
     }
-
     public double modulusForPhase(double phase) {
         for (Complex num : boundary_elements) {
             if (Math.abs(phase - num.arg()) <= tolerance) {
@@ -155,59 +144,45 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return Double.NaN;
     }
-
     public void setOldvariablecode(String oldvariablecode) {
         this.oldvariablecode = oldvariablecode;
     }
-
     public void setTrap_point(Complex trap_point) {
         this.trap_point = new Complex(trap_point);
     }
-
     public Publisher getProgressPublisher() {
         return progressPublisher;
     }
-
     public void setProgressPublisher(Publisher progressPublisher) {
         this.progressPublisher = progressPublisher;
     }
-
     public ComplexFractalParams getParams() {
         return params;
     }
-
     public void setParams(ComplexFractalParams params) {
         this.params = params;
     }
-
     public void setStripe_density(int stripe_density) {
         this.stripe_density = stripe_density;
     }
-
     public void setMaxiter(long maxiter) {
         this.maxiter = maxiter;
     }
-
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-
     public int[][] getEscapedata() {
         return escapedata;
     }
-
     public void setTolerance(double tolerance) {
         this.tolerance = tolerance;
     }
-
     public Mode getMode() {
         return mode;
     }
-
     public void setMode(Mode mode) {
         this.mode = mode;
     }
-
     /**
      * @param nx:No.   of threads horizontally
      * @param ix:Index of thread horizontally
@@ -218,7 +193,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
     public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {
         return start_end_coordinates(0, argand.getWidth(), 0, argand.getHeight(), nx, ix, ny, iy);
     }
-
     public int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
         //for multithreading purposes
         int start_x = startx, end_x, start_y = starty, end_y;
@@ -239,19 +213,15 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return new int[]{start_x, end_x, start_y, end_y};
     }
-
     public double getZoom() {
         return zoom;
     }
-
     public void setZoom(double zoom) {
         this.zoom = zoom;
     }
-
     public void setFunction(String function) {
         this.function = function;
     }
-
     public void setBase_precision(double base_precision) {
         if (base_precision <= 0) {
             this.base_precision = calculateBasePrecision();
@@ -259,22 +229,18 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             this.base_precision = base_precision;
         }
     }
-
     public double calculateBasePrecision() {
         return ((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
-
     public ImageData getArgand() {
         return argand;
     }
-
     public void setConsts(String[][] consts) {
         this.consts = new String[consts.length][consts[0].length];
         for (int i = 0; i < consts.length; i++) {
             System.arraycopy(consts[i], 0, this.consts[i], 0, consts[i].length);
         }
     }
-
     public void generate() {
         if (params.runParams.fully_configured) {
             generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, (int) params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
@@ -282,15 +248,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             generate(params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         }
     }
-
     public void generate(long iterations, double escape_radius, Complex constant) {
         generate(0, argand.getWidth(), 0, argand.getHeight(), (int) iterations, escape_radius, constant);
     }
-
     public void generate(long iterations, double escape_radius) {
         generate(0, argand.getWidth(), 0, argand.getHeight(), (int) iterations, escape_radius, null);
     }
-
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter((end_x - start_x) * (end_y - start_y) * iterations);
         if (this.color.getMode() == Colors.CALCULATIONS.SIMPLE_SMOOTH_LINEAR || this.color.getMode() == Colors.CALCULATIONS.SIMPLE_SMOOTH_SPLINE) {
@@ -389,7 +352,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     public void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
         FixedStack<Complex> last = new FixedStack<>(iterations + 2);
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
@@ -614,7 +576,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     /**
      * NOTE:Call after generating the fractal, as this uses data from @code escapdedata
      */
@@ -643,7 +604,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         points.toArray(boundaryPoints);
         return boundaryPoints;
     }
-
     private boolean isInBounds(Complex val) {
         if (val.imaginary() <= argand_map[0][center_x].imaginary() && val.imaginary() >= argand_map[argand_map.length - 1][center_x].imaginary()) {
             if (val.real() <= argand_map[center_y][argand_map[0].length - 1].real() && val.real() >= argand_map[center_y][0].real()) {
@@ -652,7 +612,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return false;
     }
-
     public Complex getLastConstant() {
         if (lastConstant.equals(new Complex(-1, 0))) {
             if (getLastConstantIndex() == -1) {
@@ -663,12 +622,10 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return lastConstant;
     }
-
     public void setLastConstant(Complex value) {
         consts[getLastConstantIndex()][1] = value.toString();
         lastConstant = new Complex(value);
     }
-
     public int getLastConstantIndex() {
         String[] parts = StringManipulator.split(function, " ");
         for (int i = parts.length - 1; i >= 0; i--) {
@@ -679,7 +636,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return -1;
     }
-
     public int getConstantIndex(String constant) {
         for (int i = 0; i < consts.length; i++) {
             if (consts[i][0].equals(constant)) {
@@ -688,11 +644,9 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return -1;
     }
-
     public void setLastConstantIdx(int lastConstantIdx) {
         this.lastConstantIdx = lastConstantIdx;
     }
-
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack<Complex> last = new FixedStack<>(iterations + 2);
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
@@ -904,7 +858,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
         String functionderiv = "", functionderiv2 = "";
         Complex degree;
@@ -1166,14 +1119,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     public void publishProgress(long ctr, int i, int startx, int endx, int j, int starty, int endy) {
         if (params != null && (!params.useThreadedGenerator())) {
             float completion = ((float) ((i - starty) * (endx - startx) + (j - startx)) / ((endx - startx) * (endy - starty))) * 100.0f;
             progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + completion + "%", completion / 100.0);
         }
     }
-
     private int indexOfRoot(Complex z) {
         for (int i = 0; i < roots.size(); i++) {
             if (ComplexOperations.distance_squared(roots.get(i), z) < tolerance) {
@@ -1182,7 +1133,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return -1;
     }
-
     private int closestRootIndex(Complex z) {
         int leastDistanceIdx = 0;
         double leastDistance = ComplexOperations.distance_squared(z, roots.get(0));
@@ -1195,7 +1145,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return leastDistanceIdx;
     }
-
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack<Complex> last = new FixedStack<>(iterations + 2);
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
@@ -1403,7 +1352,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     public double getNormalized(int val, int iterations, Complex[] z_values, double escape) {
         Complex z = z_values[0]; /*double degree = this.degree.modulus(); if (escape < zoom) {
             degree = Math.log(z.modulus() * z.modulus()) / Math.log(z_values[1].modulus() * z_values[1].modulus());
@@ -1423,15 +1371,12 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return renormalized;
     }
-
     public int[] getHistogram() {
         return histogram;
     }
-
     public double[][] getNormalized_escapes() {
         return normalized_escapes;
     }
-
     public int getColor(int i, int j, int val, Complex[] last, double escape_radius, int iterations) {
         int colortmp, colortmp1, colortmp2, color1, color2, color3, index;
         double renormalized, lbnd = 0, ubnd = 1, calc, scaling = Math.pow(zoom, zoom_factor), smoothcount;
@@ -1628,7 +1573,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return colortmp;
     }
-
     private int getInterpolated(int index, double smoothcount) {
         int color1, color2, color3, colortmp1, colortmp2, colortmp,
                 index2 = MathUtils.boundsProtected(index + 1, color.getNum_colors());
@@ -1640,7 +1584,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
         return colortmp;
     }
-
     public int[] toCooordinates(Complex point) {
         point = ComplexOperations.subtract(point, centre_offset);
         if (Math.abs(params.initParams.skew) >= tolerance) {
@@ -1652,7 +1595,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         y = MathUtils.boundsProtected(y, argand.getHeight());
         return new int[]{x, y};
     }
-
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {
             zoom(zoom.centre_x, zoom.centre_y, zoom.level);
@@ -1660,36 +1602,29 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             zoom(zoom.centre, zoom.level);
         }
     }
-
     public void mandelbrotToJulia(Matrix constant, double level) {
         zoom(constant, level);
         changeMode(centre_offset);
         resetCentre();
     }
-
     public void resetCentre() {
         setCenter_x(argand.getWidth() / 2);
         setCenter_y(argand.getHeight() / 2);
         resetCentre_Offset();
     }
-
     public void resetCentre_Offset() {
         centre_offset = new Complex(0);
     }
-
     public void setCenter_x(int center_x) {
         this.center_x = center_x;
     }
-
     public void setCenter_y(int center_y) {
         this.center_y = center_y;
     }
-
     private void changeMode(Complex lastConstant) {
         setLastConstant(lastConstant);
         setMode((mode == Mode.BUDDHABROT || mode == Mode.RUDYBROT) ? Mode.JULIABROT : ((mode == Mode.MANDELBROT || mode == Mode.RUDY) ? Mode.JULIA : mode));
     }
-
     public void zoom(Matrix centre_offset, double level) {
         if (params.zoomConfig.zooms == null) {
             params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(centre_offset, level)});
@@ -1698,7 +1633,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         zoom(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0)), level);
     }
-
     public void zoom(Complex centre_offset, double level) {
         if (params.zoomConfig.zooms == null) {
             params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(MathUtils.complexToMatrix(centre_offset), level)});
@@ -1711,7 +1645,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         //setCenter_x(toCooordinates(centre_offset)[0]);setCenter_y(toCooordinates(centre_offset)[1]);
         populateMap();
     }
-
     public void populateMap() {
         for (int i = 0; i < argand.getHeight(); i++) {
             for (int j = 0; j < argand.getWidth(); j++) {
@@ -1731,7 +1664,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     public Complex fromCooordinates(int x, int y) {
         x = MathUtils.boundsProtected(x, argand.getWidth());
         y = MathUtils.boundsProtected(y, argand.getHeight());
@@ -1742,25 +1674,20 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         }
         return ComplexOperations.add(centre_offset, point);
     }
-
     public void setCentre_offset(Complex centre_offset) {
         this.centre_offset = new Complex(centre_offset);
     }
-
     public void setScale(double scale) {
         this.scale = scale;
     }
-
     public void setZoom_factor(double zoom_factor) {
         this.zoom_factor = zoom_factor;
     }
-
     public void mandelbrotToJulia(int cx, int cy, double level) {
         zoom(cx, cy, level);
         changeMode(centre_offset);
         resetCentre();
     }
-
     public void zoom(int cx, int cy, double level) {
         if (params.zoomConfig.zooms == null) {
             params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(cx, cy, level)});
@@ -1775,30 +1702,25 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         setScale(base_precision * Math.pow(zoom, zoom_factor));
         populateMap();
     }
-
     public void mandelbrotToJulia(Complex constant, double level) {
         zoom(constant, level);
         changeMode(centre_offset);
         resetCentre();
     }
-
     public void mandelbrotToJulia(ZoomParams zoom) {
         zoom(zoom);
         changeMode(centre_offset);
         resetCentre();
     }
-
     @Override
     public void pan(int distance, double angle) {
         pan(distance, angle, false);
     }
-
     @Override
     public void pan(int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-
     @Override
     public void pan(int x_dist, int y_dist) {
         zoom(center_x + x_dist, center_y + y_dist, zoom_factor);
@@ -1824,7 +1746,6 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     private void rangedCopyHelper(int i, int j, int x_dist, int[][] tmp_escapes, double[][] tmp_normalized_escapes, ImageData tmp_argand) {
         if (x_dist < 0) {
             System.arraycopy(tmp_escapes[i], (-x_dist), escapedata[j], 0, escapedata[j].length + x_dist);
@@ -1840,6 +1761,5 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
             }
         }
     }
-
     public enum Mode {MANDELBROT, JULIA, NEWTON, BUDDHABROT, NEWTONBROT, JULIABROT, MANDELBROT_NOVA, JULIA_NOVA, MANDELBROT_NOVABROT, JULIA_NOVABROT, SECANT, SECANTBROT, RUDY, RUDYBROT}
 }

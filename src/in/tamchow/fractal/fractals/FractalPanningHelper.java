@@ -1,12 +1,10 @@
 package in.tamchow.fractal.fractals;
-
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.Pannable;
-
 /**
  * Helps to pan a fractal image on-demand, hence does not implement Pannable
  */
@@ -14,12 +12,10 @@ public class FractalPanningHelper {
     public static synchronized ImageData pan(Pannable toPan, int distance, double angle) {
         return pan(toPan, distance, angle, false);
     }
-
     public static synchronized ImageData pan(Pannable toPan, int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         return pan(toPan, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-
     public static synchronized ImageData pan(Pannable toPanthis, int x_dist, int y_dist) {
         if (toPanthis instanceof ComplexFractalGenerator) {
             ComplexFractalGenerator toPan = (ComplexFractalGenerator) toPanthis;

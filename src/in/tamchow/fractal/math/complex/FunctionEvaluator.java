@@ -1,8 +1,6 @@
 package in.tamchow.fractal.math.complex;
-
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
-
 /**
  * Implements an iterative evaluator for functions described in ComplexOperations,
  * making heavy use of string replacement;
@@ -14,11 +12,9 @@ public class FunctionEvaluator {
     private String z_value, oldvalue, variableCode, oldvariablecode;
     private boolean hasBeenSubstituted;
     private boolean advancedDegree;
-
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst) {
         this(variable, variableCode, varconst, true);
     }
-
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, boolean advancedDegree) {
         setZ_value(variable);
         setConstdec(varconst);
@@ -27,11 +23,9 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
-
     public FunctionEvaluator(String variableCode, String[][] varconst) {
         this(variableCode, varconst, true);
     }
-
     public FunctionEvaluator(String variableCode, String[][] varconst, boolean advancedDegree) {
         setConstdec(varconst);
         setVariableCode(variableCode);
@@ -39,7 +33,6 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
-
     public FunctionEvaluator(String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
         setConstdec(varconst);
         setVariableCode(variableCode);
@@ -47,11 +40,9 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
-
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, String oldvariablecode) {
         this(variable, variableCode, varconst, oldvariablecode, true);
     }
-
     public FunctionEvaluator(String variable, String variableCode, String[][] varconst, String oldvariablecode, boolean advancedDegree) {
         setZ_value(variable);
         setConstdec(varconst);
@@ -60,7 +51,6 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
-
     public static FunctionEvaluator prepareIFS(String variableCode, String r_code, String t_code, String p_code, double x, double y) {
         String[][] varconst = {{"0", "0"}};
         FunctionEvaluator fe = new FunctionEvaluator(variableCode, x + "", varconst);
@@ -69,7 +59,6 @@ public class FunctionEvaluator {
         fe.addConstant(new String[]{p_code, Math.atan2(x, y) + ""}/*phi*/);
         return fe;
     }
-
     public void addConstant(String[] constant) {
         String[][] tmpconsts = new String[constdec.length][2];
         for (int i = 0; i < constdec.length; i++) {
@@ -81,39 +70,30 @@ public class FunctionEvaluator {
         }
         System.arraycopy(constant, 0, constdec[constdec.length - 1], 0, constant.length);
     }
-
     public String getOldvariablecode() {
         return oldvariablecode;
     }
-
     public void setOldvariablecode(String oldvariablecode) {
         this.oldvariablecode = oldvariablecode;
     }
-
     public String getOldvalue() {
         return oldvalue;
     }
-
     public void setOldvalue(String oldvalue) {
         this.oldvalue = oldvalue;
     }
-
     public boolean isAdvancedDegree() {
         return advancedDegree;
     }
-
     public void setAdvancedDegree(boolean advancedDegree) {
         this.advancedDegree = advancedDegree;
     }
-
     public String getVariableCode() {
         return variableCode;
     }
-
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-
     public Complex getDegree(String function) {
         function = StringManipulator.replace(function, oldvariablecode, variableCode);
         Complex degree = Complex.ZERO;
@@ -167,31 +147,24 @@ public class FunctionEvaluator {
         }
         return degree;
     }
-
     public Complex getDegree(Polynomial polynomial) {
         return getDegree(limitedEvaluate(polynomial.toString(), polynomial.countVariableTerms() * 2 + polynomial.countConstantTerms()));
     }
-
     public String getZ_value() {
         return z_value;
     }
-
     public void setZ_value(String z_value) {
         this.z_value = z_value;
     }
-
     public String[][] getConstdec() {
         return constdec;
     }
-
     public void setConstdec(String[][] constdec) {
         this.constdec = constdec;
     }
-
     public double evaluateForIFS(String expr) {
         return evaluate(expr, false).modulus();
     }
-
     private boolean hasNoFunctions(String expr) {
         String[] parts = StringManipulator.split(expr, " ");
         for (String part : parts) {
@@ -203,15 +176,14 @@ public class FunctionEvaluator {
         }
         return true;
     }
-
     public Complex evaluate(String expr, boolean isSymbolic) {
         String subexpr = substitute(expr, isSymbolic);
         Complex ztmp;
         int flag = 0;
         /**Disabled for performance reasons:
          if ((!isSymbolic) && hasNoFunctions(subexpr)) {
-            ztmp = RPNHelper.evaluateInfix(StringManipulator.split(subexpr, " "));
-        } else {
+         ztmp = RPNHelper.evaluateInfix(StringManipulator.split(subexpr, " "));
+         } else {
          do {
          ztmp = eval(process(subexpr));
          if (!(subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
@@ -231,7 +203,6 @@ public class FunctionEvaluator {
         } while (flag <= 1);
         return ztmp;
     }
-
     private Complex eval(String[] processed) {
         Complex ztmp = new Complex(Complex.ZERO);
         if (processed.length == 1) {
@@ -399,7 +370,6 @@ public class FunctionEvaluator {
         }
         return ztmp;
     }
-
     private String[] process(String subexpr) {
         String expr;
         if (subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1) {
@@ -410,7 +380,6 @@ public class FunctionEvaluator {
         expr = expr.trim();
         return StringManipulator.split(expr, " ");
     }
-
     private String substitute(String expr, boolean isSymbolic) {
         String[] mod = StringManipulator.split(expr, " ");
         String sub = "";
@@ -428,7 +397,6 @@ public class FunctionEvaluator {
         }
         return sub.trim();
     }
-
     private String getConstant(String totry) {
         String val;
         for (String[] aConstdec : constdec) {
@@ -439,7 +407,6 @@ public class FunctionEvaluator {
         }
         return null;
     }
-
     protected String limitedEvaluate(String expr, int depth) {
         String subexpr = substitute(expr, true);
         Complex ztmp;

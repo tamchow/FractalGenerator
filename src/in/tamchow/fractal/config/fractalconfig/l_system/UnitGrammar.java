@@ -1,10 +1,8 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
-
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.graphics.Turtle;
 
 import java.io.Serializable;
-
 /**
  * Holds data about 1 unit of grammar in the L-system
  */
@@ -14,11 +12,9 @@ public class UnitGrammar implements Serializable {
     public Turtle.TurtleCommand command;
     public double angle;
     public TransformRule[] transformRules;
-
     public UnitGrammar(UnitGrammar old) {
         this(old.code, old.command, old.angle, old.transformRules);
     }
-
     public UnitGrammar(String code, Turtle.TurtleCommand command, double angle, TransformRule[] transformRules) {
         this.code = code;
         this.command = command;
@@ -28,7 +24,6 @@ public class UnitGrammar implements Serializable {
             this.transformRules[i] = new TransformRule(transformRules[i]);
         }
     }
-
     public UnitGrammar(String data) {
         String[] parts = StringManipulator.split(data, "=");
         String[] once = StringManipulator.split(parts[0], ",");
@@ -55,7 +50,6 @@ public class UnitGrammar implements Serializable {
             angle = Double.valueOf(once[2]);
         }
     }
-
     public double[] getWeights() {
         double[] weights = new double[transformRules.length];
         for (int i = 0; i < weights.length; ++i) {
@@ -63,7 +57,6 @@ public class UnitGrammar implements Serializable {
         }
         return weights;
     }
-
     @Override
     public String toString() {
         String representation = code + "," + command + "," + angle + "=";
@@ -72,24 +65,19 @@ public class UnitGrammar implements Serializable {
         }
         return representation.substring(0, representation.length() - 1);
     }
-
     public class TransformRule {
         public String transformTo;
         public double probability;
-
         public TransformRule() {
             this(code, 1.0);
         }
-
         public TransformRule(String transformTo, double probability) {
             this.transformTo = transformTo;
             this.probability = probability;
         }
-
         public TransformRule(TransformRule old) {
             this(old.transformTo, old.probability);
         }
-
         public TransformRule(String rule) {
             String[] parts = StringManipulator.split(rule, ":");
             if (parts.length == 1 && parts[0].length() == 0) {
@@ -103,11 +91,9 @@ public class UnitGrammar implements Serializable {
                 probability = Double.valueOf(parts[1]);
             }
         }
-
         public boolean isDeterministic() {
             return probability > (1.0 - ERR) && probability < (1.0 + ERR);
         }
-
         @Override
         public String toString() {
             return transformTo + ":" + probability;
