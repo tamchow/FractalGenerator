@@ -80,7 +80,8 @@ public class BrainSext {
         int[] tmp = new int[operand.length]; int num;
         //filter comments first
         while (code.contains("{") && code.contains("}")) {
-            int i1 = code.indexOf('{'), i2 = code.indexOf('}'); code = code.replace(code.substring(i1, i2 + 1), "");
+            int i1 = code.indexOf('{'), i2 = code.indexOf('}');
+            code = StringManipulator.delete(code, code.substring(i1, i2 + 1));
         } //load appended data,if any
         if (code.contains("\\") && code.length() > code.indexOf('\\') + 1) {
             String data = code.substring(code.indexOf('\\') + 1, code.length());
@@ -91,7 +92,10 @@ public class BrainSext {
                 case '~': int temp = operand[ptr]; operand[ptr] = operand[MathUtils.boundsProtected(storage, operand.length)]; operand[MathUtils.boundsProtected(storage, operand.length)] = temp; break;
                 case '#': String data = ""; for (int k : operand) {
                     data += k;
-                } data = data.replace("-1", ""); operand[ptr] = data.hashCode(); break;
+                }
+                    data = StringManipulator.delete(data, "-1");
+                    operand[ptr] = data.hashCode();
+                    break;
                 case 'm': if (numAfter(i)) {
                     size = StringManipulator.getNumFromIndex(code, i + 1);
                 } else {size = codebackup.length();} initMemory(); for (int j = 0; j < codebackup.length(); j++) {

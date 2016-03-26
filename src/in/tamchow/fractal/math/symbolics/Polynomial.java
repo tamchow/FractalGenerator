@@ -1,4 +1,6 @@
 package in.tamchow.fractal.math.symbolics;
+
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 
@@ -21,7 +23,8 @@ public class Polynomial {
         signs = new ArrayList<>();
     }
     public static Polynomial fromString(String polynomial) {
-        Polynomial poly = new Polynomial(); String[] tokens = polynomial.split(";");
+        Polynomial poly = new Polynomial();
+        String[] tokens = StringManipulator.split(polynomial, ";");
         for (String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
@@ -121,9 +124,10 @@ public class Polynomial {
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             polynomial += " " + signs.get(j) + " " + terms.get(i);
         }
+        polynomial = polynomial.trim();
         if (polynomial.trim().charAt(0) == '+') {
-            return polynomial.trim().substring(1, polynomial.trim().length());
+            return polynomial.substring(1, polynomial.length());
         }
-        return polynomial.trim();
+        return polynomial;
     }
 }

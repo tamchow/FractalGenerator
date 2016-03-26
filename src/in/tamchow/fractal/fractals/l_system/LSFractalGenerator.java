@@ -3,6 +3,7 @@ import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
 import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.Animation;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.graphics.Turtle;
@@ -35,7 +36,8 @@ public class LSFractalGenerator {
                         throw new LSGrammarException("Malformed Transformation Rule.");
                     } else {
                         evolution = evolutions.transformRules[MathUtils.boundsProtected(MathUtils.weightedRandom(evolutions.getWeights()), evolutions.transformRules.length)];
-                    } generations[k] = generations[i].replace(toEvolve, evolution.transformTo);
+                    }
+                    generations[k] = StringManipulator.replace(generations[i], toEvolve, evolution.transformTo);
                 } publishprogress(i + 1);
             }
         }

@@ -1,4 +1,7 @@
 package in.tamchow.fractal.math.symbolics;
+
+import in.tamchow.fractal.helpers.StringManipulator;
+
 /**
  * Holds one term of a polynomial
  */
@@ -21,7 +24,7 @@ public class Term {
         term = term.substring(1, term.length() - 1);//remove leading and trailing braces
         /*term.replace(":^:",":");
         term.replace(":*:",":");*/
-        String[] parts = term.split(":");
+        String[] parts = StringManipulator.split(term, ":");
         if (parts.length == 0) {
             return new Term("0", "0", "0");
         }
@@ -47,7 +50,7 @@ public class Term {
     }
     public void setCoefficient(String coefficient) {
         this.coefficient = coefficient;
-        if (this.coefficient.equals("") || this.coefficient == null) {
+        if (this.coefficient == null || this.coefficient.equals("")) {
             setCoefficient("1");
         }
     }
@@ -56,7 +59,7 @@ public class Term {
     }
     public void setExponent(String exponent) {
         this.exponent = exponent;
-        if (this.exponent.equals("0") || this.exponent == null) {
+        if (this.exponent == null || this.exponent.equals("0")) {
             setConstant(true);
             constval = this.coefficient;
         }

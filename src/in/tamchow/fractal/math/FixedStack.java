@@ -1,38 +1,97 @@
 package in.tamchow.fractal.math;
+
 import java.io.Serializable;
 import java.util.EmptyStackException;
+
 /**
- * A stack of ints, especially for BS' Stack-extended version.
+ * A generic fixed-length stack
  */
 public class FixedStack<E> implements Serializable {
+    /**
+     * Array of elements
+     */
     E[] elements;
+    /**Stack top pointer*/
     int top;
 
+    /**
+     * Parameterized constructor. No default constructor.
+     * @param capacity The maximum size  (capacity) of the stack
+     * @see FixedStack#setSize(int)
+     * @see FixedStack#resetTop(boolean)
+     */
     @SuppressWarnings("unchecked")
     public FixedStack(int capacity) {
-        elements = (E[]) new Object[capacity];
-        erase();
-        resetTop();
+        setSize(capacity);
+        resetTop(false);
     }
-    public void resetTop() {top = elements.length;}
 
+    /**
+     * Resets the stack top pointer depending on whether the stack is empty or full
+     *
+     * @param notEmpty Whether or not the stack is empty
+     */
+    public void resetTop(boolean notEmpty) {
+        top = notEmpty ? 0 : elements.length;
+    }
+
+    /**
+     * Note: Setting the size <b>WILL CLEAR THE STACK</b>.
+     *
+     * @param size The size of the newly-initialized stack
+     * @see FixedStack#resetTop(boolean)
+     */
+    @SuppressWarnings("unchecked")
+    public void setSize(int size) {
+        this.elements = (E[]) new Object[elements.length];
+        resetTop(false);
+    }
+
+    /**
+     * Has the same effect as {@link FixedStack#setSize(int)},
+     * but does not reinitialize the elements array
+     * @see FixedStack#setSize(int)
+     * @see FixedStack#resetTop(boolean)
+     */
     public void erase() {
-        for (int i = 0; i < elements.length; i++) {
+        for (int i = 0; i < elements.length; ++i) {
             elements[i] = null;
         }
+        resetTop(false);
     }
 
+    /**
+     * Pushes a set of values onto the stack
+     * @param values The values to push
+     */
     public void pushN(E[] values) {
         for (E value : values) {
             push(value);
         }
     }
 
+    /**
+     * Pushes a value onto the stack
+     * @param value The value to push
+     */
     public void push(E value) {
-        if (isFull()) throw new IndexOutOfBoundsException("Overflow Exception"); elements[--top] = value;
+        if (isFull()) throw new StackOverflowException();
+        elements[--top] = value;
     }
-    public boolean isFull() {return (top == 0);}
 
+    /**
+     * Checks whether the stack is full
+     *
+     * @return Whether the stack is full or not
+     */
+    public boolean isFull() {
+        return (top == 0);
+    }
+
+    /**
+     * Pops a set of values from the stack
+     * @return The popped values
+     */
     @SuppressWarnings("unchecked")
     public E[] popN(int n) {
         E[] values = (E[]) new Object[n];
@@ -42,15 +101,31 @@ public class FixedStack<E> implements Serializable {
         return values;
     }
 
+    /**
+     * Pops a value from the stack
+     * @return The popped value
+     */
     public E pop() {
         if (isEmpty()) throw new EmptyStackException();
         E value = elements[top];
-        elements[top] = null;
-        ++top;
+        elements[top++] = null;
         return value;
     }
-    public boolean isEmpty() {return (top == elements.length);}
 
+    /**
+     * Checks whether the stack is empty
+     *
+     * @return Whether the stack is empty or not
+     */
+    public boolean isEmpty() {
+        return (top == elements.length);
+    }
+
+    /**
+     * Peeks at a set of values on the stack
+     * @param n The number of values to peek at
+     * @return The peeked-at values
+     */
     @SuppressWarnings("unchecked")
     public E[] peekN(int n) {
         E[] values = (E[]) new Object[n];
@@ -60,25 +135,46 @@ public class FixedStack<E> implements Serializable {
         return values;
     }
 
+    /**
+     * Peeks at a value on the stack at a particular index
+     * @param n The relative index of the value to peek at
+     * @return The peeked-at value
+     */
     private E peek(int n) {
         if (isEmpty()) throw new EmptyStackException();
         return elements[top - n];
     }
 
+    /**
+     * Duplicates the n topmost elements of the stack, top-down.
+     * @param n The number of elements to duplicate
+     */
     public void duplicateN(int n) {
         for (int i = 0; i < n; i++) {
             duplicate();
         }
     }
 
+    /**
+     * Duplicates the topmost element of the stack
+     */
     public void duplicate() {
         push(peek());
     }
 
+    /**
+     * Peeks at a value on the stack
+     * @return The peeked-at value
+     */
     public E peek() {
-        if (isEmpty()) throw new EmptyStackException(); return elements[top];
+        if (isEmpty()) throw new EmptyStackException();
+        return elements[top];
     }
 
+    /**
+     * Reverses the stack
+     * @see FixedStack#initStack(Object[])
+     */
     @SuppressWarnings("unchecked")
     public void reverse() {
         E[] reversed = (E[]) new Object[elements.length];
@@ -88,18 +184,41 @@ public class FixedStack<E> implements Serializable {
         initStack(reversed);
     }
 
+    /**
+     * Initializes the stack with the supplied set of values
+     * @param elements The set of initial values
+     * @see FixedStack#pushN(Object[])
+     * @see FixedStack#setSize(int)
+     */
     @SuppressWarnings("unchecked")
     public void initStack(E[] elements) {
-        this.elements = (E[]) new Object[elements.length];
-        System.arraycopy(elements, 0, this.elements, 0, this.elements.length);
-        resetTop();
+        setSize(elements.length);
+        pushN(elements);
     }
 
+    /**
+     * Dumps the stack elements to the caller
+     * @return The set of elements currently on the stack
+     */
     public E[] dumpStack() {
         return elements;
     }
-    public int size() {return elements.length - top;}
 
+    /**
+     * Provides the current number of elements on the stack
+     *
+     * @return The size of the stack
+     */
+    public int size() {
+        return elements.length - top;
+    }
+
+    /**
+     * More conventional stack size calculation.
+     * Use not recommended.
+     * @return The size of the stack
+     * @see FixedStack#size()
+     */
     public int sizeN() {
         int size = 0;
         for (E i : elements) {
@@ -108,11 +227,33 @@ public class FixedStack<E> implements Serializable {
         return size;
     }
 
+    /**
+     * Alias for {@link FixedStack#erase()}
+     * @see FixedStack#erase()
+     */
     @SuppressWarnings("unchecked")
     public void clear() {
-        int capacity = elements.length;
-        elements = (E[]) new Object[capacity];
         erase();
-        resetTop();
+    }
+
+    /**
+     * Custom Stack Overflow Exception class
+     */
+    public class StackOverflowException extends IndexOutOfBoundsException {
+        /**
+         * Constructs the exception with a default message
+         */
+        public StackOverflowException() {
+            this("Stack Overflow");
+        }
+
+        /**
+         * Constructs the exception with a custom message
+         *
+         * @param message The custom message
+         */
+        public StackOverflowException(String message){
+            super(message);
+        }
     }
 }

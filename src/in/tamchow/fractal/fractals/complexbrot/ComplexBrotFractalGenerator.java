@@ -4,6 +4,7 @@ import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalPar
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.LinearizedImageData;
 import in.tamchow.fractal.imgutils.Pannable;
@@ -222,7 +223,8 @@ public class ComplexBrotFractalGenerator implements Serializable, Pannable {
         constants[getLastConstantIndex()][1] = value.toString(); lastConstant = new Complex(value);
     }
     public int getLastConstantIndex() {
-        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
+        String[] parts = StringManipulator.split(function, " ");
+        for (int i = parts.length - 1; i >= 0; i--) {
             if (getConstantIndex(parts[i]) != -1) {
                 setLastConstantIdx(getConstantIndex(parts[i])); return lastConstantIdx;
             }

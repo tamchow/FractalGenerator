@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.ImageData;
 
 import java.io.Serializable;
@@ -40,7 +41,9 @@ public class ComplexFractalParams implements Serializable {
     public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {this.postprocessMode = postprocessMode;}
     public boolean useThreadedGenerator() {return (x_threads > 1 || y_threads > 1);}
     public void threadDataFromString(String data) {
-        x_threads = Integer.valueOf(data.split(",")[0]); y_threads = Integer.valueOf(data.split(" ")[1]);
+        String[] parts = StringManipulator.split(data, " ");
+        x_threads = Integer.valueOf(parts[0]);
+        y_threads = Integer.valueOf(parts[1]);
     }
     public void setZoomConfig(ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);

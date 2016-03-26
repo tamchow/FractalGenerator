@@ -1,8 +1,10 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
+
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
+
 /**
  * Parameters for configuring the generation of a fractal
  */
@@ -12,6 +14,7 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
     public double escape_radius;
     public Complex constant;
     public boolean fully_configured;
+
     public ComplexFractalRunParams(ComplexFractalRunParams runParams) {
         if (runParams.fully_configured) {
             initParams(runParams.start_x, runParams.end_x, runParams.start_y, runParams.end_y, runParams.iterations, runParams.escape_radius, runParams.constant);
@@ -21,6 +24,27 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
             fully_configured = false;
         }
     }
+
+    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius) {
+        initParams(start_x, end_x, start_y, end_y, iterations, escape_radius);
+    }
+
+    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius, Complex constant) {
+        initParams(start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
+    }
+
+    public ComplexFractalRunParams(long iterations, double escape_radius) {
+        initParams(iterations, escape_radius);
+    }
+
+    public ComplexFractalRunParams(long iterations, double escape_radius, Complex constant) {
+        initParams(iterations, escape_radius, constant);
+    }
+
+    public ComplexFractalRunParams() {
+        initParams(128, 2.0);
+    }
+
     public void initParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius, Complex constant) {
         this.iterations = iterations;
         this.start_x = start_x;
@@ -31,14 +55,14 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
         this.constant = new Complex(constant);
         fully_configured = true;
     }
+
     public void initParams(long iterations, double escape_radius, Complex constant) {
         this.iterations = iterations;
-        this.escape_radius = escape_radius; this.constant = (constant != null) ? new Complex(constant) : null;
+        this.escape_radius = escape_radius;
+        this.constant = (constant != null) ? new Complex(constant) : null;
         fully_configured = false;
     }
-    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius) {
-        initParams(start_x, end_x, start_y, end_y, iterations, escape_radius);
-    }
+
     public void initParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius) {
         this.iterations = iterations;
         this.start_x = start_x;
@@ -49,26 +73,19 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
         constant = null;
         fully_configured = true;
     }
-    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius, Complex constant) {
-        initParams(start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
-    }
-    public ComplexFractalRunParams(long iterations, double escape_radius) {
-        initParams(iterations, escape_radius);
-    }
+
     public void initParams(long iterations, double escape_radius) {
         this.iterations = iterations;
         this.escape_radius = escape_radius;
         constant = null;
         fully_configured = false;
     }
-    public ComplexFractalRunParams(long iterations, double escape_radius, Complex constant) {
-        initParams(iterations, escape_radius, constant);
-    }
-    public ComplexFractalRunParams() {initParams(128, 2.0);}
+
     @Override
     public String toString() {
-        return "[Runconfig]\n" + start_x + "\n" + end_x + "\n" + start_y + "\n" + end_y + "\n" + iterations + "\n" + escape_radius + "\n" + constant + "[EndRunconfig]";
+        return String.format("[Runconfig]%n%d%n%d%n%d%n%dn%d%n%f%n%s%n[EndRunconfig]", start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
     }
+
     /**
      * @param params: Pass in -1 for escape_radius in case of Newton Fractal Mode
      */

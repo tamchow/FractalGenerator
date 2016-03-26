@@ -1,4 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.fractal_zooms;
+
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.io.Serializable;
@@ -18,7 +20,7 @@ public class ZoomParams implements Serializable {
     }
     public ZoomParams(Matrix centre, double level) {this.centre = new Matrix(centre); this.level = level;}
     public static ZoomParams fromString(String params) {
-        String[] parts = params.split(" ");
+        String[] parts = StringManipulator.split(params, " ");
         if (parts.length == 2) {return new ZoomParams(Matrix.fromString(parts[0]), Double.valueOf(parts[1]));}
         return new ZoomParams(Integer.valueOf(parts[0]), Integer.valueOf(parts[1]), Double.valueOf(parts[2]));
     }

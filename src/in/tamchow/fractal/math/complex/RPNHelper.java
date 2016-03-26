@@ -1,5 +1,6 @@
 package in.tamchow.fractal.math.complex;
 
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.FixedStack;
 
 /**
@@ -10,9 +11,7 @@ public class RPNHelper {
      * in stack precedence
      **/
     private static final int[] isp = {0, 19, 12, 12, 13, 13, 13, 0};
-    /**
-     * incoming character precedence
-     **/
+    /** incoming character precedence **/
     private static final int[] icp = {20, 19, 12, 12, 13, 13, 13, 0};
     /**
      * operators
@@ -97,7 +96,7 @@ public class RPNHelper {
         }
         /** pop any remaining elements in stack **/
         while ((token = pop()) != Precedence.eos)
-            postfix += operators[token.getIndex()] + " ";
+            postfix += operators[token.getIndex()]+" ";
         return postfix.trim();
     }
 
@@ -106,10 +105,17 @@ public class RPNHelper {
             throw new UnsupportedOperationException("Blank");
         }
         FixedStack<String> tks = new FixedStack<>(tokens.length);
-        tks.initStack(tokens);
+        //tks.initStack(tokens);
+        tks.pushN(tokens);
+        /*for(String token:tokens){
+            tks.push(token);
+        }*/
         return evaluateRPN(tks);
     }
 
+    public static Complex evaluateInfix(String[] infix) {
+        return evaluateRPN(StringManipulator.split(postfix(infix)," "));
+    }
     public static Complex evaluateRPN(FixedStack<String> tkstack) {
         String tk = tkstack.pop();
         Complex x, y;
@@ -156,9 +162,9 @@ public class RPNHelper {
 
         pow(6),
 
-        eos(8),
+        eos(7),
 
-        operand(9);
+        operand(8);
 
         private int index;
 

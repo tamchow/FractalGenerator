@@ -7,6 +7,7 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalInitParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.ImageData;
 import in.tamchow.fractal.imgutils.LinearizedImageData;
 import in.tamchow.fractal.imgutils.Pannable;
@@ -91,8 +92,10 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
                 mandelbrotToJulia = true; this.switch_rate = switch_rate;
             }
         } setTrap_point(trap_point); useLineTrap = false; if (linetrap != null) {
-            a = Double.valueOf(linetrap.split(",")[0]); b = Double.valueOf(linetrap.split(",")[1]);
-            c = Double.valueOf(linetrap.split(",")[2]); useLineTrap = true;
+            a = Double.valueOf(StringManipulator.split(linetrap, ",")[0]);
+            b = Double.valueOf(StringManipulator.split(linetrap, ",")[1]);
+            c = Double.valueOf(StringManipulator.split(linetrap, ",")[2]);
+            useLineTrap = true;
         }
         if (color.getSmoothing_base().equals(Complex.E)) {
             simpleSmoothing = true;
@@ -425,7 +428,8 @@ public final class ComplexFractalGenerator implements Serializable, Pannable {
         consts[getLastConstantIndex()][1] = value.toString(); lastConstant = new Complex(value);
     }
     public int getLastConstantIndex() {
-        String[] parts = function.split(" "); for (int i = parts.length - 1; i >= 0; i--) {
+        String[] parts = StringManipulator.split(function, " ");
+        for (int i = parts.length - 1; i >= 0; i--) {
             if (getConstantIndex(parts[i]) != -1) {
                 setLastConstantIdx(getConstantIndex(parts[i])); return lastConstantIdx;
             }

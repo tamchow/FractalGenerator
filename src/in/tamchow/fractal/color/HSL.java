@@ -1,4 +1,7 @@
 package in.tamchow.fractal.color;
+
+import in.tamchow.fractal.helpers.StringManipulator;
+
 import java.io.Serializable;
 /**
  * Holds information about an HSL color
@@ -9,7 +12,7 @@ public class HSL implements Serializable {
         setHue(hue); setSaturation(saturation); setLightness(lightness);
     }
     public static HSL fromString(String hsl) {
-        String[] parts = hsl.split(",");
+        String[] parts = StringManipulator.split(hsl, ",");
         return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
     }
     public static double hueFromAngle(double radianMeasure) {

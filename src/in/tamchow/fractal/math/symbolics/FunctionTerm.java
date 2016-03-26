@@ -27,16 +27,17 @@ public class FunctionTerm {
 
     public static FunctionTerm fromString(String function, String variableCode, String oldvariablecode) {
         FunctionTerm f = new FunctionTerm();
+        String[] parts = StringManipulator.split(function, ";");
         f.variableCode = variableCode;
         f.oldvariablecode = oldvariablecode;
-        f.coefficient = Polynomial.fromString(function.split(";")[0]);
-        if (function.split(";").length == 4) {
-            f.constant = function.split(";")[3];
+        f.coefficient = Polynomial.fromString(parts[0]);
+        if (parts.length == 4) {
+            f.constant = parts[3];
         } else {
             f.constant = "0";
         }
-        f.function = function.split(";")[1];
-        f.argument = Polynomial.fromString(function.split(";")[2]);
+        f.function = parts[1];
+        f.argument = Polynomial.fromString(parts[2]);
         return f;
     }
 

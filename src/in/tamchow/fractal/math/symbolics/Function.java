@@ -1,4 +1,6 @@
 package in.tamchow.fractal.math.symbolics;
+
+import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.util.ArrayList;
@@ -22,7 +24,9 @@ public class Function {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
     public static Function fromString(String function, String variableCode, String oldvariablecode) {
-        Function poly = new Function(); String[] tokens = function.split("|"); for (String token : tokens) {
+        Function poly = new Function();
+        String[] tokens = StringManipulator.split(function, "|");
+        for (String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
