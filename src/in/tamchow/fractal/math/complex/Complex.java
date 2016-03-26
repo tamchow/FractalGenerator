@@ -1,5 +1,7 @@
 package in.tamchow.fractal.math.complex;
+
 import java.io.Serializable;
+
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
  */
@@ -7,7 +9,10 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);
     private static final String DECIMAL_REGEX = "^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$";
     private double a, ib;
-    public Complex(Complex old) {initComplex(old.real(), old.imaginary(), false);}
+
+    public Complex(Complex old) {
+        initComplex(old.real(), old.imaginary(), false);
+    }
 
     public Complex() {
     }
@@ -60,11 +65,16 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         randomComplex.initComplex(randomModulus, randomArg, true);
         return randomComplex;
     }
+
     public void initComplex(double a, double ib, boolean cis) {
         if (cis) {
             Complex value = ComplexOperations.multiply(new Complex(a), ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(ib))));
-            this.a = value.real(); this.ib = value.imaginary();
-        } else {this.a = a; this.ib = ib;}
+            this.a = value.real();
+            this.ib = value.imaginary();
+        } else {
+            this.a = a;
+            this.ib = ib;
+        }
     }
 
     public Complex negated() {
@@ -91,22 +101,32 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public int compareTo(Complex complex) {
         return (int) (this.modulus() - complex.modulus());
     }
+
     public double modulus() {
         return Math.sqrt((a * a) + (ib * ib));
     }
+
     @Override
     public boolean equals(Object complex) {
         if (complex instanceof Complex) {
-            if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {return true;}
-        } return false;
+            if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
         return (int) (Double.doubleToRawLongBits(a) ^ Double.doubleToRawLongBits(ib));
     }
+
     @Override
-    public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
+    public String toString() {
+        if (ib < 0) {
+            return a + ",-" + (-ib) + "i";
+        } else return a + ",+" + ib + "i";
+    }
 
     //public String toString() {if (ib < 0) {return String.format("%f,-%fi",a,-ib);} else return String.format("%f,+%fi",a,ib);}
     public double arg() {
@@ -116,14 +136,33 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         else if(a<0&&ib==0){return Math.PI;}
         else{return Double.NaN;}*/
     }
-    public Complex conjugate() {return new Complex(this.a, -this.ib);}
-    public Complex inverse() {double c = a * a + ib * ib; return new Complex((a / c), (-(ib / c)));}
+
+    public Complex conjugate() {
+        return new Complex(this.a, -this.ib);
+    }
+
+    public Complex inverse() {
+        double c = a * a + ib * ib;
+        return new Complex((a / c), (-(ib / c)));
+    }
+
     @Override
-    public int intValue() {return (int) modulus();}
+    public int intValue() {
+        return (int) modulus();
+    }
+
     @Override
-    public long longValue() {return (long) modulus();}
+    public long longValue() {
+        return (long) modulus();
+    }
+
     @Override
-    public float floatValue() {return (float) modulus();}
+    public float floatValue() {
+        return (float) modulus();
+    }
+
     @Override
-    public double doubleValue() {return modulus();}
+    public double doubleValue() {
+        return modulus();
+    }
 }

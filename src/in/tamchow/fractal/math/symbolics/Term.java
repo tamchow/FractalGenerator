@@ -11,15 +11,18 @@ public class Term {
     public String variable;
     public String constval;
     private boolean constant;
+
     public Term(String coefficient, String exponent, String variable) {
         setVariable(variable);
         setCoefficient(coefficient);
         setExponent(exponent);
     }
+
     public Term(String constval) {
         setConstval(constval);
         setConstant(true);
     }
+
     public static Term fromString(String term) {
         term = term.substring(1, term.length() - 1);//remove leading and trailing braces
         /*term.replace(":^:",":");
@@ -33,30 +36,38 @@ public class Term {
         }
         return new Term(parts[0], parts[2], parts[1]);
     }
+
     public String getConstval() {
         return constval;
     }
+
     public void setConstval(String constval) {
         this.constval = constval;
     }
+
     public String getVariable() {
         return variable;
     }
+
     public void setVariable(String variable) {
         this.variable = variable;
     }
+
     public String getCoefficient() {
         return coefficient;
     }
+
     public void setCoefficient(String coefficient) {
         this.coefficient = coefficient;
         if (this.coefficient == null || this.coefficient.equals("")) {
             setCoefficient("1");
         }
     }
+
     public String getExponent() {
         return exponent;
     }
+
     public void setExponent(String exponent) {
         this.exponent = exponent;
         if (this.exponent == null || this.exponent.equals("0")) {
@@ -64,6 +75,7 @@ public class Term {
             constval = this.coefficient;
         }
     }
+
     public Term derivative() {
         Term deriv = new Term("0");
         if (!isConstant()) {
@@ -71,15 +83,20 @@ public class Term {
         }
         return deriv;
     }
+
     public boolean isConstant() {
         return constant;
     }
+
     public void setConstant(boolean constant) {
         this.constant = constant;
     }
+
     @Override
     public String toString() {
-        if (constant) {return constval;}
+        if (constant) {
+            return constval;
+        }
         return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
     }
 }

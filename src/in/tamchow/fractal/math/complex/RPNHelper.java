@@ -11,7 +11,9 @@ public class RPNHelper {
      * in stack precedence
      **/
     private static final int[] isp = {0, 19, 12, 12, 13, 13, 13, 0};
-    /** incoming character precedence **/
+    /**
+     * incoming character precedence
+     **/
     private static final int[] icp = {20, 19, 12, 12, 13, 13, 13, 0};
     /**
      * operators
@@ -96,7 +98,7 @@ public class RPNHelper {
         }
         /** pop any remaining elements in stack **/
         while ((token = pop()) != Precedence.eos)
-            postfix += operators[token.getIndex()]+" ";
+            postfix += operators[token.getIndex()] + " ";
         return postfix.trim();
     }
 
@@ -114,8 +116,9 @@ public class RPNHelper {
     }
 
     public static Complex evaluateInfix(String[] infix) {
-        return evaluateRPN(StringManipulator.split(postfix(infix)," "));
+        return evaluateRPN(StringManipulator.split(postfix(infix), " "));
     }
+
     public static Complex evaluateRPN(FixedStack<String> tkstack) {
         String tk = tkstack.pop();
         Complex x, y;

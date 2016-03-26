@@ -11,11 +11,14 @@ public class FixedStack<E> implements Serializable {
      * Array of elements
      */
     E[] elements;
-    /**Stack top pointer*/
+    /**
+     * Stack top pointer
+     */
     int top;
 
     /**
      * Parameterized constructor. No default constructor.
+     *
      * @param capacity The maximum size  (capacity) of the stack
      * @see FixedStack#setSize(int)
      * @see FixedStack#resetTop(boolean)
@@ -50,6 +53,7 @@ public class FixedStack<E> implements Serializable {
     /**
      * Has the same effect as {@link FixedStack#setSize(int)},
      * but does not reinitialize the elements array
+     *
      * @see FixedStack#setSize(int)
      * @see FixedStack#resetTop(boolean)
      */
@@ -62,6 +66,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Pushes a set of values onto the stack
+     *
      * @param values The values to push
      */
     public void pushN(E[] values) {
@@ -72,6 +77,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Pushes a value onto the stack
+     *
      * @param value The value to push
      */
     public void push(E value) {
@@ -90,6 +96,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Pops a set of values from the stack
+     *
      * @return The popped values
      */
     @SuppressWarnings("unchecked")
@@ -103,6 +110,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Pops a value from the stack
+     *
      * @return The popped value
      */
     public E pop() {
@@ -123,6 +131,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Peeks at a set of values on the stack
+     *
      * @param n The number of values to peek at
      * @return The peeked-at values
      */
@@ -137,6 +146,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Peeks at a value on the stack at a particular index
+     *
      * @param n The relative index of the value to peek at
      * @return The peeked-at value
      */
@@ -147,6 +157,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Duplicates the n topmost elements of the stack, top-down.
+     *
      * @param n The number of elements to duplicate
      */
     public void duplicateN(int n) {
@@ -164,6 +175,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Peeks at a value on the stack
+     *
      * @return The peeked-at value
      */
     public E peek() {
@@ -173,6 +185,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Reverses the stack
+     *
      * @see FixedStack#initStack(Object[])
      */
     @SuppressWarnings("unchecked")
@@ -186,6 +199,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Initializes the stack with the supplied set of values
+     *
      * @param elements The set of initial values
      * @see FixedStack#pushN(Object[])
      * @see FixedStack#setSize(int)
@@ -198,6 +212,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Dumps the stack elements to the caller
+     *
      * @return The set of elements currently on the stack
      */
     public E[] dumpStack() {
@@ -216,6 +231,7 @@ public class FixedStack<E> implements Serializable {
     /**
      * More conventional stack size calculation.
      * Use not recommended.
+     *
      * @return The size of the stack
      * @see FixedStack#size()
      */
@@ -229,6 +245,7 @@ public class FixedStack<E> implements Serializable {
 
     /**
      * Alias for {@link FixedStack#erase()}
+     *
      * @see FixedStack#erase()
      */
     @SuppressWarnings("unchecked")
@@ -252,7 +269,7 @@ public class FixedStack<E> implements Serializable {
          *
          * @param message The custom message
          */
-        public StackOverflowException(String message){
+        public StackOverflowException(String message) {
             super(message);
         }
     }

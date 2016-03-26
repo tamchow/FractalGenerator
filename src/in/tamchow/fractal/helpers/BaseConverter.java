@@ -1,4 +1,3 @@
-
 /**
  * Converts a number in digit representation from one base to another
  * Not guaranteed to work with bases above 65,451 (more characters than which the lookup can use for substituting digits)
@@ -58,21 +57,29 @@ public class BaseConverter {
             long digitValue = lookup.indexOf(inputNumber.charAt(i));
             if (digitValue < 0) {//this digit does not exist in the lookup, so the input is incorrect
                 throw new IllegalArgumentException(String.format(invalidInputNumberErrorMessage, copyOfInput));
-            } number += digitValue * Math.round(Math.pow(from_base, length - 1 - i));
+            }
+            number += digitValue * Math.round(Math.pow(from_base, length - 1 - i));
         }
         return isNegative ? -number : number;
     }
 
     private static int countDigits(long number, int to_base) {
-        int num_digits = 0; while (number > 0) {
-            number /= to_base; ++num_digits;
-        } return num_digits;
+        int num_digits = 0;
+        while (number > 0) {
+            number /= to_base;
+            ++num_digits;
+        }
+        return num_digits;
     }
 
     private static int[] createDigits(long number, int to_base) {
-        int[] digits = new int[countDigits(number, to_base)]; int num_digits = 0; while (number > 0) {
-            digits[num_digits++] = (int) (number % to_base); number /= to_base;
-        } return digits;
+        int[] digits = new int[countDigits(number, to_base)];
+        int num_digits = 0;
+        while (number > 0) {
+            digits[num_digits++] = (int) (number % to_base);
+            number /= to_base;
+        }
+        return digits;
     }
 
     public static String changeBase(String inputNumber, int from_base, int to_base) {
@@ -94,10 +101,13 @@ public class BaseConverter {
         if (isNegative) {
             //the provided number is (supposedly) negative
             inputNumber = inputNumber.substring(1, inputNumber.length());
-        } if (from_base <= 0 || to_base <= 0) {
+        }
+        if (from_base <= 0 || to_base <= 0) {
             //negative or zero bases can't be handled using simple integer arithmetic
             throw new IllegalArgumentException(String.format(negativeBaseErrorMessage, from_base, to_base));
-        } updateLookup(Math.max(from_base, to_base)); if (inputNumber.contains(".")) {
+        }
+        updateLookup(Math.max(from_base, to_base));
+        if (inputNumber.contains(".")) {
             return changeBase(inputNumber.substring(0, inputNumber.indexOf(".")), from_base, to_base, substituteNumerics)/*Integer part*/ + "." +
                     changeBase(inputNumber.substring(inputNumber.indexOf(".") + 1, inputNumber.length()), from_base, to_base, substituteNumerics)/*Fractional part*/;
         }

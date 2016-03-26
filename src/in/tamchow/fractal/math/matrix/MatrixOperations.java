@@ -1,5 +1,7 @@
 package in.tamchow.fractal.math.matrix;
+
 import java.util.InputMismatchException;
+
 /**
  * Elementary matrix operations: Addition, subtraction, scalar multiplication, matrix multiplication
  */
@@ -16,6 +18,7 @@ public class MatrixOperations {
         }
         return new Matrix(added);
     }
+
     public static Matrix subtract(Matrix m1, Matrix m2) {
         if (m1.getNumRows() != m2.getNumRows() || m1.getNumColumns() != m2.getNumColumns()) {
             throw new InputMismatchException("Given Matrices have different orders, cannot be subtracted.");
@@ -28,6 +31,7 @@ public class MatrixOperations {
         }
         return new Matrix(minused);
     }
+
     public static Matrix multiply(Matrix m1, double scalar) {
         double[][] scalared = new double[m1.getNumRows()][m1.getNumColumns()];
         for (int i = 0; i < m1.getNumRows(); i++) {
@@ -37,15 +41,21 @@ public class MatrixOperations {
         }
         return new Matrix(scalared);
     }
+
     public static Matrix power(Matrix matrix, int power) {
         if (power == 0) {
             return Matrix.identityMatrix(matrix.size());
-        } if (power < 0) {
-            matrix = matrix.inverse(); power = -power;
-        } for (int i = 1; i <= power; i++) {
+        }
+        if (power < 0) {
+            matrix = matrix.inverse();
+            power = -power;
+        }
+        for (int i = 1; i <= power; i++) {
             matrix = multiply(matrix, matrix);
-        } return matrix;
+        }
+        return matrix;
     }
+
     public static Matrix multiply(Matrix m1, Matrix m2) {
         double sum;
         if (m1.getNumColumns() != m2.getNumRows()) {

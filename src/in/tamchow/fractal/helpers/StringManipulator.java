@@ -207,6 +207,7 @@ public class StringManipulator {
     public static String delete(String value, String what) {
         return replace(value, what, "");
     }
+
     public static String replace(String value, String from, String to) {
         if (value.length() == 0 || from.length() == 0) {
             //the length checks will throw the necessary NullPointerExceptions

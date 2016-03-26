@@ -1,4 +1,5 @@
 package in.tamchow.fractal.misc.primes;
+
 /**
  * PrimeCounter - an application/library to calculate the number of prime numbers below a certain number,
  * also mathematically known as pi(x), where x is a natural number greater than one.
@@ -30,6 +31,7 @@ public class PrimeCounter {
      * For further documentation, see {@link #PrimeCounter(int, int, int, int, int)}
      */
     public final int NUM_THREADS, LOW_LIM, SPLIT_LIM, HIGH_LIM, REDUCE_FACTOR;
+
     /**
      * Default constructor. Sets default values for the parameters.
      * The values used are experimentally determined for best performance on the author's system.
@@ -37,6 +39,7 @@ public class PrimeCounter {
     public PrimeCounter() {
         this(0xF, 0x8_000, 0x80, 0x1_000_0000, 0x4);
     }
+
     /**
      * Parameterized Constructor - configures calculation parameters
      *
@@ -47,9 +50,13 @@ public class PrimeCounter {
      * @param REDUCE_FACTOR : The value which determines the packing density {@link #bitPrimeSieve(long)} will use.
      */
     public PrimeCounter(int NUM_THREADS, int LOW_LIM, int SPLIT_LIM, int HIGH_LIM, int REDUCE_FACTOR) {
-        this.NUM_THREADS = NUM_THREADS; this.LOW_LIM = LOW_LIM; this.SPLIT_LIM = SPLIT_LIM; this.HIGH_LIM = HIGH_LIM;
+        this.NUM_THREADS = NUM_THREADS;
+        this.LOW_LIM = LOW_LIM;
+        this.SPLIT_LIM = SPLIT_LIM;
+        this.HIGH_LIM = HIGH_LIM;
         this.REDUCE_FACTOR = REDUCE_FACTOR;
     }
+
     /**
      * Main method: accepts user input and shows total execution time taken
      *
@@ -57,15 +64,22 @@ public class PrimeCounter {
      * @return Nothing
      */
     public static void main(String[] args) {
-        double total_time = 0; java.util.Scanner sc = new java.util.Scanner(System.in);
-        java.util.ArrayList<Long> numbers = new java.util.ArrayList<>(); System.out.format(PROMPT + WARNING);
+        double total_time = 0;
+        java.util.Scanner sc = new java.util.Scanner(System.in);
+        java.util.ArrayList<Long> numbers = new java.util.ArrayList<>();
+        System.out.format(PROMPT + WARNING);
         String line = sc.nextLine();
         while (!line.equals(START_CODE)/*sc.hasNextLine()&&Character.isDigit(line.charAt(0))*/) {
-            numbers.add(Long.valueOf(line)); line = sc.nextLine();
-        } System.out.format(WAIT); for (long num : numbers) {
+            numbers.add(Long.valueOf(line));
+            line = sc.nextLine();
+        }
+        System.out.format(WAIT);
+        for (long num : numbers) {
             total_time += sieveTest(num);
-        } System.out.format(TOTAL_OUTPUT_FORMAT, total_time / 1e9);
+        }
+        System.out.format(TOTAL_OUTPUT_FORMAT, total_time / 1e9);
     }
+
     /**
      * Private testing and timer function
      *
@@ -73,73 +87,13 @@ public class PrimeCounter {
      * @return The time taken for the calculation of pi(x)
      */
     private static long sieveTest(long MAX) {
-        long start = System.nanoTime(); long ps = new PrimeCounter().primeSieve(MAX); long end = System.nanoTime();
-        System.out.format(TEST_FORMAT, MAX, ps, ((end - start) / 1E9)); return end - start;
+        long start = System.nanoTime();
+        long ps = new PrimeCounter().primeSieve(MAX);
+        long end = System.nanoTime();
+        System.out.format(TEST_FORMAT, MAX, ps, ((end - start) / 1E9));
+        return end - start;
     }
-    /**
-     * Calculates primes using the atandard Sieve of Eratosthenes.
-     * Uses 2,3,5,7 wheel factorization for elimination (hardcoded for performance reasons)
-     *
-     * @param MAX : argument x for pi(x)
-     *            Will delegate to {@link #primeCount(long)} for MAX&lt;LOW_LIM,
-     *            and to {@link #bitPrimeSieve(long)} for MAX&gt;HIGH_LIM, for performance reasons.
-     * @return The number of prime numbers &lt;= MAX
-     * @see #primeCount(long)
-     * @see #bitPrimeSieve(long)
-     */
-    public long primeSieve(long MAX) {
-        if (MAX <= 1) return 0;
-        else if (LOW_LIM > 0 && MAX < LOW_LIM) {return primeCount(MAX);} else if (HIGH_LIM > 0 && MAX > HIGH_LIM) {
-            return bitPrimeSieve(MAX);
-        } int n = (int) MAX; int sn = (int) Math.sqrt(n), ctr = 2; if (sn % 2 == 0) --sn;
-        boolean[] ps = new boolean[n + 1]; for (int i = 2; i <= n; ++i) {
-            if (i == 2 || i == 3 || i == 5 || i == 7) ps[i] = true;
-            else if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0 && i % 7 != 0) ps[i] = true;
-            else ++ctr;
-        } for (int i = (n > 10) ? 11 : 3; i <= sn; i += 2) {
-            if (ps[i]) {
-                for (int j = i * i; j <= n; j += i << 1) {
-                    if (ps[j]) { ps[j] = false; ++ctr;}
-                }
-            }
-        } return (n + 1 - ctr);
-    }
-    /**
-     * Generates and counts primes using an optimized but naive iterative algorithm.
-     * Uses MultiThreading for arguments above LOW_LIM
-     *
-     * @param MAX : Argument x for pi(x), the limit to which to generate numbers.
-     * @return The number of prime numbers &lt;= MAX
-     */
-    public long primeCount(long MAX) {
-        long ctr = 1; if (MAX < SPLIT_LIM) {
-            for (long i = 3; i <= MAX; i += 2) {
-                if (isPrime(i)) ++ctr;
-            }
-        } else {
-            int threads = (NUM_THREADS <= 0) ? (int) MAX / SPLIT_LIM : NUM_THREADS;
-            final long[] counts = new long[threads]; for (int i = 0; i < threads; ++i) {
-                counts[i] = -1;
-            } long range = Math.round((double) MAX / threads); for (int i = 0; i < threads; ++i) {
-                final long start = (i == 0) ? 3 : i * range + 1, end = (i == threads - 1) ? MAX : (i + 1) * range;
-                final int idx = i; new Thread(new Runnable() {
-                    public void run() {
-                        for (long j = start; j <= end; j += 2) {
-                            if (isPrime(j)) ++counts[idx];
-                        }
-                    }
-                }).start();
-            } synchronized (LOCK) {
-                while (!completed(counts)) {
-                    try {
-                        LOCK.wait(300);
-                    } catch (InterruptedException ie) {}
-                } LOCK.notifyAll();
-            } for (long count : counts) {
-                ctr += count;
-            } ctr += threads;
-        } return ctr;
-    }
+
     /**
      * Checks for completion of threads
      *
@@ -149,8 +103,10 @@ public class PrimeCounter {
     private static boolean completed(long[] array) {
         for (long i : array) {
             if (i < 0) return false;
-        } return true;
+        }
+        return true;
     }
+
     /**
      * Checks if the parameter is prime or not.
      * 2,3,5,7 are hardcoded as factors.
@@ -164,9 +120,99 @@ public class PrimeCounter {
         else {
             for (long i = 11; i < n; i += 2) {
                 if (n % i == 0) return false;
-            } return true;
+            }
+            return true;
         }
     }
+
+    /**
+     * Calculates primes using the atandard Sieve of Eratosthenes.
+     * Uses 2,3,5,7 wheel factorization for elimination (hardcoded for performance reasons)
+     *
+     * @param MAX : argument x for pi(x)
+     *            Will delegate to {@link #primeCount(long)} for MAX&lt;LOW_LIM,
+     *            and to {@link #bitPrimeSieve(long)} for MAX&gt;HIGH_LIM, for performance reasons.
+     * @return The number of prime numbers &lt;= MAX
+     * @see #primeCount(long)
+     * @see #bitPrimeSieve(long)
+     */
+    public long primeSieve(long MAX) {
+        if (MAX <= 1) return 0;
+        else if (LOW_LIM > 0 && MAX < LOW_LIM) {
+            return primeCount(MAX);
+        } else if (HIGH_LIM > 0 && MAX > HIGH_LIM) {
+            return bitPrimeSieve(MAX);
+        }
+        int n = (int) MAX;
+        int sn = (int) Math.sqrt(n), ctr = 2;
+        if (sn % 2 == 0) --sn;
+        boolean[] ps = new boolean[n + 1];
+        for (int i = 2; i <= n; ++i) {
+            if (i == 2 || i == 3 || i == 5 || i == 7) ps[i] = true;
+            else if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0 && i % 7 != 0) ps[i] = true;
+            else ++ctr;
+        }
+        for (int i = (n > 10) ? 11 : 3; i <= sn; i += 2) {
+            if (ps[i]) {
+                for (int j = i * i; j <= n; j += i << 1) {
+                    if (ps[j]) {
+                        ps[j] = false;
+                        ++ctr;
+                    }
+                }
+            }
+        }
+        return (n + 1 - ctr);
+    }
+
+    /**
+     * Generates and counts primes using an optimized but naive iterative algorithm.
+     * Uses MultiThreading for arguments above LOW_LIM
+     *
+     * @param MAX : Argument x for pi(x), the limit to which to generate numbers.
+     * @return The number of prime numbers &lt;= MAX
+     */
+    public long primeCount(long MAX) {
+        long ctr = 1;
+        if (MAX < SPLIT_LIM) {
+            for (long i = 3; i <= MAX; i += 2) {
+                if (isPrime(i)) ++ctr;
+            }
+        } else {
+            int threads = (NUM_THREADS <= 0) ? (int) MAX / SPLIT_LIM : NUM_THREADS;
+            final long[] counts = new long[threads];
+            for (int i = 0; i < threads; ++i) {
+                counts[i] = -1;
+            }
+            long range = Math.round((double) MAX / threads);
+            for (int i = 0; i < threads; ++i) {
+                final long start = (i == 0) ? 3 : i * range + 1, end = (i == threads - 1) ? MAX : (i + 1) * range;
+                final int idx = i;
+                new Thread(new Runnable() {
+                    public void run() {
+                        for (long j = start; j <= end; j += 2) {
+                            if (isPrime(j)) ++counts[idx];
+                        }
+                    }
+                }).start();
+            }
+            synchronized (LOCK) {
+                while (!completed(counts)) {
+                    try {
+                        LOCK.wait(300);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+                LOCK.notifyAll();
+            }
+            for (long count : counts) {
+                ctr += count;
+            }
+            ctr += threads;
+        }
+        return ctr;
+    }
+
     /**
      * Calculates primes using bitmasked Sieve of Eratosthenes.
      *
@@ -174,8 +220,10 @@ public class PrimeCounter {
      * @return The number of prime numbers &lt;= MAX
      */
     public long bitPrimeSieve(long MAX) {
-        long SQRT_MAX = (long) Math.sqrt(MAX); if (SQRT_MAX % 2 == 0) --SQRT_MAX;
-        int MEMORY_SIZE = (int) ((MAX + 1) >> REDUCE_FACTOR); byte[] array = new byte[MEMORY_SIZE];
+        long SQRT_MAX = (long) Math.sqrt(MAX);
+        if (SQRT_MAX % 2 == 0) --SQRT_MAX;
+        int MEMORY_SIZE = (int) ((MAX + 1) >> REDUCE_FACTOR);
+        byte[] array = new byte[MEMORY_SIZE];
         for (long i = 3; i <= SQRT_MAX; i += 2) {
             if ((array[(int) (i >> REDUCE_FACTOR)] & (byte) (1 << ((i >> 1) & 7))) == 0) {
                 for (long j = i * i; j <= MAX; j += i << 1) {
@@ -184,11 +232,16 @@ public class PrimeCounter {
                     }
                 }
             }
-        } long pi = 1; for (long i = 3; i <= MAX; i += 2) {
+        }
+        long pi = 1;
+        for (long i = 3; i <= MAX; i += 2) {
             if ((array[(int) (i >> REDUCE_FACTOR)] & (byte) (1 << ((i >> 1) & 7))) == 0) {
                 ++pi;
             }
-        } return pi;
+        }
+        return pi;
     }
-    private static final class Lock {}
+
+    private static final class Lock {
+    }
 }
