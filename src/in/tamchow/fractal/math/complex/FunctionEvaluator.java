@@ -192,7 +192,7 @@ public class FunctionEvaluator {
         return evaluate(expr, false).modulus();
     }
 
-    private boolean hasNofunctions(String expr) {
+    private boolean hasNoFunctions(String expr) {
         String[] parts = StringManipulator.split(expr, " ");
         for (String part : parts) {
             for (String function : FUNCTIONS) {
@@ -208,18 +208,27 @@ public class FunctionEvaluator {
         String subexpr = substitute(expr, isSymbolic);
         Complex ztmp;
         int flag = 0;
-        if ((!isSymbolic) && hasNofunctions(subexpr)) {
+        /**Disabled for performance reasons:
+         if ((!isSymbolic) && hasNoFunctions(subexpr)) {
             ztmp = RPNHelper.evaluateInfix(StringManipulator.split(subexpr, " "));
         } else {
-            do {
-                ztmp = eval(process(subexpr));
-                if (!(subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
-                    subexpr = StringManipulator.replace(subexpr, subexpr.substring((subexpr.lastIndexOf('(')), subexpr.indexOf(')', subexpr.lastIndexOf('(') + 1) + 1), "" + ztmp);
-                } else {
-                    ++flag;
-                }
-            } while (flag <= 1);
-        }
+         do {
+         ztmp = eval(process(subexpr));
+         if (!(subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
+         subexpr = StringManipulator.replace(subexpr, subexpr.substring((subexpr.lastIndexOf('(')), subexpr.indexOf(')', subexpr.lastIndexOf('(') + 1) + 1), ztmp.toString());
+         } else {
+         ++flag;
+         }
+         } while (flag <= 1);
+         }*/
+        do {
+            ztmp = eval(process(subexpr));
+            if (!(subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1)) {
+                subexpr = StringManipulator.replace(subexpr, subexpr.substring((subexpr.lastIndexOf('(')), subexpr.indexOf(')', subexpr.lastIndexOf('(') + 1) + 1), ztmp.toString());
+            } else {
+                ++flag;
+            }
+        } while (flag <= 1);
         return ztmp;
     }
 

@@ -1,106 +1,19 @@
 package in.tamchow.fractal.math.complex;
 
-import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.math.FixedStack;
 
 /**
  * Supports dyadic operations on complex numbers as expressions in RPN format
  */
 public class RPNHelper {
-    /**
-     * in stack precedence
-     **/
-    private static final int[] isp = {0, 19, 12, 12, 13, 13, 13, 0};
-    /**
-     * incoming character precedence
-     **/
-    private static final int[] icp = {20, 19, 12, 12, 13, 13, 13, 0};
-    /**
-     * operators
-     **/
-    private static final String[] operators = {"(", ")", "+", "-", "/", "*", "^", " "};
-    /**
-     * precedence stack
-     **/
-    private static Precedence[] stack;
-    /**
-     * stack top pointer
-     **/
-    private static int top;
-
-    /**
-     * pop element from stack
-     **/
-    private static Precedence pop() {
-        return stack[top--];
-    }
-
-    /**
-     * push element onto stack
-     **/
-    private static void push(Precedence ele) {
-        stack[++top] = ele;
-    }
-
-    /**
-     * get precedence token for symbol
-     **/
-    public static Precedence getToken(String symbol) {
-        switch (symbol) {
-            case "(":
-                return Precedence.lparen;
-            case ")":
-                return Precedence.rparen;
-            case "+":
-                return Precedence.plus;
-            case "-":
-                return Precedence.minus;
-            case "/":
-                return Precedence.divide;
-            case "*":
-                return Precedence.times;
-            case "^":
-                return Precedence.pow;
-            case " ":
-                return Precedence.eos;
-            default:
-                return Precedence.operand;
-        }
-    }
-
-    /**
-     * Function to convert infix to postfix
-     **/
-    public static String postfix(String[] infix) {
-        String postfix = "";
-        top = 0;
-        stack = new Precedence[infix.length];
-        stack[0] = Precedence.eos;
-        Precedence token;
-        for (String anInfix : infix) {
-            token = getToken(anInfix);
-            /** if token is operand append to postfix **/
-            if (token == Precedence.operand)
-                postfix += anInfix + " ";
-            /** if token is right parenthesis pop till matching left parenthesis **/
-            else if (token == Precedence.rparen) {
-                while (stack[top] != Precedence.lparen)
-                    postfix += operators[pop().getIndex()] + " ";
-                /** discard left parenthesis **/
-                pop();
-            }
-            /** else pop stack elements whose precedence is greater than that of token **/
-            else {
-                while (isp[stack[top].getIndex()] >= icp[token.getIndex()])
-                    postfix += operators[pop().getIndex()] + " ";
-                push(token);
-            }
-        }
-        /** pop any remaining elements in stack **/
-        while ((token = pop()) != Precedence.eos)
-            postfix += operators[token.getIndex()] + " ";
-        return postfix.trim();
-    }
+    // Supported operators
+    private static final Operator[] OPERATORS = {
+            new Operator("+", 0, Associativity.LEFT),
+            new Operator("-", 0, Associativity.LEFT),
+            new Operator("*", 5, Associativity.LEFT),
+            new Operator("/", 5, Associativity.LEFT),
+            new Operator("^", 10, Associativity.RIGHT)
+    };
 
     public static Complex evaluateRPN(String[] tokens) {
         if (tokens.length == 0) {
@@ -116,7 +29,7 @@ public class RPNHelper {
     }
 
     public static Complex evaluateInfix(String[] infix) {
-        return evaluateRPN(StringManipulator.split(postfix(infix), " "));
+        return evaluateRPN(infixToRPN(infix));
     }
 
     public static Complex evaluateRPN(FixedStack<String> tkstack) {
@@ -150,33 +63,122 @@ public class RPNHelper {
         return x;
     }
 
-    private enum Precedence {
-        lparen(0),
+    private static boolean contains(String token) {
+        return getByToken(token) != null;
+    }
 
-        rparen(1),
+    /**
+     * Test if a certain is an operator .
+     *
+     * @param token The token to be tested .
+     * @return True if token is an operator . Otherwise False .
+     */
+    private static boolean isOperator(String token) {
+        return contains(token);
+    }
 
-        plus(2),
-
-        minus(3),
-
-        divide(4),
-
-        times(5),
-
-        pow(6),
-
-        eos(7),
-
-        operand(8);
-
-        private int index;
-
-        Precedence(int index) {
-            this.index = index;
+    private static Operator getByToken(String token) {
+        for (Operator operator : OPERATORS) {
+            if (operator.symbol.equals(token)) {
+                return operator;
+            }
         }
+        return null;
+    }
 
-        public int getIndex() {
-            return index;
+    /**
+     * Test the associativity of a certain operator token .
+     *
+     * @param token The token to be tested (needs to operator).
+     * @param type  Associativity.LEFT or Associativity.RIGHT
+     * @return True if the tokenType equals the input parameter type .
+     */
+    private static boolean isAssociative(String token, Associativity type) {
+        if (!isOperator(token)) {
+            throw new IllegalArgumentException("Invalid token: " + token);
+        }
+        return getByToken(token).associativity == type;
+    }
+
+    /**
+     * Compare precendece of two operators.
+     *
+     * @param token1 The first operator .
+     * @param token2 The second operator .
+     * @return A negative number if token1 has a smaller precedence than token2,
+     * 0 if the precendences of the two tokens are equal, a positive number
+     * otherwise.
+     */
+    private static int comparePrecedence(String token1, String token2) {
+        if (!isOperator(token1) || !isOperator(token2)) {
+            throw new IllegalArgumentException("Invalid tokens: " + token1
+                    + " " + token2);
+        }
+        return getByToken(token1).precedence - getByToken(token2).precedence;
+    }
+
+    private static int countOccurrencesOfParentheses(String[] inputTokens) {
+        int ctr = 0;
+        for (String token : inputTokens) {
+            if (token.equals("(") || token.equals(")")) {
+                ++ctr;
+            }
+        }
+        return ctr;
+    }
+
+    public static String[] infixToRPN(String[] inputTokens) {
+        String[] out = new String[inputTokens.length - countOccurrencesOfParentheses(inputTokens)];
+        int outCtr = 0;
+        FixedStack<String> stack = new FixedStack<>(inputTokens.length);
+        // For all the input tokens [S1] read the next token [S2]
+        for (String token : inputTokens) {
+            if (isOperator(token)) {
+                // If token is an operator (x) [S3]
+                while (!stack.isEmpty() && isOperator(stack.peek())) {
+                    // [S4]
+                    if ((isAssociative(token, Associativity.LEFT) && comparePrecedence(
+                            token, stack.peek()) <= 0)
+                            || (isAssociative(token, Associativity.RIGHT) && comparePrecedence(
+                            token, stack.peek()) < 0)) {
+                        out[outCtr++] = stack.pop();    // [S5] [S6]
+                        continue;
+                    }
+                    break;
+                }
+                // Push the new operator on the stack [S7]
+                stack.push(token);
+            } else if (token.equals("(")) {
+                stack.push(token);    // [S8]
+            } else if (token.equals(")")) {
+                // [S9]
+                while (!stack.isEmpty() && !stack.peek().equals("(")) {
+                    out[outCtr++] = stack.pop(); // [S10]
+                }
+                stack.pop(); // [S11]
+            } else {
+                out[outCtr++] = token; // [S12]
+            }
+        }
+        while (!stack.isEmpty()) {
+            out[outCtr++] = stack.pop(); // [S13]
+        }
+        return out;
+    }
+
+    private enum Associativity {
+        LEFT, RIGHT
+    }
+
+    private static class Operator {
+        private String symbol;
+        private int precedence;
+        private Associativity associativity;
+
+        public Operator(String symbol, int precedence, Associativity associativity) {
+            this.symbol = symbol;
+            this.precedence = precedence;
+            this.associativity=associativity;
         }
     }
 }

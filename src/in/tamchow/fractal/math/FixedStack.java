@@ -10,11 +10,11 @@ public class FixedStack<E> implements Serializable {
     /**
      * Array of elements
      */
-    E[] elements;
+    private E[] elements;
     /**
      * Stack top pointer
      */
-    int top;
+    private int top;
 
     /**
      * Parameterized constructor. No default constructor.
@@ -23,7 +23,6 @@ public class FixedStack<E> implements Serializable {
      * @see FixedStack#setSize(int)
      * @see FixedStack#resetTop(boolean)
      */
-    @SuppressWarnings("unchecked")
     public FixedStack(int capacity) {
         setSize(capacity);
         resetTop(false);
@@ -34,7 +33,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @param notEmpty Whether or not the stack is empty
      */
-    public void resetTop(boolean notEmpty) {
+    private void resetTop(boolean notEmpty) {
         top = notEmpty ? 0 : elements.length;
     }
 
@@ -45,8 +44,8 @@ public class FixedStack<E> implements Serializable {
      * @see FixedStack#resetTop(boolean)
      */
     @SuppressWarnings("unchecked")
-    public void setSize(int size) {
-        this.elements = (E[]) new Object[elements.length];
+    private void setSize(int size) {
+        this.elements = (E[]) new Object[Math.abs(size)];
         resetTop(false);
     }
 
@@ -57,7 +56,7 @@ public class FixedStack<E> implements Serializable {
      * @see FixedStack#setSize(int)
      * @see FixedStack#resetTop(boolean)
      */
-    public void erase() {
+    private void erase() {
         for (int i = 0; i < elements.length; ++i) {
             elements[i] = null;
         }
@@ -99,8 +98,8 @@ public class FixedStack<E> implements Serializable {
      *
      * @return The popped values
      */
-    @SuppressWarnings("unchecked")
     public E[] popN(int n) {
+        @SuppressWarnings("unchecked")
         E[] values = (E[]) new Object[n];
         for (int i = 0; i < n; i++) {
             values[i] = pop();
@@ -135,8 +134,8 @@ public class FixedStack<E> implements Serializable {
      * @param n The number of values to peek at
      * @return The peeked-at values
      */
-    @SuppressWarnings("unchecked")
     public E[] peekN(int n) {
+        @SuppressWarnings("unchecked")
         E[] values = (E[]) new Object[n];
         for (int i = 0; i < n; i++) {
             values[i] = peek(i);
@@ -188,8 +187,8 @@ public class FixedStack<E> implements Serializable {
      *
      * @see FixedStack#initStack(Object[])
      */
-    @SuppressWarnings("unchecked")
     public void reverse() {
+        @SuppressWarnings("unchecked")
         E[] reversed = (E[]) new Object[elements.length];
         for (int i = 0, j = reversed.length - 1; i < elements.length && j >= 0; i++, j--) {
             reversed[j] = elements[i];
@@ -204,7 +203,6 @@ public class FixedStack<E> implements Serializable {
      * @see FixedStack#pushN(Object[])
      * @see FixedStack#setSize(int)
      */
-    @SuppressWarnings("unchecked")
     public void initStack(E[] elements) {
         setSize(elements.length);
         pushN(elements);
@@ -248,29 +246,28 @@ public class FixedStack<E> implements Serializable {
      *
      * @see FixedStack#erase()
      */
-    @SuppressWarnings("unchecked")
     public void clear() {
         erase();
     }
+}
+
+/**
+ * Custom Stack Overflow Exception class
+ */
+class StackOverflowException extends IndexOutOfBoundsException {
+    /**
+     * Constructs the exception with a default message
+     */
+    public StackOverflowException() {
+        this("Stack Overflow");
+    }
 
     /**
-     * Custom Stack Overflow Exception class
+     * Constructs the exception with a custom message
+     *
+     * @param message The custom message
      */
-    public class StackOverflowException extends IndexOutOfBoundsException {
-        /**
-         * Constructs the exception with a default message
-         */
-        public StackOverflowException() {
-            this("Stack Overflow");
-        }
-
-        /**
-         * Constructs the exception with a custom message
-         *
-         * @param message The custom message
-         */
-        public StackOverflowException(String message) {
-            super(message);
-        }
+    public StackOverflowException(String message) {
+        super(message);
     }
 }
