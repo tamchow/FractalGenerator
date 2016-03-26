@@ -107,6 +107,8 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     }
     @Override
     public String toString() {if (ib < 0) {return a + ",-" + (-ib) + "i";} else return a + ",+" + ib + "i";}
+
+    //public String toString() {if (ib < 0) {return String.format("%f,-%fi",a,-ib);} else return String.format("%f,+%fi",a,ib);}
     public double arg() {
         return Math.atan2(ib, a); //return (arg < 0) ? arg + 2 * Math.PI : arg;
         /*if(ib!=0){return 2*Math.atan((modulus()-a)/ib);}

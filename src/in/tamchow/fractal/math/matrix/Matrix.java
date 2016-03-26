@@ -1,4 +1,7 @@
 package in.tamchow.fractal.math.matrix;
+
+import in.tamchow.fractal.helpers.StringManipulator;
+
 import java.io.Serializable;
 /**
  * Holds a rectangular matrix
@@ -7,43 +10,21 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     private int rows, columns;
     private double[][] matrixData;
     public Matrix(double[][] matrixData) {initMatrix(matrixData.length, matrixData[0].length, matrixData);}
-    private void initMatrix(int rows, int columns, double[][] matrixData) {
-        setMatrixData(matrixData);
-        setNumRows(rows);
-        setNumColumns(columns);
-    }
     public Matrix(Matrix old) {initMatrix(old.getNumRows(), old.getNumColumns(), old.getMatrixData());}
-    public int getNumRows() {
-        return rows;
-    }
-    public void setNumRows(int rows) {
-        this.rows = rows;
-    }
-    public int getNumColumns() {
-        return columns;
-    }
-    public void setNumColumns(int columns) {
-        this.columns = columns;
-    }
-    public double[][] getMatrixData() {
-        return matrixData;
-    }
-    public void setMatrixData(double[][] matrixData) {
-        this.matrixData = new double[matrixData.length][matrixData[0].length];
-        for (int i = 0; i < matrixData.length; i++) {
-            System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData[i].length);
-        }
-    }
     public Matrix(int rows, int columns) {
         setNumRows(rows); setNumColumns(columns); matrixData = new double[this.rows][this.columns];
     }
+
     public static Matrix rotationMatrix2D(double angle) {
         double[][] matrixData = new double[2][2]; matrixData[0][0] = Math.cos(angle);
         matrixData[0][1] = -Math.sin(angle); matrixData[1][0] = Math.sin(angle); matrixData[1][1] = Math.cos(angle);
         return new Matrix(matrixData);
     }
+
     public static Matrix nullMatrix(int order) {return nullMatrix(order, order);}
+
     public static Matrix nullMatrix(int rows, int colums) {return new Matrix(rows, colums);}
+
     public static Matrix identityMatrix(int order) {
         int rows = Math.round((float) Math.sqrt(order)), columns = rows; Matrix matrix = new Matrix(rows, columns);
         for (int i = 0; i < rows; i++) {
@@ -54,22 +35,59 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
             }
         } return matrix;
     }
-    public synchronized void set(int i, int j, double value) {
-        matrixData[i][j] = value;
-    }
+
     public static Matrix fromString(String matrix) {
         matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
-        String[] rows = matrix.split(";"); int nrow = rows.length;
-        int ncolumn = rows[0].substring(1, rows[0].length() - 1).split(",").length;
+        String[] rows = StringManipulator.split(matrix, ";");
+        int nrow = rows.length;
+        int ncolumn = StringManipulator.split(rows[0].substring(1, rows[0].length() - 1), ",").length;
         Matrix newMatrix = new Matrix(nrow, ncolumn);
         for (int i = 0; i < newMatrix.matrixData.length && i < rows.length; i++) {
             //trim leading and trailing square brackets
-            String[] columns = rows[i].substring(1, rows[i].length() - 1).split(",");
+            String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
             for (int j = 0; j < newMatrix.matrixData[i].length && j < columns.length; j++) {
                 newMatrix.matrixData[i][j] = Double.valueOf(columns[j]);
             }
         } return newMatrix;
     }
+
+    private void initMatrix(int rows, int columns, double[][] matrixData) {
+        setMatrixData(matrixData);
+        setNumRows(rows);
+        setNumColumns(columns);
+    }
+
+    public int getNumRows() {
+        return rows;
+    }
+
+    public void setNumRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getNumColumns() {
+        return columns;
+    }
+
+    public void setNumColumns(int columns) {
+        this.columns = columns;
+    }
+
+    public double[][] getMatrixData() {
+        return matrixData;
+    }
+
+    public void setMatrixData(double[][] matrixData) {
+        this.matrixData = new double[matrixData.length][matrixData[0].length];
+        for (int i = 0; i < matrixData.length; i++) {
+            System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData[i].length);
+        }
+    }
+
+    public synchronized void set(int i, int j, double value) {
+        matrixData[i][j] = value;
+    }
+
     public Matrix transpose() {
         Matrix transposedMatrix = new Matrix(getNumColumns(), getNumRows()); for (int i = 0; i < getNumRows(); i++) {
             for (int j = 0; j < getNumColumns(); j++) {
