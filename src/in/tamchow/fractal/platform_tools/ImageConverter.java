@@ -1,6 +1,6 @@
 package in.tamchow.fractal.platform_tools;
-import in.tamchow.fractal.imgutils.Animation;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.Animation;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

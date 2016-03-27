@@ -3,8 +3,8 @@ import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
-import in.tamchow.fractal.imgutils.ImageData;
-import in.tamchow.fractal.imgutils.Pannable;
+import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.imgutils.containers.Pannable;
 /**
  * Helps to pan a fractal image on-demand, hence does not implement Pannable
  */

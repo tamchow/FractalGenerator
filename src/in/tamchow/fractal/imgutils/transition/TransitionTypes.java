@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.imgutils.transition;
 /**
  * Has codes for transition types.
  * Types:

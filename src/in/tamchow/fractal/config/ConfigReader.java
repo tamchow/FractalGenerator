@@ -10,7 +10,7 @@ import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.helpers.StringManipulator;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.File;

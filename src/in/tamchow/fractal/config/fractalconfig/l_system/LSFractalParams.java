@@ -1,5 +1,5 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 
 import java.io.Serializable;
 /**

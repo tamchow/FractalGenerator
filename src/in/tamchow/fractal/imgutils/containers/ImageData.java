@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.imgutils.containers;
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
@@ -246,7 +246,17 @@ public class ImageData implements Serializable, Pannable {
         }
     }
     public ImageData falseColor(ImageData[] channels) {
-        return falseColor(channels[0], channels[1], channels[2]);
+        if (channels.length == 0) {
+            return this;//don't throw an exception
+        } else if (channels.length == 1) {
+            return falseColor(channels[0], channels[0], channels[0]);//grayscale
+        } else if (channels.length == 2) {
+            return falseColor(channels[0], channels[1], channels[1]);
+        } else if (channels.length == 3) {
+            return falseColor(channels[0], channels[1], channels[2]);
+        } else {
+            return falseColor(channels[0], channels[1], channels[2], channels[3]);
+        }
     }
     public void add(ImageData toAdd) {
         for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
@@ -260,6 +270,15 @@ public class ImageData implements Serializable, Pannable {
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
                 falseColored.setPixel(i, j, Color_Utils_Config.toRGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+            }
+        }
+        return falseColored;
+    }
+    public ImageData falseColor(ImageData a, ImageData r, ImageData g, ImageData b) {
+        ImageData falseColored = new ImageData(r.getWidth(), r.getHeight());
+        for (int i = 0; i < falseColored.getHeight(); i++) {
+            for (int j = 0; j < falseColored.getWidth(); j++) {
+                falseColored.setPixel(i, j, Color_Utils_Config.packARGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA), Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
             }
         }
         return falseColored;

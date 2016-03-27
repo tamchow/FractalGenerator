@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.imgutils.containers;
 import java.util.ArrayList;
 /**
  * Stores frames for an animation, or here, transitions, with some metadata such as fps.

@@ -4,7 +4,7 @@ import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;

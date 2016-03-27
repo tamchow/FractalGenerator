@@ -1,8 +1,8 @@
 package in.tamchow.fractal.config.imageconfig;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.DataFromString;
-import in.tamchow.fractal.imgutils.ImageData;
-import in.tamchow.fractal.imgutils.TransitionTypes;
+import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.imgutils.transition.TransitionTypes;
 
 import java.io.Serializable;
 /**

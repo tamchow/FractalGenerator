@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.IFS;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 /**
  * Part of an IFS fractal's image data
  */

@@ -5,9 +5,8 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
-import in.tamchow.fractal.imgutils.ImageData;
-import in.tamchow.fractal.imgutils.LinearizedImageData;
-import in.tamchow.fractal.imgutils.Pannable;
+import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.imgutils.containers.Pannable;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.matrix.Matrix;
@@ -42,42 +41,24 @@ public class ComplexBrotFractalGenerator implements Serializable, Pannable {
         return bases;
     }
     public void createImage() {
-        if (bases.length == 1) {
-            for (int i = 0; i < plane.getHeight(); i++) {
-                for (int j = 0; j < plane.getWidth(); j++) {
-                    plane.setPixel(i, j, getColor(i, j, 0));
+        ImageData[] levels = new ImageData[bases.length];
+        for (int i = 0; i < bases.length; ++i) {
+            for (int j = 0; j < bases[i].length; ++j) {
+                for (int k = 0; k < bases[i][j].length; ++k) {
+                    levels[i].setPixel(j, k, getColor(j, k, i));
                 }
             }
-        } else {
-            ImageData level1 = new LinearizedImageData(plane.getHeight(), plane.getWidth());
-            for (int i = 0; i < level1.getHeight(); i++) {
-                for (int j = 0; j < level1.getWidth(); j++) {
-                    level1.setPixel(i, j, getColor(i, j, 0));
-                }
-            }
-            ImageData level2 = new LinearizedImageData(plane.getHeight(), plane.getWidth());
-            for (int i = 0; i < level2.getHeight(); i++) {
-                for (int j = 0; j < level2.getWidth(); j++) {
-                    level2.setPixel(i, j, getColor(i, j, 1));
-                }
-            }
-            ImageData level3 = new LinearizedImageData(plane.getHeight(), plane.getWidth());
-            for (int i = 0; i < level3.getHeight(); i++) {
-                for (int j = 0; j < level3.getWidth(); j++) {
-                    level3.setPixel(i, j, getColor(i, j, 2));
-                }
-            }
-            plane = plane.falseColor(level1, level2, level3);
         }
+        plane = plane.falseColor(levels);
     }
     private int getColor(int i, int j, int level) {
         return MathUtils.boundsProtected(Math.round((float) bases[level][i][j] / getMaximum(bases[level])) * 255, 256);
     }
     private int getMaximum(int[][] base) {
-        int max = -1;
+        int max = 0;
         for (int[] row : base) {
             for (int val : row) {
-                if (val > max) max = val;
+                if (val >= max) max = val;
             }
         }
         return max;

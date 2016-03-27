@@ -2,7 +2,7 @@ package in.tamchow.fractal.config.fractalconfig.complexbrot;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;

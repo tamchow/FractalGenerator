@@ -1,9 +1,9 @@
 package in.tamchow.fractal.imgutils.graphics;
-import in.tamchow.fractal.imgutils.ImageData;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 /**
  * Implements turtle graphics at a very basic level
  *
- * @see in.tamchow.fractal.imgutils.ImageData#drawLine(int, int, int, int, int)
+ * @see ImageData#drawLine(int, int, int, int, int)
  */
 public class Turtle {
     ImageData canvas;

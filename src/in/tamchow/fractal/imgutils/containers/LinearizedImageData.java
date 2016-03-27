@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils;
+package in.tamchow.fractal.imgutils.containers;
 import in.tamchow.fractal.helpers.MathUtils;
 
 import java.io.Serializable;
