@@ -2,30 +2,49 @@
 <head>
     A <b>Java</b> fractal generator (currently UI-silent, with configuration through a file),
     that implements display of custom functions,
-    with constant declaration processing, in Mandelbrot, Newton,Secant,Nova (both Mandelbrot and Julia types) and Julia modes, and an experimental IFS/LS render system.
+    with constant declaration processing, in Mandelbrot, Newton,Secant,Nova (both Mandelbrot and Julia types) and Julia
+    modes, and an experimental IFS/LS render system.
 
     There are also Buddhabrot techniques ( naive algorithm ) for each of the above.
     <br>
-    There are 36 different colouring schemes, 15 have linear interpolation, 17 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics (symbolic differentiation) backend.
+    There are 36 different colouring schemes, 15 have linear interpolation, 17 have Catmull-Rom Spline interpolation and
+    2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale
+    or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics
+    (symbolic differentiation) backend.
 
-Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
-The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation.
-This calculation can be manually overriden after initializing the fractal generator with <pre>setDegree(double)</pre> of the <pre>ComplexFractalGenerator</pre> object in the <pre>Test</pre> class. 
-This could be made more accessible once a GUI is made.
-Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a complex value.
+    Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
+    The automatic degree calculation system has less issues with grouped operations, especially if considering division
+    or multiplication in the equation.
+    This calculation can be manually overriden after initializing the fractal generator with
+    <pre>setDegree(double)</pre>
+    of the
+    <pre>ComplexFractalGenerator</pre>
+    object in the
+    <pre>Test</pre>
+    class.
+    This could be made more accessible once a GUI is made.
+    Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a
+    complex value.
 
-Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B components.
+    Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B
+    components.
 
-    The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring  (by extension Rank-Order mapping) and Color Distance Estimation,Orbit and Line Traps and Gaussian Distance and Epsilon Cross, by default.
+    The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe
+    Average, as well as Histogram coloring (by extension Rank-Order mapping) and Color Distance Estimation,Orbit and
+    Line Traps and Gaussian Distance and Epsilon Cross, by default.
 
-    The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation and traps.<br>
+    The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct
+    and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation
+    and traps.<br>
     Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
 </head>
 <body>
 <p>
-    Supported modes: Julia, Mandelbrot, Newton, Nova (both mandelbrot and Julia variants) and Secant, with Buddhabrot technique variations available for each.
+    Supported modes: Julia, Mandelbrot, Newton, Nova (both mandelbrot and Julia variants) and Secant, with Buddhabrot
+    technique variations available for each.
     <br>
-    Newton/Nova fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a different input format:
+    Newton/Nova fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a
+    different input format:
 
     {coefficient:variable:exponent};+;{coefficient:variable:exponent};-;{coefficient:variable:exponent},etc.
 
@@ -41,71 +60,86 @@ Indexing of colours can be linear or logarithmic. Colors can be interpolated dir
     {1:z:0};sin;{1:z:2};{f:z:0}
     <br>
     Colors currently available are based on:
-    <ol>
-    <li>Simple mode: iteration count is used as a direct index into the palette (interpolation available as SIMPLE_SMOOTH)</li>
+<ol>
+    <li>Simple mode: iteration count is used as a direct index into the palette (interpolation available as
+        SIMPLE_SMOOTH)
+    </li>
     <li>Division of 0xffffffff by integer or fractional iteration count (interpolation available)</li>
-    <li>Bit-shift mode with results similar to division by integer or fractional iteration count (interpolation available)</li>
+    <li>Bit-shift mode with results similar to division by integer or fractional iteration count (interpolation
+        available)
+    </li>
     <li>High contrast Grayscale mode</li>
     <li>Low Contrast Grayscale Mode</li>
-    <li>Full custom or base-step, or linear-interpolated control points gradient palette mode by fractional iteration count (interpolation available)</li>
+    <li>Full custom or base-step, or linear-interpolated control points gradient palette mode by fractional iteration
+        count (interpolation available)
+    </li>
     <li>Randomized palette mode by fractional iteration count (interpolation available)</li>
     <li>Newton Mode - maximum modulus (linear or spline) or root reached</li>
     <li>Domain coloring- standard or faux on basis of lightness parameter</li>
     <li>Histogram Coloring or Rank-Order color mapping (linear and spline interpolation available)</li>
-    </ol>
-    <br>
-The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
-    <br>
-    Support for IFS Affine Transform or function-based fractals such as the fern is in place.
+</ol>
+<br>
+The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as
+Newton mode as it uses the same mathematics (symbolic differentiation) backend.
+<br>
+Support for IFS Affine Transform or function-based fractals such as the fern is in place.
 
-    Multithreading -- Available for complex number fractals and IFS fractals
-    (not including L-System ones and animations)! Use is encouraged, but memory requirements are a bit high.
+Multithreading -- Available for complex number fractals and IFS fractals
+(not including L-System ones and animations)! Use is encouraged, but memory requirements are a bit high.
 
-    More standard coloring methods are there, such as:
-    <ol>
-        <li>Triangle Area Inequality</li>
-        <li>Curvature Average</li>
-        <li>Stripe Average</li>
-        <li>Orbit and line traps (min.,max.,average)</li>
-        <li>Gaussian Distance</li>
-        <li>Epsilon Cross Distance</li>
-    </ol>
-    Also, these modes support Catmull-Rom Spline and linear interpolation.
+More standard coloring methods are there, such as:
+<ol>
+    <li>Triangle Area Inequality</li>
+    <li>Curvature Average</li>
+    <li>Stripe Average</li>
+    <li>Orbit and line traps (min.,max.,average)</li>
+    <li>Gaussian Distance</li>
+    <li>Epsilon Cross Distance</li>
+</ol>
+Also, these modes support Catmull-Rom Spline and linear interpolation.
 
-    Distance Estimation has been included, but as it involves differentiation and so uses the same backend as Newton Fractals, it is subject to
-    the same constraints on polynomials and style of input. This method produces grayscale or color images.
+Distance Estimation has been included, but as it involves differentiation and so uses the same backend as Newton
+Fractals, it is subject to
+the same constraints on polynomials and style of input. This method produces grayscale or color images.
 
-    These coloring methods will affect only the palette-based methods of colouring.
+These coloring methods will affect only the palette-based methods of colouring.
 </p>
 
 <p>
     NOTES:
-    The fractal generator has the basic framework for being extensible and being multithreaded, and multithreading works,
+    The fractal generator has the basic framework for being extensible and being multithreaded, and multithreading
+    works,
     albeit being extremely resource intensive, requiring about a 20x increase in memory requirements for about a 10x
     speedup during generation (12 threads). Also, there might be OOM errors in very intensive cases.
     I still encourage people to use multithreading, with up to 14 threads (7*2).
-    </p>
-    <p>
-    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
-    </p>
-    <p>
-    Default debug and progress is output to console, and the final image(s) are saved serially as <pre>Fractal_[no.].png</pre>(except for animated IFS and/or L-System fractals, which are output frame-by-frame into a folder) in the output directory specified in the CMD arguments to the program.
+</p>
+<p>
+    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb
+    rule, for quadrupling total resolution, double base precision for best results.
+</p>
+<p>
+    Default debug and progress is output to console, and the final image(s) are saved serially as
+<pre>Fractal_[no.].png</pre>
+(except for animated IFS and/or L-System fractals, which are output frame-by-frame into a folder) in the output
+directory specified in the CMD arguments to the program.
 </p>
 
 <p>
-    There is also an included image viewer, which can also display fractal images. Enable it with the <pre>-v</pre>
-    command-line switch.
-    <br>
-    There is support for elementary image transitions from top, bottom, left and right in the viewer, again configurable.
-    <br>
-    However, saving of the fractal image and zooming in the viewer are both supported but untested.
-    All input to the application is currently handled by:
-    <ol>
-        <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
-        <li>Or use the pre-configured test shell script</li>
-    </ol>
+    There is also an included image viewer, which can also display fractal images. Enable it with the
+<pre>-v</pre>
+command-line switch.
+<br>
+There is support for elementary image transitions from top, bottom, left and right in the viewer, again configurable.
+<br>
+However, saving of the fractal image and zooming in the viewer are both supported but untested.
+All input to the application is currently handled by:
+<ol>
+    <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
+    <li>Or use the pre-configured test shell script</li>
+</ol>
 
-Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in .ini files.
+Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in
+.ini files.
 </p>
 
 <p>

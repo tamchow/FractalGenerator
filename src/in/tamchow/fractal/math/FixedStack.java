@@ -22,7 +22,6 @@ public class FixedStack<E> implements Serializable {
      */
     public FixedStack(int capacity) {
         setSize(capacity);
-        resetTop(false);
     }
     /**
      * Resets the stack top pointer depending on whether the stack is empty or full
@@ -72,7 +71,7 @@ public class FixedStack<E> implements Serializable {
      * @param value The value to push
      */
     public void push(E value) {
-        if (isFull()) throw new StackOverflowException();
+        if (isFull()) throw new FixedStackOverflowException();
         elements[--top] = value;
     }
     /**
@@ -214,7 +213,7 @@ public class FixedStack<E> implements Serializable {
     public int sizeN() {
         int size = 0;
         for (E i : elements) {
-            if (i != null) size++;
+            if (i != null) ++size;
         }
         return size;
     }
@@ -230,11 +229,11 @@ public class FixedStack<E> implements Serializable {
 /**
  * Custom Stack Overflow Exception class
  */
-class StackOverflowException extends IndexOutOfBoundsException {
+class FixedStackOverflowException extends IndexOutOfBoundsException {
     /**
      * Constructs the exception with a default message
      */
-    public StackOverflowException() {
+    public FixedStackOverflowException() {
         this("Stack Overflow");
     }
     /**
@@ -242,7 +241,7 @@ class StackOverflowException extends IndexOutOfBoundsException {
      *
      * @param message The custom message
      */
-    public StackOverflowException(String message) {
+    public FixedStackOverflowException(String message) {
         super(message);
     }
 }
