@@ -2,6 +2,7 @@ package in.tamchow.fractal.fractals.l_system;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
+import in.tamchow.fractal.fractals.FractalGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.Animation;
@@ -10,7 +11,7 @@ import in.tamchow.fractal.imgutils.graphics.Turtle;
 /**
  * generates L-System Fractals. Does not implement panning or zooming, as those make no sense
  */
-public class LSFractalGenerator {
+public class LSFractalGenerator implements FractalGenerator {
     LSFractalParams params;
     ImageData canvas;
     Turtle turtle;

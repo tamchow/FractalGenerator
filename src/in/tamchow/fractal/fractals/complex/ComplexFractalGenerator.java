@@ -6,11 +6,11 @@ import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalInitParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
+import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
-import in.tamchow.fractal.imgutils.containers.Pannable;
 import in.tamchow.fractal.math.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
@@ -20,14 +20,13 @@ import in.tamchow.fractal.math.matrix.MatrixOperations;
 import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * The actual fractal plotter for Julia, Newton, Nova (both Mandelbrot and Julia variants),Secant and Mandelbrot Sets using an iterative algorithm.
  * The Buddhabrot technique (naive algorithm) is also implemented (of sorts) for all modes.
  * Various (21) Coloring modes
  */
-public final class ComplexFractalGenerator implements Serializable, Pannable {
+public final class ComplexFractalGenerator implements PixelFractalGenerator {
     static ArrayList<Complex> roots;
     Color_Utils_Config color;
     Complex[] boundary_elements;

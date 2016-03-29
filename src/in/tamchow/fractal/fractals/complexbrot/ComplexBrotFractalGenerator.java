@@ -2,24 +2,23 @@ package in.tamchow.fractal.fractals.complexbrot;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
+import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.containers.Pannable;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Complex brot fractal generator
  * NOTE: Length of the iterations[] can be only 1 or 3
  * TODO: Implement
  */
-public class ComplexBrotFractalGenerator implements Serializable, Pannable {
+public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     ComplexBrotFractalParams params;
     ComplexFractalGenerator.Mode mode;
     Publisher progressPublisher;

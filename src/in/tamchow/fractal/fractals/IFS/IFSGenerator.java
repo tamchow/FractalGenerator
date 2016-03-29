@@ -2,21 +2,20 @@ package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
+import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.imgutils.containers.Animation;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
-import in.tamchow.fractal.imgutils.containers.Pannable;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 
-import java.io.Serializable;
 import java.util.Random;
 /**
  * Generates IFS fractals
  */
-public class IFSGenerator implements Serializable, Pannable {
+public class IFSGenerator implements PixelFractalGenerator {
     ImageData plane;
     IFSFractalParams params;
     Matrix centre_offset, initial, point;
