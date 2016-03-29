@@ -445,52 +445,56 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         createImage();
     }
     private void secantGenerate(int start, int end) {
-        /** //Template for specific generator methods
-         for(int i=0;i<iterations.length;++i) {
-         int[][] tmp=new int[plane.getHeight()][plane.getWidth()];
-         long iterCount=iterations[i];
-         for (int j = start; j < end; ++j) {
-         Complex z=points[j];
-         //TODO: Generate the fractal
-         }
-         }
-         */
+        //Template for specific generator methods
+        for (long iteration : iterations) {
+            int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            for (int j = start; j < end; ++j) {
+                Complex z = points[j];
+                int c = 0;
+                while (c <= iteration) {
+                }
+                //TODO: Generate the fractal
+            }
+        }
     }
     private void newtonGenerate(int start, int end) {
         Complex constant = params.getNewton_constant();
-        /** //Template for specific generator methods
-         for(int i=0;i<iterations.length;++i) {
-         int[][] tmp=new int[plane.getHeight()][plane.getWidth()];
-         long iterCount=iterations[i];
-         for (int j = start; j < end; ++j) {
-         Complex z=points[j];
-         //TODO: Generate the fractal
-         }
-         }
-         */
+        //Template for specific generator methods
+        for (long iteration : iterations) {
+            int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            for (int j = start; j < end; ++j) {
+                Complex z = points[j];
+                int c = 0;
+                while (c <= iteration) {
+                }
+                //TODO: Generate the fractal
+            }
+        }
     }
     private void mandelbrotGenerate(int start, int end) {
-        /** //Template for specific generator methods
-         for(int i=0;i<iterations.length;++i) {
-         int[][] tmp=new int[plane.getHeight()][plane.getWidth()];
-         long iterCount=iterations[i];
-         for (int j = start; j < end; ++j) {
-         Complex z=points[j];
-         //TODO: Generate the fractal
-         }
-         }
-         */
+        //Template for specific generator methods
+        for (long iteration : iterations) {
+            int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            for (int j = start; j < end; ++j) {
+                Complex z = points[j];
+                int c = 0;
+                while (c <= iteration) {
+                }
+                //TODO: Generate the fractal
+            }
+        }
     }
     private void juliaGenerate(int start, int end) {
-        /** //Template for specific generator methods
-         for(int i=0;i<iterations.length;++i) {
-         int[][] tmp=new int[plane.getHeight()][plane.getWidth()];
-         long iterCount=iterations[i];
-         for (int j = start; j < end; ++j) {
-         Complex z=points[j];
-         //TODO: Generate the fractal
-         }
-         }
-         */
+        //Template for specific generator methods
+        for (long iteration : iterations) {
+            int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            for (int j = start; j < end; ++j) {
+                Complex z = points[j];
+                int c = 0;
+                while (c <= iteration) {
+                }
+                //TODO: Generate the fractal
+            }
+        }
     }
 }
