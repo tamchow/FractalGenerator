@@ -68,7 +68,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         ComplexBrotFractalGenerator copyOfMaster;
         public SlaveRunner(int index) {
             super(index);
-            long num_points;
+            int num_points;
             this.copyOfMaster = new ComplexBrotFractalGenerator(master.getParams(), master.getProgressPublisher());
             if (index == data.length - 1) {
                 num_points = copyOfMaster.getParams().getNum_points() % threads;
