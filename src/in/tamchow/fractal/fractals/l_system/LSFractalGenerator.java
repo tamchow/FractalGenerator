@@ -49,8 +49,8 @@ public class LSFractalGenerator implements FractalGenerator {
         }
     }
     private void publishprogress(int progress) {
-        float completion = ((float) (progress)) * 100.0f / generations.length;
-        publisher.publish("Completion = " + completion + " %", completion);
+        float completion = ((float) (progress)) / generations.length;
+        publisher.publish("Completion = " + (completion * 100.0f) + " %", completion);
     }
     private UnitGrammar getGrammarForCode(String code) {
         for (UnitGrammar grammar : params.getGrammar()) {

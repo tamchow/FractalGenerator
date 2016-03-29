@@ -92,7 +92,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         setFunction(function);
         setBase_precision(base_precision);
         setConsts(consts);
-        setScale((int) (this.base_precision * Math.pow(zoom, zoom_factor)));
+        setScale(this.base_precision * Math.pow(zoom, zoom_factor));
         resetCentre();
         setOldvariablecode(oldvariablecode);
         setTolerance(tolerance);
@@ -189,10 +189,10 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
      * @param iy:Index of thread vertically
      * @return the start and end coordinates for a particular thread's rendering region
      */
-    public int[] start_end_coordinates(int nx, int ix, int ny, int iy) {
+    protected int[] start_end_coordinates(int nx, int ix, int ny, int iy) {
         return start_end_coordinates(0, argand.getWidth(), 0, argand.getHeight(), nx, ix, ny, iy);
     }
-    public int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
+    protected int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
         //for multithreading purposes
         int start_x = startx, end_x, start_y = starty, end_y;
         int x_dist = Math.round((float) (endx - startx) / nx), y_dist = Math.round((float) (endy - starty) / ny);
@@ -1120,8 +1120,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     }
     public void publishProgress(long ctr, int i, int startx, int endx, int j, int starty, int endy) {
         if (params != null && (!params.useThreadedGenerator())) {
-            float completion = ((float) ((i - starty) * (endx - startx) + (j - startx)) / ((endx - startx) * (endy - starty))) * 100.0f;
-            progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + completion + "%", completion / 100.0);
+            float completion = ((float) ((i - starty) * (endx - startx) + (j - startx)) / ((endx - startx) * (endy - starty)));
+            progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion);
         }
     }
     private int indexOfRoot(Complex z) {

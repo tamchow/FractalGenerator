@@ -199,8 +199,8 @@ public class IFSGenerator implements PixelFractalGenerator {
     }
     public synchronized void publishProgress(long val) {
         if (!silencer) {
-            float completion = (((float) val) / depth) * 100.0f;
-            progressPublisher.publish("% completion= " + completion + "%", completion);
+            float completion = (((float) val) / depth);
+            progressPublisher.publish("% completion= " + (completion * 100.0f) + "%", completion);
         }
     }
     private Matrix modifyPoint(Matrix point, int index) {

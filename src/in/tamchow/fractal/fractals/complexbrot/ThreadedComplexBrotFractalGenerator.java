@@ -28,7 +28,8 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     public void generate() {
         int idx = 0;
         for (int i = 0; i < threads; i++) {
-            SlaveRunner runner = new SlaveRunner(idx);
+            int[] coords = master.start_end_coordinates(i, threads);
+            SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
             master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
             idx++;
             runner.start();
@@ -64,22 +65,17 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         return c;
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
-        int index;
         ComplexBrotFractalGenerator copyOfMaster;
-        public SlaveRunner(int index) {
+        private int start, end;
+        public SlaveRunner(int index, int start, int end) {
             super(index);
-            int num_points;
             this.copyOfMaster = new ComplexBrotFractalGenerator(master.getParams(), master.getProgressPublisher());
-            if (index == data.length - 1) {
-                num_points = copyOfMaster.getParams().getNum_points() % threads;
-            } else {
-                num_points = copyOfMaster.getParams().getNum_points() / threads;
-            }
-            copyOfMaster.setDepth(num_points);
+            this.start = start;
+            this.end = end;
         }
         @Override
         public void run() {
-            copyOfMaster.generate();
+            copyOfMaster.generate(start, end);
         }
         @Override
         public void onCompletion() {
