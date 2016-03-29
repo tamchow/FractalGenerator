@@ -26,7 +26,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     ArrayList<Complex> roots;
     int center_x, center_y, lastConstantIdx;
     double zoom, zoom_factor, base_precision, scale;
-    long depth;
+    int depth;
     Complex centre_offset, lastConstant;
     Complex[][] plane_map;
     String[][] constants;
@@ -38,6 +38,31 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     public int[][][] getBases() {
         return bases;
+    }
+    private Complex[] getPoints() {
+        Complex[] points = new Complex[depth];
+        for (int i = 0; i < points.length; ++i) {
+            Complex random_point;
+            do {
+                random_point = getRandomPoint();
+            }
+            while (!containsPoint(points, random_point));
+            points[i] = random_point;
+        }
+        return points;
+    }
+    private Complex getRandomPoint() {
+        int random_x = MathUtils.boundsProtected(Math.round((float) Math.random() * plane.getWidth()), plane.getWidth()),
+                random_y = MathUtils.boundsProtected(Math.round((float) Math.random() * plane.getHeight()), plane.getHeight());
+        return plane_map[random_y][random_x];
+    }
+    private boolean containsPoint(Complex[] points, Complex point) {
+        for (Complex aPoint : points) {
+            if (point != null && aPoint != null && point.equals(aPoint)) {
+                return true;
+            }
+        }
+        return false;
     }
     public void createImage() {
         ImageData[] levels = new ImageData[bases.length];
@@ -247,10 +272,10 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     public double calculateBasePrecision() {
         return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
     }
-    public long getDepth() {
+    public int getDepth() {
         return depth;
     }
-    public void setDepth(long depth) {
+    public void setDepth(int depth) {
         this.depth = depth;
     }
     public Complex getCentre_offset() {
