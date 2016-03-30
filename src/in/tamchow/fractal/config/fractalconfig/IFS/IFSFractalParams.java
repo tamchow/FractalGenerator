@@ -19,7 +19,7 @@ public class IFSFractalParams implements Serializable {
     String[] yfunctions, xfunctions;
     double[] weights;
     int[] colors;
-    long depth;
+    int depth;
     int width;
     int height;
     int fps;
@@ -79,7 +79,7 @@ public class IFSFractalParams implements Serializable {
         params.setBase_precision(Double.valueOf(input[3]));
         params.setZoom(Double.valueOf(input[4]));
         params.setZoomlevel(Double.valueOf(input[5]));
-        params.setDepth(Long.valueOf(input[6]));
+        params.setDepth(Integer.valueOf(input[6]));
         params.setFps(Integer.valueOf(input[7]));
         params.setSkew(Double.valueOf(input[8]));
         if (params.isIfsMode()) {
@@ -163,10 +163,10 @@ public class IFSFractalParams implements Serializable {
     public void setFrameskip(int frameskip) {
         this.frameskip = frameskip;
     }
-    public long getDepth() {
+    public int getDepth() {
         return depth;
     }
-    public void setDepth(long depth) {
+    public void setDepth(int depth) {
         this.depth = depth;
     }
     public Matrix[] getTransforms() {

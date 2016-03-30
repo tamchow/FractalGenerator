@@ -21,7 +21,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     Matrix centre_offset, initial, point;
     int center_x, center_y;
     double zoom, zoom_factor, base_precision, scale;
-    long depth;
+    int depth;
     boolean completion, silencer;
     Publisher progressPublisher;
     public IFSGenerator(IFSFractalParams params, Publisher progressPublisher) {
@@ -107,13 +107,13 @@ public class IFSGenerator implements PixelFractalGenerator {
     public void setParams(IFSFractalParams params) {
         this.params = new IFSFractalParams(params);
     }
-    public long getDepth() {
+    public int getDepth() {
         return depth;
     }
-    public void setDepth(long depth) {
-        this.depth = depth;
+    public void setDepth(int depth) {
+        this.depth = MathUtils.clamp(depth, 0, plane.getHeight() * plane.getWidth());
     }
-    public double getBase_precision() {
+    double getBase_precision() {
         return base_precision;
     }
     public void setBase_precision(double base_precision) {

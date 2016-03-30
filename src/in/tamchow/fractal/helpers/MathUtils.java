@@ -10,6 +10,21 @@ public class MathUtils {
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
+    public static int clamp(int ptr, int size) {
+        return clamp(ptr, 0, size - 1);//for array indices
+    }
+    public static int clamp(int ptr, int min, int max) {
+        return (ptr < min) ? min : ((ptr > max) ? max : ptr);
+    }
+    public static int[][] intDDAAdd(int[][] from, int[][] to) {
+        int[][] sum = new int[from.length][to[0].length];//from and to must have same dimensions
+        for (int i = 0; i < sum.length; ++i) {
+            for (int j = 0; j < sum.length; ++j) {
+                sum[i][j] = from[i][j] + to[i][j];
+            }
+        }
+        return sum;
+    }
     public static String numberLineRepresentation(float number, int precision) {
         int g = (int) number, d = Math.round((number - g) * precision), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
         String h = "", q = "" + g;

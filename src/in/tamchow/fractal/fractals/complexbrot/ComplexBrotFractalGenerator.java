@@ -8,12 +8,14 @@ import in.tamchow.fractal.helpers.MathUtils;
 import in.tamchow.fractal.helpers.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
+import in.tamchow.fractal.math.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
+import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
-
-import java.util.ArrayList;
+import in.tamchow.fractal.math.symbolics.Function;
+import in.tamchow.fractal.math.symbolics.Polynomial;
 /**
  * ComplexBrot fractal generator
  * NOTE: Only supports the *BROT (excepting MANDELBROT, of course) fractal modes.
@@ -21,11 +23,10 @@ import java.util.ArrayList;
  *
  * @see ComplexFractalGenerator
  * @see ComplexBrotFractalParams
- * TODO: Implement
  */
 public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
-    private static ArrayList<Complex> roots;
     private static Complex[] points;
+    private static long sumIterations;
     ComplexBrotFractalParams params;
     ComplexFractalGenerator.Mode mode;
     Publisher progressPublisher;
@@ -36,24 +37,24 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     double base_precision;
     double scale;
     double tolerance;
+    double escape_radius;
     int depth, switch_rate;
     Complex centre_offset, lastConstant;
     Complex[][] plane_map;
     String[][] constants;
     String function;
     int[][][] bases;
-    long[] iterations;
+    int[] iterations;
     boolean silencer, anti, mandelbrotToJulia, juliaToMandelbrot;
     String variableCode, oldVariableCode;
     private long maxiter;
-    private long sumIterations;
     public ComplexBrotFractalGenerator(ComplexBrotFractalParams params, Publisher publisher) {
         this.params = params;
         setProgressPublisher(publisher);
         initFractal(params);
     }
-    public void setIterations(long[] iterations) {
-        this.iterations = new long[iterations.length];
+    public void setIterations(int[] iterations) {
+        this.iterations = new int[iterations.length];
         System.arraycopy(iterations, 0, this.iterations, 0, iterations.length);
     }
     public void setTolerance(double tolerance) {
@@ -80,6 +81,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         setMode(params.getMode());
         setDepth(params.getNum_points());
         setIterations(params.getIterations());
+        setEscape_radius(params.getEscape_radius());
         silencer = params.useThreadedGenerator();
         anti = params.isAnti();
         plane = new LinearizedImageData(params.getWidth(), params.getHeight());
@@ -90,7 +92,6 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         setOldVariableCode(params.getOldVariableCode());
         setTolerance(params.getTolerance());
         sumIterations = sumIterations();
-        roots = new ArrayList<>();
         lastConstant = new Complex(-1, 0);
         mandelbrotToJulia = false;
         juliaToMandelbrot = false;
@@ -104,7 +105,9 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             }
         }
         populateMap();
-        createPoints();
+        if (points == null) {
+            createPoints();
+        }
     }
     public int[][][] getBases() {
         return bases;
@@ -255,26 +258,6 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         }
         return ComplexOperations.add(centre_offset, point);
     }
-    private int indexOfRoot(Complex z) {
-        for (int i = 0; i < roots.size(); i++) {
-            if (ComplexOperations.distance_squared(roots.get(i), z) < params.tolerance) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    private int closestRootIndex(Complex z) {
-        int leastDistanceIdx = 0;
-        double leastDistance = ComplexOperations.distance_squared(z, roots.get(0));
-        for (int i = 1; i < roots.size(); i++) {
-            double distance = ComplexOperations.distance_squared(z, roots.get(i));
-            if (distance < leastDistance) {
-                leastDistance = distance;
-                leastDistanceIdx = i;
-            }
-        }
-        return leastDistanceIdx;
-    }
     public void mandelbrotToJulia(int cx, int cy, double level) {
         zoom(cx, cy, level);
         changeMode(centre_offset);
@@ -355,7 +338,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         return depth;
     }
     public void setDepth(int depth) {
-        this.depth = depth;
+        this.depth = MathUtils.clamp(depth, 0, plane.getHeight() * plane.getWidth());
     }
     public Complex getCentre_offset() {
         return centre_offset;
@@ -445,56 +428,292 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         createImage();
     }
     private void secantGenerate(int start, int end) {
-        //Template for specific generator methods
-        for (long iteration : iterations) {
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        int level = 0;
+        for (int iteration : iterations) {
+            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            outer:
             for (int j = start; j < end; ++j) {
-                Complex z = points[j];
+                Complex z = points[j], ztmp2 = new Complex(0);
                 int c = 0;
+                fe.setZ_value(z.toString());
+                fe.setOldvalue(ztmp2.toString());
                 while (c <= iteration) {
+                    Complex ztmp;
+                    last.pop();
+                    ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                    last.push(z);
+                    fe.setOldvalue(ztmp2.toString());
+                    Complex a = fe.evaluate(function, false);
+                    fe.setZ_value(ztmp2.toString());
+                    Complex b = fe.evaluate(function, false);
+                    ztmp = ComplexOperations.subtract(z,
+                            ComplexOperations.divide(
+                                    ComplexOperations.multiply(a,
+                                            ComplexOperations.subtract(z, ztmp2)),
+                                    ComplexOperations.subtract(a, b)));
+                    fe.setZ_value(ztmp.toString());
+                    if (fe.evaluate(function, false).modulus() <= tolerance) {
+                        c = iteration;
+                        break;
+                    }
+                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                        c = iteration;
+                        break;
+                    }
+                    z = new Complex(ztmp);
+                    fe.setZ_value(z.toString());
+                    fe.setOldvalue(ztmp2.toString());
+                    publishProgress(ctr, start, end, j);
+                    c++;
+                    if (ctr > maxiter) {
+                        break outer;
+                    }
+                    ctr++;
                 }
-                //TODO: Generate the fractal
+                last.clear();
+                updateBases(c, iteration, level, tmp);
+                ++level;
             }
         }
     }
     private void newtonGenerate(int start, int end) {
         Complex constant = params.getNewton_constant();
-        //Template for specific generator methods
-        for (long iteration : iterations) {
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        int level = 0;
+        Complex degree;
+        String functionderiv = "";
+        if (Function.isSpecialFunction(function)) {
+            Function func = Function.fromString(function, variableCode, oldVariableCode);
+            func.setConsts(constants);
+            function = func.toString();
+            degree = func.getDegree();
+            functionderiv = func.derivative(1);
+        } else {
+            Polynomial polynomial = Polynomial.fromString(function);
+            polynomial.setConstdec(constants);
+            polynomial.setVariableCode(variableCode);
+            polynomial.setOldvariablecode(oldVariableCode);
+            function = polynomial.toString();
+            degree = polynomial.getDegree();
+            functionderiv = polynomial.derivative().toString();
+        }
+        if (constant != null && constant.equals(Complex.ZERO)) {
+            constant = ComplexOperations.divide(Complex.ONE, degree);
+        }
+        Complex toadd = Complex.ZERO;
+        Complex lastConstantBackup = new Complex(getLastConstant());
+        if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
+            toadd = new Complex(getLastConstant());
+        }
+        for (int iteration : iterations) {
+            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            outer:
             for (int j = start; j < end; ++j) {
-                Complex z = points[j];
+                boolean useJulia = false, useMandelbrot = false;
+                Complex z = points[j], ztmp2 = new Complex(0);
                 int c = 0;
-                while (c <= iteration) {
+                fe.setZ_value(z.toString());
+                fe.setOldvalue(ztmp2.toString());
+                if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
+                    toadd = points[j];
+                    z = new Complex(0);
                 }
-                //TODO: Generate the fractal
+                last.push(z);
+                while (c <= iteration) {
+                    if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
+                        if (mandelbrotToJulia) {
+                            if (c % switch_rate == 0) {
+                                useJulia = (!useJulia);
+                            }
+                            if (useJulia) {
+                                toadd = lastConstantBackup;
+                            } else {
+                                toadd = points[j];
+                            }
+                        }
+                    }
+                    if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
+                        if (juliaToMandelbrot) {
+                            if (c % switch_rate == 0) {
+                                useMandelbrot = (!useMandelbrot);
+                            }
+                            if (useMandelbrot) {
+                                toadd = points[j];
+                            } else {
+                                toadd = lastConstantBackup;
+                            }
+                        }
+                    }
+                    last.pop();
+                    ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                    last.push(z);
+                    last.pop();
+                    Complex ztmp;
+                    if (constant != null) {
+                        ztmp = ComplexOperations.add(ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)))), toadd);
+                    } else {
+                        ztmp = ComplexOperations.add(ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
+                    }
+                    fe.setZ_value(ztmp.toString());
+                    if (fe.evaluate(function, false).modulus() <= tolerance) {
+                        c = iteration;
+                        break;
+                    }
+                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                        c = iteration;
+                        break;
+                    }
+                    z = new Complex(ztmp);
+                    fe.setZ_value(z.toString());
+                    publishProgress(ctr, start, end, j);
+                    c++;
+                    if (ctr > maxiter) {
+                        break outer;
+                    }
+                    ctr++;
+                }
+                last.clear();
+                updateBases(c, iteration, level, tmp);
+                ++level;
             }
         }
     }
     private void mandelbrotGenerate(int start, int end) {
-        //Template for specific generator methods
-        for (long iteration : iterations) {
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        int level = 0;
+        Complex lastConstantBackup = getLastConstant();
+        for (int iteration : iterations) {
+            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            outer:
             for (int j = start; j < end; ++j) {
-                Complex z = points[j];
+                Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(points[j]) : new Complex(0), ztmp2 = Complex.ZERO;
+                setLastConstant(points[j]);
+                fe.setZ_value(z.toString());
+                fe.setOldvalue(ztmp2.toString());
+                fe.setConstdec(this.constants);
+                fe.setZ_value(z.toString());
+                last.push(z);
                 int c = 0;
-                while (c <= iteration) {
+                boolean useJulia = false;
+                while (c <= iteration && z.modulus() < escape_radius) {
+                    if (mandelbrotToJulia) {
+                        if (c % switch_rate == 0) {
+                            useJulia = (!useJulia);
+                        }
+                        if (useJulia) {
+                            setLastConstant(lastConstantBackup);
+                            fe.setConstdec(constants);
+                        } else {
+                            setLastConstant(points[j]);
+                            fe.setConstdec(constants);
+                        }
+                    }
+                    last.pop();
+                    ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                    last.push(z);
+                    fe.setOldvalue(ztmp2.toString());
+                    last.pop();
+                    Complex ztmp = fe.evaluate(function, false);
+                    last.push(ztmp);
+                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                        c = iteration;
+                        break;
+                    }
+                    z = new Complex(ztmp);
+                    int[] coords = toCooordinates(z);
+                    ++tmp[coords[1]][coords[0]];
+                    fe.setZ_value(z.toString());
+                    publishProgress(ctr, start, end, j);
+                    c++;
+                    if (ctr > maxiter) {
+                        break outer;
+                    }
+                    ctr++;
                 }
-                //TODO: Generate the fractal
+                last.clear();
+                updateBases(c, iteration, level, tmp);
+                ++level;
+            }
+        }
+    }
+    private void updateBases(int c, int iteration, int level, int[][] tmp) {
+        if (anti) {
+            if (c == iteration) {
+                bases[level] = MathUtils.intDDAAdd(bases[level], tmp);
+                ++level;
+            }
+        } else {
+            if (c < iteration) {
+                bases[level] = MathUtils.intDDAAdd(bases[level], tmp);
+                ++level;
             }
         }
     }
     private void juliaGenerate(int start, int end) {
-        //Template for specific generator methods
-        for (long iteration : iterations) {
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        int level = 0;
+        Complex lastConstantBackup = getLastConstant();
+        for (int iteration : iterations) {
+            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            outer:
             for (int j = start; j < end; ++j) {
-                Complex z = points[j];
+                Complex z = points[j], ztmp2 = Complex.ZERO;
+                fe.setZ_value(z.toString());
+                fe.setOldvalue(ztmp2.toString());
+                last.push(z);
                 int c = 0;
-                while (c <= iteration) {
+                boolean useMandelBrot = false;
+                while (c <= iteration && z.modulus() < escape_radius) {
+                    if (juliaToMandelbrot) {
+                        if (c % switch_rate == 0) {
+                            useMandelBrot = (!useMandelBrot);
+                        }
+                        if (useMandelBrot) {
+                            setLastConstant(points[j]);
+                            fe.setConstdec(constants);
+                        } else {
+                            setLastConstant(lastConstantBackup);
+                            fe.setConstdec(constants);
+                        }
+                    }
+                    last.pop();
+                    ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                    last.push(z);
+                    fe.setOldvalue(ztmp2.toString());
+                    last.pop();
+                    Complex ztmp = fe.evaluate(function, false);
+                    last.push(ztmp);
+                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                        c = iteration;
+                        break;
+                    }
+                    z = new Complex(ztmp);
+                    int[] coords = toCooordinates(z);
+                    ++tmp[coords[1]][coords[0]];
+                    fe.setZ_value(z.toString());
+                    publishProgress(ctr, start, end, j);
+                    c++;
+                    if (ctr > maxiter) {
+                        break outer;
+                    }
+                    ctr++;
                 }
-                //TODO: Generate the fractal
+                last.clear();
+                updateBases(c, iteration, level, tmp);
+                ++level;
             }
         }
+    }
+    public void setEscape_radius(double escape_radius) {
+        this.escape_radius = escape_radius;
     }
 }

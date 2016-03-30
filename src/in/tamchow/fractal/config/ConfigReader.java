@@ -269,7 +269,7 @@ public class ConfigReader {
     private static ComplexBrotFractalParams getComplexBrotParamFromFile(File paramfile) throws FileNotFoundException {
         Scanner in = new Scanner(paramfile);
         ArrayList<String> lines = new ArrayList<>();
-        String constant = null, threads = null, post_process_mode = null;
+        String constant = null, threads = null, post_process_mode = null, oldvariablecode = null, switch_rate = null;
         while (in.hasNext()) {
             String line = in.nextLine();
             if (line.startsWith("Threads:")) {
@@ -281,6 +281,14 @@ public class ConfigReader {
             }
             if (line.startsWith("Newton_constant:")) {
                 constant = line.substring("Newton_constant:".length()).trim();
+                continue;
+            }
+            if (line.startsWith("Old_variable_code:")) {
+                oldvariablecode = line.substring("Old_variable_code:".length()).trim();
+                continue;
+            }
+            if (line.startsWith("Switch_Mode_Rate:")) {
+                switch_rate = line.substring("Switch_Mode_Rate:".length()).trim();
                 continue;
             }
             if (!line.startsWith("#")) {
@@ -311,6 +319,12 @@ public class ConfigReader {
         }
         if (post_process_mode != null) {
             complexBrotFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+        }
+        if (switch_rate != null) {
+            complexBrotFractalParams.setSwitch_rate(Integer.valueOf(switch_rate));
+        }
+        if (oldvariablecode != null) {
+            complexBrotFractalParams.setOldVariableCode(oldvariablecode);
         }
         complexBrotFractalParams.setPath(paramfile.getAbsolutePath());
         return complexBrotFractalParams;

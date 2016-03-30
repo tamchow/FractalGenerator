@@ -174,7 +174,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         }
         @Override
         public void onCompletion() {
-            if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+            if (copyOfMaster.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || copyOfMaster.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || copyOfMaster.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || copyOfMaster.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);

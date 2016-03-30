@@ -27,8 +27,8 @@ import java.util.ArrayList;
  * Various (21) Coloring modes
  */
 public final class ComplexFractalGenerator implements PixelFractalGenerator {
-    static ArrayList<Complex> roots;
-    Color_Utils_Config color;
+    private static ArrayList<Complex> roots;
+    protected Color_Utils_Config color;
     Complex[] boundary_elements;
     double zoom, zoom_factor, base_precision, scale;
     int center_x, center_y, lastConstantIdx, stripe_density, switch_rate;
@@ -96,7 +96,9 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         resetCentre();
         setOldvariablecode(oldvariablecode);
         setTolerance(tolerance);
-        roots = new ArrayList<>();
+        if (roots == null) {
+            roots = new ArrayList<>();
+        }
         setColor(color);
         lastConstant = new Complex(-1, 0);
         if ((this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE || this.color.getMode() == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR) || ((!this.color.isExponentialSmoothing()) && (this.color.isLogIndex() && (!(mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT))))) {
@@ -354,7 +356,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     public void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
         FixedStack<Complex> last = new FixedStack<>(iterations + 2);
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         String functionderiv = "";
         Complex degree = null;
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -469,12 +471,13 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         mindist = (Math.min(distance, mindist));
                     }
                     maxdist = (Math.max(distance, maxdist));
-                    if (fe.evaluate(function, false).modulus() <= tolerance/*&&roots.size()<(int)degree.modulus()*/) {
+                    if (fe.evaluate(function, false).modulus() <= tolerance) {
                         if (color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_CLASSIC || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_STRIPES || color.getMode() == Colors.CALCULATIONS.COLOR_NEWTON_NORMALIZED) {
                             if (indexOfRoot(ztmp) == -1) {
                                 roots.add(ztmp);
                             }
                         }
+                        c = iterations;
                         break;
                     }
                     if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
@@ -483,6 +486,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                                 roots.add(ztmp);
                             }
                         }
+                        c = iterations;
                         break;
                     }
                     z = new Complex(ztmp);
@@ -649,7 +653,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack<Complex> last = new FixedStack<>(iterations + 2);
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
             if (Function.isSpecialFunction(function)) {
@@ -688,11 +692,11 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                 setLastConstant(argand_map[i][j]);
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
-                fe.setConstdec(this.consts);
+                fe.setConstdec(consts);
                 if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
                     fed.setZ_value(zd.toString());
                     fed.setOldvalue(ztmpd2.toString());
-                    fed.setConstdec(this.consts);
+                    fed.setConstdec(consts);
                 }
                 int c = 0;
                 last.push(z);
@@ -705,12 +709,12 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         }
                         if (useJulia) {
                             setLastConstant(lastConstantBackup);
-                            fe.setConstdec(this.consts);
-                            fed.setConstdec(this.consts);
-                        } else if (!useJulia) {
+                            fe.setConstdec(consts);
+                            fed.setConstdec(consts);
+                        } else {
                             setLastConstant(argand_map[i][j]);
-                            fe.setConstdec(this.consts);
-                            fed.setConstdec(this.consts);
+                            fe.setConstdec(consts);
+                            fed.setConstdec(consts);
                         }
                     }
                     last.pop();
@@ -889,7 +893,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         }
         FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         long ctr = 0;
-        Complex toadd = new Complex(0);
+        Complex toadd = Complex.ZERO;
         Complex lastConstantBackup = new Complex(getLastConstant());
         if (mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT) {
             toadd = new Complex(getLastConstant());
@@ -930,7 +934,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                             }
                             if (useJulia) {
                                 toadd = lastConstantBackup;
-                            } else if (!useJulia) {
+                            } else {
                                 toadd = argand_map[i][j];
                             }
                         }
@@ -940,10 +944,10 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                             if (c % switch_rate == 0) {
                                 useMandelbrot = (!useMandelbrot);
                             }
-                            if (!useMandelbrot) {
-                                toadd = lastConstantBackup;
-                            } else if (useMandelbrot) {
+                            if (useMandelbrot) {
                                 toadd = argand_map[i][j];
+                            } else {
+                                toadd = lastConstantBackup;
                             }
                         }
                     }
@@ -1019,6 +1023,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                                 roots.add(ztmp);
                             }
                         }
+                        c = iterations;
                         break;
                     }
                     if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
@@ -1027,6 +1032,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                                 roots.add(ztmp);
                             }
                         }
+                        c = iterations;
                         break;
                     }
                     z = new Complex(ztmp);
@@ -1147,7 +1153,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         FixedStack<Complex> last = new FixedStack<>(iterations + 2);
         FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
-        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts);
+        FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
             if (Function.isSpecialFunction(function)) {
@@ -1197,14 +1203,14 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         if (c % switch_rate == 0) {
                             useMandelBrot = (!useMandelBrot);
                         }
-                        if (!useMandelBrot) {
-                            setLastConstant(lastConstantBackup);
-                            fe.setConstdec(this.consts);
-                            fed.setConstdec(this.consts);
-                        } else if (useMandelBrot) {
+                        if (useMandelBrot) {
                             setLastConstant(argand_map[i][j]);
-                            fe.setConstdec(this.consts);
-                            fed.setConstdec(this.consts);
+                            fe.setConstdec(consts);
+                            fed.setConstdec(consts);
+                        } else {
+                            setLastConstant(lastConstantBackup);
+                            fe.setConstdec(consts);
+                            fed.setConstdec(consts);
                         }
                     }
                     last.pop();

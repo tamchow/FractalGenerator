@@ -52,7 +52,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         IFSGenerator copyOfMaster;
         public SlaveRunner(int index) {
             super(index);
-            long iterations;
+            int iterations;
             copyOfMaster = new IFSGenerator(new IFSFractalParams(master.getParams()), master.getProgressPublisher());
             if (index == data.length - 1) {
                 iterations = copyOfMaster.getDepth() % threads;
