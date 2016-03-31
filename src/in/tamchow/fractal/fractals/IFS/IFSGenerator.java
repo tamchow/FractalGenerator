@@ -29,6 +29,22 @@ public class IFSGenerator implements PixelFractalGenerator {
         initIFS(params);
         this.progressPublisher = progressPublisher;
     }
+    public int getHeight() {
+        return params.getHeight();
+    }
+    public void setHeight(int height) {
+        IFSFractalParams modified = new IFSFractalParams(params);
+        modified.setHeight(height);
+        initIFS(modified);
+    }
+    public int getWidth() {
+        return params.getWidth();
+    }
+    public void setWidth(int width) {
+        IFSFractalParams modified = new IFSFractalParams(params);
+        modified.setWidth(width);
+        initIFS(modified);
+    }
     private void initIFS(IFSFractalParams params) {
         plane = new LinearizedImageData(params.getWidth(), params.getHeight());
         resetCentre();
@@ -90,16 +106,6 @@ public class IFSGenerator implements PixelFractalGenerator {
     }
     public void setProgressPublisher(Publisher progressPublisher) {
         this.progressPublisher = progressPublisher;
-    }
-    public void setWidth(int width) {
-        IFSFractalParams modified = new IFSFractalParams(params);
-        modified.setWidth(width);
-        initIFS(modified);
-    }
-    public void setHeight(int height) {
-        IFSFractalParams modified = new IFSFractalParams(params);
-        modified.setHeight(height);
-        initIFS(modified);
     }
     public IFSFractalParams getParams() {
         return params;

@@ -44,28 +44,21 @@ public class FractalPanningHelper {
             panner.generate(start_x, end_x, start_y, end_y);
             return toPan.getArgand();
         } else if (toPanthis instanceof IFSGenerator || toPanthis instanceof ComplexBrotFractalGenerator) {
-            IFSGenerator toPan = (IFSGenerator) toPanthis;
-            try {
-                ImageData plane = new ImageData(toPan.getPlane());
-                plane.pan(toPan.getParams().getWidth(), toPan.getParams().getHeight(), x_dist, y_dist);
-                return plane;
-            } catch (UnsupportedOperationException rangeViolation) {
-                //buffer exhausted, so we re-render completely
-                toPan.pan(x_dist, y_dist);
-                toPan.generate();
-                return toPan.getPlane().subImage(toPan.getParams().getWidth(), toPan.getParams().getHeight());
+            PixelFractalGenerator toPan;
+            if (toPanthis instanceof IFSGenerator) {
+                toPan = (IFSGenerator) toPanthis;
+            } else {
+                toPan = (ComplexBrotFractalGenerator) toPanthis;
             }
-        } else if (toPanthis instanceof ComplexBrotFractalGenerator) {
-            ComplexBrotFractalGenerator toPan = (ComplexBrotFractalGenerator) toPanthis;
             try {
                 ImageData plane = new ImageData(toPan.getPlane());
-                plane.pan(toPan.getParams().getWidth(), toPan.getParams().getHeight(), x_dist, y_dist);
+                plane.pan(toPan.getWidth(), toPan.getHeight(), x_dist, y_dist);
                 return plane;
             } catch (UnsupportedOperationException rangeViolation) {
                 //buffer exhausted, so we re-render completely
                 toPan.pan(x_dist, y_dist);
                 toPan.generate();
-                return toPan.getPlane().subImage(toPan.getParams().getWidth(), toPan.getParams().getHeight());
+                return toPan.getPlane().subImage(toPan.getWidth(), toPan.getHeight());
             }
         } else if (toPanthis instanceof ImageData) {
             toPanthis.pan(x_dist, y_dist);

@@ -38,7 +38,8 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     double scale;
     double tolerance;
     double escape_radius;
-    int depth, switch_rate;
+    int depth;
+    int switch_rate;
     Complex centre_offset, lastConstant;
     Complex[][] plane_map;
     String[][] constants;
@@ -48,10 +49,26 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     boolean silencer, anti, mandelbrotToJulia, juliaToMandelbrot;
     String variableCode, oldVariableCode;
     private long maxiter;
-    public ComplexBrotFractalGenerator(ComplexBrotFractalParams params, Publisher publisher) {
+    public ComplexBrotFractalGenerator(ComplexBrotFractalParams params, Publisher progressPublisher) {
         this.params = params;
-        setProgressPublisher(publisher);
+        setProgressPublisher(progressPublisher);
         initFractal(params);
+    }
+    public int getHeight() {
+        return params.getHeight();
+    }
+    public void setHeight(int height) {
+        ComplexBrotFractalParams modified = new ComplexBrotFractalParams(params);
+        modified.setHeight(height);
+        initFractal(modified);
+    }
+    public int getWidth() {
+        return params.getWidth();
+    }
+    public void setWidth(int width) {
+        ComplexBrotFractalParams modified = new ComplexBrotFractalParams(params);
+        modified.setWidth(width);
+        initFractal(modified);
     }
     public void setIterations(int[] iterations) {
         this.iterations = new int[iterations.length];

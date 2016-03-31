@@ -1,4 +1,5 @@
 package in.tamchow.fractal.fractals;
+import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.imgutils.containers.Pannable;
 import in.tamchow.fractal.imgutils.containers.Zoomable;
 /**
@@ -7,4 +8,7 @@ import in.tamchow.fractal.imgutils.containers.Zoomable;
 public interface PixelFractalGenerator extends FractalGenerator, Zoomable, Pannable {
     double calculateBasePrecision();
     void resetCentre();
+    int getWidth();
+    int getHeight();
+    ImageData getPlane();
 }

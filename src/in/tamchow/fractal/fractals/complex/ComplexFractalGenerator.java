@@ -78,6 +78,9 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, double tolerance, Color_Utils_Config color, Publisher progressPublisher, int switch_rate, Complex trap_point, String linetrap) {
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, 0), null), progressPublisher);
     }
+    public ImageData getPlane() {
+        return getArgand();
+    }
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Color_Utils_Config color, int switch_rate, Complex trap_point, String linetrap) {
         silencer = params.useThreadedGenerator();
         argand = new LinearizedImageData(width, height);
@@ -1616,6 +1619,14 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         setCenter_x(argand.getWidth() / 2);
         setCenter_y(argand.getHeight() / 2);
         resetCentre_Offset();
+    }
+    @Override
+    public int getWidth() {
+        return getArgand().getWidth();
+    }
+    @Override
+    public int getHeight() {
+        return getArgand().getHeight();
     }
     public void resetCentre_Offset() {
         centre_offset = new Complex(0);
