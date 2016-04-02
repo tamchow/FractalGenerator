@@ -14,7 +14,6 @@ import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
-import in.tamchow.fractal.math.matrix.MatrixOperations;
 import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 /**
@@ -234,16 +233,15 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     public ImageData getPlane() {
         return plane;
     }
-    public int[] toCooordinates(Complex point) {
+    public int[] toCoordinates(Complex point) {
         point = ComplexOperations.subtract(point, centre_offset);
         if (Math.abs(params.skew) >= params.tolerance) {
-            Matrix rotor = Matrix.rotationMatrix2D(params.skew).inverse();
-            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));
+            /*Matrix rotor = Matrix.rotationMatrix2D(params.skew).inverse();
+            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));*/
+            point = MathUtils.matrixToComplex(MathUtils.doRotate(MathUtils.complexToMatrix(point), -params.skew));
         }
-        int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
-        x = MathUtils.boundsProtected(x, plane.getWidth());
-        y = MathUtils.boundsProtected(y, plane.getHeight());
-        return new int[]{x, y};
+        return new int[]{MathUtils.boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
+                MathUtils.boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {
@@ -289,23 +287,23 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         setCentre_offset(centre_offset);
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
-        //setCenter_x(toCooordinates(centre_offset)[0]);setCenter_y(toCooordinates(centre_offset)[1]);
+        //setCenter_x(toCoordinates(centre_offset)[0]);setCenter_y(toCoordinates(centre_offset)[1]);
         populateMap();
     }
     public void populateMap() {
         for (int i = 0; i < plane.getHeight(); i++) {
             for (int j = 0; j < plane.getWidth(); j++) {
-                plane_map[i][j] = fromCooordinates(j, i);
+                plane_map[i][j] = fromCoordinates(j, i);
             }
         }
     }
-    public Complex fromCooordinates(int x, int y) {
-        x = MathUtils.boundsProtected(x, plane.getWidth());
-        y = MathUtils.boundsProtected(y, plane.getHeight());
-        Complex point = new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale));
+    public Complex fromCoordinates(int x, int y) {
+        Complex point = new Complex(((MathUtils.boundsProtected(x, getImageWidth()) - center_x) / scale),
+                ((center_y - MathUtils.boundsProtected(y, getImageWidth())) / scale));
         if (Math.abs(params.skew) > params.tolerance) {
-            Matrix rotor = Matrix.rotationMatrix2D(params.skew);
-            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));
+            /*Matrix rotor = Matrix.rotationMatrix2D(params.skew);
+            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));*/
+            point = MathUtils.matrixToComplex(MathUtils.doRotate(MathUtils.complexToMatrix(point), params.skew));
         }
         return ComplexOperations.add(centre_offset, point);
     }
@@ -323,7 +321,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         cx = MathUtils.boundsProtected(cx, plane.getWidth());
         cy = MathUtils.boundsProtected(cy, plane.getHeight());
         //setCenter_x(cx);setCenter_y(cy);
-        setCentre_offset(fromCooordinates(cx, cy));
+        setCentre_offset(fromCoordinates(cx, cy));
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
         populateMap();
@@ -678,7 +676,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                         break;
                     }
                     z = new Complex(ztmp);
-                    int[] coords = toCooordinates(z);
+                    int[] coords = toCoordinates(z);
                     ++tmp[coords[1]][coords[0]];
                     fe.setZ_value(z.toString());
                     publishProgress(ctr, start, end, j);
@@ -748,7 +746,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                         break;
                     }
                     z = new Complex(ztmp);
-                    int[] coords = toCooordinates(z);
+                    int[] coords = toCoordinates(z);
                     ++tmp[coords[1]][coords[0]];
                     fe.setZ_value(z.toString());
                     publishProgress(ctr, start, end, j);

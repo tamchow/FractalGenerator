@@ -1,6 +1,7 @@
 package in.tamchow.fractal.helpers.math;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
+import in.tamchow.fractal.math.matrix.MatrixOperations;
 
 import java.util.Random;
 /**
@@ -145,6 +146,14 @@ public class MathUtils {
     }
     public static Complex matrixToComplex(Matrix data) {
         return new Complex(data.get(0, 0), data.get(1, 0));
+    }
+    public static Matrix doRotate(Matrix point, double angle) {
+        /** Uses the 3-shears rotation technique over conventional rotation techniques for
+         * improved image quality.
+         */
+        Matrix tanMatrix = new Matrix(new double[][]{{1, -Math.tan(angle / 2)}, {0, 1}});
+        Matrix sinMatrix = new Matrix(new double[][]{{1, 0}, {Math.sin(angle), 1}});
+        return MatrixOperations.multiply(tanMatrix, MatrixOperations.multiply(sinMatrix, MatrixOperations.multiply(tanMatrix, point)));
     }
     public int[] mostEfficientfactor(int a) {
         int num_factors = 0;

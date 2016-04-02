@@ -33,13 +33,13 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         }
     }
     public static Matrix rotationMatrix2D(double angle) {
-        return new Matrix(new double[][]{{Math.cos(angle), -Math.sin(angle)}, {Math.sin(angle), Math.cos(angle)}});
+        return new Matrix(new double[][]{{Math.cos(angle), Math.sin(angle)}, {-Math.sin(angle), Math.cos(angle)}});
     }
     public static Matrix nullMatrix(int order) {
         return nullMatrix(order, order);
     }
-    public static Matrix nullMatrix(int rows, int colums) {
-        return new Matrix(rows, colums);
+    public static Matrix nullMatrix(int rows, int columns) {
+        return new Matrix(rows, columns);
     }
     public static Matrix identityMatrix(int order) {
         int rows = Math.round((float) Math.sqrt(order));

@@ -17,7 +17,6 @@ import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
-import in.tamchow.fractal.math.matrix.MatrixOperations;
 import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
@@ -583,7 +582,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         colortmp = getColor(i, j, c, pass, maxModulus, iterations);
                 }
                 if (mode == Mode.SECANTBROT) {
-                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + colortmp);
+                    argand.setPixel(toCoordinates(z)[1], toCoordinates(z)[0], argand.getPixel(toCoordinates(z)[1], toCoordinates(z)[0]) + colortmp);
                 } else {
                     argand.setPixel(i, j, colortmp);
                 }
@@ -865,7 +864,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         colortmp = getColor(i, j, c, pass, escape_radius, iterations);
                 }
                 if (mode == Mode.BUDDHABROT || mode == Mode.RUDYBROT) {
-                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + colortmp);
+                    argand.setPixel(toCoordinates(z)[1], toCoordinates(z)[0], argand.getPixel(toCoordinates(z)[1], toCoordinates(z)[0]) + colortmp);
                 } else {
                     argand.setPixel(i, j, colortmp);
                 }
@@ -1128,7 +1127,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         colortmp = getColor(i, j, c, pass, maxModulus, iterations);
                 }
                 if (mode == Mode.NEWTONBROT || mode == Mode.JULIA_NOVABROT || mode == Mode.MANDELBROT_NOVABROT) {
-                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + colortmp);
+                    argand.setPixel(toCoordinates(z)[1], toCoordinates(z)[0], argand.getPixel(toCoordinates(z)[1], toCoordinates(z)[0]) + colortmp);
                 } else {
                     argand.setPixel(i, j, colortmp);
                 }
@@ -1361,7 +1360,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                         colortmp = getColor(i, j, c, pass, escape_radius, iterations);
                 }
                 if (mode == Mode.JULIABROT) {
-                    argand.setPixel(toCooordinates(z)[1], toCooordinates(z)[0], argand.getPixel(toCooordinates(z)[1], toCooordinates(z)[0]) + colortmp);
+                    argand.setPixel(toCoordinates(z)[1], toCoordinates(z)[0], argand.getPixel(toCoordinates(z)[1], toCoordinates(z)[0]) + colortmp);
                 } else {
                     argand.setPixel(i, j, colortmp);
                 }
@@ -1602,16 +1601,15 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
         return colortmp;
     }
-    public int[] toCooordinates(Complex point) {
+    public int[] toCoordinates(Complex point) {
         point = ComplexOperations.subtract(point, centre_offset);
         if (Math.abs(params.initParams.skew) >= tolerance) {
-            Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew).inverse();
-            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));
+            /*Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew).inverse();
+            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));*/
+            point = MathUtils.matrixToComplex(MathUtils.doRotate(MathUtils.complexToMatrix(point), -params.initParams.skew));
         }
-        int x = (int) ((point.real() * scale) + center_x), y = (int) (center_y - (point.imaginary() * scale));
-        x = MathUtils.boundsProtected(x, argand.getWidth());
-        y = MathUtils.boundsProtected(y, argand.getHeight());
-        return new int[]{x, y};
+        return new int[]{MathUtils.boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
+                MathUtils.boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
     }
     public void zoom(ZoomParams zoom) {
         if (zoom.centre == null) {
@@ -1698,13 +1696,13 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         setCentre_offset(centre_offset);
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
-        //setCenter_x(toCooordinates(centre_offset)[0]);setCenter_y(toCooordinates(centre_offset)[1]);
+        //setCenter_x(toCoordinates(centre_offset)[0]);setCenter_y(toCoordinates(centre_offset)[1]);
         populateMap();
     }
     public void populateMap() {
         for (int i = 0; i < argand.getHeight(); i++) {
             for (int j = 0; j < argand.getWidth(); j++) {
-                argand_map[i][j] = fromCooordinates(j, i);
+                argand_map[i][j] = fromCoordinates(j, i);
             }
         }
         if (color.mode == Colors.CALCULATIONS.DOMAIN_COLORING) {
@@ -1720,13 +1718,13 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
             }
         }
     }
-    public Complex fromCooordinates(int x, int y) {
-        x = MathUtils.boundsProtected(x, argand.getWidth());
-        y = MathUtils.boundsProtected(y, argand.getHeight());
-        Complex point = new Complex(((((double) x) - center_x) / scale), ((center_y - ((double) y)) / scale));
+    public Complex fromCoordinates(int x, int y) {
+        Complex point = new Complex(((MathUtils.boundsProtected(x, getImageWidth()) - center_x) / scale),
+                ((center_y - MathUtils.boundsProtected(y, getImageWidth())) / scale));
         if (Math.abs(params.initParams.skew) > tolerance) {
-            Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
-            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));
+            /*Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
+            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));*/
+            point = MathUtils.matrixToComplex(MathUtils.doRotate(MathUtils.complexToMatrix(point), params.initParams.skew));
         }
         return ComplexOperations.add(centre_offset, point);
     }
@@ -1753,7 +1751,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         cx = MathUtils.boundsProtected(cx, argand.getWidth());
         cy = MathUtils.boundsProtected(cy, argand.getHeight());
         //setCenter_x(cx);setCenter_y(cy);
-        setCentre_offset(fromCooordinates(cx, cy));
+        setCentre_offset(fromCoordinates(cx, cy));
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
         populateMap();
