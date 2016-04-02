@@ -1,5 +1,5 @@
 package in.tamchow.fractal.math.symbolics;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 /**
  * Holds one term of a polynomial
  */

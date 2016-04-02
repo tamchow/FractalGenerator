@@ -1,9 +1,10 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
+import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
-import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.imgutils.containers.Animation;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
@@ -27,20 +28,51 @@ public class IFSGenerator implements PixelFractalGenerator {
     public IFSGenerator(IFSFractalParams params, Publisher progressPublisher) {
         setParams(params);
         initIFS(params);
-        this.progressPublisher = progressPublisher;
+        doZooms(params.zoomConfig);
+        setProgressPublisher(progressPublisher);
     }
-    public int getHeight() {
+    @Override
+    public void doZooms(ZoomConfig zoomConfig) {
+        if (zoomConfig.zooms != null) {
+            for (ZoomParams zoom : zoomConfig.zooms) {
+                zoom(zoom);
+            }
+        }
+    }
+    @Override
+    public int getConfiguredHeight() {
         return params.getHeight();
     }
+    @Override
+    public int getImageHeight() {
+        return getPlane().getWidth();
+    }
+    @Override
+    public int getHeight() {
+        return getConfiguredHeight();
+    }
+    @Override
     public void setHeight(int height) {
+        height = MathUtils.clamp(height, getPlane().getHeight());
         IFSFractalParams modified = new IFSFractalParams(params);
         modified.setHeight(height);
         initIFS(modified);
     }
-    public int getWidth() {
+    @Override
+    public int getConfiguredWidth() {
         return params.getWidth();
     }
+    @Override
+    public int getImageWidth() {
+        return getPlane().getWidth();
+    }
+    @Override
+    public int getWidth() {
+        return getConfiguredWidth();
+    }
+    @Override
     public void setWidth(int width) {
+        width = MathUtils.clamp(width, getPlane().getWidth());
         IFSFractalParams modified = new IFSFractalParams(params);
         modified.setWidth(width);
         initIFS(modified);

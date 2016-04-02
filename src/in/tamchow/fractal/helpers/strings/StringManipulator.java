@@ -1,4 +1,4 @@
-package in.tamchow.fractal.helpers;
+package in.tamchow.fractal.helpers.strings;
 /**
  * Miscellaneous: String Manipulation.
  */
@@ -164,8 +164,8 @@ public class StringManipulator {
     public static int[] indexesOf(String in, char what) {
         return indexesOf(in, "" + what);
     }
-    public static int countOccurencesOf(String in, char what) {
-        return countOccurencesOf(in, "" + what);
+    public static int countOccurrencesOf(String in, char what) {
+        return countOccurrencesOf(in, "" + what);
     }
     public static String format(String toFormat, String[][] details) {
         String formatted = "";
@@ -184,7 +184,7 @@ public class StringManipulator {
         System.arraycopy(backup, 0, indexes, 0, count);
         return indexes;
     }
-    public static int countOccurencesOf(String in, String what) {
+    public static int countOccurrencesOf(String in, String what) {
         return indexesOf(in, what).length;
     }
     public static String delete(String value, String what) {
@@ -199,16 +199,16 @@ public class StringManipulator {
             to = "";
         }
         String result = value;
-        int lastIndex = 0, index = value.indexOf(from), fl = from.length(), replaceCount = countOccurencesOf(value, from);
+        int lastIndex = 0, index = value.indexOf(from), fl = from.length(), replaceCount = countOccurrencesOf(value, from);
         if (index != -1) {
-            StringBuilder builder = new StringBuilder(result.length() - replaceCount * (fl - to.length()));
+            CharBuffer buffer = new CharBuffer(result.length() - replaceCount * (fl - to.length()));
             while (index != -1) {
-                builder.append(value.substring(lastIndex, index)).append(to);
+                buffer.append(value.substring(lastIndex, index)).append(to);
                 lastIndex = index + fl;
                 index = value.indexOf(from, lastIndex);
             }
-            builder.append(value.substring(lastIndex));
-            result = builder.toString();
+            buffer.append(value.substring(lastIndex));
+            result = buffer.toString();
         }
         return result;
     }
@@ -217,7 +217,7 @@ public class StringManipulator {
             //the length checks will throw the necessary NullPointerExceptions
             throw new IllegalArgumentException("Empty String");
         }
-        String[] result = new String[countOccurencesOf(what, at) + 1];
+        String[] result = new String[countOccurrencesOf(what, at) + 1];
         if (result.length == 1) {
             result[0] = what;
             return result;

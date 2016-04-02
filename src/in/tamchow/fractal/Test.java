@@ -36,7 +36,7 @@ public class Test {
         //cfg.setColor_density(-1);//let there be the proper color_density!
         Complex constant = null;//new Complex("1.0,+0.0i");
         Complex trap = new Complex(0.1);
-        int x_t = 3, y_t = 2;
+        int x_t = 4, y_t = 2;
         double skew = 0 * Math.PI;
         func = func2;
         boolean def = (args.length == 0);

@@ -1,4 +1,4 @@
-package in.tamchow.fractal.math;
+package in.tamchow.fractal.helpers.math;
 import java.io.Serializable;
 import java.util.EmptyStackException;
 /**

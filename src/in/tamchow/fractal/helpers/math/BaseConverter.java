@@ -1,3 +1,4 @@
+package in.tamchow.fractal.helpers.math;
 /**
  * Converts a number in digit representation from one base to another
  * Not guaranteed to work with bases above 65,451 (more characters than which the lookup can use for substituting digits)
@@ -39,7 +40,7 @@ public class BaseConverter {
     }
     public static long convertToNumber(String inputNumber, int from_base, boolean checkIfNegative) {
         String copyOfInput = inputNumber;
-        boolean isNegative = checkIfNegative ? isNegative(inputNumber) : false;
+        boolean isNegative = checkIfNegative && isNegative(inputNumber);
         if (isNegative) {
             //the provided number is (supposedly) negative
             inputNumber = inputNumber.substring(1, inputNumber.length());

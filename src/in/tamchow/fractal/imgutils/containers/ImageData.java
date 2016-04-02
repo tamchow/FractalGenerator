@@ -2,7 +2,7 @@ package in.tamchow.fractal.imgutils.containers;
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
-import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 

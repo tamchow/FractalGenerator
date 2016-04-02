@@ -1,7 +1,7 @@
 package in.tamchow.fractal.misc.bs;
-import in.tamchow.fractal.helpers.MathUtils;
-import in.tamchow.fractal.helpers.StringManipulator;
-import in.tamchow.fractal.math.FixedStack;
+import in.tamchow.fractal.helpers.math.FixedStack;
+import in.tamchow.fractal.helpers.math.MathUtils;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.misc.bs.bserrors.HaltError;
 
 import java.io.File;

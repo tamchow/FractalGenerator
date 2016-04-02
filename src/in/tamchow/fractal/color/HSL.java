@@ -1,5 +1,5 @@
 package in.tamchow.fractal.color;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
 /**

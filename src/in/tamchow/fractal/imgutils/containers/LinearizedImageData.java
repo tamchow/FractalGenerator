@@ -1,5 +1,5 @@
 package in.tamchow.fractal.imgutils.containers;
-import in.tamchow.fractal.helpers.MathUtils;
+import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.io.Serializable;
 /**

@@ -1,14 +1,15 @@
 package in.tamchow.fractal.fractals.complexbrot;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
+import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
-import in.tamchow.fractal.helpers.MathUtils;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.math.FixedStack;
+import in.tamchow.fractal.helpers.math.MathUtils;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
-import in.tamchow.fractal.math.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
@@ -51,21 +52,52 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     private long maxiter;
     public ComplexBrotFractalGenerator(ComplexBrotFractalParams params, Publisher progressPublisher) {
         this.params = params;
-        setProgressPublisher(progressPublisher);
         initFractal(params);
+        doZooms(params.zoomConfig);
+        setProgressPublisher(progressPublisher);
     }
-    public int getHeight() {
+    @Override
+    public void doZooms(ZoomConfig zoomConfig) {
+        if (zoomConfig.zooms != null) {
+            for (ZoomParams zoom : zoomConfig.zooms) {
+                zoom(zoom);
+            }
+        }
+    }
+    @Override
+    public int getConfiguredHeight() {
         return params.getHeight();
     }
+    @Override
+    public int getImageHeight() {
+        return getPlane().getWidth();
+    }
+    @Override
+    public int getHeight() {
+        return getConfiguredHeight();
+    }
+    @Override
     public void setHeight(int height) {
+        height = MathUtils.clamp(height, getPlane().getHeight());
         ComplexBrotFractalParams modified = new ComplexBrotFractalParams(params);
         modified.setHeight(height);
         initFractal(modified);
     }
-    public int getWidth() {
+    @Override
+    public int getConfiguredWidth() {
         return params.getWidth();
     }
+    @Override
+    public int getImageWidth() {
+        return getPlane().getWidth();
+    }
+    @Override
+    public int getWidth() {
+        return getConfiguredWidth();
+    }
+    @Override
     public void setWidth(int width) {
+        width = MathUtils.clamp(width, getPlane().getWidth());
         ComplexBrotFractalParams modified = new ComplexBrotFractalParams(params);
         modified.setWidth(width);
         initFractal(modified);

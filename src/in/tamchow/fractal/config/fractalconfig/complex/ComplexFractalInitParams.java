@@ -3,7 +3,7 @@ import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -98,6 +98,18 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         }
         representation = representation.substring(0, representation.length() - 1);
         return representation;
+    }
+    public int getWidth() {
+        return width;
+    }
+    public void setWidth(int width) {
+        this.width = width;
+    }
+    public int getHeight() {
+        return height;
+    }
+    public void setHeight(int height) {
+        this.height = height;
     }
     public String getLinetrap() {
         return linetrap;

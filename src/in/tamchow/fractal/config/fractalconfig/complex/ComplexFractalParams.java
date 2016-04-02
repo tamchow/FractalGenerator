@@ -1,6 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 
 import java.io.Serializable;

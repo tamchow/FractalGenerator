@@ -1,13 +1,14 @@
 package in.tamchow.fractal.math.matrix;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
 /**
  * Holds a rectangular matrix
  */
-public final class Matrix implements Serializable, Comparable<Matrix> {
+public final class Matrix extends Number implements Serializable, Comparable<Matrix> {
     private int rows, columns;
     private double[][] matrixData;
+    private String representationCache;
     public Matrix(double[][] matrixData) {
         initMatrix(matrixData.length, matrixData[0].length, matrixData);
     }
@@ -18,14 +19,24 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         setNumRows(rows);
         setNumColumns(columns);
         matrixData = new double[this.rows][this.columns];
+        //representationCache=toString();
+    }
+    public Matrix(String matrix) {
+        matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
+        String[] rows = StringManipulator.split(matrix, ";");
+        this.rows = rows.length;
+        this.columns = StringManipulator.split(rows[0].substring(1, rows[0].length() - 1), ",").length;
+        for (int i = 0; i < matrixData.length && i < rows.length; i++) {
+            //trim leading and trailing square brackets
+            String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
+            for (int j = 0; j < matrixData[i].length && j < columns.length; j++) {
+                matrixData[i][j] = Double.valueOf(columns[j]);
+            }
+        }
+        representationCache = toString();
     }
     public static Matrix rotationMatrix2D(double angle) {
-        double[][] matrixData = new double[2][2];
-        matrixData[0][0] = Math.cos(angle);
-        matrixData[0][1] = -Math.sin(angle);
-        matrixData[1][0] = Math.sin(angle);
-        matrixData[1][1] = Math.cos(angle);
-        return new Matrix(matrixData);
+        return new Matrix(new double[][]{{Math.cos(angle), -Math.sin(angle)}, {Math.sin(angle), Math.cos(angle)}});
     }
     public static Matrix nullMatrix(int order) {
         return nullMatrix(order, order);
@@ -34,10 +45,11 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         return new Matrix(rows, colums);
     }
     public static Matrix identityMatrix(int order) {
-        int rows = Math.round((float) Math.sqrt(order)), columns = rows;
-        Matrix matrix = new Matrix(rows, columns);
+        int rows = Math.round((float) Math.sqrt(order));
+        //Note: For an identity matrix, rows=columns, so we reuse `rows` as `columns`
+        Matrix matrix = new Matrix(rows, rows);
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+            for (int j = 0; j < rows; j++) {
                 if (i == j) {
                     matrix.set(i, j, 1);
                 } else {
@@ -47,25 +59,11 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
         }
         return matrix;
     }
-    public static Matrix fromString(String matrix) {
-        matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
-        String[] rows = StringManipulator.split(matrix, ";");
-        int nrow = rows.length;
-        int ncolumn = StringManipulator.split(rows[0].substring(1, rows[0].length() - 1), ",").length;
-        Matrix newMatrix = new Matrix(nrow, ncolumn);
-        for (int i = 0; i < newMatrix.matrixData.length && i < rows.length; i++) {
-            //trim leading and trailing square brackets
-            String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
-            for (int j = 0; j < newMatrix.matrixData[i].length && j < columns.length; j++) {
-                newMatrix.matrixData[i][j] = Double.valueOf(columns[j]);
-            }
-        }
-        return newMatrix;
-    }
     private void initMatrix(int rows, int columns, double[][] matrixData) {
         setMatrixData(matrixData);
         setNumRows(rows);
         setNumColumns(columns);
+        representationCache = toString();
     }
     public int getNumRows() {
         return rows;
@@ -157,10 +155,7 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     }
     @Override
     public synchronized boolean equals(Object that) {
-        if (that == null) {
-            return false;
-        }
-        if (!(that instanceof Matrix)) {
+        if (that == null || (!(that instanceof Matrix))) {
             return false;
         }
         Matrix other = (Matrix) that;
@@ -174,6 +169,9 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     }
     @Override
     public String toString() {
+        if (representationCache != null) {
+            return representationCache;
+        }
         String matrix = "";
         for (double[] aMatrixData : matrixData) {
             for (double anAMatrixData : aMatrixData) {
@@ -188,13 +186,11 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
     }
     @Override
     public int compareTo(Matrix other) {
-        if (other == null) {
-            return 0;
-        }
         if (other.getNumColumns() + other.getNumRows() != getNumColumns() + getNumRows()) {
             return (other.getNumColumns() + other.getNumRows()) - (getNumColumns() + getNumRows());
         } else {
-            return (int) (other.sumAllElements() - sumAllElements());
+            //Representation-based lexicographical comparison - makes not much mathematical sense
+            return toString().compareTo(other.toString());
         }
     }
     private double sumAllElements() {
@@ -205,5 +201,25 @@ public final class Matrix implements Serializable, Comparable<Matrix> {
             }
         }
         return sum;
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+    @Override
+    public int intValue() {
+        return isSquare() ? Math.round((float) determinant()) : Math.round((float) sumAllElements());
+    }
+    @Override
+    public long longValue() {
+        return isSquare() ? Math.round(determinant()) : Math.round(sumAllElements());
+    }
+    @Override
+    public float floatValue() {
+        return isSquare() ? (float) determinant() : (float) sumAllElements();
+    }
+    @Override
+    public double doubleValue() {
+        return isSquare() ? determinant() : sumAllElements();
     }
 }

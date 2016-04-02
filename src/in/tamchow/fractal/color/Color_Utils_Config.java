@@ -1,6 +1,6 @@
 package in.tamchow.fractal.color;
-import in.tamchow.fractal.helpers.MathUtils;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.math.MathUtils;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 

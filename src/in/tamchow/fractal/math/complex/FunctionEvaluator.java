@@ -1,5 +1,5 @@
 package in.tamchow.fractal.math.complex;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 /**
  * Implements an iterative evaluator for functions described in ComplexOperations,

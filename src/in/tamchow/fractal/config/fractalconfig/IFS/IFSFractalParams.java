@@ -1,6 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
-import in.tamchow.fractal.helpers.StringManipulator;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.matrix.Matrix;
 
@@ -101,8 +101,8 @@ public class IFSFractalParams implements Serializable {
             params.weights = new double[input.length - 9];
             for (int i = 9; i < input.length; i++) {
                 String[] parts = StringManipulator.split(input[i], " ");
-                params.transforms[i] = Matrix.fromString(parts[0]);
-                params.translators[i] = Matrix.fromString(parts[1]);
+                params.transforms[i] = new Matrix(parts[0]);
+                params.translators[i] = new Matrix(parts[1]);
                 params.weights[i] = Double.valueOf(parts[2]);
                 params.colors[i] = Integer.valueOf(parts[3], 16);
             }

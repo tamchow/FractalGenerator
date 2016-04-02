@@ -1,5 +1,5 @@
 package in.tamchow.fractal.misc.evilstuff.users;
-import in.tamchow.fractal.math.FixedStack;
+import in.tamchow.fractal.helpers.math.FixedStack;
 import in.tamchow.fractal.misc.evilstuff.EvilStuff;
 /**
  * A class which implements a calculator which provides unpredictable functions.

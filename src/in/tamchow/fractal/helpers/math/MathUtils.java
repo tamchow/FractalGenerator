@@ -1,4 +1,4 @@
-package in.tamchow.fractal.helpers;
+package in.tamchow.fractal.helpers.math;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
 
