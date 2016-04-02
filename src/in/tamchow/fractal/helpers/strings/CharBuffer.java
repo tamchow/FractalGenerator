@@ -3,22 +3,20 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.io.Serializable;
 /**
- *
+ * No-nonsense Character Buffer which is faster than StringBuilder.
+ * Does not cache String representation for performance reasons.
  */
 public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Serializable {
     private final char[] buffer;
     private int size;
-    private String representationCache;
     public CharBuffer(int length) {
         buffer = new char[length];
         size = 0;
-        //representationCache=toString();
     }
     public CharBuffer(String str) {
         buffer = new char[str.length()];
         str.getChars(0, buffer.length, buffer, 0);
         size = buffer.length;
-        representationCache = toString();
     }
     @Override
     public int length() {
@@ -37,9 +35,6 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     }
     @Override
     public String toString() {
-        if (representationCache != null) {
-            return representationCache;
-        }
         return new String(buffer);
     }
     public CharBuffer append(CharSequence csq) {

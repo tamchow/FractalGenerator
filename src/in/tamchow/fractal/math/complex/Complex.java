@@ -6,7 +6,6 @@ import java.io.Serializable;
 public final class Complex extends Number implements Serializable, Comparable<Complex> {
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);
     private static final String DECIMAL_REGEX = "^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$";
-    private String representationCache;
     private double a, ib;
     public Complex(Complex old) {
         initComplex(old.real(), old.imaginary(), false);
@@ -14,7 +13,6 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public Complex() {
         a = 0;
         ib = 0;
-        representationCache = toString();
     }
     public Complex(double a, double ib) {
         initComplex(a, ib, false);
@@ -48,8 +46,6 @@ public final class Complex extends Number implements Serializable, Comparable<Co
             }
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Illegal Format for Input " + e.getLocalizedMessage());
-        } finally {
-            representationCache = toString();
         }
     }
     public static Complex random() {
@@ -71,7 +67,6 @@ public final class Complex extends Number implements Serializable, Comparable<Co
             this.a = a;
             this.ib = ib;
         }
-        representationCache = toString();
     }
     public Complex negated() {
         return new Complex(-a, -ib);
@@ -116,9 +111,6 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     }
     @Override
     public String toString() {
-        if (representationCache != null) {
-            return representationCache;
-        }
         if (ib < 0) {
             return a + ",-" + (-ib) + "i";
         } else return a + ",+" + ib + "i";

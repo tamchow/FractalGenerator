@@ -26,6 +26,7 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
  * @see ComplexBrotFractalParams
  */
 public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
+    static Complex[][] plane_map;
     private static Complex[] points;
     private static long sumIterations;
     ComplexBrotFractalParams params;
@@ -42,7 +43,6 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     int depth;
     int switch_rate;
     Complex centre_offset, lastConstant;
-    Complex[][] plane_map;
     String[][] constants;
     String function;
     int[][][] bases;
@@ -134,7 +134,6 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         silencer = params.useThreadedGenerator();
         anti = params.isAnti();
         plane = new LinearizedImageData(params.getWidth(), params.getHeight());
-        plane_map = new Complex[plane.getHeight()][plane.getWidth()];
         resetCentre();
         setScale(this.base_precision * Math.pow(zoom, zoom_factor));
         setVariableCode(params.getVariableCode());
@@ -153,7 +152,10 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                 mandelbrotToJulia = true;
             }
         }
-        populateMap();
+        if (plane_map == null) {
+            plane_map = new Complex[plane.getHeight()][plane.getWidth()];
+            populateMap();
+        }
         if (points == null) {
             createPoints();
         }

@@ -8,7 +8,6 @@ import java.io.Serializable;
 public final class Matrix extends Number implements Serializable, Comparable<Matrix> {
     private int rows, columns;
     private double[][] matrixData;
-    private String representationCache;
     public Matrix(double[][] matrixData) {
         initMatrix(matrixData.length, matrixData[0].length, matrixData);
     }
@@ -19,7 +18,6 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         setNumRows(rows);
         setNumColumns(columns);
         matrixData = new double[this.rows][this.columns];
-        //representationCache=toString();
     }
     public Matrix(String matrix) {
         matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
@@ -33,7 +31,6 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
                 matrixData[i][j] = Double.valueOf(columns[j]);
             }
         }
-        representationCache = toString();
     }
     public static Matrix rotationMatrix2D(double angle) {
         return new Matrix(new double[][]{{Math.cos(angle), -Math.sin(angle)}, {Math.sin(angle), Math.cos(angle)}});
@@ -63,7 +60,6 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         setMatrixData(matrixData);
         setNumRows(rows);
         setNumColumns(columns);
-        representationCache = toString();
     }
     public int getNumRows() {
         return rows;
@@ -169,9 +165,6 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     @Override
     public String toString() {
-        if (representationCache != null) {
-            return representationCache;
-        }
         String matrix = "";
         for (double[] aMatrixData : matrixData) {
             for (double anAMatrixData : aMatrixData) {

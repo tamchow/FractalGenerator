@@ -28,6 +28,7 @@ import java.util.ArrayList;
  * Various (21) Coloring modes
  */
 public final class ComplexFractalGenerator implements PixelFractalGenerator {
+    static Complex[][] argand_map;
     private static ArrayList<Complex> roots;
     protected Color_Utils_Config color;
     Complex[] boundary_elements;
@@ -40,7 +41,6 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     String function;
     String[][] consts;
     int[][] escapedata;
-    Complex[][] argand_map;
     Complex centre_offset, lastConstant, trap_point;
     boolean mandelbrotToJulia, juliaToMandelbrot, useLineTrap, silencer, simpleSmoothing;
     int[] histogram;
@@ -94,7 +94,6 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         argand = new LinearizedImageData(width, height);
         setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
-        argand_map = new Complex[argand.getHeight()][argand.getWidth()];
         escapedata = new int[argand.getHeight()][argand.getWidth()];
         normalized_escapes = new double[argand.getHeight()][argand.getWidth()];
         setVariableCode(variableCode);
@@ -140,7 +139,10 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         if (color.getSmoothing_base().equals(Complex.E)) {
             simpleSmoothing = true;
         }
-        populateMap();
+        if (argand_map == null) {
+            argand_map = new Complex[argand.getHeight()][argand.getWidth()];
+            populateMap();
+        }
     }
     public Color_Utils_Config getColor() {
         return color;
