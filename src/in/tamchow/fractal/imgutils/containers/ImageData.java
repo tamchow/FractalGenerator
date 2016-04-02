@@ -350,7 +350,7 @@ public class ImageData implements Serializable, Pannable {
     }
     public ImageData subImage(int x_res, int y_res) {
         ImageData subImage = new ImageData(this);
-        subImage.pan(0, 0);
+        subImage.pan(x_res, y_res, 0, 0);
         return subImage;
     }
     public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NEGATIVE, NONE}
