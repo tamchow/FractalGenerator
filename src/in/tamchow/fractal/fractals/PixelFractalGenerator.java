@@ -1,7 +1,7 @@
 package in.tamchow.fractal.fractals;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.containers.Pannable;
-import in.tamchow.fractal.imgutils.containers.Zoomable;
+import in.tamchow.fractal.graphicsutilities.containers.Pannable;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphicsutilities.containers.Zoomable;
 /**
  * Indicates that the fractal generator (the implementor) generates the fractal on a pixel-per-pixel basis
  */
@@ -16,5 +16,5 @@ public interface PixelFractalGenerator extends FractalGenerator, Zoomable, Panna
     int getImageWidth();
     int getWidth();
     void setWidth(int width);
-    ImageData getPlane();
+    PixelContainer getPlane();
 }

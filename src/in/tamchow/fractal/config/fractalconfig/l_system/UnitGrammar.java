@@ -1,6 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
+import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.graphics.Turtle;
 
 import java.io.Serializable;
 /**

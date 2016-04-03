@@ -1,12 +1,12 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
-import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 
 import java.io.Serializable;
 /**
  * Holds Parameters for an LS fractal
  */
 public class LSFractalParams implements Serializable {
-    public ImageData.PostProcessMode postprocessMode;
+    public PixelContainer.PostProcessMode postprocessMode;
     public String path;
     String axiom;
     int width;
@@ -31,7 +31,7 @@ public class LSFractalParams implements Serializable {
     }
     public LSFractalParams() {
         setPath("");
-        setPostprocessMode(ImageData.PostProcessMode.NONE);
+        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
         setFps(0);
     }
     public String getAxiom() {
@@ -79,10 +79,10 @@ public class LSFractalParams implements Serializable {
     public void setInit_length(int init_length) {
         this.init_length = init_length;
     }
-    public ImageData.PostProcessMode getPostprocessMode() {
+    public PixelContainer.PostProcessMode getPostprocessMode() {
         return postprocessMode;
     }
-    public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {
+    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
         this.postprocessMode = postprocessMode;
     }
     public String getPath() {

@@ -1,6 +1,6 @@
 package in.tamchow.fractal.platform_tools;
-import in.tamchow.fractal.imgutils.containers.Animation;
-import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.graphicsutilities.containers.Animation;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,10 +15,10 @@ public class ImageConverter {
         }
         return frames;
     }
-    public static BufferedImage toImage(ImageData img) {
+    public static BufferedImage toImage(PixelContainer img) {
         return toImage(img, 0, 0, img.getWidth(), img.getHeight());
     }
-    public static BufferedImage toImage(ImageData img, int startx, int starty, int endx, int endy) {
+    public static BufferedImage toImage(PixelContainer img, int startx, int starty, int endx, int endy) {
         BufferedImage buf = new BufferedImage(endx - startx, endy - starty, BufferedImage.TYPE_INT_ARGB);
         for (int i = 0; i < buf.getHeight(); i++) {
             for (int j = 0; j < buf.getWidth(); j++) {
@@ -37,18 +37,18 @@ public class ImageConverter {
         }
         return animation;
     }
-    public static ImageData toImageData(Image img) {
+    public static PixelContainer toImageData(Image img) {
         return toImageData(img, 0, 0, img.getWidth(null), img.getHeight(null));
     }
-    public static ImageData toImageData(Image img, int startx, int starty, int endx, int endy) {
+    public static PixelContainer toImageData(Image img, int startx, int starty, int endx, int endy) {
         BufferedImage buf = new BufferedImage(endx - startx, endy - starty, BufferedImage.TYPE_INT_ARGB);
         buf.getGraphics().drawImage(img, 0, 0, buf.getWidth(), buf.getHeight(), startx, starty, endx, endy, null);
-        ImageData imageData = new ImageData(buf.getWidth(), buf.getHeight());
-        for (int i = 0; i < imageData.getHeight(); i++) {
-            for (int j = 0; j < imageData.getWidth(); j++) {
-                imageData.setPixel(i, j, buf.getRGB(j, i));
+        PixelContainer pixelContainer = new PixelContainer(buf.getWidth(), buf.getHeight());
+        for (int i = 0; i < pixelContainer.getHeight(); i++) {
+            for (int j = 0; j < pixelContainer.getWidth(); j++) {
+                pixelContainer.setPixel(i, j, buf.getRGB(j, i));
             }
         }
-        return imageData;
+        return pixelContainer;
     }
 }

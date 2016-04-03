@@ -5,8 +5,8 @@ import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.containers.Pannable;
+import in.tamchow.fractal.graphicsutilities.containers.Pannable;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 /**
  * Helper class for on-demand panning of various {@link Pannable} types.
  * Not used by CLI (batch-zooming can be used for this purpose by maintaining same zoom level), but useful for GUI (not implemented)
@@ -22,18 +22,18 @@ import in.tamchow.fractal.imgutils.containers.Pannable;
  * @see ThreadedIFSGenerator
  */
 public class FractalPanningHelper {
-    public static ImageData pan(Pannable toPan, int distance, double angle) {
+    public static PixelContainer pan(Pannable toPan, int distance, double angle) {
         return pan(toPan, distance, angle, false);
     }
-    public static ImageData pan(Pannable toPan, int distance, double angle, boolean flip_axes) {
+    public static PixelContainer pan(Pannable toPan, int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         return pan(toPan, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-    public static ImageData pan(Pannable toPanThis, int x_dist, int y_dist) {
+    public static PixelContainer pan(Pannable toPanThis, int x_dist, int y_dist) {
         if (toPanThis instanceof ComplexFractalGenerator || toPanThis instanceof IFSGenerator || toPanThis instanceof ComplexBrotFractalGenerator) {
             PixelFractalGenerator toPan = (PixelFractalGenerator) toPanThis;
             try {
-                ImageData plane = new ImageData(toPan.getPlane());
+                PixelContainer plane = new PixelContainer(toPan.getPlane());
                 plane.pan(toPan.getConfiguredWidth(), toPan.getConfiguredHeight(), x_dist, y_dist);
                 return plane;
             } catch (UnsupportedOperationException rangeViolation) {
@@ -74,9 +74,9 @@ public class FractalPanningHelper {
                 }
                 return toPan.getPlane().subImage(toPan.getWidth(), toPan.getHeight());
             }
-        } else if (toPanThis instanceof ImageData) {
+        } else if (toPanThis instanceof PixelContainer) {
             toPanThis.pan(x_dist, y_dist);
-            return (ImageData) toPanThis;
+            return (PixelContainer) toPanThis;
         } else {
             throw new UnsupportedOperationException("Object of type " + toPanThis.getClass() + "is not of type " + Pannable.class);
         }

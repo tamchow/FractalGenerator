@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils.containers;
+package in.tamchow.fractal.graphicsutilities.containers;
 /**
  * A data type that can be panned.
  */

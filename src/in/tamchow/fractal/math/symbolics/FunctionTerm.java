@@ -1,10 +1,12 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
+
+import java.io.Serializable;
 /**
  * Support for transcendental functions for derivative-requiring fractal modes
  */
-public class FunctionTerm {
+public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     public final FunctionTermData[] functions = {new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * cos $ )"),
             new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"),
             new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"),
@@ -80,6 +82,18 @@ public class FunctionTerm {
     }
     public Complex getDegree() {
         return coefficient.getDegree();
+    }
+    @Override
+    public int compareTo(FunctionTerm o) {
+        return toString().compareTo(o.toString());
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof FunctionTerm && toString().equals(o.toString());
     }
     private class FunctionTermData {
         String function, derivative1, derivative2;

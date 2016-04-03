@@ -4,10 +4,10 @@ import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
+import in.tamchow.fractal.graphicsutilities.containers.Animation;
+import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.MathUtils;
-import in.tamchow.fractal.imgutils.containers.Animation;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
@@ -18,7 +18,7 @@ import java.util.Random;
  */
 public class IFSGenerator implements PixelFractalGenerator {
     private static final double TOLERANCE = 1E-15;
-    ImageData plane;
+    PixelContainer plane;
     IFSFractalParams params;
     Matrix centre_offset, initial, point;
     int center_x, center_y;
@@ -79,7 +79,7 @@ public class IFSGenerator implements PixelFractalGenerator {
         initIFS(modified);
     }
     private void initIFS(IFSFractalParams params) {
-        plane = new LinearizedImageData(params.getWidth(), params.getHeight());
+        plane = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
         resetCentre();
         setDepth(params.getDepth());
         setZoom(params.getZoom());
@@ -195,7 +195,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     public void setCentre_offset(Matrix centre_offset) {
         this.centre_offset = new Matrix(centre_offset);
     }
-    public ImageData getPlane() {
+    public PixelContainer getPlane() {
         return plane;
     }
     public void generate() {

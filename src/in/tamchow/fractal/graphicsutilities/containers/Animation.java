@@ -1,11 +1,11 @@
-package in.tamchow.fractal.imgutils.containers;
+package in.tamchow.fractal.graphicsutilities.containers;
 import java.util.ArrayList;
 /**
  * Stores frames for an animation, or here, transitions, with some metadata such as fps.
  */
 public class Animation {
     private int fps;
-    private ArrayList<ImageData> frames;
+    private ArrayList<PixelContainer> frames;
     public Animation() {
         fps = 24;
         frames = new ArrayList<>();
@@ -14,7 +14,7 @@ public class Animation {
         this.fps = fps;
         frames = new ArrayList<>();
     }
-    public Animation(int fps, ImageData[] frames) {
+    public Animation(int fps, PixelContainer[] frames) {
         this.fps = fps;
         this.frames = new ArrayList<>();
         setFrames(frames);
@@ -40,33 +40,33 @@ public class Animation {
     public void setFps(int fps) {
         this.fps = fps;
     }
-    public void setFrame(int idx, ImageData frame) {
-        frames.set(idx, new ImageData(frame));
+    public void setFrame(int idx, PixelContainer frame) {
+        frames.set(idx, new PixelContainer(frame));
     }
     public void removeFrame(int idx) {
         frames.remove(idx);
     }
-    public void removeFrame(ImageData frame) {
+    public void removeFrame(PixelContainer frame) {
         frames.remove(frame);
     }
-    public ImageData[] getFrames() {
-        ImageData[] tmp = new ImageData[frames.size()];
+    public PixelContainer[] getFrames() {
+        PixelContainer[] tmp = new PixelContainer[frames.size()];
         for (int i = 0; i < frames.size(); i++) {
             tmp[i] = getFrame(i);
         }
         return tmp;
     }
-    public void setFrames(ImageData[] frames) {
+    public void setFrames(PixelContainer[] frames) {
         clearFrames();
-        for (ImageData imgdat : frames) {
+        for (PixelContainer imgdat : frames) {
             addFrame(imgdat);
         }
     }
-    public ImageData getFrame(int idx) {
+    public PixelContainer getFrame(int idx) {
         return frames.get(idx);
     }
-    public void addFrame(ImageData frame) {
-        frames.add(new ImageData(frame));
+    public void addFrame(PixelContainer frame) {
+        frames.add(new PixelContainer(frame));
     }
     public void clearFrames() {
         frames.clear();

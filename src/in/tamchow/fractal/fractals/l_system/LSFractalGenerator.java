@@ -3,23 +3,23 @@ import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
 import in.tamchow.fractal.fractals.FractalGenerator;
+import in.tamchow.fractal.graphicsutilities.containers.Animation;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.Animation;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.graphics.Turtle;
 /**
  * generates L-System Fractals. Does not implement panning or zooming, as those make no sense
  */
 public class LSFractalGenerator implements FractalGenerator {
     LSFractalParams params;
-    ImageData canvas;
+    PixelContainer canvas;
     Turtle turtle;
     String[] generations;
     Publisher publisher;
     public LSFractalGenerator(LSFractalParams params, Publisher publisher) {
         this.params = params;
-        canvas = new ImageData(params.getWidth(), params.getHeight());
+        canvas = new PixelContainer(params.getWidth(), params.getHeight());
         canvas.fill(params.getBack_color());
         turtle = new Turtle(canvas, Math.abs(canvas.getWidth() - params.getInit_length()) / 2, canvas.getHeight() / 2, params.getBack_color(), params.getFore_color(), params.getInit_angle());
         generations = new String[params.getDepth()];
@@ -97,7 +97,7 @@ public class LSFractalGenerator implements FractalGenerator {
         }
         return frames;
     }
-    public ImageData getCanvas() {
+    public PixelContainer getCanvas() {
         return canvas;
     }
     public LSFractalParams getParams() {

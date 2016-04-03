@@ -2,11 +2,12 @@ package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Holds a transcendental function chain
  */
-public class Function {
+public class Function implements Serializable, Comparable<Function> {
     ArrayList<FunctionTerm> terms;
     ArrayList<String> signs;
     String[][] consts;
@@ -127,5 +128,17 @@ public class Function {
             return function.trim().substring(1, function.trim().length());
         }
         return function.trim();
+    }
+    @Override
+    public int compareTo(Function o) {
+        return toString().compareTo(o.toString());
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Function && toString().equals(o.toString());
     }
 }

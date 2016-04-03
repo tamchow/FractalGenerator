@@ -1,9 +1,11 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
+
+import java.io.Serializable;
 /**
  * Holds one term of a polynomial
  */
-public class Term {
+public class Term implements Serializable, Comparable<Term> {
     public String coefficient;
     public String exponent;
     public String variable;
@@ -81,5 +83,17 @@ public class Term {
             return constval;
         }
         return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
+    }
+    @Override
+    public int compareTo(Term o) {
+        return toString().compareTo(o.toString());
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Term && toString().equals(o.toString());
     }
 }

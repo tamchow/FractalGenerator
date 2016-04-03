@@ -1,4 +1,4 @@
-package in.tamchow.fractal.imgutils.containers;
+package in.tamchow.fractal.graphicsutilities.containers;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 /**

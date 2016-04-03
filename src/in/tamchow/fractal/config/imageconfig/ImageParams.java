@@ -1,45 +1,45 @@
 package in.tamchow.fractal.config.imageconfig;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.DataFromString;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.transition.TransitionTypes;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
 
 import java.io.Serializable;
 /**
  * Parameters for configuring an image
  */
 public class ImageParams extends Config implements Serializable, DataFromString {
-    public ImageData image;
+    public PixelContainer image;
     public TransitionTypes transition;
     public ImageParams() {
     }
     public ImageParams(ImageParams old) {
         initParams(old.transtime, old.fps, old.wait, old.image, old.transition);
     }
-    public ImageParams(int transtime, int fps, int wait, ImageData image, TransitionTypes transition) {
+    public ImageParams(int transtime, int fps, int wait, PixelContainer image, TransitionTypes transition) {
         initParams(transtime, fps, wait, image, transition);
     }
     public ImageParams(int transtime, int fps, int wait, String path, TransitionTypes transition) {
         initParams(transtime, fps, wait, path, transition);
     }
-    public ImageParams(int transtime, int fps, int wait, ImageData image) {
+    public ImageParams(int transtime, int fps, int wait, PixelContainer image) {
         initParams(transtime, fps, wait, image, TransitionTypes.NONE);
     }
     public ImageParams(int transtime, int fps, int wait, String path) {
         initParams(transtime, fps, wait, path, TransitionTypes.NONE);
     }
-    private void initParams(int transtime, int fps, int wait, ImageData image, TransitionTypes transition) {
+    private void initParams(int transtime, int fps, int wait, PixelContainer image, TransitionTypes transition) {
         setFps(fps);
         setTranstime(transtime);
         setWait(wait);
-        this.image = new ImageData(image);
+        this.image = new PixelContainer(image);
         this.transition = transition;
     }
     private void initParams(int transtime, int fps, int wait, String path, TransitionTypes transition) {
         setFps(fps);
         setTranstime(transtime);
         setWait(wait);
-        this.image = new ImageData(path);
+        this.image = new PixelContainer(path);
         this.transition = transition;
     }
     public String toString() {

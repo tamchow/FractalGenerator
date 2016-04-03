@@ -1,8 +1,8 @@
 package in.tamchow.fractal.config.imageconfig;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.DataFromString;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.transition.TransitionTypes;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
 
 import java.io.Serializable;
 /**
@@ -13,7 +13,7 @@ public class ImageConfig extends Config implements DataFromString, Serializable 
     int width, height;
     public ImageConfig() {
     }
-    public ImageConfig(int transtime, int fps, ImageData[] data, TransitionTypes[] transitions, int wait) {
+    public ImageConfig(int transtime, int fps, PixelContainer[] data, TransitionTypes[] transitions, int wait) {
         setWidth(-1);
         setHeight(-1);
         setFps(fps);
@@ -32,7 +32,7 @@ public class ImageConfig extends Config implements DataFromString, Serializable 
         setWait(wait);
         params = null;
     }
-    public ImageConfig(int fps, ImageData[] data, int wait) {
+    public ImageConfig(int fps, PixelContainer[] data, int wait) {
         setWidth(-1);
         setHeight(-1);
         setFps(fps);

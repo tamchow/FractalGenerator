@@ -3,11 +3,12 @@ import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Represents a polynomial and provides standard methods
  */
-public class Polynomial {
+public class Polynomial implements Serializable, Comparable<Polynomial> {
     ArrayList<Term> terms;
     ArrayList<String> signs;
     String[][] constdec;
@@ -139,5 +140,17 @@ public class Polynomial {
             return polynomial.substring(1, polynomial.length());
         }
         return polynomial;
+    }
+    @Override
+    public int compareTo(Polynomial o) {
+        return toString().compareTo(o.toString());
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Polynomial && toString().equals(o.toString());
     }
 }

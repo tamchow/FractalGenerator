@@ -1,22 +1,22 @@
-package in.tamchow.fractal.imgutils.graphics;
-import in.tamchow.fractal.imgutils.containers.ImageData;
+package in.tamchow.fractal.graphicsutilities.graphics;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 /**
  * Implements turtle graphics at a very basic level
  *
- * @see ImageData#drawLine(int, int, int, int, int)
+ * @see PixelContainer#drawLine(int, int, int, int, int)
  */
 public class Turtle {
-    ImageData canvas;
+    PixelContainer canvas;
     int x, y;
     int back_color, fore_color;
     double angle;
-    public Turtle(ImageData canvas, int x, int y) {
+    public Turtle(PixelContainer canvas, int x, int y) {
         this(canvas, x, y, 0);
     }
-    public Turtle(ImageData canvas, int x, int y, double angle) {
+    public Turtle(PixelContainer canvas, int x, int y, double angle) {
         this(canvas, x, y, 0xffffff, 0x00000, angle);
     }
-    public Turtle(ImageData canvas, int x, int y, int back_color, int fore_color, double angle) {
+    public Turtle(PixelContainer canvas, int x, int y, int back_color, int fore_color, double angle) {
         this.x = x;
         this.y = y;
         this.back_color = back_color;
@@ -51,10 +51,10 @@ public class Turtle {
     private void turn(double delta) {
         angle += delta;
     }
-    public ImageData getCanvas() {
+    public PixelContainer getCanvas() {
         return canvas;
     }
-    public void setCanvas(ImageData canvas) {
+    public void setCanvas(PixelContainer canvas) {
         this.canvas = canvas;
     }
     public int getBack_color() {

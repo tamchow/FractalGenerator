@@ -8,11 +8,11 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
+import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.FixedStack;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
@@ -36,7 +36,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     Mode mode;
     double tolerance;
     long maxiter;
-    ImageData argand;
+    PixelContainer argand;
     String function;
     String[][] consts;
     int[][] escapedata;
@@ -82,7 +82,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
             }
         }
     }
-    public ImageData getPlane() {
+    public PixelContainer getPlane() {
         return getArgand();
     }
     private void initFractal(ComplexFractalParams params) {
@@ -90,7 +90,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     }
     private void initFractal(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, String[][] consts, String variableCode, String oldvariablecode, double tolerance, Color_Utils_Config color, int switch_rate, Complex trap_point, String linetrap) {
         silencer = params.useThreadedGenerator();
-        argand = new LinearizedImageData(width, height);
+        argand = new LinearizedPixelContainer(width, height);
         setMode(mode);
         setMaxiter(argand.getHeight() * argand.getWidth());
         escapedata = new int[argand.getHeight()][argand.getWidth()];
@@ -245,7 +245,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     public double calculateBasePrecision() {
         return ((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
     }
-    public ImageData getArgand() {
+    public PixelContainer getArgand() {
         return argand;
     }
     public void setConsts(String[][] consts) {
@@ -1782,12 +1782,12 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         histogram = new int[histogram_length];
         int[][] tmp_escapes = new int[escapedata.length][escapedata[0].length];
         double[][] tmp_normalized_escapes = new double[normalized_escapes.length][normalized_escapes[0].length];
-        ImageData tmp_argand = new LinearizedImageData(argand);
+        PixelContainer tmp_argand = new LinearizedPixelContainer(argand);
         for (int i = 0; i < tmp_escapes.length && i < tmp_normalized_escapes.length; i++) {
             System.arraycopy(escapedata[i], 0, tmp_escapes[i], 0, tmp_escapes[i].length);
             System.arraycopy(normalized_escapes[i], 0, tmp_normalized_escapes[i], 0, tmp_normalized_escapes[i].length);
         }
-        argand = new ImageData(tmp_argand.getWidth(), tmp_argand.getHeight());
+        argand = new PixelContainer(tmp_argand.getWidth(), tmp_argand.getHeight());
         escapedata = new int[tmp_escapes.length][tmp_escapes[0].length];
         normalized_escapes = new double[tmp_normalized_escapes.length][tmp_normalized_escapes[0].length];
         if (y_dist < 0) {
@@ -1800,7 +1800,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
             }
         }
     }
-    private void rangedCopyHelper(int i, int j, int x_dist, int[][] tmp_escapes, double[][] tmp_normalized_escapes, ImageData tmp_argand) {
+    private void rangedCopyHelper(int i, int j, int x_dist, int[][] tmp_escapes, double[][] tmp_normalized_escapes, PixelContainer tmp_argand) {
         if (x_dist < 0) {
             System.arraycopy(tmp_escapes[i], (-x_dist), escapedata[j], 0, escapedata[j].length + x_dist);
             System.arraycopy(tmp_normalized_escapes[i], (-x_dist), normalized_escapes[j], 0, normalized_escapes[j].length + x_dist);

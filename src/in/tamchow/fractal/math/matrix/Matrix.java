@@ -197,6 +197,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     @Override
     public int hashCode() {
+        //return java.util.Arrays.deepHashCode(matrixData);
         return toString().hashCode();
     }
     @Override

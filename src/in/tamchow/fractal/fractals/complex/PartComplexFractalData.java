@@ -1,23 +1,23 @@
 package in.tamchow.fractal.fractals.complex;
-import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 
 import java.io.Serializable;
 /**
  * Holds a part of a fractal's data for threaded generation, along with the render coordinates
  */
 public final class PartComplexFractalData implements Serializable {
-    ImageData imageData;
+    PixelContainer pixelContainer;
     int[][] escapedata;
     double[][] normalized_escapes;
     int[] histogram;
     int startx, endx, starty, endy;
-    public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, ImageData imageData, int startx, int endx, int starty, int endy) {
+    public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, PixelContainer pixelContainer, int startx, int endx, int starty, int endy) {
         this.startx = startx;
         this.endx = endx;
         this.starty = starty;
         this.endy = endy;
         initData(escapedata, normalized_escapes);
-        this.imageData = new ImageData(imageData);
+        this.pixelContainer = new PixelContainer(pixelContainer);
     }
     public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, int[] histogram, int startx, int endx, int starty, int endy) {
         this.startx = startx;

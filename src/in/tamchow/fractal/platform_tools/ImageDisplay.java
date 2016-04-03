@@ -5,9 +5,9 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
-import in.tamchow.fractal.imgutils.containers.Animation;
-import in.tamchow.fractal.imgutils.transition.Transition;
-import in.tamchow.fractal.imgutils.transition.TransitionTypes;
+import in.tamchow.fractal.graphicsutilities.containers.Animation;
+import in.tamchow.fractal.graphicsutilities.transition.Transition;
+import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

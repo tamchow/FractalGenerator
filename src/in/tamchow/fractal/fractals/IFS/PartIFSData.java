@@ -1,17 +1,17 @@
 package in.tamchow.fractal.fractals.IFS;
-import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 /**
  * Part of an IFS fractal's image data
  */
 public class PartIFSData {
-    ImageData partPlane;
-    public PartIFSData(ImageData part) {
+    PixelContainer partPlane;
+    public PartIFSData(PixelContainer part) {
         setPartPlane(part);
     }
-    public ImageData getPartPlane() {
+    public PixelContainer getPartPlane() {
         return partPlane;
     }
-    public void setPartPlane(ImageData partPlane) {
-        this.partPlane = new ImageData(partPlane);
+    public void setPartPlane(PixelContainer partPlane) {
+        this.partPlane = new PixelContainer(partPlane);
     }
 }

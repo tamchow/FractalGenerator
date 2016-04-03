@@ -5,11 +5,11 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
+import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.FixedStack;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
-import in.tamchow.fractal.imgutils.containers.LinearizedImageData;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
@@ -31,7 +31,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     ComplexBrotFractalParams params;
     ComplexFractalGenerator.Mode mode;
     Publisher progressPublisher;
-    ImageData plane;
+    PixelContainer plane;
     int center_x, center_y, lastConstantIdx;
     double zoom;
     double zoom_factor;
@@ -132,7 +132,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         setEscape_radius(params.getEscape_radius());
         silencer = params.useThreadedGenerator();
         anti = params.isAnti();
-        plane = new LinearizedImageData(params.getWidth(), params.getHeight());
+        plane = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
         resetCentre();
         setScale(this.base_precision * Math.pow(zoom, zoom_factor));
         setVariableCode(params.getVariableCode());
@@ -196,7 +196,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         return false;
     }
     public void createImage() {
-        ImageData[] levels = new ImageData[bases.length];
+        PixelContainer[] levels = new PixelContainer[bases.length];
         for (int i = 0; i < bases.length; ++i) {
             for (int j = 0; j < bases[i].length; ++j) {
                 for (int k = 0; k < bases[i][j].length; ++k) {
@@ -230,7 +230,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     public void setParams(ComplexBrotFractalParams params) {
         this.params = params;
     }
-    public ImageData getPlane() {
+    public PixelContainer getPlane() {
         return plane;
     }
     public int[] toCoordinates(Complex point) {

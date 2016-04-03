@@ -1,7 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class IFSFractalParams implements Serializable {
     public static final String VARIABLE_CODES = "x:y:r:t:p";
     public ZoomConfig zoomConfig;
-    public ImageData.PostProcessMode postprocessMode;
+    public PixelContainer.PostProcessMode postprocessMode;
     public String path;
     Matrix[] transforms, translators;
     boolean ifsMode;
@@ -38,7 +38,7 @@ public class IFSFractalParams implements Serializable {
         setR_code(variableCodes[2]);
         setT_code(variableCodes[3]);
         setP_code(variableCodes[4]);
-        setPostprocessMode(ImageData.PostProcessMode.NONE);
+        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
     }
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
@@ -139,10 +139,10 @@ public class IFSFractalParams implements Serializable {
     public void setP_code(String p_code) {
         this.p_code = p_code;
     }
-    public ImageData.PostProcessMode getPostprocessMode() {
+    public PixelContainer.PostProcessMode getPostprocessMode() {
         return postprocessMode;
     }
-    public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {
+    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
         this.postprocessMode = postprocessMode;
     }
     public double getSkew() {

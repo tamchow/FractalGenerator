@@ -9,8 +9,8 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.File;
@@ -149,7 +149,7 @@ public class ConfigReader {
             complexFractalParams.threadDataFromString(thread_data);
         }
         if (post_process_mode != null) {
-            complexFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+            complexFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (zooms != null) {
             complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));
@@ -236,7 +236,7 @@ public class ConfigReader {
             ifsFractalParams.setThreads(Integer.valueOf(threads));
         }
         if (post_process_mode != null) {
-            ifsFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+            ifsFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         ifsFractalParams.setPath(paramfile.getAbsolutePath());
         return ifsFractalParams;
@@ -318,7 +318,7 @@ public class ConfigReader {
             complexBrotFractalParams.setNum_threads(Integer.valueOf(threads));
         }
         if (post_process_mode != null) {
-            complexBrotFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+            complexBrotFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (switch_rate != null) {
             complexBrotFractalParams.setSwitch_rate(Integer.valueOf(switch_rate));
@@ -380,7 +380,7 @@ public class ConfigReader {
         LSFractalParams lsFractalParams = new LSFractalParams();
         lsFractalParams.fromString(params);
         if (post_process_mode != null) {
-            lsFractalParams.setPostprocessMode(ImageData.PostProcessMode.valueOf(post_process_mode));
+            lsFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (fps != null) {
             lsFractalParams.setFps(Integer.valueOf(fps));

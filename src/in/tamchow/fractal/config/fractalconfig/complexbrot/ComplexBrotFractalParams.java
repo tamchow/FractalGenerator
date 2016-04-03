@@ -2,8 +2,8 @@ package in.tamchow.fractal.config.fractalconfig.complexbrot;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ZoomConfig zoomConfig;
-    public ImageData.PostProcessMode postprocessMode;
+    public PixelContainer.PostProcessMode postprocessMode;
     public int width, height, num_threads, switch_rate, num_points;
     public Complex newton_constant;
     public int[] iterations;
@@ -46,7 +46,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     }
     public ComplexBrotFractalParams() {
         setPath("");
-        setPostprocessMode(ImageData.PostProcessMode.NONE);
+        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
     }
     public ComplexBrotFractalParams(ComplexBrotFractalParams old) {
         this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getMode(), old.getConstants(), old.isAnti());
@@ -60,10 +60,10 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public void setEscape_radius(double escape_radius) {
         this.escape_radius = escape_radius;
     }
-    public ImageData.PostProcessMode getPostprocessMode() {
+    public PixelContainer.PostProcessMode getPostprocessMode() {
         return postprocessMode;
     }
-    public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {
+    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
         this.postprocessMode = postprocessMode;
     }
     public Complex getNewton_constant() {

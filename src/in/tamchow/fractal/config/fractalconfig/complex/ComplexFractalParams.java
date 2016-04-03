@@ -1,7 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import in.tamchow.fractal.imgutils.containers.ImageData;
 
 import java.io.Serializable;
 /**
@@ -12,7 +12,7 @@ public class ComplexFractalParams implements Serializable {
     public ComplexFractalInitParams initParams;
     public ZoomConfig zoomConfig = new ZoomConfig();
     public int x_threads, y_threads;
-    public ImageData.PostProcessMode postprocessMode;
+    public PixelContainer.PostProcessMode postprocessMode;
     public String path;
     public ComplexFractalParams() {
         runParams = new ComplexFractalRunParams();
@@ -20,7 +20,7 @@ public class ComplexFractalParams implements Serializable {
         x_threads = 1;
         y_threads = 1;
         zoomConfig = null;
-        setPostprocessMode(ImageData.PostProcessMode.NONE);
+        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
         setPath("");
     }
     public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams, int x_threads, int y_threads) {
@@ -37,7 +37,7 @@ public class ComplexFractalParams implements Serializable {
         }
         this.x_threads = 1;
         this.y_threads = 1;
-        setPostprocessMode(ImageData.PostProcessMode.NONE);
+        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
         setPath("");
     }
     public ComplexFractalParams(ComplexFractalParams params) {
@@ -57,10 +57,10 @@ public class ComplexFractalParams implements Serializable {
     public void setPath(String path) {
         this.path = path;
     }
-    public ImageData.PostProcessMode getPostprocessMode() {
+    public PixelContainer.PostProcessMode getPostprocessMode() {
         return postprocessMode;
     }
-    public void setPostprocessMode(ImageData.PostProcessMode postprocessMode) {
+    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
         this.postprocessMode = postprocessMode;
     }
     public boolean useThreadedGenerator() {

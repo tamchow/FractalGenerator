@@ -3,8 +3,8 @@ import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.MathUtils;
-import in.tamchow.fractal.imgutils.containers.ImageData;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -139,7 +139,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                                 }
                                 master.argand.setPixel(i, j, colortmp);
                             } else {
-                                master.argand.setPixel(i, j, partImage.imageData.getPixel(i, j));
+                                master.argand.setPixel(i, j, partImage.pixelContainer.getPixel(i, j));
                             }
                         }
                     }
@@ -177,7 +177,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             if (copyOfMaster.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || copyOfMaster.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || copyOfMaster.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || copyOfMaster.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
-                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new ImageData(copyOfMaster.getArgand()), startx, endx, starty, endy);
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new PixelContainer(copyOfMaster.getArgand()), startx, endx, starty, endy);
             }
             float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);

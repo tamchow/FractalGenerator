@@ -1,18 +1,18 @@
-package in.tamchow.fractal.imgutils.transition;
+package in.tamchow.fractal.graphicsutilities.transition;
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
-import in.tamchow.fractal.imgutils.containers.Animation;
-import in.tamchow.fractal.imgutils.containers.ImageData;
+import in.tamchow.fractal.graphicsutilities.containers.Animation;
+import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 /**
  * Creates transitions between images.
  * Note: Images to be transitioned between must be of the same resolution. No scaling is implemented here.
  */
 public class Transition {
-    private ImageData img1, img2;
+    private PixelContainer img1, img2;
     private Animation frames;
     private TransitionTypes transtype;
     private int transtime;
-    public Transition(TransitionTypes transtype, ImageData img1, ImageData img2, int fps, int time) {
+    public Transition(TransitionTypes transtype, PixelContainer img1, PixelContainer img2, int fps, int time) {
         setImg1(img1);
         setImg2(img2);
         frames = new Animation(fps);
@@ -28,23 +28,23 @@ public class Transition {
     public Animation getFrames() {
         return frames;
     }
+    public void setFrames(PixelContainer[] frames) {
+        this.frames.setFrames(frames);
+    }
     public void setFrames(Animation frames) {
         this.frames = frames;
     }
-    public void setFrames(ImageData[] frames) {
-        this.frames.setFrames(frames);
-    }
-    public ImageData getImg2() {
+    public PixelContainer getImg2() {
         return img2;
     }
-    public void setImg2(ImageData img2) {
-        this.img2 = new ImageData(img2);
+    public void setImg2(PixelContainer img2) {
+        this.img2 = new PixelContainer(img2);
     }
-    public ImageData getImg1() {
+    public PixelContainer getImg1() {
         return img1;
     }
-    public void setImg1(ImageData img1) {
-        this.img1 = new ImageData(img1);
+    public void setImg1(PixelContainer img1) {
+        this.img1 = new PixelContainer(img1);
     }
     public TransitionTypes getTranstype() {
         return transtype;
@@ -54,7 +54,7 @@ public class Transition {
     }
     public void doTransition() {
         frames.clearFrames();
-        ImageData tmp = new ImageData(img1);
+        PixelContainer tmp = new PixelContainer(img1);
         int[][] pixdata = tmp.getPixdata();
         frames.addFrame(img1);
         int numframes = frames.getFps() * transtime;
