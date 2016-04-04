@@ -1,4 +1,5 @@
 package in.tamchow.fractal.helpers.math;
+
 /**
  * Converts a number in digit representation from one base to another
  * Not guaranteed to work with bases above 65,451 (more characters than which the lookup can use for substituting digits)
@@ -32,6 +33,7 @@ public class BaseConverter {
             throw new IllegalArgumentException(String.format(tooLargeBaseForLookupErrorMessage, lookup.length(), base));
         }
     }
+
     public static long convertToNumber(String inputNumber, int from_base) {
         return convertToNumber(inputNumber, from_base, true);
     }
@@ -40,7 +42,7 @@ public class BaseConverter {
     }
     public static long convertToNumber(String inputNumber, int from_base, boolean checkIfNegative) {
         String copyOfInput = inputNumber;
-        boolean isNegative = checkIfNegative && isNegative(inputNumber);
+        boolean isNegative = checkIfNegative ? isNegative(inputNumber) : false;
         if (isNegative) {
             //the provided number is (supposedly) negative
             inputNumber = inputNumber.substring(1, inputNumber.length());
@@ -59,6 +61,15 @@ public class BaseConverter {
         }
         return isNegative ? -number : number;
     }
+    public static long convertToNumber(int[] digits, int from_base) {
+        long number = 0;
+        int length = digits.length;
+        for (int i = 0; i < length; ++i) {
+            number += digits[i] * Math.round(Math.pow(from_base, length - 1 - i));
+        }
+        return number;
+    }
+
     private static int countDigits(long number, int to_base) {
         int num_digits = 0;
         while (number > 0) {
@@ -67,6 +78,7 @@ public class BaseConverter {
         }
         return num_digits;
     }
+
     private static int[] createDigits(long number, int to_base) {
         int[] digits = new int[countDigits(number, to_base)];
         int num_digits = 0;
@@ -76,9 +88,11 @@ public class BaseConverter {
         }
         return digits;
     }
+
     public static String changeBase(String inputNumber, int from_base, int to_base) {
         return changeBase(inputNumber, from_base, to_base, true);
     }
+
     private static boolean isInvalidInputNumber(String inputNumber, int from_base) {
         //there should be no more than 1 - sign, which should have been removed already if it exists
         return inputNumber.contains("-") ||
@@ -87,6 +101,69 @@ public class BaseConverter {
                 //there should be no characters in the string which indicate values for a digit greater than the current base
                 (!inputNumber.matches(String.format("^[%s]*$", lookup.substring(0, from_base))));
     }
+    /**
+     * Utility method for parsing an array of Strings to an array of ints
+     */
+    private static int[] parseStringsToIntegers(String[] data) {
+        int[] ints = new int[data.length];
+        for (int i = 0; i < data.length; ++i) {
+            ints[i] = Integer.valueOf(data[i]);
+        }
+        return ints;
+    }
+    /**
+     * Utility method for parsing an array of Strings to an array of doubles
+     */
+    private static double[] parseStringsToDoubles(String[] data) {
+        double[] ints = new double[data.length];
+        for (int i = 0; i < data.length; ++i) {
+            ints[i] = Double.valueOf(data[i]);
+        }
+        return ints;
+    }
+    public static double convertToNumber(double[] digits, double from_base) {
+        double number = 0;
+        int length = digits.length;
+        for (int i = 0; i < length; ++i) {
+            number += digits[i] * Math.pow(from_base, length - 1 - i);
+        }
+        return number;
+    }
+    private static double[] createDigits(double number, double to_base) {
+        double[] digits = new double[countDigits(number, to_base)];
+        int num_digits = 0;
+        while (number > 0) {
+            digits[num_digits++] = (number % to_base);
+            number /= to_base;
+        }
+        return digits;
+    }
+    private static int countDigits(double number, double to_base) {
+        int num_digits = 0;
+        while (number > 0) {
+            number /= to_base;
+            ++num_digits;
+        }
+        return num_digits;
+    }
+    public static double[] changeBase(double[] digits, double from_base, double to_base) {
+        return createDigits(convertToNumber(digits, from_base), to_base);
+    }
+    public static String changeBase(String inputNumber, double from_base, double to_base) {
+        String new_number = "";
+        boolean isNegative = false;
+        if (inputNumber.startsWith("-")) {
+            isNegative = true;
+            inputNumber = inputNumber.substring(1, inputNumber.length());
+        }
+        double[] digits = changeBase(parseStringsToDoubles(inputNumber.split("\\s+")), from_base, to_base);
+        for (int i = digits.length - 1; i >= 0; --i) {
+            new_number += digits[i] + " ";
+        }
+        new_number = new_number.trim();
+        return isNegative ? "-" + new_number : new_number;
+    }
+
     public static String changeBase(String inputNumber, int from_base, int to_base, boolean substituteNumerics) {
         String copyOfInput = inputNumber;
         boolean isNegative = isNegative(inputNumber);
@@ -112,7 +189,13 @@ public class BaseConverter {
             return (isNegative) ? "-" + lookup.charAt(0) : lookup.charAt(0) + "";//I could simply return "0", but this looks less hardcoded
         }
         String new_number = "";
-        int[] digits = createDigits(convertToNumber(inputNumber, from_base, false), to_base);
+        int[] digits;
+        if (inputNumber.matches("\\s+")) {
+            //presence of whitespaces imply the number is in numeric digit format
+            digits = createDigits(convertToNumber(parseStringsToIntegers(inputNumber.split("\\s+")), from_base), to_base);
+        } else {
+            digits = createDigits(convertToNumber(inputNumber, from_base, false), to_base);
+        }
         if (substituteNumerics) {
             //use character representation for digits
             for (int i = digits.length - 1; i >= 0; --i) {
