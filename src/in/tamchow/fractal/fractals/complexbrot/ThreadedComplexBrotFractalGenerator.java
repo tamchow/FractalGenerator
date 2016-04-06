@@ -42,8 +42,8 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
                 lock.notifyAll();
             }
             for (PartComplexBrotFractalData part : data) {
-                for (int i = 0; i < master.bases.length; i++) {
-                    master.bases[i] = addDDA(master.bases[i], part.bases[i]);
+                for (int i = 0; i < master.bases.length; ++i) {
+                    master.bases[i] = addDDA(master.bases[i], part.getBases()[i]);
                 }
             }
             master.createImage();

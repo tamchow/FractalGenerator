@@ -474,7 +474,10 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             default:
                 throw new UnsupportedOperationException("Unsupported fractal render mode");
         }
-        createImage();
+        if (!silencer) {
+            //Don't create the image if in multithreaded mode, the threaded generator handles it
+            createImage();
+        }
     }
     private void secantGenerate(int start, int end) {
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);

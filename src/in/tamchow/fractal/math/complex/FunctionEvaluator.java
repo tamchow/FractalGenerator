@@ -53,10 +53,10 @@ public class FunctionEvaluator {
     }
     public static FunctionEvaluator prepareIFS(String variableCode, String r_code, String t_code, String p_code, double x, double y) {
         String[][] varconst = {{"0", "0"}};
-        FunctionEvaluator fe = new FunctionEvaluator(variableCode, x + "", varconst);
-        fe.addConstant(new String[]{r_code, Math.sqrt(x * x + y * y)/*rho*/ + ""});
-        fe.addConstant(new String[]{t_code, Math.atan2(y, x) + ""}/*theta*/);
-        fe.addConstant(new String[]{p_code, Math.atan2(x, y) + ""}/*phi*/);
+        FunctionEvaluator fe = new FunctionEvaluator(variableCode, String.valueOf(x), varconst);
+        fe.addConstant(new String[]{r_code, String.valueOf(Math.sqrt(x * x + y * y))}/*rho*/);
+        fe.addConstant(new String[]{t_code, String.valueOf(Math.atan2(y, x))}/*theta*/);
+        fe.addConstant(new String[]{p_code, String.valueOf(Math.atan2(x, y))}/*phi*/);
         return fe;
     }
     public void addConstant(String[] constant) {

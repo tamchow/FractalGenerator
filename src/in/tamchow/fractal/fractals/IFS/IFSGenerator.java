@@ -11,8 +11,6 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
-
-import java.util.Random;
 /**
  * Generates IFS fractals
  */
@@ -199,7 +197,7 @@ public class IFSGenerator implements PixelFractalGenerator {
         return plane;
     }
     public void generate() {
-        if (initial == null) {
+        /*if (initial == null) {
             Random random = new Random();
             initial = fromCoordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
         }
@@ -214,10 +212,15 @@ public class IFSGenerator implements PixelFractalGenerator {
                 break;
             }
             publishProgress(i);
+        }*/
+        for (long i = 0; i <= depth && (!completion); i++) {
+            generateStep();
+            publishProgress(i);
         }
     }
     public boolean isOutOfBounds(Matrix point) {
-        int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
+        int x = Math.round((float) (point.get(0, 0) * scale) + center_x),
+                y = Math.round(center_y - (float) (point.get(1, 0) * scale));
         return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
     public int[] toCoordinates(Matrix point) {
@@ -241,7 +244,7 @@ public class IFSGenerator implements PixelFractalGenerator {
             FunctionEvaluator fe = FunctionEvaluator.prepareIFS(params.getX_code(), params.getR_code(), params.getT_code(), params.getP_code(), x, y);
             point.set(0, 0, fe.evaluateForIFS(params.getXfunctions()[index]));
             fe.setVariableCode(params.getY_code());
-            fe.setZ_value(y + "");
+            fe.setZ_value(String.valueOf(y));
             point.set(1, 0, fe.evaluateForIFS(params.getYfunctions()[index]));
         } else {
             point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
@@ -265,8 +268,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     }
     public void generateStep() {
         if (initial == null) {
-            Random random = new Random();
-            initial = fromCoordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
+            initial = fromCoordinates(Math.round((float) Math.random() * getWidth()), Math.round((float) Math.random() * getHeight()));
         }
         if (point == null) {
             point = new Matrix(initial);
@@ -275,7 +277,9 @@ public class IFSGenerator implements PixelFractalGenerator {
         int[] coord = toCoordinates(point);
         plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
         point = modifyPoint(point, index);
-        if (point.equals(initial) || isOutOfBounds(point)) completion = true;
+        if (point.equals(initial) || isOutOfBounds(point)) {
+            completion = true;
+        }
     }
     @Override
     public void pan(int distance, double angle) {

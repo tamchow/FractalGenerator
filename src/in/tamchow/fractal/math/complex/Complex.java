@@ -8,17 +8,28 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     private static final String DECIMAL_REGEX = "^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$";
     private double a, ib;
     public Complex(Complex old) {
-        initComplex(old.real(), old.imaginary(), false);
+        this(old.real(), old.imaginary(), false);
     }
     public Complex() {
         a = 0;
         ib = 0;
     }
     public Complex(double a, double ib) {
-        initComplex(a, ib, false);
+        this(a, ib, false);
+    }
+    public Complex(double a, double ib, boolean cis) {
+        if (cis) {
+            Complex value = ComplexOperations.multiply(new Complex(a),
+                    ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(ib))));
+            this.a = value.real();
+            this.ib = value.imaginary();
+        } else {
+            this.a = a;
+            this.ib = ib;
+    }
     }
     public Complex(double a) {
-        initComplex(a, 0, false);
+        this(a, 0, false);
     }
     public Complex(String complex) {
         /** Not using explicit input validation for performance reasons.
@@ -54,19 +65,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public static Complex random(Complex lowerBound, Complex upperBound) {
         double modulusRange = upperBound.modulus() - lowerBound.modulus(), argRange = upperBound.arg() - lowerBound.arg();
         double randomModulus = Math.random() * modulusRange, randomArg = Math.random() * argRange;
-        Complex randomComplex = new Complex();
-        randomComplex.initComplex(randomModulus, randomArg, true);
-        return randomComplex;
-    }
-    public void initComplex(double a, double ib, boolean cis) {
-        if (cis) {
-            Complex value = ComplexOperations.multiply(new Complex(a), ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(ib))));
-            this.a = value.real();
-            this.ib = value.imaginary();
-        } else {
-            this.a = a;
-            this.ib = ib;
-        }
+        return new Complex(randomModulus, randomArg, true);
     }
     public Complex negated() {
         return new Complex(-a, -ib);
