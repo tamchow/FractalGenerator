@@ -46,7 +46,7 @@ public class Turtle {
         int oldx = x, oldy = y;
         x += step * Math.cos(Math.toRadians(angle));
         y += step * Math.sin(Math.toRadians(angle));
-        canvas.drawLine(oldx, oldy, x, y, fore_color);
+        DrawingUtils.drawLine(canvas, oldx, oldy, x, y, fore_color);
     }
     private void turn(double delta) {
         angle += delta;

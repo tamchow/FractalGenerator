@@ -200,6 +200,19 @@ public class PixelContainer implements Serializable, Pannable {
         matrixData[1][0] = ((center_y - ((double) y)) / scale);
         return new Matrix(matrixData);
     }
+    /**
+     * Uses Bresenham's Line Drawing Algorithm
+     *
+     * @param from_x starting ordinate
+     * @param from_y starting abscissa
+     * @param to_x   ending ordinate
+     * @param to_y   ending abscissa
+     * @param color  line pixel color
+     *               <p/>
+     *               Deprecated.
+     *               Use the {@link in.tamchow.fractal.graphicsutilities.graphics.DrawingUtils#drawLine(PixelContainer, int, int, int, int, int)}
+     */
+    @Deprecated
     public void drawLine(int from_x, int from_y, int to_x, int to_y, int color) {
         int deltax = Math.abs(to_x - from_x), deltay = Math.abs(to_y - from_y),
                 numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y, yinc1, yinc2;

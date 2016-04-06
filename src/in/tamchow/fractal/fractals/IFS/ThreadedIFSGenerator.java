@@ -3,6 +3,12 @@ import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
 /**
  * Threaded IFS Fractal Generator
+ *
+ * Note: May produce unpredictable results. Use not recommended.
+ *
+ * Expected result: Images with {@link IFSFractalParams#depth} times added colors.
+ *
+ * Debugging in progress.
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
     IFSGenerator master;

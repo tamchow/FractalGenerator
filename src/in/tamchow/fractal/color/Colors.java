@@ -10,4 +10,7 @@ public final class Colors {
     public static final class RGBCOMPONENTS {//not an enum because the constants are used for calculating stuff
         public static final int ALPHA = 3, RED = 2, GREEN = 1, BLUE = 0;
     }
+    public static final class BASE_COLORS {
+        public static final int BLACK = 0xff000000, WHITE = 0xffffffff;//opaque
+    }
 }
