@@ -62,37 +62,25 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     }
     @Override
     public int getPixel(int y, int x) {
-        if (x < 0) {
-            y -= x / getWidth();
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        if (x >= getWidth()) {
-            y += x / getWidth();
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        y = MathUtils.boundsProtected(y, getHeight());
-        return pixdata[y * width + x];
+        int[] yx = imageBounds(y, x);
+        return pixdata[yx[0] * getWidth() + yx[1]];
+    }
+    @Override
+    public int getNum_pixels() {
+        return pixdata.length;
     }
     @Override
     public void setPixel(int y, int x, int val) {
-        if (x < 0) {
-            y -= x / getWidth();
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        if (x >= getWidth()) {
-            y += x / getWidth();
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        y = MathUtils.boundsProtected(y, getHeight());
-        pixdata[y * width + x] = val;
+        int[] yx = imageBounds(y, x);
+        pixdata[yx[0] * getWidth() + yx[1]] = val;
     }
     @Override
     public int getPixel(int i) {
-        return pixdata[i];
+        return pixdata[MathUtils.boundsProtected(i, pixdata.length)];
     }
     @Override
     public void setPixel(int i, int val) {
-        pixdata[i] = val;
+        pixdata[MathUtils.boundsProtected(i, pixdata.length)] = val;
     }
     @Override
     public LinearizedPixelContainer getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {

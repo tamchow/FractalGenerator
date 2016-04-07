@@ -56,7 +56,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
             System.arraycopy(pixdata[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-    private int[] imageBounds(int y, int x) {
+    protected int[] imageBounds(int y, int x) {
         int shift = MathUtils.boundsProtected(x / getWidth(), getHeight());
         if (x < 0) {
             y -= shift;
@@ -243,11 +243,16 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
         return rotated;
     }
+    public int getNum_pixels() {
+        return getWidth() * getHeight();
+    }
     public int getPixel(int i) {
-        return getPixel(i / pixdata[0].length, i % pixdata[0].length);
+        i = MathUtils.boundsProtected(i, getNum_pixels());
+        return getPixel(i / getWidth(), i % getWidth());
     }
     public void setPixel(int i, int val) {
-        setPixel(i / pixdata[0].length, i % pixdata[0].length, val);
+        i = MathUtils.boundsProtected(i, getNum_pixels());
+        setPixel(i / getWidth(), i % getWidth(), val);
     }
     @Override
     public void pan(int distance, double angle) {
