@@ -4,13 +4,12 @@ import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.matrix.Matrix;
-import in.tamchow.fractal.math.matrix.MatrixOperations;
 
 import java.io.Serializable;
 /**
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed ARGB in hex values as pixels.
  */
-public class PixelContainer implements Serializable, Pannable {
+public class PixelContainer implements Serializable, Pannable, Comparable<PixelContainer> {
     private String path;
     private int[][] pixdata;
     public PixelContainer() {
@@ -57,43 +56,22 @@ public class PixelContainer implements Serializable, Pannable {
             System.arraycopy(pixdata[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-    public void fill(int color) {
-        for (int i = 0; i < pixdata.length; i++) {
-            for (int j = 0; j < pixdata[i].length; j++) {
-                pixdata[i][j] = color;
-            }
-        }
-    }
-    public void drawRect(int startx, int starty, int endx, int endy, int thickness, int color) {
-        int oldcolor = pixdata[(endy - starty) / 2][(endx - startx) / 2];
-        fillRect(startx, starty, endx, endy, color);
-        fillRect(startx + thickness, starty + thickness, endx - thickness, endy - thickness, oldcolor);
-    }
-    public void fillRect(int startx, int starty, int endx, int endy, int color) {
-        for (int i = starty; i < endy; i++) {
-            for (int j = startx; j < endx; j++) {
-                pixdata[i][j] = color;
-            }
-        }
-    }
-    public void setPixel(int y, int x, int val) {
-        if (y < 0) {
-            y += getHeight();
-            setPixel(y, x, val);
-        }
-        if (y >= getHeight()) {
-            y -= getHeight();
-            setPixel(y, x, val);
-        }
+    private int[] imageBounds(int y, int x) {
+        int shift = MathUtils.boundsProtected(x / getWidth(), getHeight());
         if (x < 0) {
-            x += getWidth();
-            setPixel(y, x, val);
+            y -= shift;
+            x = MathUtils.boundsProtected(x, getWidth());
         }
         if (x >= getWidth()) {
-            x -= getWidth();
-            setPixel(y, x, val);
+            y += shift;
+            x = MathUtils.boundsProtected(x, getWidth());
         }
-        pixdata[y][x] = val;
+        y = MathUtils.boundsProtected(y, getHeight());
+        return new int[]{y, x};
+    }
+    public void setPixel(int y, int x, int val) {
+        int[] yx = imageBounds(y, x);
+        pixdata[yx[0]][yx[1]] = val;
     }
     public HSL[][] toHSL() {
         HSL[][] output = new HSL[pixdata.length][pixdata[0].length];
@@ -105,16 +83,8 @@ public class PixelContainer implements Serializable, Pannable {
         return output;
     }
     public int getPixel(int y, int x) {
-        if (x < 0) {
-            y -= x / getWidth();
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        if (x >= getWidth()) {
-            y += x / getWidth();
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        y = MathUtils.boundsProtected(y, getHeight());
-        return pixdata[y][x];
+        int[] yx = imageBounds(y, x);
+        return pixdata[yx[0]][yx[1]];
     }
     public int getHeight() {
         if (pixdata == null) {
@@ -200,63 +170,15 @@ public class PixelContainer implements Serializable, Pannable {
         matrixData[1][0] = ((center_y - ((double) y)) / scale);
         return new Matrix(matrixData);
     }
-    /**
-     * Uses Bresenham's Line Drawing Algorithm
-     *
-     * @param from_x starting ordinate
-     * @param from_y starting abscissa
-     * @param to_x   ending ordinate
-     * @param to_y   ending abscissa
-     * @param color  line pixel color
-     *               <p/>
-     *               Deprecated.
-     *               Use the {@link in.tamchow.fractal.graphicsutilities.graphics.DrawingUtils#drawLine(PixelContainer, int, int, int, int, int)}
-     */
-    @Deprecated
-    public void drawLine(int from_x, int from_y, int to_x, int to_y, int color) {
-        int deltax = Math.abs(to_x - from_x), deltay = Math.abs(to_y - from_y),
-                numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y, yinc1, yinc2;
-        if (deltax >= deltay) {
-            numpixels = deltax + 1;
-            d = (2 * deltay) - deltax;
-            dinc1 = deltay << 1;
-            dinc2 = (deltay - deltax) << 1;
-            xinc1 = 1;
-            xinc2 = 1;
-            yinc1 = 0;
-            yinc2 = 1;
-        } else {
-            numpixels = deltay + 1;
-            d = (2 * deltax) - deltay;
-            dinc1 = deltax << 1;
-            dinc2 = (deltax - deltay) << 1;
-            xinc1 = 0;
-            xinc2 = 1;
-            yinc1 = 1;
-            yinc2 = 1;
+    @Override
+    public boolean equals(Object o) {
+        return o == this || (o instanceof PixelContainer && dataEquals((PixelContainer) o));
+    }
+    private boolean dataEquals(PixelContainer o) {
+        for (int i = 0; i < o.getWidth() * o.getHeight() && i < this.getHeight() * this.getWidth(); ++i) {
+            if (getPixel(i) != o.getPixel(i)) return false;
         }
-        if (from_x > to_x) {
-            xinc1 = -xinc1;
-            xinc2 = -xinc2;
-        }
-        if (from_y > to_y) {
-            yinc1 = -yinc1;
-            yinc2 = -yinc2;
-        }
-        x = from_x;
-        y = from_y;
-        for (int i = 1; i <= numpixels; ++i) {
-            setPixel(y, x, color);
-            if (d < 0) {
-                d += dinc1;
-                x += xinc1;
-                y += yinc1;
-            } else {
-                d += dinc2;
-                x += xinc2;
-                y += yinc2;
-            }
-        }
+        return true;
     }
     public PixelContainer falseColor(PixelContainer[] channels) {
         if (channels.length == 0) {
@@ -309,11 +231,12 @@ public class PixelContainer implements Serializable, Pannable {
         int w = getWidth(), h = getHeight();
         int neww = (int) Math.floor(w * cos + h * sin), newh = (int) Math.floor(h * cos + w * sin);
         PixelContainer rotated = new PixelContainer(neww, newh);
-        Matrix rotor = Matrix.rotationMatrix2D(angle);
+        //Matrix rotor = Matrix.rotationMatrix2D(angle);
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 Matrix coords = fromCooordinates(j, i);
-                coords = MatrixOperations.multiply(rotor, coords);
+                //coords = MatrixOperations.multiply(rotor, coords);
+                coords = MathUtils.doRotate(coords, angle);
                 int[] rcoords = toCooordinates(coords);
                 rotated.setPixel(rcoords[1], rcoords[0], getPixel(i, j));
             }
@@ -365,6 +288,31 @@ public class PixelContainer implements Serializable, Pannable {
         PixelContainer subImage = new PixelContainer(this);
         subImage.pan(x_res, y_res, 0, 0);
         return subImage;
+    }
+    @Override
+    public int compareTo(PixelContainer o) {
+        int difference = 0;
+        for (int i = 0; i < getHeight() && i < o.getHeight(); ++i) {
+            for (int j = 0; j < getWidth() && j < o.getWidth(); ++j) {
+                difference += getPixel(j - i) - o.getPixel(j, i);
+            }
+        }
+        return difference ^ getPath().compareTo(o.getPath());
+    }
+    @Override
+    public String toString() {
+        String pixels = getPath() + "," + getHeight() + "," + getWidth() + "\n";
+        for (int i = 0; i < getHeight(); ++i) {
+            for (int j = 0; j < getWidth(); ++j) {
+                pixels += " " + getPixel(i, j);
+            }
+            pixels += "\n";
+        }
+        return pixels.trim();
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
     public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NEGATIVE, NONE}
 }

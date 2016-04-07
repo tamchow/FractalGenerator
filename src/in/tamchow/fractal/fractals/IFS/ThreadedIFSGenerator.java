@@ -3,11 +3,11 @@ import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
 /**
  * Threaded IFS Fractal Generator
- *
+ * <p/>
  * Note: May produce unpredictable results. Use not recommended.
- *
+ * <p/>
  * Expected result: Images with {@link IFSFractalParams#depth} times added colors.
- *
+ * <p/>
  * Debugging in progress.
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
@@ -46,6 +46,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
                 lock.notifyAll();
                 for (PartIFSData partIFSData : data) {
                     master.getPlane().add(partIFSData.getPartPlane());
+                    master.getAnimation().addFrames(partIFSData.getPartAnimation());
                 }
             }
         } catch (Exception e) {
@@ -69,15 +70,11 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         }
         @Override
         public void run() {
-            if (copyOfMaster.getParams().getFrameskip() > 0) {
-                throw new UnsupportedOperationException("Animations cannot be generated in multithreaded mode,\n" + "Due to risk of corrupted output.");
-            } else {
-                copyOfMaster.generate();
-            }
+            copyOfMaster.generate(index);
         }
         @Override
         public void onCompletion() {
-            data[index] = new PartIFSData(copyOfMaster.getPlane());
+            data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
         }

@@ -5,6 +5,7 @@ import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
 import in.tamchow.fractal.fractals.FractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphicsutilities.graphics.DrawingUtilities;
 import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
@@ -20,7 +21,7 @@ public class LSFractalGenerator implements FractalGenerator {
     public LSFractalGenerator(LSFractalParams params, Publisher publisher) {
         this.params = params;
         canvas = new PixelContainer(params.getWidth(), params.getHeight());
-        canvas.fill(params.getBack_color());
+        DrawingUtilities.fill(canvas, params.getBack_color());
         turtle = new Turtle(canvas, Math.abs(canvas.getWidth() - params.getInit_length()) / 2, canvas.getHeight() / 2, params.getBack_color(), params.getFore_color(), params.getInit_angle());
         generations = new String[params.getDepth()];
         generations[0] = params.getAxiom();

@@ -1,6 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
 
@@ -211,7 +212,10 @@ public class IFSFractalParams implements Serializable {
         return threads;
     }
     public void setThreads(int threads) {
-        this.threads = threads;
+        this.threads = MathUtils.clamp(threads, 1, depth);
+    }
+    public boolean isAnimated() {
+        return frameskip >= 0;
     }
     public boolean isIfsMode() {
         return ifsMode;

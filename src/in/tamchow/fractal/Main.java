@@ -127,14 +127,17 @@ public class Main {
                     for (int i = 0; i < cfg.getParams().length; i++) {
                         IFSFractalParams params = cfg.getParams()[i];
                         IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
-                        if (params.getFrameskip() > 0) {
-                            if (generator.getParams().getFrameskip() > 0) {
-                                throw new UnsupportedOperationException("Animations cannot be generated in multithreaded mode,\n" + "Due to risk of corrupted output.");
-                            }
-                            Animation frames = generator.generateAnimation();
+                        if (params.useThreadedGenerator()) {
+                            ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
+                            threaded.generate();
+                        } else {
+                            generator.generate();
+                        }
+                        if (params.isAnimated()) {
+                            Animation frames = generator.getAnimation();
                             File animationMetaData = new File(args[1] + "/Fractal_" + i + "/animation.cfg");
                             BufferedWriter writer = new BufferedWriter(new FileWriter(animationMetaData));
-                            writer.write(frames + "");
+                            writer.write(frames.sizeDataString() + "");
                             writer.flush();
                             writer.close();
                             for (int j = 0; j < frames.getNumFrames(); j++) {
@@ -146,12 +149,6 @@ public class Main {
                                 }
                             }
                         } else {
-                            if (params.useThreadedGenerator()) {
-                                ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
-                                threaded.generate();
-                            } else {
-                                generator.generate();
-                            }
                             File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostprocessMode() != PixelContainer.PostProcessMode.NONE) {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostprocessMode(), null, 0)), "png", outputFile);

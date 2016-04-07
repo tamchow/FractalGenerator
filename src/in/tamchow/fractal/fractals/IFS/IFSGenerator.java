@@ -13,9 +13,16 @@ import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
 /**
  * Generates IFS fractals
+ * <p/>
+ * Hack to support multithreading:
+ * <p/>
+ * Actually makes 2 passes:
+ * 1 in single threaded initialization phase without rendering to get starting points for threads (fast)
+ * & 1 in multithreaded mode for rendering/animation (slow)
  */
 public class IFSGenerator implements PixelFractalGenerator {
     private static final double TOLERANCE = 1E-15;
+    static Matrix[] points;
     PixelContainer plane;
     IFSFractalParams params;
     Matrix centre_offset, initial, point;
@@ -24,11 +31,22 @@ public class IFSGenerator implements PixelFractalGenerator {
     int depth;
     boolean completion, silencer;
     Publisher progressPublisher;
+    private Animation animation;
     public IFSGenerator(IFSFractalParams params, Publisher progressPublisher) {
         setParams(params);
         initIFS(params);
         doZooms(params.zoomConfig);
         setProgressPublisher(progressPublisher);
+    }
+    private void populatePoints() {
+        int gap = depth / params.getThreads(), pidx = 0;
+        points = new Matrix[params.getThreads()];
+        for (long i = 0; i <= depth && (!completion) && pidx < points.length; ++i) {
+            generateStep(false);
+            if (i % gap == 0) {
+                points[pidx++] = point;
+            }
+        }
     }
     @Override
     public void doZooms(ZoomConfig zoomConfig) {
@@ -86,6 +104,10 @@ public class IFSGenerator implements PixelFractalGenerator {
         initial = null;
         completion = false;
         point = null;
+        if (points == null) {
+            populatePoints();
+        }
+        animation = new Animation(params.getFps());
         if (params.zoomConfig.zooms != null) {
             for (ZoomParams zoom : params.zoomConfig.zooms) {
                 zoom(zoom);
@@ -197,6 +219,9 @@ public class IFSGenerator implements PixelFractalGenerator {
         return plane;
     }
     public void generate() {
+        generate(0);
+    }
+    public void generate(int index) {
         /*if (initial == null) {
             Random random = new Random();
             initial = fromCoordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
@@ -213,10 +238,18 @@ public class IFSGenerator implements PixelFractalGenerator {
             }
             publishProgress(i);
         }*/
+        initial = points[index];
+        int frameskip = Math.abs(params.getFrameskip()) + 1;//to skip 1 frame, it must divide by 2, etc.
         for (long i = 0; i <= depth && (!completion); i++) {
             generateStep();
             publishProgress(i);
+            if (params.isAnimated() && i % frameskip == 0) {
+                animation.addFrame(plane);
+            }
         }
+    }
+    public Animation getAnimation() {
+        return animation;
     }
     public boolean isOutOfBounds(Matrix point) {
         int x = Math.round((float) (point.get(0, 0) * scale) + center_x),
@@ -254,19 +287,10 @@ public class IFSGenerator implements PixelFractalGenerator {
     public boolean isComplete() {
         return completion;
     }
-    public Animation generateAnimation() {
-        int frameskip = Math.abs(params.getFrameskip()) + 1;//to skip 1 frame, it must divide by 2, etc.
-        Animation animation = new Animation(params.getFps());
-        for (long i = 0; i <= depth && (!completion); i++) {
-            generateStep();
-            publishProgress(i);
-            if (i % frameskip == 0) {
-                animation.addFrame(plane);
-            }
-        }
-        return animation;
-    }
     public void generateStep() {
+        generateStep(true);
+    }
+    public void generateStep(boolean render) {
         if (initial == null) {
             initial = fromCoordinates(Math.round((float) Math.random() * getWidth()), Math.round((float) Math.random() * getHeight()));
         }
@@ -275,7 +299,9 @@ public class IFSGenerator implements PixelFractalGenerator {
         }
         int index = MathUtils.weightedRandom(params.getWeights());
         int[] coord = toCoordinates(point);
-        plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
+        if (render) {
+            plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
+        }
         point = modifyPoint(point, index);
         if (point.equals(initial) || isOutOfBounds(point)) {
             completion = true;

@@ -3,6 +3,7 @@ import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
@@ -151,7 +152,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         return num_threads;
     }
     public void setNum_threads(int num_threads) {
-        this.num_threads = num_threads;
+        this.num_threads = MathUtils.clamp(num_threads, 1, num_points);
     }
     public int getNum_points() {
         return num_points;

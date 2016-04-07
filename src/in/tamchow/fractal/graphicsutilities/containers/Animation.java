@@ -1,9 +1,10 @@
 package in.tamchow.fractal.graphicsutilities.containers;
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Stores frames for an animation, or here, transitions, with some metadata such as fps.
  */
-public class Animation {
+public class Animation implements Serializable, Comparable<Animation> {
     private int fps;
     private ArrayList<PixelContainer> frames;
     public Animation() {
@@ -18,6 +19,19 @@ public class Animation {
         this.fps = fps;
         this.frames = new ArrayList<>();
         setFrames(frames);
+    }
+    public Animation(Animation other) {
+        this.fps = other.fps;
+        this.frames = new ArrayList<>(other.frames);
+    }
+    @Override
+    public String toString() {
+        return fps + " " + frames.toString();
+    }
+    public void addFrames(Animation frames) {
+        for (int i = 0; i < frames.getNumFrames(); ++i) {
+            this.frames.add(frames.getFrame(i));
+        }
     }
     public int getNumFrames() {
         return frames.size();
@@ -58,8 +72,8 @@ public class Animation {
     }
     public void setFrames(PixelContainer[] frames) {
         clearFrames();
-        for (PixelContainer imgdat : frames) {
-            addFrame(imgdat);
+        for (PixelContainer pixelContainer : frames) {
+            addFrame(pixelContainer);
         }
     }
     public PixelContainer getFrame(int idx) {
@@ -71,8 +85,23 @@ public class Animation {
     public void clearFrames() {
         frames.clear();
     }
-    @Override
-    public String toString() {
+    public String sizeDataString() {
         return "" + fps + "," + frames.size();
+    }
+    @Override
+    public boolean equals(Object o) {
+        return o == this || (o instanceof Animation && ((Animation) o).fps == fps && ((Animation) o).frames.equals(frames));
+    }
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+    @Override
+    public int compareTo(Animation o) {
+        int difference = 0;
+        for (int i = 0; i < getNumFrames() && i < o.getNumFrames(); ++i) {
+            difference += getFrame(i).compareTo(o.getFrame(i));
+        }
+        return difference ^ (getFps() - o.getFps());
     }
 }

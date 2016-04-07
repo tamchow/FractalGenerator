@@ -3,11 +3,11 @@ import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 /**
  * Implements turtle graphics at a very basic level
  *
- * @see PixelContainer#drawLine(int, int, int, int, int)
+ * @see Turtle
  */
 public class Turtle {
     PixelContainer canvas;
-    int x, y;
+    double x, y;
     int back_color, fore_color;
     double angle;
     public Turtle(PixelContainer canvas, int x, int y) {
@@ -27,7 +27,7 @@ public class Turtle {
         switch (command) {
             case FILL_CANVAS:
             case CLEAR:
-                canvas.fill(back_color);
+                DrawingUtilities.fill(canvas, back_color);
             case DRAW_FORWARD:
                 draw_forward(data);
                 break;
@@ -43,10 +43,10 @@ public class Turtle {
         }
     }
     private void draw_forward(double step) {
-        int oldx = x, oldy = y;
+        double oldx = x, oldy = y;
         x += step * Math.cos(Math.toRadians(angle));
         y += step * Math.sin(Math.toRadians(angle));
-        DrawingUtils.drawLine(canvas, oldx, oldy, x, y, fore_color);
+        DrawingUtilities.drawLine(canvas, oldx, oldy, x, y, fore_color);
     }
     private void turn(double delta) {
         angle += delta;
