@@ -15,6 +15,12 @@ public class MathUtils {
         return clamp(ptr, 0, size - 1);//for array indices
     }
     public static int clamp(int ptr, int min, int max) {
+        if (max < min) {
+            return (ptr < min) ? min : ptr;
+        }
+        if (max == min) {
+            return min;///*or,*/ return max;
+        }
         return (ptr < min) ? min : ((ptr > max) ? max : ptr);
     }
     public static int[][] intDDAAdd(int[][] from, int[][] to) {

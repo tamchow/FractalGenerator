@@ -256,16 +256,16 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     }
     public void generate() {
         if (params.runParams.fully_configured) {
-            generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, (int) params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
+            generate(params.runParams.start_x, params.runParams.end_x, params.runParams.start_y, params.runParams.end_y, params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         } else {
             generate(params.runParams.iterations, params.runParams.escape_radius, params.runParams.constant);
         }
     }
-    public void generate(long iterations, double escape_radius, Complex constant) {
-        generate(0, argand.getWidth(), 0, argand.getHeight(), (int) iterations, escape_radius, constant);
+    public void generate(int iterations, double escape_radius, Complex constant) {
+        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, constant);
     }
-    public void generate(long iterations, double escape_radius) {
-        generate(0, argand.getWidth(), 0, argand.getHeight(), (int) iterations, escape_radius, null);
+    public void generate(int iterations, double escape_radius) {
+        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, null);
     }
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter((end_x - start_x) * (end_y - start_y) * iterations);
@@ -312,9 +312,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
             }
             for (int i = start_y; i < end_y; i++) {
                 for (int j = start_x; j < end_x; j++) {
-                    int colortmp = 0;
+                    int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
                     double normalized_count = normalized_escapes[i][j];
-                    int pi = i, pj = j - 1, ni = i, nj = j + 1;
                     if (pj < 0) {
                         pi = (i == 0) ? i : i - 1;
                         pj = escapedata[pi].length - 1;
@@ -404,7 +403,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                 }
                 last.push(z);
                 lastd.push(zd);
-                double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd = 0, ubnd = 0;
+                double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd, ubnd;
                 if (color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR ||
                         color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE ||
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR ||
@@ -550,7 +549,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                 } else {
                     normalized_escapes[i][j] = c + (Math.log(tolerance) - Math.log(d0)) / (Math.log(d1) - Math.log(d0));
                 }
-                int colortmp = 0x0;
+                int colortmp;
                 switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN:
@@ -688,7 +687,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                double s = 0, mindist = escape_radius, maxdist = mindist, lbnd = 0, ubnd = 0;
+                double s = 0, mindist = escape_radius, maxdist = mindist, lbnd, ubnd;
                 if (color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR ||
                         color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE ||
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR ||
@@ -831,7 +830,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                 } else {
                     normalized_escapes[i][j] = getNormalized(c, iterations, pass, escape_radius);
                 }
-                int colortmp = 0x0;
+                int colortmp;
                 switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN:
@@ -874,7 +873,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         }
     }
     public void newtonGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, Complex constant) {
-        String functionderiv = "", functionderiv2 = "";
+        String functionderiv, functionderiv2 = "";
         Complex degree;
         if (Function.isSpecialFunction(function)) {
             Function func = Function.fromString(function, variableCode, oldvariablecode);
@@ -913,7 +912,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
-                double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd = 0, ubnd = 0;
+                double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd, ubnd;
                 if (color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR ||
                         color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE ||
                         color.mode == Colors.CALCULATIONS.STRIPE_AVERAGE_LINEAR ||
@@ -1189,7 +1188,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 Complex z = argand_map[i][j], zd = new Complex(1), ztmp2 = new Complex(0), ztmpd2 = new Complex(0), z2 = new Complex(0);
-                double s = 0, mindist = escape_radius, maxdist = mindist, lbnd = 0, ubnd = 0;
+                double s = 0, mindist = escape_radius, maxdist = mindist, lbnd, ubnd;
                 int c = 0x0;
                 if (color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_LINEAR ||
                         color.mode == Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE ||
@@ -1327,7 +1326,7 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                 } else {
                     normalized_escapes[i][j] = getNormalized(c, iterations, pass, escape_radius);
                 }
-                int colortmp = 0x0;
+                int colortmp;
                 switch (color.getMode()) {
                     case ORBIT_TRAP_MIN:
                     case LINE_TRAP_MIN:

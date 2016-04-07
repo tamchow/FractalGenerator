@@ -149,7 +149,7 @@ public class ConfigReader {
             complexFractalParams.threadDataFromString(thread_data);
         }
         if (post_process_mode != null) {
-            complexFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
+            complexFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (zooms != null) {
             complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));
@@ -236,7 +236,7 @@ public class ConfigReader {
             ifsFractalParams.setThreads(Integer.valueOf(threads));
         }
         if (post_process_mode != null) {
-            ifsFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
+            ifsFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         ifsFractalParams.setPath(paramfile.getAbsolutePath());
         return ifsFractalParams;
@@ -318,7 +318,7 @@ public class ConfigReader {
             complexBrotFractalParams.setNum_threads(Integer.valueOf(threads));
         }
         if (post_process_mode != null) {
-            complexBrotFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
+            complexBrotFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (switch_rate != null) {
             complexBrotFractalParams.setSwitch_rate(Integer.valueOf(switch_rate));
@@ -380,7 +380,7 @@ public class ConfigReader {
         LSFractalParams lsFractalParams = new LSFractalParams();
         lsFractalParams.fromString(params);
         if (post_process_mode != null) {
-            lsFractalParams.setPostprocessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
+            lsFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (fps != null) {
             lsFractalParams.setFps(Integer.valueOf(fps));

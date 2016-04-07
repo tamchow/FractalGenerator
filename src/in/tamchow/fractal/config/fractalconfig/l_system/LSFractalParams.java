@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Holds Parameters for an LS fractal
  */
 public class LSFractalParams implements Serializable {
-    public PixelContainer.PostProcessMode postprocessMode;
+    public PixelContainer.PostProcessMode postProcessMode;
     public String path;
     String axiom;
     int width;
@@ -20,7 +20,7 @@ public class LSFractalParams implements Serializable {
     UnitGrammar[] grammar;
     public LSFractalParams(LSFractalParams old) {
         setPath(old.getPath());
-        setPostprocessMode(old.getPostprocessMode());
+        setPostProcessMode(old.getPostProcessMode());
         setHeight(old.getHeight());
         setWidth(old.getWidth());
         setInit_length(old.getInit_length());
@@ -31,7 +31,7 @@ public class LSFractalParams implements Serializable {
     }
     public LSFractalParams() {
         setPath("");
-        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
         setFps(0);
     }
     public String getAxiom() {
@@ -79,11 +79,11 @@ public class LSFractalParams implements Serializable {
     public void setInit_length(int init_length) {
         this.init_length = init_length;
     }
-    public PixelContainer.PostProcessMode getPostprocessMode() {
-        return postprocessMode;
+    public PixelContainer.PostProcessMode getPostProcessMode() {
+        return postProcessMode;
     }
-    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
-        this.postprocessMode = postprocessMode;
+    public void setPostProcessMode(PixelContainer.PostProcessMode postProcessMode) {
+        this.postProcessMode = postProcessMode;
     }
     public String getPath() {
         return path;

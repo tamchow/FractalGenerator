@@ -54,15 +54,13 @@ public class Test {
         ComplexFractalGenerator jgen;
         ComplexFractalParams jgenParams = null;
         if (def) {
-            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null);
+            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null, x_t, y_t);
             jgenParams.initParams.skew = skew;
             if (constant != null) {
                 jgenParams.runParams = new ComplexFractalRunParams(iter, escrad, constant);
             } else {
                 jgenParams.runParams = new ComplexFractalRunParams(iter, escrad);
             }
-            jgenParams.x_threads = x_t;
-            jgenParams.y_threads = y_t;
             jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
         } else {
             jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());

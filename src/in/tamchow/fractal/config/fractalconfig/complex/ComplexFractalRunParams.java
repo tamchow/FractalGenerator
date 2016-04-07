@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.DataFromString;
+import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.io.Serializable;
  */
 public class ComplexFractalRunParams implements Serializable, DataFromString {
     public int start_x, end_x, start_y, end_y;
-    public long iterations;
+    public int iterations;
     public double escape_radius;
     public Complex constant;
     public boolean fully_configured;
@@ -21,23 +22,23 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
             fully_configured = false;
         }
     }
-    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius) {
+    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         initParams(start_x, end_x, start_y, end_y, iterations, escape_radius);
     }
-    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius, Complex constant) {
+    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         initParams(start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
     }
-    public ComplexFractalRunParams(long iterations, double escape_radius) {
+    public ComplexFractalRunParams(int iterations, double escape_radius) {
         initParams(iterations, escape_radius);
     }
-    public ComplexFractalRunParams(long iterations, double escape_radius, Complex constant) {
+    public ComplexFractalRunParams(int iterations, double escape_radius, Complex constant) {
         initParams(iterations, escape_radius, constant);
     }
     public ComplexFractalRunParams() {
         initParams(128, 2.0);
     }
-    public void initParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius, Complex constant) {
-        this.iterations = iterations;
+    public void initParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
+        setIterations(iterations);
         this.start_x = start_x;
         this.end_x = end_x;
         this.start_y = start_y;
@@ -46,14 +47,14 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
         this.constant = new Complex(constant);
         fully_configured = true;
     }
-    public void initParams(long iterations, double escape_radius, Complex constant) {
-        this.iterations = iterations;
+    public void initParams(int iterations, double escape_radius, Complex constant) {
+        setIterations(iterations);
         this.escape_radius = escape_radius;
         this.constant = (constant != null) ? new Complex(constant) : null;
         fully_configured = false;
     }
-    public void initParams(int start_x, int end_x, int start_y, int end_y, long iterations, double escape_radius) {
-        this.iterations = iterations;
+    public void initParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
+        setIterations(iterations);
         this.start_x = start_x;
         this.end_x = end_x;
         this.start_y = start_y;
@@ -62,28 +63,34 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
         constant = null;
         fully_configured = true;
     }
-    public void initParams(long iterations, double escape_radius) {
-        this.iterations = iterations;
+    public void initParams(int iterations, double escape_radius) {
+        setIterations(iterations);
         this.escape_radius = escape_radius;
         constant = null;
         fully_configured = false;
     }
+    public void setIterations(int iterations) {
+        this.iterations = MathUtils.clamp(iterations, 0, Integer.MAX_VALUE - 2);
+    }
     @Override
     public String toString() {
-        return String.format("[Runconfig]%n%d%n%d%n%d%n%dn%d%n%f%n%s%n[EndRunconfig]", start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
+        if (fully_configured) {
+            return String.format("[Runconfig]%n%d%n%d%n%d%n%d%n%d%n%f%n%s%n[EndRunconfig]", start_x, end_x, start_y, end_y, iterations, escape_radius, (constant == null) ? "" : constant);
+        }
+        return String.format("[Runconfig]%n%d%n%f%n%s%n[EndRunconfig]", iterations, escape_radius, (constant == null) ? "" : constant);
     }
     /**
      * @param params: Pass in -1 for escape_radius in case of Newton Fractal Mode
      */
     public void fromString(String[] params) {
         if (params.length == 6) {
-            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Long.valueOf(params[4]), Double.valueOf(params[5]));
+            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), Double.valueOf(params[5]));
         } else if (params.length == 7) {
-            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Long.valueOf(params[4]), Double.valueOf(params[5]), new Complex(params[6]));
+            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), Double.valueOf(params[5]), new Complex(params[6]));
         } else if (params.length == 2) {
-            initParams(Long.valueOf(params[0]), Double.valueOf(params[1]));
+            initParams(Integer.valueOf(params[0]), Double.valueOf(params[1]));
         } else if (params.length == 3) {
-            initParams(Long.valueOf(params[0]), Double.valueOf(params[1]), new Complex(params[2]));
+            initParams(Integer.valueOf(params[0]), Double.valueOf(params[1]), new Complex(params[2]));
         }
     }
 }

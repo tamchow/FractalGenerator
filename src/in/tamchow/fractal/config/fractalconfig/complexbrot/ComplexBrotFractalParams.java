@@ -26,9 +26,9 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", mode, constants, anti);
     }
     public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
+        this();
         setWidth(width);
         setHeight(height);
-        setNum_threads(num_threads);
         setSwitch_rate(switch_rate);
         setNum_points(num_points);
         setIterations(iterations);
@@ -44,16 +44,24 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setMode(mode);
         setConstants(constants);
         setAnti(anti);
+        setNum_threads(num_threads);
     }
     public ComplexBrotFractalParams() {
         setPath("");
-        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
+        zoomConfig = new ZoomConfig();
+        setNewton_constant(null);
+        setNum_points(1);
+        setNum_threads(1);
     }
     public ComplexBrotFractalParams(ComplexBrotFractalParams old) {
         this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getMode(), old.getConstants(), old.isAnti());
         setPath(old.getPath());
-        setPostprocessMode(old.getPostprocessMode());
+        setPostProcessMode(old.getPostProcessMode());
         setNewton_constant(old.getNewton_constant());
+        if (old.zoomConfig.zooms != null) {
+            this.zoomConfig = new ZoomConfig(old.getZoomConfig());
+        }
     }
     public double getEscape_radius() {
         return escape_radius;
@@ -61,17 +69,17 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public void setEscape_radius(double escape_radius) {
         this.escape_radius = escape_radius;
     }
-    public PixelContainer.PostProcessMode getPostprocessMode() {
+    public PixelContainer.PostProcessMode getPostProcessMode() {
         return postprocessMode;
     }
-    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
-        this.postprocessMode = postprocessMode;
+    public void setPostProcessMode(PixelContainer.PostProcessMode postProcessMode) {
+        this.postprocessMode = postProcessMode;
     }
     public Complex getNewton_constant() {
         return newton_constant;
     }
     public void setNewton_constant(Complex newton_constant) {
-        this.newton_constant = newton_constant;
+        this.newton_constant = (newton_constant != null) ? new Complex(newton_constant) : null;
     }
     public int getSwitch_rate() {
         return switch_rate;
@@ -152,20 +160,23 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         return num_threads;
     }
     public void setNum_threads(int num_threads) {
-        this.num_threads = MathUtils.clamp(num_threads, 1, num_points);
+        this.num_threads = MathUtils.clamp(num_threads, 1, getNum_points());
     }
     public int getNum_points() {
         return num_points;
     }
     public void setNum_points(int num_points) {
-        this.num_points = num_points;
+        this.num_points = MathUtils.clamp(num_points, 1, getHeight() * getWidth());
     }
     public int[] getIterations() {
         return iterations;
     }
     public void setIterations(int[] iterations) {
         this.iterations = new int[iterations.length];
-        System.arraycopy(iterations, 0, this.iterations, 0, this.iterations.length);
+        //System.arraycopy(iterations, 0, this.iterations, 0, this.iterations.length);
+        for (int i = 0; i < iterations.length; ++i) {
+            this.iterations[i] = MathUtils.clamp(iterations[i], 0, Integer.MAX_VALUE - 2);
+        }
     }
     public double getZoom() {
         return zoom;
@@ -207,6 +218,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     }
     @Override
     public void fromString(String[] data) {
+        setNum_threads(1);
         setWidth(Integer.valueOf(data[0]));
         setHeight(Integer.valueOf(data[1]));
         setIterations(integersFromStrings(StringManipulator.split(data[2], ",")));

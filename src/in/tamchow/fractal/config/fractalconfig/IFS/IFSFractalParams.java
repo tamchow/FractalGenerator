@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class IFSFractalParams implements Serializable {
     public static final String VARIABLE_CODES = "x:y:r:t:p";
     public ZoomConfig zoomConfig;
-    public PixelContainer.PostProcessMode postprocessMode;
+    public PixelContainer.PostProcessMode postProcessMode;
     public String path;
     Matrix[] transforms, translators;
     boolean ifsMode;
@@ -31,6 +31,8 @@ public class IFSFractalParams implements Serializable {
     double base_precision;
     double skew;
     private IFSFractalParams() {
+        setDepth(1);
+        setThreads(1);
         String[] variableCodes = StringManipulator.split(VARIABLE_CODES, ":");
         setFrameskip(-1);
         setPath("");
@@ -39,7 +41,7 @@ public class IFSFractalParams implements Serializable {
         setR_code(variableCodes[2]);
         setT_code(variableCodes[3]);
         setP_code(variableCodes[4]);
-        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
     }
     public IFSFractalParams(IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
@@ -54,13 +56,18 @@ public class IFSFractalParams implements Serializable {
         setFps(config.getFps());
         setPath(config.getPath());
         setSkew(config.getSkew());
-        setPostprocessMode(config.getPostprocessMode());
+        setPostProcessMode(config.getPostProcessMode());
         setThreads(config.getThreads());
         setX_code(config.getX_code());
         setY_code(config.getY_code());
         setR_code(config.getR_code());
         setT_code(config.getT_code());
         setP_code(config.getP_code());
+        if (config.zoomConfig.zooms != null) {
+            this.zoomConfig = new ZoomConfig(config.zoomConfig);
+        }
+        setPath(config.getPath());
+        setPostProcessMode(config.getPostProcessMode());
     }
     public static IFSFractalParams fromString(String[] input) {
         IFSFractalParams params = new IFSFractalParams(); //params.setIfsMode(Boolean.valueOf(input[0]));
@@ -140,12 +147,6 @@ public class IFSFractalParams implements Serializable {
     public void setP_code(String p_code) {
         this.p_code = p_code;
     }
-    public PixelContainer.PostProcessMode getPostprocessMode() {
-        return postprocessMode;
-    }
-    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
-        this.postprocessMode = postprocessMode;
-    }
     public double getSkew() {
         return skew;
     }
@@ -168,7 +169,7 @@ public class IFSFractalParams implements Serializable {
         return depth;
     }
     public void setDepth(int depth) {
-        this.depth = depth;
+        this.depth = Math.abs((depth == 0) ? 1 : depth);
     }
     public Matrix[] getTransforms() {
         return transforms;
@@ -241,8 +242,8 @@ public class IFSFractalParams implements Serializable {
     @Override
     public String toString() {
         String representation = (frameskip >= 0) ? "Frameskip:" + frameskip : "";
-        representation += (postprocessMode != null) ? "Postprocessing:" + postprocessMode : "";
-        representation += "\n" + ((ifsMode) ? ifsMode + ":" + createCodeString() : ifsMode) + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
+        representation += (postProcessMode != null) ? "Postprocessing:" + postProcessMode : "";
+        representation += "\n" + ifsMode + ((ifsMode) ? ":" + createCodeString() : "") + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {
             for (int i = 0; i < weights.length; i++) {
                 representation += "\n" + xfunctions[i] + " " + yfunctions[i] + " " + weights[i] + " " + colors[i];
@@ -292,5 +293,11 @@ public class IFSFractalParams implements Serializable {
     }
     public void setBase_precision(double base_precision) {
         this.base_precision = base_precision;
+    }
+    public PixelContainer.PostProcessMode getPostProcessMode() {
+        return postProcessMode;
+    }
+    public void setPostProcessMode(PixelContainer.PostProcessMode postProcessMode) {
+        this.postProcessMode = postProcessMode;
     }
 }

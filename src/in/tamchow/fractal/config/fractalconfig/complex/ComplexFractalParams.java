@@ -12,45 +12,77 @@ public class ComplexFractalParams implements Serializable {
     public ComplexFractalRunParams runParams;
     public ComplexFractalInitParams initParams;
     public ZoomConfig zoomConfig = new ZoomConfig();
-    public int x_threads, y_threads;
     public PixelContainer.PostProcessMode postprocessMode;
     public String path;
+    private int x_threads, y_threads;
     public ComplexFractalParams() {
         runParams = new ComplexFractalRunParams();
         initParams = new ComplexFractalInitParams();
-        x_threads = 1;
-        y_threads = 1;
-        zoomConfig = null;
-        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
+        initParams.setHeight(1);
+        initParams.setWidth(1);
         setPath("");
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
+        setX_threads(1);
+        setY_threads(1);
     }
     public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams, int x_threads, int y_threads) {
-        this.initParams = new ComplexFractalInitParams(initParams);
-        setPath("");
-        this.runParams = new ComplexFractalRunParams(runParams);
-        this.x_threads = x_threads;
-        this.y_threads = y_threads;
-    }
-    public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams) {
-        this.initParams = new ComplexFractalInitParams(initParams);
+        if (initParams != null) {
+            this.initParams = new ComplexFractalInitParams(initParams);
+        } else {
+            this.initParams = new ComplexFractalInitParams();
+            this.initParams.setHeight(1);
+            this.initParams.setWidth(1);
+        }
         if (runParams != null) {
             this.runParams = new ComplexFractalRunParams(runParams);
+        } else {
+            this.runParams = new ComplexFractalRunParams();
         }
-        this.x_threads = 1;
-        this.y_threads = 1;
-        setPostprocessMode(PixelContainer.PostProcessMode.NONE);
         setPath("");
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
+        setX_threads(x_threads);
+        setY_threads(y_threads);
+    }
+    public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams) {
+        if (initParams != null) {
+            this.initParams = new ComplexFractalInitParams(initParams);
+        } else {
+            this.initParams = new ComplexFractalInitParams();
+            this.initParams.setHeight(1);
+            this.initParams.setWidth(1);
+        }
+        if (runParams != null) {
+            this.runParams = new ComplexFractalRunParams(runParams);
+        } else {
+            this.runParams = new ComplexFractalRunParams();
+        }
+        setPath("");
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
+        setX_threads(1);
+        setY_threads(1);
     }
     public ComplexFractalParams(ComplexFractalParams params) {
         this.initParams = new ComplexFractalInitParams(params.initParams);
         this.runParams = new ComplexFractalRunParams(params.runParams);
-        this.x_threads = params.x_threads;
-        this.y_threads = params.y_threads;
+        setX_threads(params.getX_threads());
+        setY_threads(params.getY_threads());
         if (params.zoomConfig.zooms != null) {
             this.zoomConfig = new ZoomConfig(params.zoomConfig);
         }
-        setPostprocessMode(params.getPostprocessMode());
+        setPostProcessMode(params.getPostProcessMode());
         setPath(params.getPath());
+    }
+    public int getX_threads() {
+        return x_threads;
+    }
+    public void setX_threads(int x_threads) {
+        this.x_threads = MathUtils.clamp(x_threads, 1, initParams.getWidth());
+    }
+    public int getY_threads() {
+        return y_threads;
+    }
+    public void setY_threads(int y_threads) {
+        this.y_threads = MathUtils.clamp(y_threads, 1, initParams.getHeight());
     }
     public String getPath() {
         return path;
@@ -58,19 +90,19 @@ public class ComplexFractalParams implements Serializable {
     public void setPath(String path) {
         this.path = path;
     }
-    public PixelContainer.PostProcessMode getPostprocessMode() {
+    public PixelContainer.PostProcessMode getPostProcessMode() {
         return postprocessMode;
     }
-    public void setPostprocessMode(PixelContainer.PostProcessMode postprocessMode) {
-        this.postprocessMode = postprocessMode;
+    public void setPostProcessMode(PixelContainer.PostProcessMode postProcessMode) {
+        this.postprocessMode = postProcessMode;
     }
     public boolean useThreadedGenerator() {
-        return (x_threads > 1 || y_threads > 1);
+        return (getX_threads() * getY_threads() > 1);
     }
     public void threadDataFromString(String data) {
         String[] parts = StringManipulator.split(data, " ");
-        x_threads = MathUtils.clamp(Integer.valueOf(parts[0]), 1, initParams.getWidth());
-        y_threads = MathUtils.clamp(Integer.valueOf(parts[1]), 1, initParams.getHeight());
+        setX_threads(Integer.valueOf(parts[0]));
+        setY_threads(Integer.valueOf(parts[1]));
     }
     public void setZoomConfig(ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);

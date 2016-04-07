@@ -35,8 +35,8 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
         this.constant = config.runParams.constant;
-        nx = config.x_threads;
-        ny = config.y_threads;
+        nx = config.getX_threads();
+        ny = config.getY_threads();
         buffer = new PartComplexFractalData[nx * ny];
     }
     @Override
@@ -89,8 +89,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                             master.escapedata[i][j] = partImage.escapedata[i][j];
                             master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
                             double normalized_count = master.normalized_escapes[i][j];
-                            int colortmp = 0;
-                            int pi = i, pj = j - 1, ni = i, nj = j + 1;
+                            int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
                             if (pj < 0) {
                                 pi = (i == 0) ? i : i - 1;
                                 pj = master.escapedata[pi].length - 1;
