@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
 /**
@@ -92,7 +93,7 @@ public class LSFractalParams implements Serializable {
         this.path = path;
     }
     public void fromString(String[] data) {
-        String[] init = data[0].split(",");
+        String[] init = StringManipulator.split(data[0], ",");
         if (init.length == 6) {
             width = Integer.valueOf(init[0]);
             height = Integer.valueOf(init[1]);
@@ -113,7 +114,7 @@ public class LSFractalParams implements Serializable {
                 init_length = Integer.valueOf(init[6]);
                 init_angle = 0.0;
             } catch (NumberFormatException nfe) {
-                init_angle = Double.valueOf(init[7]);
+                init_angle = Double.valueOf(init[6]);
                 init_length = width;
             }
         } else if (init.length == 8) {

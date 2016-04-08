@@ -30,7 +30,7 @@ public class LSFractalGenerator implements FractalGenerator {
     public void generate() {
         for (int i = 0, k = 1; i < generations.length - 1 && k < generations.length; ++i, ++k) {
             for (int j = 0; j < generations[i].length(); ++j) {
-                String toEvolve = generations[i].charAt(j) + "";
+                String toEvolve = String.valueOf(generations[i].charAt(j));
                 UnitGrammar evolutions = getGrammarForCode(toEvolve);
                 if (evolutions == null) {
                     throw new LSGrammarException("Undefined code encountered.");

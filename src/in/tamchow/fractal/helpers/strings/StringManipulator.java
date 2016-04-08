@@ -213,7 +213,7 @@ public class StringManipulator {
         return result;
     }
     public static String[] split(String what, String at) {
-        if (what.length() == 0 || at.length() == 0) {
+        if (what.isEmpty() || at.isEmpty()) {
             //the length checks will throw the necessary NullPointerExceptions
             throw new IllegalArgumentException("Empty String");
         }
