@@ -45,11 +45,17 @@ public class IFSGenerator implements PixelFractalGenerator {
         points[0] = initial;
         //indexes start from 1 so we can avoid doing a pass unnecessarily
         int gap = depth / params.getThreads(), pidx = 1;
-        for (long i = 1; pidx < points.length && i <= depth && (!completion); ++i, ++pidx) {
+        for (long i = 1; pidx < points.length && i <= depth; ++i) {
             generateStep(false);
-            if (i % gap == 0) {
-                points[pidx] = point;
+            if (completion) {
+                break;
             }
+            if (i % gap == 0) {
+                points[pidx++] = point;
+            }
+        }
+        if (pidx < params.getThreads()) {
+            params.setThreads(pidx);
         }
     }
     @Override
@@ -257,17 +263,22 @@ public class IFSGenerator implements PixelFractalGenerator {
     public Animation getAnimation() {
         return animation;
     }
-    public boolean isOutOfBounds(Matrix point) {
-        int x = Math.round((float) (point.get(0, 0) * scale) + center_x),
-                y = Math.round(center_y - (float) (point.get(1, 0) * scale));
-        return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
-    }
-    public int[] toCoordinates(Matrix point) {
+    private Matrix normalizePoint(Matrix point) {
         point = MatrixOperations.subtract(point, centre_offset);
         if (Math.abs(params.getSkew()) > TOLERANCE) {
             //point = MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()).inverse(),point);
             point = MathUtils.doRotate(point, -params.getSkew());
         }
+        return point;
+    }
+    public boolean isOutOfBounds(Matrix point) {
+        point = normalizePoint(point);
+        int x = Math.round((float) (point.get(0, 0) * scale) + center_x),
+                y = Math.round(center_y - (float) (point.get(1, 0) * scale));
+        return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
+    }
+    public int[] toCoordinates(Matrix point) {
+        point = normalizePoint(point);
         return new int[]{MathUtils.boundsProtected(Math.round((float) (point.get(0, 0) * scale) + center_x), getImageWidth()),
                 MathUtils.boundsProtected(Math.round(center_y - (float) (point.get(1, 0) * scale)), getImageHeight())};
     }
@@ -302,9 +313,11 @@ public class IFSGenerator implements PixelFractalGenerator {
         if (render) {
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
         }
-        point = modifyPoint(point, index);
+        Matrix point = modifyPoint(this.point, index);
         if (point.equals(initial) || isOutOfBounds(point)) {
             completion = true;
+        } else {
+            this.point = point;
         }
     }
     @Override
