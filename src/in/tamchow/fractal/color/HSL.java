@@ -1,5 +1,6 @@
 package in.tamchow.fractal.color;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -12,6 +13,7 @@ public class HSL implements Serializable {
         setSaturation(saturation);
         setLightness(lightness);
     }
+    @NotNull
     public static HSL fromString(String hsl) {
         String[] parts = StringManipulator.split(hsl, ",");
         return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
@@ -19,6 +21,7 @@ public class HSL implements Serializable {
     public static double hueFromAngle(double radianMeasure) {
         return radianMeasure / (2 * Math.PI);
     }
+    @NotNull
     public static HSL fromRGB(int color) {
         int ri = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.RED),
                 gi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
@@ -48,13 +51,14 @@ public class HSL implements Serializable {
     @Override
     public boolean equals(Object other) {
         if (other instanceof HSL) {
-            HSL that = (HSL) other;
+            @NotNull HSL that = (HSL) other;
             if (that.getHue() == getHue() && that.getLightness() == getLightness() && that.getSaturation() == getSaturation()) {
                 return true;
             }
         }
         return false;
     }
+    @NotNull
     @Override
     public String toString() {
         return hue + "," + saturation + "," + lightness;

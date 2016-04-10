@@ -1,6 +1,7 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -24,8 +25,9 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     String function, constant, variableCode, oldvariablecode;
     Polynomial coefficient, argument;
     String[][] consts;
+    @NotNull
     public static FunctionTerm fromString(String function, String variableCode, String oldvariablecode) {
-        FunctionTerm f = new FunctionTerm();
+        @NotNull FunctionTerm f = new FunctionTerm();
         String[] parts = StringManipulator.split(function, ";");
         f.variableCode = variableCode;
         f.oldvariablecode = oldvariablecode;
@@ -39,10 +41,10 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
         f.argument = Polynomial.fromString(parts[2]);
         return f;
     }
-    public static boolean isSpecialFunctionTerm(String function) {
+    public static boolean isSpecialFunctionTerm(@NotNull String function) {
         return getUsedFunctionTermIndex(function) != -1;
     }
-    public static int getUsedFunctionTermIndex(String function) {
+    public static int getUsedFunctionTermIndex(@NotNull String function) {
         for (int i = 0; i < new FunctionTerm().functions.length; i++) {
             if (function.contains(new FunctionTerm().functions[i].function)) {
                 return i;
@@ -53,12 +55,13 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     public String[][] getConsts() {
         return consts;
     }
-    public void setConsts(String[][] constdec) {
+    public void setConsts(@NotNull String[][] constdec) {
         this.consts = new String[constdec.length][constdec[0].length];
         for (int i = 0; i < this.consts.length; i++) {
             System.arraycopy(constdec[i], 0, this.consts[i], 0, this.consts[i].length);
         }
     }
+    @NotNull
     @Override
     public String toString() {
         return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant.trim() + " )";
@@ -66,7 +69,7 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     public String derivative(int order) {
         coefficient.setConstdec(consts);
         argument.setConstdec(consts);
-        String deriv = "";
+        @NotNull String deriv = "";
         switch (order) {
             case 1:
                 deriv += "( # * fv ) + ( #v * f)";
@@ -77,14 +80,15 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
             default:
                 throw new IllegalArgumentException("Only 1st and 2nd order derivatives are supported");
         }
-        final String[][] REPLACEMENTS = {{"fvv", "( " + functions[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"}, {"fv", "( " + functions[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"}, {"f", "( " + function.trim() + " $ )"}, {"#vv", "( " + coefficient.derivative().derivative().toString().trim() + " )"}, {"#v", "( " + coefficient.derivative().toString().trim() + " )"}, {"#", "( " + coefficient.toString().trim() + " )"}, {"$vv", "( " + argument.derivative().derivative().toString().trim() + " )"}, {"$v", "( " + argument.derivative().toString().trim() + " )"}, {"$", "( " + argument.toString().trim() + " )"}};
+        @NotNull final String[][] REPLACEMENTS = {{"fvv", "( " + functions[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"}, {"fv", "( " + functions[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"}, {"f", "( " + function.trim() + " $ )"}, {"#vv", "( " + coefficient.derivative().derivative().toString().trim() + " )"}, {"#v", "( " + coefficient.derivative().toString().trim() + " )"}, {"#", "( " + coefficient.toString().trim() + " )"}, {"$vv", "( " + argument.derivative().derivative().toString().trim() + " )"}, {"$v", "( " + argument.derivative().toString().trim() + " )"}, {"$", "( " + argument.toString().trim() + " )"}};
         return StringManipulator.format(deriv, REPLACEMENTS);
     }
+    @NotNull
     public Complex getDegree() {
         return coefficient.getDegree();
     }
     @Override
-    public int compareTo(FunctionTerm o) {
+    public int compareTo(@NotNull FunctionTerm o) {
         return toString().compareTo(o.toString());
     }
     @Override
@@ -102,7 +106,7 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
             this.derivative1 = derivative1;
             this.derivative2 = derivative2;
         }
-        public FunctionTermData(FunctionTermData old) {
+        public FunctionTermData(@NotNull FunctionTermData old) {
             function = old.function;
             derivative1 = old.derivative1;
             derivative2 = old.derivative2;

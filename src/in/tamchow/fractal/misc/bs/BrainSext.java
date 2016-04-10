@@ -3,6 +3,7 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.misc.bs.bserrors.HaltError;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,8 +51,8 @@ public class BrainSext {
         this.silent = silent;
         stack = new FixedStack<>(size);
     }
-    public static void main(String[] args) {
-        BrainSext executor = new BrainSext(false);
+    public static void main(@NotNull String[] args) {
+        @NotNull BrainSext executor = new BrainSext(false);
         if (args.length == 0) {
             throw new IllegalArgumentException("Nothing to interpret");
         }
@@ -85,15 +86,15 @@ public class BrainSext {
     public void setSilent(boolean silent) {
         this.silent = silent;
     }
-    public void setMemory(int[] data) {
+    public void setMemory(@NotNull int[] data) {
         size = data.length;
         operand = new int[size];
         System.arraycopy(data, 0, operand, 0, size);
     }
-    void readFile(String path) {
-        File input = new File(path);
+    void readFile(@NotNull String path) {
+        @NotNull File input = new File(path);
         try {
-            Scanner sc = new Scanner(input);
+            @NotNull Scanner sc = new Scanner(input);
             while (sc.hasNextLine()) {
                 code += sc.nextLine();
             }
@@ -104,7 +105,7 @@ public class BrainSext {
         }
     }
     public void execute() {
-        int[] tmp = new int[operand.length];
+        @NotNull int[] tmp = new int[operand.length];
         int num;
         //filter comments first
         while (code.contains("{") && code.contains("}")) {
@@ -112,7 +113,7 @@ public class BrainSext {
             code = StringManipulator.delete(code, code.substring(i1, i2 + 1));
         } //load appended data,if any
         if (code.contains("\\") && code.length() > code.indexOf('\\') + 1) {
-            String data = code.substring(code.indexOf('\\') + 1, code.length());
+            @NotNull String data = code.substring(code.indexOf('\\') + 1, code.length());
             for (int i = 0; i < data.length() && i < size; i++) {
                 operand[i] = data.charAt(i);
             }
@@ -365,7 +366,7 @@ public class BrainSext {
                     } else {
                         num = Math.abs(storage);
                     }
-                    int[] stmp = new int[num];
+                    @NotNull int[] stmp = new int[num];
                     System.arraycopy(operand, ptr, stmp, 0, num);
                     stack.pushN(toObjects(stmp));
                     break;
@@ -429,7 +430,7 @@ public class BrainSext {
                     System.out.print(operand[ptr]);
                     break;
                 case '\\':
-                    String halterror = "Program signalled HALT at " + i + "\n";
+                    @NotNull String halterror = "Program signalled HALT at " + i + "\n";
                     setOutput(halterror, ERROR);
                     if (!silent) {
                         throw new HaltError(halterror);
@@ -443,13 +444,15 @@ public class BrainSext {
             i++;
         }
     }
-    private Integer[] toObjects(int[] values) {
-        Integer[] ovalues = new Integer[values.length];
+    @NotNull
+    private Integer[] toObjects(@NotNull int[] values) {
+        @NotNull Integer[] ovalues = new Integer[values.length];
         for (int i = 0; i < ovalues.length; ++i) ovalues[i] = values[i];
         return ovalues;
     }
-    private int[] toPrimitives(Integer[] ovalues) {
-        int[] values = new int[ovalues.length];
+    @NotNull
+    private int[] toPrimitives(@NotNull Integer[] ovalues) {
+        @NotNull int[] values = new int[ovalues.length];
         for (int i = 0; i < values.length; ++i) values[i] = ovalues[i];
         return values;
     }

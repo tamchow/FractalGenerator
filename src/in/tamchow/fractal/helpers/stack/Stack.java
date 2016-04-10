@@ -1,5 +1,6 @@
 package in.tamchow.fractal.helpers.stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,6 +65,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
      * @return {@link StackIterator}
      * @see Collection#iterator()
      */
+    @NotNull
     @Override
     public Iterator<E> iterator() {
         return new StackIterator(dumpStack());
@@ -72,6 +74,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
      * @return the elements of this stack
      * @see Collection#toArray()
      */
+    @NotNull
     @Override
     public Object[] toArray() {
         return dumpStack();
@@ -80,6 +83,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
      * @return the elements of this stack
      * @see Collection#toArray(T[])
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
@@ -117,7 +121,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
      * @see Collection#containsAll(Collection)
      */
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(@NotNull Collection<?> c) {
         for (Object item : c) {
             if (!contains(item)) {
                 return false;
@@ -131,7 +135,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
      * @see Collection#addAll(Collection)
      */
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(@NotNull Collection<? extends E> c) {
         for (E item : c) {
             add(item);
         }
@@ -173,7 +177,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
             return true;
         }
         if (other instanceof Stack) {
-            Stack<E> that = (Stack<E>) other;
+            @NotNull Stack<E> that = (Stack<E>) other;
             if (that.size() != size()) {
                 return false;
             }
@@ -209,7 +213,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
         E[] data;
         int pointer;
         @SuppressWarnings("unchecked")
-        private StackIterator(E[] data) {
+        private StackIterator(@NotNull E[] data) {
             this.data = (E[]) new Object[data.length];
             System.arraycopy(data, 0, this.data, 0, data.length);
         }

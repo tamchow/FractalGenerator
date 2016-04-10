@@ -3,6 +3,8 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -14,6 +16,7 @@ public class Color_Utils_Config implements Serializable {
     public double periodicity, phase_shift;
     public Colors.CALCULATIONS mode;
     public Colors.PALETTE palette_type;
+    @Nullable
     public int[] palette;
     public boolean logIndex, exponentialSmoothing, cyclize;
     boolean colors_corrected, already_cyclized;
@@ -26,7 +29,7 @@ public class Color_Utils_Config implements Serializable {
     public Color_Utils_Config(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
         initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize);
     }
-    public Color_Utils_Config(Colors.CALCULATIONS mode, int[] palette) {
+    public Color_Utils_Config(Colors.CALCULATIONS mode, @NotNull int[] palette) {
         setPalette(palette, false);
         setMode(mode);
         setByParts(0);
@@ -51,7 +54,7 @@ public class Color_Utils_Config implements Serializable {
         palette = null;
         initColorConfig(Colors.CALCULATIONS.SIMPLE, 0, 0x0, 0, 0, false, false);
     }
-    public Color_Utils_Config(Color_Utils_Config old) {
+    public Color_Utils_Config(@NotNull Color_Utils_Config old) {
         initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.getByParts(), old.isLogIndex(), old.isCyclize());
         setExponentialSmoothing(old.isExponentialSmoothing());
         setPalette(old.getPalette(), false);
@@ -146,13 +149,13 @@ public class Color_Utils_Config implements Serializable {
     public void setSmoothing_base(Complex smoothing_base) {
         this.smoothing_base = smoothing_base;
     }
-    public void setPalette(int[] palette, boolean preserve) {
+    public void setPalette(@NotNull int[] palette, boolean preserve) {
         if (!preserve) {
             this.palette = new int[palette.length];
             setNum_colors(palette.length);
             System.arraycopy(palette, 0, this.palette, 0, palette.length);
         } else {
-            int[] tmpPalette = new int[this.palette.length];
+            @NotNull int[] tmpPalette = new int[this.palette.length];
             setNum_colors(palette.length);
             System.arraycopy(this.palette, 0, tmpPalette, 0, this.palette.length);
             this.palette = new int[num_colors];
@@ -179,7 +182,7 @@ public class Color_Utils_Config implements Serializable {
                 palette[pidx] = packRGB(((int) (Math.random() * 255)), ((int) (Math.random() * 255)), ((int) (Math.random() * 255)));
             }
         } else {
-            int[] randtmp = new int[palette.length];
+            @NotNull int[] randtmp = new int[palette.length];
             System.arraycopy(palette, 0, randtmp, 0, palette.length);
             palette = new int[num_colors];
             System.arraycopy(randtmp, 0, palette, 0, randtmp.length);
@@ -211,7 +214,7 @@ public class Color_Utils_Config implements Serializable {
             num_colors = palette.length;
         }
         num_colors = (palette.length * 2);
-        int[] tmp = new int[palette.length];
+        @NotNull int[] tmp = new int[palette.length];
         System.arraycopy(palette, 0, tmp, 0, tmp.length);
         palette = new int[num_colors];
         System.arraycopy(tmp, 0, palette, 0, tmp.length);
@@ -369,6 +372,7 @@ public class Color_Utils_Config implements Serializable {
     public void setStep(int step) {
         this.step = step;
     }
+    @Nullable
     public int[] getPalette() {
         return palette;
     }
@@ -403,17 +407,17 @@ public class Color_Utils_Config implements Serializable {
     public void setExponentialSmoothing(boolean exponentialSmoothing) {
         this.exponentialSmoothing = exponentialSmoothing;
     }
-    public void createSmoothPalette(int[] control_colors, double[] control_points) {
+    public void createSmoothPalette(int[] control_colors, @NotNull double[] control_points) {
         createSmoothPalette(control_colors, control_points, false);
     }
-    public void createSmoothPalette(int[] control_colors, double[] control_points, boolean useSpline) {
+    public void createSmoothPalette(int[] control_colors, @NotNull double[] control_points, boolean useSpline) {
         if (already_cyclized) {
             num_colors /= 2;
             num_colors++;
             already_cyclized = false;
         }
         palette = new int[num_colors];
-        int[] controls = new int[control_points.length];
+        @NotNull int[] controls = new int[control_points.length];
         int color_density_backup = color_density;
         color_density = num_colors;
         for (int i = 0; i < controls.length && i < control_points.length; i++) {
@@ -455,8 +459,8 @@ public class Color_Utils_Config implements Serializable {
         if (((min == 0 || (max - min) == 1 || (max - min) == 0) && logIndex) || (!logIndex)) {
             return (int) ((transform(Math.abs((val - min) / (max - min))) * color_density) % num_colors);
         }
-        Complex exp = new Complex(val / min, 0);
-        Complex base = new Complex(max / min, 0);
+        @NotNull Complex exp = new Complex(val / min, 0);
+        @NotNull Complex base = new Complex(max / min, 0);
         double idx = ComplexOperations.divide(ComplexOperations.principallog(exp), ComplexOperations.principallog(base)).modulus();
         return (int) (transform(idx) * color_density) % num_colors;
     }
@@ -484,7 +488,7 @@ public class Color_Utils_Config implements Serializable {
     }
     public int splineInterpolated(int index, int index1, int i2, int i3, double bias) {
         if ((!colors_corrected) && num_colors < 4) {
-            int[] tmppalette = new int[num_colors];
+            @NotNull int[] tmppalette = new int[num_colors];
             if (palette != null) System.arraycopy(palette, 0, tmppalette, 0, palette.length);
             num_colors = 4;
             initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize);
@@ -545,7 +549,7 @@ public class Color_Utils_Config implements Serializable {
     public void setPalette_type(Colors.PALETTE palette_type) {
         this.palette_type = palette_type;
     }
-    public void fromString(String[] colors) {
+    public void fromString(@NotNull String[] colors) {
         setSmoothing_base(Complex.E);
         setExponentialSmoothing(true);
         palette_type = Colors.PALETTE.valueOf(colors[0]);
@@ -569,7 +573,7 @@ public class Color_Utils_Config implements Serializable {
                 break;
             case CUSTOM_PALETTE:
                 String[] parts = StringManipulator.split(colors[8], ";");
-                int[] colorset = new int[parts.length];
+                @NotNull int[] colorset = new int[parts.length];
                 for (int i = 0; i < colorset.length; i++) {
                     colorset[i] = Integer.valueOf(parts[i + 6], 16);
                 }
@@ -591,8 +595,8 @@ public class Color_Utils_Config implements Serializable {
                 initColorConfig(mode, Integer.valueOf(colors[8]), byParts, logIndex, cyclize);
                 setColor_density(Integer.valueOf(colors[9]));
                 String[] controls = StringManipulator.split(colors[9], ";");
-                int[] control_colors = new int[controls.length];
-                double[] control_points = new double[controls.length];
+                @NotNull int[] control_colors = new int[controls.length];
+                @NotNull double[] control_points = new double[controls.length];
                 for (int i = 0; i < controls.length; i++) {
                     String[] control = StringManipulator.split(controls[i], " ");
                     control_colors[i] = Integer.valueOf(control[0]);

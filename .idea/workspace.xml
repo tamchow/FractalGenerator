@@ -9,21 +9,74 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="LS Bugfixes">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/Stack.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/StackOverflowException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/package-info.java" />
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Code Restructuring&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FractalGenerator.iml" afterPath="$PROJECT_DIR$/FractalGenerator.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Color_Utils_Config.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Color_Utils_Config.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/HSL.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigWriter.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigWriter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalPanningHelper.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalPanningHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/PartComplexFractalData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/PartComplexFractalData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Animation.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Animation.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/Turtle.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/Turtle.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/transition/Transition.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/transition/Transition.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/BaseConverter.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/BaseConverter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/Stack.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/Stack.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/impls/FixedStack.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/impls/FixedStack.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/RPNHelper.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/RPNHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/MatrixOperations.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/MatrixOperations.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/RC4.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/RC4Utility/RC4.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/HaltError.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/HaltError.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/evilstuff/users/UnpredictableAdder.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/evilstuff/users/UnpredictableAdder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/evilstuff/users/UnpredictableCalculator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/evilstuff/users/UnpredictableCalculator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/primes/PrimeCounter.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/primes/PrimeCounter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/FixedStack.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/impls/FixedStack.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,18 +105,7 @@
     <favorites_list name="FractalGenerator" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PrimeCounter.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/primes/PrimeCounter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.22298457">
-              <caret line="194" column="45" selection-start-line="194" selection-start-column="45" selection-end-line="194" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -84,6 +126,11 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -1111,13 +1158,7 @@
       <workItem from="1460047036060" duration="518000" />
       <workItem from="1460096789491" duration="624000" />
       <workItem from="1460126412662" duration="2212000" />
-      <workItem from="1460268130673" duration="4695000" />
-    </task>
-    <task id="LOCAL-00150" summary="BS Language Updated">
-      <created>1456136724817</created>
-      <option name="number" value="00150" />
-      <option name="project" value="LOCAL" />
-      <updated>1456136724817</updated>
+      <workItem from="1460268130673" duration="5085000" />
     </task>
     <task id="LOCAL-00151" summary="BS Language Updated">
       <created>1456140564347</created>
@@ -1407,11 +1448,17 @@
       <option name="project" value="LOCAL" />
       <updated>1460128652605</updated>
     </task>
-    <option name="localTasksCounter" value="199" />
+    <task id="LOCAL-00199" summary="Code Restructuring&#10;">
+      <created>1460272921887</created>
+      <option name="number" value="00199" />
+      <option name="project" value="LOCAL" />
+      <updated>1460272921887</updated>
+    </task>
+    <option name="localTasksCounter" value="200" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="935507000" />
+    <option name="totallyTimeSpent" value="935897000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1424,7 +1471,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1436,8 +1483,9 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32242227" sideWeight="0.4969743" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.400982" sideWeight="0.48940998" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.4969743" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1474,7 +1522,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="tan and tanh added&#10;" />
     <MESSAGE value="Prime Counter utility added under misc&#10;L-System Fractal Generator facility added" />
     <MESSAGE value="Documentation updated" />
     <MESSAGE value="Maths functions improved&#10;L-System Bugs fixed&#10;" />
@@ -1499,7 +1546,8 @@
     <MESSAGE value="Code restructuring" />
     <MESSAGE value="IFS Bugfixes" />
     <MESSAGE value="LS Bugfixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="LS Bugfixes" />
+    <MESSAGE value="Code Restructuring&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code Restructuring&#10;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1720,13 +1768,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.27958834">
-          <caret line="81" column="48" selection-start-line="81" selection-start-column="48" selection-end-line="81" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5128645">
@@ -1769,8 +1810,8 @@
         <state vertical-scroll-proportion="0.77568495">
           <caret line="143" column="33" selection-start-line="143" selection-start-column="33" selection-end-line="143" selection-end-column="33" />
           <folding>
-            <element signature="e#6052#6053#0" expanded="false" />
-            <element signature="e#6114#6115#0" expanded="false" />
+            <element signature="e#6191#6192#0" expanded="false" />
+            <element signature="e#6253#6254#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1812,7 +1853,7 @@
         <state vertical-scroll-proportion="0.787307">
           <caret line="27" column="16" selection-start-line="27" selection-start-column="16" selection-end-line="27" selection-end-column="16" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1838,8 +1879,8 @@
         <state vertical-scroll-proportion="0.39794168">
           <caret line="368" column="11" selection-start-line="368" selection-start-column="11" selection-end-line="368" selection-end-column="11" />
           <folding>
-            <element signature="e#37162#37163#0" expanded="true" />
-            <element signature="e#37216#37217#0" expanded="true" />
+            <element signature="e#37630#37631#0" expanded="true" />
+            <element signature="e#37684#37685#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1895,8 +1936,18 @@
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/primes/PrimeCounter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.22298457">
-          <caret line="194" column="45" selection-start-line="194" selection-start-column="45" selection-end-line="194" selection-end-column="45" />
+          <caret line="195" column="45" selection-start-line="195" selection-start-column="45" selection-end-line="195" selection-end-column="45" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.02915952">
+          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1907,10 +1958,10 @@
         <settings>
           <artifact-editor>
             <show-content>
-              <type id="library" />
+              <type id="artifact" />
               <type id="jpa-descriptors" />
               <type id="javaee-facet-resources" />
-              <type id="artifact" />
+              <type id="library" />
             </show-content>
           </artifact-editor>
           <last-edited>FractalGenerator:jar</last-edited>

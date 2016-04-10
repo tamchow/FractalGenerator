@@ -4,6 +4,7 @@ import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -43,7 +44,7 @@ public class IFSFractalParams implements Serializable {
         setP_code(variableCodes[4]);
         setPostProcessMode(PixelContainer.PostProcessMode.NONE);
     }
-    public IFSFractalParams(IFSFractalParams config) {
+    public IFSFractalParams(@NotNull IFSFractalParams config) {
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
             throw new IllegalArgumentException("Configuration object is not properly defined");
         }
@@ -69,8 +70,9 @@ public class IFSFractalParams implements Serializable {
         setPath(config.getPath());
         setPostProcessMode(config.getPostProcessMode());
     }
-    public static IFSFractalParams fromString(String[] input) {
-        IFSFractalParams params = new IFSFractalParams(); //params.setIfsMode(Boolean.valueOf(input[0]));
+    @NotNull
+    public static IFSFractalParams fromString(@NotNull String[] input) {
+        @NotNull IFSFractalParams params = new IFSFractalParams(); //params.setIfsMode(Boolean.valueOf(input[0]));
         String[] ifsData = StringManipulator.split(input[0], ":");
         if (ifsData.length == 1) {
             params.setIfsMode(Boolean.valueOf(input[0]));
@@ -174,7 +176,7 @@ public class IFSFractalParams implements Serializable {
     public Matrix[] getTransforms() {
         return transforms;
     }
-    public void setTransforms(Matrix[] transforms) {
+    public void setTransforms(@NotNull Matrix[] transforms) {
         this.transforms = new Matrix[transforms.length];
         for (int i = 0; i < transforms.length; i++) {
             this.transforms[i] = new Matrix(transforms[i]);
@@ -183,7 +185,7 @@ public class IFSFractalParams implements Serializable {
     public Matrix[] getTranslators() {
         return translators;
     }
-    public void setTranslators(Matrix[] translators) {
+    public void setTranslators(@NotNull Matrix[] translators) {
         this.translators = new Matrix[translators.length];
         for (int i = 0; i < translators.length; i++) {
             this.translators[i] = new Matrix(translators[i]);
@@ -192,14 +194,14 @@ public class IFSFractalParams implements Serializable {
     public double[] getWeights() {
         return weights;
     }
-    public void setWeights(double[] weights) {
+    public void setWeights(@NotNull double[] weights) {
         this.weights = new double[weights.length];
         System.arraycopy(weights, 0, this.weights, 0, this.weights.length);
     }
     public int[] getColors() {
         return colors;
     }
-    public void setColors(int[] colors) {
+    public void setColors(@NotNull int[] colors) {
         this.colors = new int[colors.length];
         System.arraycopy(colors, 0, this.colors, 0, this.colors.length);
     }
@@ -239,9 +241,10 @@ public class IFSFractalParams implements Serializable {
     public void setXfunctions(String[] xfunctions) {
         this.xfunctions = xfunctions;
     }
+    @NotNull
     @Override
     public String toString() {
-        String representation = (frameskip >= 0) ? "Frameskip:" + frameskip : "";
+        @NotNull String representation = (frameskip >= 0) ? "Frameskip:" + frameskip : "";
         representation += (postProcessMode != null) ? "Postprocessing:" + postProcessMode : "";
         representation += "\n" + ifsMode + ((ifsMode) ? ":" + createCodeString() : "") + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {

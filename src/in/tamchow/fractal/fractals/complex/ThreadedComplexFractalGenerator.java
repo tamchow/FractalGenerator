@@ -6,6 +6,8 @@ import in.tamchow.fractal.fractals.ThreadedGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -16,6 +18,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     PartComplexFractalData[] buffer;
     long iterations;
     double escape_radius;
+    @Nullable
     Complex constant;
     int nx, ny;
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
@@ -27,10 +30,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         ny = y_threads;
         buffer = new PartComplexFractalData[nx * ny];
     }
-    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master) {
+    public ThreadedComplexFractalGenerator(@NotNull ComplexFractalGenerator master) {
         this(master, master.getParams());
     }
-    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, ComplexFractalParams config) {
+    public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, @NotNull ComplexFractalParams config) {
         this.master = master;
         this.iterations = config.runParams.iterations;
         this.escape_radius = config.runParams.escape_radius;
@@ -42,7 +45,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
-        for (PartComplexFractalData partImage : buffer) {
+        for (@Nullable PartComplexFractalData partImage : buffer) {
             if (partImage != null) ctr++;
         }
         return ctr;
@@ -54,8 +57,8 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         int idx = 0;
         for (int i = 0; i < ny; i++) {
             for (int j = 0; j < nx; j++) {
-                int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, j, ny, i);
-                SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
+                @NotNull int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, j, ny, i);
+                @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
                 master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
                 idx++;
                 runner.start();
@@ -67,10 +70,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                     lock.wait(1000);
                 }
                 lock.notifyAll();
-                int[] histogram = new int[(int) iterations + 2];
+                @NotNull int[] histogram = new int[(int) iterations + 2];
                 int total = 0;
                 if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                    for (PartComplexFractalData partImage : buffer) {
+                    for (@NotNull PartComplexFractalData partImage : buffer) {
                         for (int i = 0; i < histogram.length; i++) {
                             histogram[i] += partImage.histogram[i];
                         }
@@ -83,7 +86,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                     System.arraycopy(MathUtils.rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
                 }
                 double scaling = Math.pow(master.zoom, master.zoom_factor);
-                for (PartComplexFractalData partImage : buffer) {
+                for (@NotNull PartComplexFractalData partImage : buffer) {
                     for (int i = partImage.starty; i < partImage.endy; i++) {
                         for (int j = partImage.startx; j < partImage.endx; j++) {
                             master.escapedata[i][j] = partImage.escapedata[i][j];

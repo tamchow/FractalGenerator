@@ -3,14 +3,19 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
  * Encapsulates @code ComplexFractalInitParams and @code ComplexFractalRunParams
  */
 public class ComplexFractalParams implements Serializable {
+    @Nullable
     public ComplexFractalRunParams runParams;
+    @Nullable
     public ComplexFractalInitParams initParams;
+    @NotNull
     public ZoomConfig zoomConfig = new ZoomConfig();
     public PixelContainer.PostProcessMode postprocessMode;
     public String path;
@@ -25,7 +30,7 @@ public class ComplexFractalParams implements Serializable {
         setX_threads(1);
         setY_threads(1);
     }
-    public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams, int x_threads, int y_threads) {
+    public ComplexFractalParams(@Nullable ComplexFractalInitParams initParams, @Nullable ComplexFractalRunParams runParams, int x_threads, int y_threads) {
         if (initParams != null) {
             this.initParams = new ComplexFractalInitParams(initParams);
         } else {
@@ -43,7 +48,7 @@ public class ComplexFractalParams implements Serializable {
         setX_threads(x_threads);
         setY_threads(y_threads);
     }
-    public ComplexFractalParams(ComplexFractalInitParams initParams, ComplexFractalRunParams runParams) {
+    public ComplexFractalParams(@Nullable ComplexFractalInitParams initParams, @Nullable ComplexFractalRunParams runParams) {
         if (initParams != null) {
             this.initParams = new ComplexFractalInitParams(initParams);
         } else {
@@ -61,7 +66,7 @@ public class ComplexFractalParams implements Serializable {
         setX_threads(1);
         setY_threads(1);
     }
-    public ComplexFractalParams(ComplexFractalParams params) {
+    public ComplexFractalParams(@NotNull ComplexFractalParams params) {
         this.initParams = new ComplexFractalInitParams(params.initParams);
         this.runParams = new ComplexFractalRunParams(params.runParams);
         setX_threads(params.getX_threads());
@@ -107,6 +112,7 @@ public class ComplexFractalParams implements Serializable {
     public void setZoomConfig(ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);
     }
+    @NotNull
     @Override
     public String toString() {
         return "Threads:" + x_threads + "," + y_threads + "\nPostprocessing:" + postprocessMode + "\n" + ((zoomConfig != null) ? (zoomConfig + "\n") : "") + initParams + "\n" + runParams + "\n";

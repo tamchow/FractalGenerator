@@ -1,5 +1,7 @@
 package in.tamchow.fractal.fractals.complexbrot;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -16,7 +18,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
-        for (PartComplexBrotFractalData partImage : data) {
+        for (@Nullable PartComplexBrotFractalData partImage : data) {
             if (partImage != null) ctr++;
         }
         return ctr;
@@ -28,8 +30,8 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     public void generate() {
         int idx = 0;
         for (int i = 0; i < threads; i++) {
-            int[] coords = master.start_end_coordinates(i, threads);
-            SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
+            @NotNull int[] coords = master.start_end_coordinates(i, threads);
+            @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
             master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
             idx++;
             runner.start();
@@ -41,7 +43,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
                 }
                 lock.notifyAll();
             }
-            for (PartComplexBrotFractalData part : data) {
+            for (@NotNull PartComplexBrotFractalData part : data) {
                 for (int i = 0; i < master.bases.length; ++i) {
                     master.bases[i] = addDDA(master.bases[i], part.getBases()[i]);
                 }
@@ -52,11 +54,12 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
     }
-    private int[][] addDDA(int[][] a, int[][] b) {
+    @NotNull
+    private int[][] addDDA(@NotNull int[][] a, @NotNull int[][] b) {
         if (a.length != b.length || a[0].length != b[0].length) {
             throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
         }
-        int[][] c = new int[a.length][a[0].length];
+        @NotNull int[][] c = new int[a.length][a[0].length];
         for (int i = 0; i < c.length; i++) {
             for (int j = 0; j < c[i].length; j++) {
                 c[i][j] = a[i][j] + b[i][j];

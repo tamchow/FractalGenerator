@@ -2,6 +2,8 @@ package in.tamchow.fractal.helpers.math;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 /**
@@ -23,8 +25,9 @@ public class MathUtils {
         }
         return (ptr < min) ? min : ((ptr > max) ? max : ptr);
     }
-    public static int[][] intDDAAdd(int[][] from, int[][] to) {
-        int[][] sum = new int[from.length][to[0].length];//from and to must have same dimensions
+    @NotNull
+    public static int[][] intDDAAdd(@NotNull int[][] from, int[][] to) {
+        @NotNull int[][] sum = new int[from.length][to[0].length];//from and to must have same dimensions
         for (int i = 0; i < sum.length; ++i) {
             for (int j = 0; j < sum.length; ++j) {
                 sum[i][j] = from[i][j] + to[i][j];
@@ -32,9 +35,10 @@ public class MathUtils {
         }
         return sum;
     }
+    @NotNull
     public static String numberLineRepresentation(float number, int precision) {
         int g = (int) number, d = Math.round((number - g) * precision), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
-        String h = "", q = "" + g;
+        @NotNull String h = "", q = "" + g;
         int c = q.length();
         for (; i < b; i++) h += " ";
         for (++i; i <= b + precision; i++) h += "-";
@@ -48,17 +52,18 @@ public class MathUtils {
         }
         return null;
     }
+    @NotNull
     public static int[] diamondPuzzleSolverQuadratic(int sum, int product) {
         int x = sum + (int) Math.sqrt(sum * sum - 4 * product);
         return new int[]{x / 2, sum - x / 2};
     }
-    public static boolean approxEquals(Complex a, Complex b, double tolerance) {
+    public static boolean approxEquals(@NotNull Complex a, @NotNull Complex b, double tolerance) {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }
-    public static int weightedRandom(double[] weights) {
+    public static int weightedRandom(@NotNull double[] weights) {
         return (int) weightedRandom(null, weights);
     }
-    public static double weightedRandom(double[] values, double[] weights) {
+    public static double weightedRandom(@Nullable double[] values, @NotNull double[] weights) {
         int factor = 0, pidx = 0;
         double sum = 0.0;
         boolean custom = values != null;
@@ -71,7 +76,7 @@ public class MathUtils {
             throw new IllegalArgumentException("Illegal Parameters");
         }
         factor = Math.round((float) Math.pow(10, factor));
-        double[] rand = new double[factor];
+        @NotNull double[] rand = new double[factor];
         for (int i = 0; i < rand.length; ) {
             if (i == weights[pidx] * factor) {
                 ++pidx;
@@ -82,6 +87,7 @@ public class MathUtils {
         }
         return rand[new Random().nextInt(rand.length)];
     }
+    @NotNull
     public static int[] translateCoordinates(int x, int y, int ix, int iy, int fx, int fy) {
         return new int[]{(int) (((double) x / ix) * fx), (int) (((double) y / iy) * fy)};
     }
@@ -99,7 +105,7 @@ public class MathUtils {
         }
         return -1;
     }
-    static void quickSort(int[][] arr, int low, int high) {
+    static void quickSort(@Nullable int[][] arr, int low, int high) {
         if (arr == null || arr.length == 0) return;
         if (low >= high) return;
         // pick the pivot
@@ -115,7 +121,7 @@ public class MathUtils {
                 j--;
             }
             if (i <= j) {
-                int[] temp = new int[2];
+                @NotNull int[] temp = new int[2];
                 System.arraycopy(arr[i], 0, temp, 0, temp.length);//temp=arr[i]
                 System.arraycopy(arr[j], 0, arr[i], 0, arr[i].length);//arr[i]=arr[j]
                 System.arraycopy(temp, 0, arr[j], 0, arr[j].length);//arr[j]=temp
@@ -126,7 +132,7 @@ public class MathUtils {
         if (low < j) quickSort(arr, low, j);
         if (high > i) quickSort(arr, i, high);
     }
-    public static int indexOf(int[] data, int element) {
+    public static int indexOf(@NotNull int[] data, int element) {
         for (int i = 0; i < data.length; i++) {
             if (data[i] == element) {
                 return i;
@@ -134,39 +140,44 @@ public class MathUtils {
         }
         return -1;
     }
-    public static int[] rankListFromHistogram(int[] histogram) {
-        int[][] map = new int[histogram.length][2];
+    @NotNull
+    public static int[] rankListFromHistogram(@NotNull int[] histogram) {
+        @NotNull int[][] map = new int[histogram.length][2];
         for (int i = 0; i < histogram.length; i++) {
             map[i][0] = i;
             map[i][1] = histogram[i];
         }
         quickSort(map, 0, map.length - 1);
-        int[] rankList = new int[histogram.length];
+        @NotNull int[] rankList = new int[histogram.length];
         for (int i = 0; i < rankList.length; i++) {
             rankList[i] = map[i][0];
         }
         return rankList;
     }
-    public static Matrix complexToMatrix(Complex data) {
+    @NotNull
+    public static Matrix complexToMatrix(@NotNull Complex data) {
         return new Matrix(new double[][]{{data.real()}, {data.imaginary()}});
     }
-    public static Complex matrixToComplex(Matrix data) {
+    @NotNull
+    public static Complex matrixToComplex(@NotNull Matrix data) {
         return new Complex(data.get(0, 0), data.get(1, 0));
     }
-    public static Matrix doRotate(Matrix point, double angle) {
+    @NotNull
+    public static Matrix doRotate(@NotNull Matrix point, double angle) {
         /** Uses the 3-shears rotation technique over conventional rotation techniques for
          * improved image quality.
          */
-        Matrix tanMatrix = new Matrix(new double[][]{{1, -Math.tan(angle / 2)}, {0, 1}});
-        Matrix sinMatrix = new Matrix(new double[][]{{1, 0}, {Math.sin(angle), 1}});
+        @NotNull Matrix tanMatrix = new Matrix(new double[][]{{1, -Math.tan(angle / 2)}, {0, 1}});
+        @NotNull Matrix sinMatrix = new Matrix(new double[][]{{1, 0}, {Math.sin(angle), 1}});
         return MatrixOperations.multiply(tanMatrix, MatrixOperations.multiply(sinMatrix, MatrixOperations.multiply(tanMatrix, point)));
     }
+    @NotNull
     public int[] mostEfficientfactor(int a) {
         int num_factors = 0;
         for (int i = 1; i <= a; i++) {
             if (a % i == 0) num_factors++;
         }
-        int[] factors = new int[num_factors];
+        @NotNull int[] factors = new int[num_factors];
         num_factors = 0;
         for (int i = 1; i <= a && num_factors < factors.length; i++) {
             if (a % i == 0) {
@@ -174,7 +185,7 @@ public class MathUtils {
                 num_factors++;
             }
         }
-        FactorData[] data = new FactorData[num_factors];
+        @NotNull FactorData[] data = new FactorData[num_factors];
         for (int i = 0; i < num_factors; i++) {
             for (int j = i + 1; j < num_factors; j++) {
                 data[i] = new FactorData(factors[i], factors[j]);
@@ -183,7 +194,7 @@ public class MathUtils {
         quickSort(data, 0, data.length - 1);
         return new int[]{data[0].a, data[0].b};
     }
-    void quickSort(FactorData[] arr, int low, int high) {
+    void quickSort(@Nullable FactorData[] arr, int low, int high) {
         if (arr == null || arr.length == 0) return;
         if (low >= high) return;
         // pick the pivot
@@ -199,7 +210,7 @@ public class MathUtils {
                 j--;
             }
             if (i <= j) {
-                FactorData temp = new FactorData(arr[i]);
+                @Nullable FactorData temp = new FactorData(arr[i]);
                 arr[i] = new FactorData(arr[j]);
                 arr[j] = new FactorData(temp);
                 i++;
@@ -216,7 +227,7 @@ public class MathUtils {
             this.b = b;
             this.sum = a + b;
         }
-        public FactorData(FactorData old) {
+        public FactorData(@NotNull FactorData old) {
             a = old.a;
             b = old.b;
             sum = old.sum;

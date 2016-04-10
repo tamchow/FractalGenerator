@@ -1,5 +1,6 @@
 package in.tamchow.fractal.graphicsutilities.graphics;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import org.jetbrains.annotations.NotNull;
 /**
  * Implements turtle graphics at a very basic level
  *
@@ -23,7 +24,7 @@ public class Turtle {
         this.fore_color = fore_color;
         this.angle = angle;
     }
-    public void draw(TurtleCommand command, double data) {
+    public void draw(@NotNull TurtleCommand command, double data) {
         switch (command) {
             case FILL_CANVAS:
             case CLEAR:

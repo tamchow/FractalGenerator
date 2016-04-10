@@ -1,16 +1,17 @@
 package in.tamchow.fractal.misc.RC4Utility;
+import org.jetbrains.annotations.NotNull;
 /**
  * Implements simple RC4 encryption/decryption
  */
 public class RC4 {
     private int[] key, config;
-    public RC4(byte[] key) {
+    public RC4(@NotNull byte[] key) {
         initRC4(key);
     }
     public RC4() {
         initRC4(new byte[]{2, 4, 6, 8, 16, 32, 64});
     }
-    private void initRC4(byte[] key) {
+    private void initRC4(@NotNull byte[] key) {
         if (key.length == 0 || key.length > 256) {
             throw new IllegalArgumentException("Key length out of range");
         }
@@ -30,20 +31,22 @@ public class RC4 {
             key[j] = tmp;
         }
     }
-    public String process(String input) {
-        byte[] toprocess = new byte[input.length()];
+    @NotNull
+    public String process(@NotNull String input) {
+        @NotNull byte[] toprocess = new byte[input.length()];
         for (int i = 0; i < toprocess.length; i++) {
             toprocess[i] = (byte) ((int) input.charAt(i));
         }
-        byte[] processed = process(toprocess);
-        String output = "";
+        @NotNull byte[] processed = process(toprocess);
+        @NotNull String output = "";
         for (byte aProcessed : processed) {
             output += (char) ((int) aProcessed);
         }
         return output;
     }
-    public byte[] process(byte[] input) {
-        byte[] output = new byte[input.length];
+    @NotNull
+    public byte[] process(@NotNull byte[] input) {
+        @NotNull byte[] output = new byte[input.length];
         int i = 0, j = 0;
         for (int k = 0; k < input.length; k++) {
             i = (i + 1) % key.length;

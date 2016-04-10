@@ -1,6 +1,7 @@
 package in.tamchow.fractal.misc.evilstuff.users;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.misc.evilstuff.EvilStuff;
+import org.jetbrains.annotations.NotNull;
 /**
  * A class which implements a calculator which provides unpredictable functions.
  * <p/>
@@ -14,17 +15,17 @@ public class UnpredictableCalculator {
         EvilStuff.repeatedlyDoEvilStuff(Integer.class, "cache", "Evil_Thread_", waitPeriod);
     }
     public static void main(String[] args) {
-        java.util.Scanner in = new java.util.Scanner(System.in);
+        @NotNull java.util.Scanner in = new java.util.Scanner(System.in);
         repeatedlyDoEvilStuffToInteger(64);
         do {
             System.out.println("\nEnter an expression to evaluate.\nPlease use integers between -64 (-128/2) and 63 (127/2):");
             String expression = in.nextLine();
             try {
-                final String SPLIT_REGEX = "[\\s]+";
+                @NotNull final String SPLIT_REGEX = "[\\s]+";
                 int result = RPNHelper.evaluateRPN(RPNHelper.postfix(expression.split(SPLIT_REGEX)).split(SPLIT_REGEX));
                 System.out.format("%s = %s , no, really it's %d",
                         expression, result, new Integer(result));
-            } catch (IllegalArgumentException | java.util.EmptyStackException incorrectException) {
+            } catch (@NotNull IllegalArgumentException | java.util.EmptyStackException incorrectException) {
                 System.out.println("I won't be more unpredictable if you don't let me :( -> " +
                         "\nI didn't expect you to enter: " +
                         ((incorrectException instanceof java.util.EmptyStackException) ?
@@ -59,7 +60,8 @@ class RPNHelper {
         stack[++top] = ele;
     }
     // get precedence token for symbol
-    public static Precedence getToken(String symbol) {
+    @NotNull
+    public static Precedence getToken(@NotNull String symbol) {
         switch (symbol.charAt(0)) {
             case '(':
                 return Precedence.lparen;
@@ -82,13 +84,13 @@ class RPNHelper {
         }
     }
     // Function to convert infix to postfix
-    public static String postfix(String[] infix) {
-        String postfix = "";
+    public static String postfix(@NotNull String[] infix) {
+        @NotNull String postfix = "";
         top = 0;
         stack = new Precedence[infix.length];
         stack[0] = Precedence.eos;
         Precedence token;
-        for (String anInfix : infix) {
+        for (@NotNull String anInfix : infix) {
             token = getToken(anInfix);
             // if token is operand append to postfix
             if (token == Precedence.operand)
@@ -112,15 +114,15 @@ class RPNHelper {
             postfix += operators[token.getIndex()] + " ";
         return postfix.trim();
     }
-    public static int evaluateRPN(String[] tokens) {
+    public static int evaluateRPN(@NotNull String[] tokens) {
         if (tokens.length == 0) {
             throw new UnsupportedOperationException("Blank");
         }
-        FixedStack<String> tks = new FixedStack<>(tokens.length);
+        @NotNull FixedStack<String> tks = new FixedStack<>(tokens.length);
         tks.initStack(tokens);
         return evaluateRPN(tks);
     }
-    public static int evaluateRPN(FixedStack<String> tkstack) {
+    public static int evaluateRPN(@NotNull FixedStack<String> tkstack) {
         String tk = tkstack.pop();
         int x, y;
         try {

@@ -1,6 +1,7 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Function implements Serializable, Comparable<Function> {
     String[][] consts;
     String z_value;
     String variableCode, oldvariablecode;
-    public Function(String variable, String variableCode, String oldvariablecode, String[][] varconst) {
+    public Function(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
         setZ_value(variable);
         setConsts(varconst);
         setVariableCode(variableCode);
@@ -28,10 +29,11 @@ public class Function implements Serializable, Comparable<Function> {
     public static boolean isSpecialFunction(String function) {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
+    @NotNull
     public static Function fromString(String function, String variableCode, String oldvariablecode) {
-        Function poly = new Function();
+        @NotNull Function poly = new Function();
         String[] tokens = StringManipulator.split(function, "|");
-        for (String token : tokens) {
+        for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
@@ -58,7 +60,7 @@ public class Function implements Serializable, Comparable<Function> {
     public String[][] getConsts() {
         return consts;
     }
-    public void setConsts(String[][] constdec) {
+    public void setConsts(@NotNull String[][] constdec) {
         consts = new String[constdec.length][constdec[0].length];
         for (int i = 0; i < this.consts.length; i++) {
             System.arraycopy(constdec[i], 0, consts[i], 0, consts[i].length);
@@ -73,19 +75,20 @@ public class Function implements Serializable, Comparable<Function> {
     public ArrayList<String> getSigns() {
         return signs;
     }
-    public void setSigns(ArrayList<String> signs) {
+    public void setSigns(@NotNull ArrayList<String> signs) {
         this.signs.clear();
         this.signs.addAll(signs);
     }
     public ArrayList<FunctionTerm> getTerms() {
         return terms;
     }
-    public void setTerms(ArrayList<FunctionTerm> terms) {
+    public void setTerms(@NotNull ArrayList<FunctionTerm> terms) {
         this.terms.clear();
         this.terms.addAll(terms);
     }
+    @NotNull
     public String derivative(int order) {
-        String deriv = "";
+        @NotNull String deriv = "";
         switch (order) {
             case 1:
                 for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
@@ -108,9 +111,10 @@ public class Function implements Serializable, Comparable<Function> {
         }
         return deriv;
     }
+    @NotNull
     public Complex getDegree() {
-        Complex degree = new Complex(Complex.ZERO);
-        for (FunctionTerm term : terms) {
+        @NotNull Complex degree = new Complex(Complex.ZERO);
+        for (@NotNull FunctionTerm term : terms) {
             Complex vardeg = term.getDegree();
             if (vardeg.modulus() > degree.modulus()) {
                 degree = new Complex(vardeg);
@@ -118,9 +122,10 @@ public class Function implements Serializable, Comparable<Function> {
         }
         return degree;
     }
+    @NotNull
     @Override
     public String toString() {
-        String function = "";
+        @NotNull String function = "";
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             function += " " + signs.get(j) + " " + terms.get(i);
         }
@@ -130,7 +135,7 @@ public class Function implements Serializable, Comparable<Function> {
         return function.trim();
     }
     @Override
-    public int compareTo(Function o) {
+    public int compareTo(@NotNull Function o) {
         return toString().compareTo(o.toString());
     }
     @Override

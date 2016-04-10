@@ -1,6 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
 import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -12,10 +13,10 @@ public class UnitGrammar implements Serializable {
     public Turtle.TurtleCommand command;
     public double angle;
     public TransformRule[] transformRules;
-    public UnitGrammar(UnitGrammar old) {
+    public UnitGrammar(@NotNull UnitGrammar old) {
         this(old.code, old.command, old.angle, old.transformRules);
     }
-    public UnitGrammar(String code, Turtle.TurtleCommand command, double angle, TransformRule[] transformRules) {
+    public UnitGrammar(String code, Turtle.TurtleCommand command, double angle, @NotNull TransformRule[] transformRules) {
         this.code = code;
         this.command = command;
         this.angle = angle;
@@ -87,16 +88,18 @@ public class UnitGrammar implements Serializable {
             angle = Double.valueOf(once[2]);
         }
     }
+    @NotNull
     public double[] getWeights() {
-        double[] weights = new double[transformRules.length];
+        @NotNull double[] weights = new double[transformRules.length];
         for (int i = 0; i < weights.length; ++i) {
             weights[i] = transformRules[i].probability;
         }
         return weights;
     }
+    @NotNull
     @Override
     public String toString() {
-        String representation = code + "," + command + "," + angle + "=";
+        @NotNull String representation = code + "," + command + "," + angle + "=";
         for (TransformRule rule : transformRules) {
             representation += rule + ",";
         }
@@ -112,10 +115,10 @@ public class UnitGrammar implements Serializable {
             this.transformTo = transformTo;
             this.probability = Math.abs(probability);
         }
-        public TransformRule(TransformRule old) {
+        public TransformRule(@NotNull TransformRule old) {
             this(old.transformTo, old.probability);
         }
-        public TransformRule(String rule) {
+        public TransformRule(@NotNull String rule) {
             this();//default initialization in case of empty argument
             if (!rule.isEmpty()) {
                 String[] parts = StringManipulator.split(rule, ":");
@@ -139,6 +142,7 @@ public class UnitGrammar implements Serializable {
         public boolean isDeterministic() {
             return probability > (1.0 - ERR) && probability < (1.0 + ERR);
         }
+        @NotNull
         @Override
         public String toString() {
             return transformTo + ":" + probability;

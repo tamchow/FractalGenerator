@@ -1,5 +1,6 @@
 package in.tamchow.fractal.graphicsutilities.containers;
 import in.tamchow.fractal.helpers.math.MathUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -21,12 +22,12 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
             }
         }
     }
-    public LinearizedPixelContainer(int[] pixdata, int width) {
+    public LinearizedPixelContainer(@NotNull int[] pixdata, int width) {
         this.width = width;
         this.pixdata = new int[pixdata.length];
         System.arraycopy(pixdata, 0, this.pixdata, 0, this.pixdata.length);
     }
-    public LinearizedPixelContainer(int[][] pixels) {
+    public LinearizedPixelContainer(@NotNull int[][] pixels) {
         pixdata = new int[pixels.length * pixels[0].length];
         width = pixels[0].length;
         for (int i = 0; i < pixels.length; i++) {
@@ -41,14 +42,16 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     public int[] getPixels() {
         return pixdata;
     }
+    @NotNull
     @Override
     public int[][] getPixdata() {
-        int[][] pixels = new int[pixdata.length / width][width];
+        @NotNull int[][] pixels = new int[pixdata.length / width][width];
         for (int i = 0; i < pixels.length; i++) {
             System.arraycopy(pixdata, i * width, pixels[i], 0, pixels[i].length);
         }
         return pixels;
     }
+    @NotNull
     public PixelContainer toImageData() {
         return new PixelContainer(getPixdata());
     }
@@ -62,7 +65,7 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     }
     @Override
     public int getPixel(int y, int x) {
-        int[] yx = imageBounds(y, x);
+        @NotNull int[] yx = imageBounds(y, x);
         return pixdata[yx[0] * getWidth() + yx[1]];
     }
     @Override
@@ -71,7 +74,7 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     }
     @Override
     public void setPixel(int y, int x, int val) {
-        int[] yx = imageBounds(y, x);
+        @NotNull int[] yx = imageBounds(y, x);
         pixdata[yx[0] * getWidth() + yx[1]] = val;
     }
     @Override
@@ -82,8 +85,9 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     public void setPixel(int i, int val) {
         pixdata[MathUtils.boundsProtected(i, pixdata.length)] = val;
     }
+    @NotNull
     @Override
-    public LinearizedPixelContainer getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {
+    public LinearizedPixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts) {
         return new LinearizedPixelContainer(toImageData().getPostProcessed(mode, biases, byParts));
     }
 }

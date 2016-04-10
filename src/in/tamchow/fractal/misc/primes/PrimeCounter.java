@@ -1,4 +1,5 @@
 package in.tamchow.fractal.misc.primes;
+import org.jetbrains.annotations.NotNull;
 /**
  * PrimeCounter - an application/library to calculate the number of prime numbers below a certain number,
  * also mathematically known as pi(x), where x is a natural number greater than one.
@@ -61,8 +62,8 @@ public class PrimeCounter {
      */
     public static void main(String[] args) {
         double total_time = 0;
-        java.util.Scanner sc = new java.util.Scanner(System.in);
-        java.util.ArrayList<Long> numbers = new java.util.ArrayList<>();
+        @NotNull java.util.Scanner sc = new java.util.Scanner(System.in);
+        @NotNull java.util.ArrayList<Long> numbers = new java.util.ArrayList<>();
         System.out.format(PROMPT + WARNING);
         String line = sc.nextLine();
         while (!line.equals(START_CODE)/*sc.hasNextLine()&&Character.isDigit(line.charAt(0))*/) {
@@ -94,7 +95,7 @@ public class PrimeCounter {
      * @param array : The array containing the completion data
      * @return True if completed, false if not
      */
-    private static boolean completed(long[] array) {
+    private static boolean completed(@NotNull long[] array) {
         for (long i : array) {
             if (i < 0) return false;
         }
@@ -138,7 +139,7 @@ public class PrimeCounter {
         int n = (int) MAX;
         int sn = (int) Math.sqrt(n), ctr = 2;
         if (sn % 2 == 0) --sn;
-        boolean[] ps = new boolean[n + 1];
+        @NotNull boolean[] ps = new boolean[n + 1];
         for (int i = 2; i <= n; ++i) {
             if (i == 2 || i == 3 || i == 5 || i == 7) ps[i] = true;
             else if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0 && i % 7 != 0) ps[i] = true;
@@ -171,7 +172,7 @@ public class PrimeCounter {
             }
         } else {
             int threads = (NUM_THREADS <= 0) ? (int) MAX / SPLIT_LIM : NUM_THREADS;
-            final long[] counts = new long[threads];
+            @NotNull final long[] counts = new long[threads];
             for (int i = 0; i < threads; ++i) {
                 counts[i] = -1;
             }
@@ -214,7 +215,7 @@ public class PrimeCounter {
         long SQRT_MAX = (long) Math.sqrt(MAX);
         if (SQRT_MAX % 2 == 0) --SQRT_MAX;
         int MEMORY_SIZE = (int) ((MAX + 1) >> REDUCE_FACTOR);
-        byte[] array = new byte[MEMORY_SIZE];
+        @NotNull byte[] array = new byte[MEMORY_SIZE];
         for (long i = 3; i <= SQRT_MAX; i += 2) {
             if ((array[(int) (i >> REDUCE_FACTOR)] & (byte) (1 << ((i >> 1) & 7))) == 0) {
                 for (long j = i * i; j <= MAX; j += i << 1) {

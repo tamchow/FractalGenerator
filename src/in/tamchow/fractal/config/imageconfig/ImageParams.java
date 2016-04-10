@@ -3,6 +3,7 @@ import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -13,7 +14,7 @@ public class ImageParams extends Config implements Serializable, DataFromString 
     public TransitionTypes transition;
     public ImageParams() {
     }
-    public ImageParams(ImageParams old) {
+    public ImageParams(@NotNull ImageParams old) {
         initParams(old.transtime, old.fps, old.wait, old.image, old.transition);
     }
     public ImageParams(int transtime, int fps, int wait, PixelContainer image, TransitionTypes transition) {
@@ -42,10 +43,11 @@ public class ImageParams extends Config implements Serializable, DataFromString 
         this.image = new PixelContainer(path);
         this.transition = transition;
     }
+    @NotNull
     public String toString() {
         return transtime + "," + fps + "," + wait + "," + image.getPath() + "," + transition;
     }
-    public void fromString(String params) {
+    public void fromString(@NotNull String params) {
         fromString(params.split(","));
     }
     public void fromString(String[] params) {
