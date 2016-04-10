@@ -11,6 +11,7 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
+import org.jetbrains.annotations.NotNull;
 /**
  * Generates IFS fractals
  * <p/>
@@ -33,7 +34,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     boolean completion, silencer;
     Publisher progressPublisher;
     private Animation animation;
-    public IFSGenerator(IFSFractalParams params, Publisher progressPublisher) {
+    public IFSGenerator(@NotNull IFSFractalParams params, Publisher progressPublisher) {
         setParams(params);
         initIFS(params);
         doZooms(params.zoomConfig);
@@ -59,9 +60,9 @@ public class IFSGenerator implements PixelFractalGenerator {
         }
     }
     @Override
-    public void doZooms(ZoomConfig zoomConfig) {
+    public void doZooms(@NotNull ZoomConfig zoomConfig) {
         if (zoomConfig.zooms != null) {
-            for (ZoomParams zoom : zoomConfig.zooms) {
+            for (@NotNull ZoomParams zoom : zoomConfig.zooms) {
                 zoom(zoom);
             }
         }
@@ -81,7 +82,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     @Override
     public void setHeight(int height) {
         height = MathUtils.clamp(height, getPlane().getHeight());
-        IFSFractalParams modified = new IFSFractalParams(params);
+        @NotNull IFSFractalParams modified = new IFSFractalParams(params);
         modified.setHeight(height);
         initIFS(modified);
     }
@@ -100,11 +101,11 @@ public class IFSGenerator implements PixelFractalGenerator {
     @Override
     public void setWidth(int width) {
         width = MathUtils.clamp(width, getPlane().getWidth());
-        IFSFractalParams modified = new IFSFractalParams(params);
+        @NotNull IFSFractalParams modified = new IFSFractalParams(params);
         modified.setWidth(width);
         initIFS(modified);
     }
-    private void initIFS(IFSFractalParams params) {
+    private void initIFS(@NotNull IFSFractalParams params) {
         plane = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
         resetCentre();
         setDepth(params.getDepth());
@@ -121,20 +122,20 @@ public class IFSGenerator implements PixelFractalGenerator {
         }
         animation = new Animation(params.getFps());
         if (params.zoomConfig.zooms != null) {
-            for (ZoomParams zoom : params.zoomConfig.zooms) {
+            for (@NotNull ZoomParams zoom : params.zoomConfig.zooms) {
                 zoom(zoom);
             }
         }
         silencer = params.useThreadedGenerator();
     }
-    public void zoom(ZoomParams zoom) {
+    public void zoom(@NotNull ZoomParams zoom) {
         if (zoom.centre == null) {
             zoom(zoom.centre_x, zoom.centre_y, zoom.level);
         } else {
             zoom(zoom.centre, zoom.level);
         }
     }
-    public void zoom(Matrix centre_offset, double level) {
+    public void zoom(@NotNull Matrix centre_offset, double level) {
         setCentre_offset(centre_offset);
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
@@ -146,8 +147,9 @@ public class IFSGenerator implements PixelFractalGenerator {
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
+    @NotNull
     public Matrix fromCoordinates(int x, int y) {
-        Matrix point = new Matrix(new double[][]{{(MathUtils.boundsProtected(x, getImageWidth()) - center_x) / scale},
+        @NotNull Matrix point = new Matrix(new double[][]{{(MathUtils.boundsProtected(x, getImageWidth()) - center_x) / scale},
                 {(center_y - MathUtils.boundsProtected(y, getImageHeight())) / scale}});
         if (Math.abs(params.getSkew()) > TOLERANCE) {
             //return MatrixOperations.add(MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()),point), centre_offset);
@@ -169,7 +171,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     public IFSFractalParams getParams() {
         return params;
     }
-    public void setParams(IFSFractalParams params) {
+    public void setParams(@NotNull IFSFractalParams params) {
         this.params = new IFSFractalParams(params);
     }
     public int getDepth() {
@@ -224,7 +226,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     public Matrix getCentre_offset() {
         return centre_offset;
     }
-    public void setCentre_offset(Matrix centre_offset) {
+    public void setCentre_offset(@NotNull Matrix centre_offset) {
         this.centre_offset = new Matrix(centre_offset);
     }
     public PixelContainer getPlane() {
@@ -277,6 +279,7 @@ public class IFSGenerator implements PixelFractalGenerator {
                 y = Math.round(center_y - (float) (point.get(1, 0) * scale));
         return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
     }
+    @NotNull
     public int[] toCoordinates(Matrix point) {
         point = normalizePoint(point);
         return new int[]{MathUtils.boundsProtected(Math.round((float) (point.get(0, 0) * scale) + center_x), getImageWidth()),
@@ -288,10 +291,11 @@ public class IFSGenerator implements PixelFractalGenerator {
             progressPublisher.publish("% completion= " + (completion * 100.0f) + "%", completion);
         }
     }
-    private Matrix modifyPoint(Matrix point, int index) {
+    @NotNull
+    private Matrix modifyPoint(@NotNull Matrix point, int index) {
         if (params.isIfsMode()) {
             double x = point.get(0, 0), y = point.get(1, 0);
-            FunctionEvaluator fe = FunctionEvaluator.prepareIFS(params.getX_code(), params.getR_code(), params.getT_code(), params.getP_code(), x, y);
+            @NotNull FunctionEvaluator fe = FunctionEvaluator.prepareIFS(params.getX_code(), params.getR_code(), params.getT_code(), params.getP_code(), x, y);
             point.set(0, 0, fe.evaluateForIFS(params.getXfunctions()[index]));
             fe.setVariableCode(params.getY_code());
             fe.setZ_value(String.valueOf(y));
@@ -309,11 +313,11 @@ public class IFSGenerator implements PixelFractalGenerator {
     }
     public void generateStep(boolean render) {
         int index = MathUtils.weightedRandom(params.getWeights());
-        int[] coord = toCoordinates(point);
+        @NotNull int[] coord = toCoordinates(point);
         if (render) {
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
         }
-        Matrix point = modifyPoint(this.point, index);
+        @NotNull Matrix point = modifyPoint(this.point, index);
         if (point.equals(initial) || isOutOfBounds(point)) {
             completion = true;
         } else {

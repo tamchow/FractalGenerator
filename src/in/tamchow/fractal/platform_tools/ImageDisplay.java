@@ -8,6 +8,7 @@ import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.transition.Transition;
 import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -53,8 +54,8 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         }
     }
     public static void show(Config config, String title) {
-        ImageDisplay id = new ImageDisplay(config);
-        JScrollPane scrollPane = new JScrollPane(id);
+        @NotNull ImageDisplay id = new ImageDisplay(config);
+        @NotNull JScrollPane scrollPane = new JScrollPane(id);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         id.parent = new JFrame(title);
@@ -68,13 +69,13 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         id.parent.pack();
         id.running = true;
         id.parent.setVisible(true);
-        Thread thread = new Thread(id);
+        @NotNull Thread thread = new Thread(id);
         thread.start();
     }
     private void initDisplay(Config config, int width, int height) {
         if (config instanceof ImageConfig) {
             try {
-                ImageConfig imageConfig = (ImageConfig) config;
+                @NotNull ImageConfig imageConfig = (ImageConfig) config;
                 if (width == -1) {
                     width = ImageIO.read(new File(imageConfig.getParams()[0].image.getPath())).getWidth();
                 }
@@ -104,7 +105,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             }
         } else if (config instanceof ComplexFractalConfig) {
             try {
-                ComplexFractalConfig complexFractalConfig = (ComplexFractalConfig) config;
+                @NotNull ComplexFractalConfig complexFractalConfig = (ComplexFractalConfig) config;
                 this.width = complexFractalConfig.getParams()[0].initParams.width;
                 this.height = complexFractalConfig.getParams()[0].initParams.height;
                 todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -125,7 +126,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         parent.setTitle("Generating Fractal: " + message);
     }
     @Override
-    public synchronized void publish(String message, double progress, Object... args) {
+    public synchronized void publish(@NotNull String message, double progress, Object... args) {
         parent.setTitle("Generating Fractal: " + String.format(message, args));
     }
     @Override
@@ -144,7 +145,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     if (i == rimg.length - 1) {
                         k = 0;
                     }
-                    Transition transition = new Transition(imgconf.getParams()[i].transition, ImageConverter.toImageData(rimg[i]), ImageConverter.toImageData(rimg[k]), imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
+                    @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition, ImageConverter.toImageData(rimg[i]), ImageConverter.toImageData(rimg[k]), imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
                     transition.doTransition();
                     Animation anim = transition.getFrames();
                     for (int j = subctr; j < anim.getNumFrames(); j++) {
@@ -170,7 +171,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     current = new ComplexFractalGenerator(fracconf.getParams()[i], this);
                 }
                 if (fracconf.getParams()[i].useThreadedGenerator()) {
-                    ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
+                    @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
                     threaded.generate();
                 } else {
                     current.generate();
@@ -191,9 +192,10 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             i++;
         }
     }
-    public void paint(Graphics g) {
+    public void paint(@NotNull Graphics g) {
         g.drawImage(todraw, 0, 0, null);
     }
+    @NotNull
     public Dimension getPreferredSize() {
         return new Dimension(width, height);
     }
@@ -201,15 +203,15 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public void keyTyped(KeyEvent e) {
     }
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(@NotNull KeyEvent e) {
         System.out.println("Key pressed:" + e.getKeyChar());
         if (e.getKeyChar() == ' ') {
             running = (!running);
         } else if (e.getKeyChar() == 's' || e.getKeyChar() == 'S') {
-            JFileChooser fileChooser = new JFileChooser();
+            @NotNull JFileChooser fileChooser = new JFileChooser();
             fileChooser.showSaveDialog(this);
             try {
-                BufferedImage buf = new BufferedImage(todraw.getWidth(null), todraw.getHeight(null), BufferedImage.TYPE_INT_RGB);
+                @NotNull BufferedImage buf = new BufferedImage(todraw.getWidth(null), todraw.getHeight(null), BufferedImage.TYPE_INT_RGB);
                 buf.getGraphics().drawImage(todraw, 0, 0, null);
                 ImageIO.write(buf, "jpg", fileChooser.getSelectedFile());
             } catch (Exception ex) {
@@ -221,7 +223,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public void keyReleased(KeyEvent e) {
     }
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(@NotNull MouseEvent e) {
         if (fractal_mode) {
             try {
                 running = false;

@@ -1,4 +1,6 @@
 package in.tamchow.fractal.math.complex;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
@@ -7,7 +9,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);
     private static final String DECIMAL_REGEX = "^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$";
     private double a, ib;
-    public Complex(Complex old) {
+    public Complex(@NotNull Complex old) {
         this(old.real(), old.imaginary(), false);
     }
     public Complex() {
@@ -31,7 +33,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public Complex(double a) {
         this(a, 0, false);
     }
-    public Complex(String complex) {
+    public Complex(@NotNull String complex) {
         /** Not using explicit input validation for performance reasons.
          if(!isInCorrectFormat(complex)){
          throw new NumberFormatException("Illegal Format for Input "+complex);
@@ -44,8 +46,8 @@ public final class Complex extends Number implements Serializable, Comparable<Co
                 a = 0.0;
                 ib = Double.parseDouble(complex.substring(0, complex.length()));
             } else {
-                String a = complex.substring(0, complex.indexOf(","));
-                String ib = complex.substring(complex.indexOf(",") + 1, complex.lastIndexOf("i"));
+                @NotNull String a = complex.substring(0, complex.indexOf(","));
+                @NotNull String ib = complex.substring(complex.indexOf(",") + 1, complex.lastIndexOf("i"));
                 if (a.startsWith("+")) {
                     a = a.substring(1, a.length());
                 }
@@ -59,14 +61,17 @@ public final class Complex extends Number implements Serializable, Comparable<Co
             throw new NumberFormatException("Illegal Format for Input " + e.getLocalizedMessage());
         }
     }
+    @NotNull
     public static Complex random() {
         return random(Complex.ZERO, Complex.ONE);
     }
-    public static Complex random(Complex lowerBound, Complex upperBound) {
+    @NotNull
+    public static Complex random(@NotNull Complex lowerBound, @NotNull Complex upperBound) {
         double modulusRange = upperBound.modulus() - lowerBound.modulus(), argRange = upperBound.arg() - lowerBound.arg();
         double randomModulus = Math.random() * modulusRange, randomArg = Math.random() * argRange;
         return new Complex(randomModulus, randomArg, true);
     }
+    @NotNull
     public Complex negated() {
         return new Complex(-a, -ib);
     }
@@ -76,15 +81,15 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public double imaginary() {
         return ib;
     }
-    private boolean isInCorrectFormat(String complex) {
+    private boolean isInCorrectFormat(@NotNull String complex) {
         if (complex.length() <= 0) return false;
         if (complex.contains(",")) {
-            String[] parts = complex.split(",");
+            @NotNull String[] parts = complex.split(",");
             return parts[0].matches(DECIMAL_REGEX) && parts[1].substring(0, parts[1].length() - 1)/*trim the 'i'*/.matches(DECIMAL_REGEX);
         } else return complex.matches(DECIMAL_REGEX);
     }
     @Override
-    public int compareTo(Complex complex) {
+    public int compareTo(@NotNull Complex complex) {
         if (modulus() != complex.modulus()) {
             return Math.round((float) (complex.modulus() - modulus()));
         }
@@ -108,6 +113,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         //Easy way out
         return toString().hashCode();
     }
+    @NotNull
     @Override
     public String toString() {
         if (ib < 0) {
@@ -128,9 +134,11 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         else if(a<0&&ib==0){return Math.PI;}
         else{return Double.NaN;}*/
     }
+    @NotNull
     public Complex conjugate() {
         return new Complex(this.a, -this.ib);
     }
+    @NotNull
     public Complex inverse() {
         double c = a * a + ib * ib;
         return new Complex((a / c), (-(ib / c)));

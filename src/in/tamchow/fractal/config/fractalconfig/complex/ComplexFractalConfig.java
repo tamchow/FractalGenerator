@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.Config;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -12,13 +13,13 @@ public class ComplexFractalConfig extends Config implements Serializable {
         setTranstime(transtime);
         setWait(wait);
     }
-    public ComplexFractalConfig(ComplexFractalConfig config) {
+    public ComplexFractalConfig(@NotNull ComplexFractalConfig config) {
         setWait(config.getWait());
         setFps(config.getFps());
         setTranstime(config.transtime);
         setParams(config.getParams());
     }
-    public ComplexFractalConfig(int transtime, int fps, int wait, ComplexFractalParams[] config) {
+    public ComplexFractalConfig(int transtime, int fps, int wait, @NotNull ComplexFractalParams[] config) {
         setFps(fps);
         setTranstime(transtime);
         setWait(wait);
@@ -27,7 +28,7 @@ public class ComplexFractalConfig extends Config implements Serializable {
     public ComplexFractalParams[] getParams() {
         return params;
     }
-    public void setParams(ComplexFractalParams[] config) {
+    public void setParams(@NotNull ComplexFractalParams[] config) {
         this.params = new ComplexFractalParams[config.length];
         for (int i = 0; i < config.length; i++) {
             params[i] = new ComplexFractalParams(config[i]);
@@ -37,7 +38,7 @@ public class ComplexFractalConfig extends Config implements Serializable {
     public String toString() {
         String representation = String.format("[ComplexFractalConfig]%n[Globals]%n%d%n%d$n%d%n[EndGlobals]%n[Fractals]",
                 transtime, fps, wait);
-        for (ComplexFractalParams param : params) {
+        for (@NotNull ComplexFractalParams param : params) {
             representation += "\n" + param.getPath();
         }
         representation += "\n[EndFractals]";

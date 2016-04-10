@@ -4,6 +4,8 @@ import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.matrix.Matrix;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -11,6 +13,7 @@ import java.io.Serializable;
  */
 public class PixelContainer implements Serializable, Pannable, Comparable<PixelContainer> {
     private String path;
+    @Nullable
     private int[][] pixdata;
     public PixelContainer() {
         path = "";
@@ -20,11 +23,11 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         path = "";
         pixdata = new int[h][w];
     }
-    public PixelContainer(int[][] pixdata) {
+    public PixelContainer(@NotNull int[][] pixdata) {
         path = "";
         setPixdata(pixdata);
     }
-    public PixelContainer(PixelContainer img) {
+    public PixelContainer(@NotNull PixelContainer img) {
         setPixdata(img.getPixdata());
         path = img.getPath();
     }
@@ -32,8 +35,9 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         this.path = path;
         pixdata = null;
     }
-    public static PixelContainer fromHSL(HSL[][] input) {
-        PixelContainer img = new PixelContainer(input[0].length, input.length);
+    @NotNull
+    public static PixelContainer fromHSL(@NotNull HSL[][] input) {
+        @NotNull PixelContainer img = new PixelContainer(input[0].length, input.length);
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[i].length; j++) {
                 img.setPixel(i, j, input[i][j].toRGB());
@@ -47,15 +51,17 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     public void setPath(String path) {
         this.path = path;
     }
+    @Nullable
     public int[][] getPixdata() {
         return pixdata;
     }
-    public void setPixdata(int[][] pixdata) {
+    public void setPixdata(@NotNull int[][] pixdata) {
         this.pixdata = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
+    @NotNull
     protected int[] imageBounds(int y, int x) {
         int shift = MathUtils.boundsProtected(x / getWidth(), getHeight());
         if (x < 0) {
@@ -70,11 +76,12 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return new int[]{y, x};
     }
     public void setPixel(int y, int x, int val) {
-        int[] yx = imageBounds(y, x);
+        @NotNull int[] yx = imageBounds(y, x);
         pixdata[yx[0]][yx[1]] = val;
     }
+    @NotNull
     public HSL[][] toHSL() {
-        HSL[][] output = new HSL[pixdata.length][pixdata[0].length];
+        @NotNull HSL[][] output = new HSL[pixdata.length][pixdata[0].length];
         for (int i = 0; i < output.length; i++) {
             for (int j = 0; j < output[i].length; j++) {
                 output[i][j] = HSL.fromRGB(getPixel(i, j));
@@ -83,7 +90,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return output;
     }
     public int getPixel(int y, int x) {
-        int[] yx = imageBounds(y, x);
+        @NotNull int[] yx = imageBounds(y, x);
         return pixdata[yx[0]][yx[1]];
     }
     public int getHeight() {
@@ -98,12 +105,13 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
         return pixdata[0].length;
     }
+    @Nullable
     public int[] getRow(int row) {
         row = MathUtils.boundsProtected(row, getHeight());
         return pixdata[row];
     }
-    public PixelContainer getPostProcessed(PostProcessMode mode, double[][] biases, int byParts) {
-        PixelContainer processed = new PixelContainer(this);
+    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts) {
+        @NotNull PixelContainer processed = new PixelContainer(this);
         if (mode == PostProcessMode.NONE) {
             return processed;
         }
@@ -138,7 +146,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return processed;
     }
     public void setSize(int height, int width) {
-        int[][] tmp = new int[pixdata.length][pixdata[0].length];
+        @NotNull int[][] tmp = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);
         }
@@ -147,25 +155,26 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
             System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
-    public void setPixdata(int[] pixdata, int scan) {
+    public void setPixdata(@NotNull int[] pixdata, int scan) {
         this.pixdata = new int[pixdata.length / scan][scan];
         for (int i = 0; i < this.pixdata.length; i++) {
             System.arraycopy(pixdata, i * scan, this.pixdata[i], 0, this.pixdata[i].length);
         }
     }
     public int[] getPixels() {
-        int[] pixels = new int[pixdata.length * pixdata[0].length];
+        @NotNull int[] pixels = new int[pixdata.length * pixdata[0].length];
         for (int i = 0; i < pixdata.length; i++) {
             System.arraycopy(pixdata[i], 0, pixels, i * pixdata[i].length, pixdata[i].length);
         }
         return pixels;
     }
+    @NotNull
     public Matrix fromCooordinates(int x, int y) {
         double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
         int center_x = getWidth() / 2, center_y = getHeight() / 2;
         x = MathUtils.boundsProtected(x, getWidth());
         y = MathUtils.boundsProtected(y, getHeight());
-        double[][] matrixData = new double[2][1];
+        @NotNull double[][] matrixData = new double[2][1];
         matrixData[0][0] = ((((double) x) - center_x) / scale);
         matrixData[1][0] = ((center_y - ((double) y)) / scale);
         return new Matrix(matrixData);
@@ -174,13 +183,14 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     public boolean equals(Object o) {
         return o == this || (o instanceof PixelContainer && dataEquals((PixelContainer) o));
     }
-    private boolean dataEquals(PixelContainer o) {
+    private boolean dataEquals(@NotNull PixelContainer o) {
         for (int i = 0; i < o.getWidth() * o.getHeight() && i < this.getHeight() * this.getWidth(); ++i) {
             if (getPixel(i) != o.getPixel(i)) return false;
         }
         return true;
     }
-    public PixelContainer falseColor(PixelContainer[] channels) {
+    @NotNull
+    public PixelContainer falseColor(@NotNull PixelContainer[] channels) {
         if (channels.length == 0) {
             return this;//don't throw an exception
         } else if (channels.length == 1) {
@@ -193,15 +203,16 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
             return falseColor(channels[0], channels[1], channels[2], channels[3]);
         }
     }
-    public void add(PixelContainer toAdd) {
+    public void add(@NotNull PixelContainer toAdd) {
         for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
             for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                 setPixel(i, j, getPixel(i, j) + toAdd.getPixel(i, j));
             }
         }
     }
-    public PixelContainer falseColor(PixelContainer r, PixelContainer g, PixelContainer b) {
-        PixelContainer falseColored = new PixelContainer(r.getWidth(), r.getHeight());
+    @NotNull
+    public PixelContainer falseColor(@NotNull PixelContainer r, @NotNull PixelContainer g, @NotNull PixelContainer b) {
+        @NotNull PixelContainer falseColored = new PixelContainer(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
                 falseColored.setPixel(i, j, Color_Utils_Config.toRGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
@@ -209,8 +220,9 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
         return falseColored;
     }
-    public PixelContainer falseColor(PixelContainer a, PixelContainer r, PixelContainer g, PixelContainer b) {
-        PixelContainer falseColored = new PixelContainer(r.getWidth(), r.getHeight());
+    @NotNull
+    public PixelContainer falseColor(PixelContainer a, @NotNull PixelContainer r, @NotNull PixelContainer g, @NotNull PixelContainer b) {
+        @NotNull PixelContainer falseColored = new PixelContainer(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
                 falseColored.setPixel(i, j, Color_Utils_Config.packARGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA), Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
@@ -218,7 +230,8 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
         return falseColored;
     }
-    public int[] toCooordinates(Matrix point) {
+    @NotNull
+    public int[] toCooordinates(@NotNull Matrix point) {
         double scale = ((getHeight() >= getWidth()) ? getWidth() / 2 : getHeight() / 2);
         int center_x = getWidth() / 2, center_y = getHeight() / 2;
         int x = (int) ((point.get(0, 0) * scale) + center_x), y = (int) (center_y - (point.get(1, 0) * scale));
@@ -226,18 +239,19 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         y = MathUtils.boundsProtected(y, getHeight());
         return new int[]{x, y};
     }
+    @NotNull
     public PixelContainer getRotatedImage(double angle) {
         double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
         int w = getWidth(), h = getHeight();
         int neww = (int) Math.floor(w * cos + h * sin), newh = (int) Math.floor(h * cos + w * sin);
-        PixelContainer rotated = new PixelContainer(neww, newh);
+        @NotNull PixelContainer rotated = new PixelContainer(neww, newh);
         //Matrix rotor = Matrix.rotationMatrix2D(angle);
         for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
-                Matrix coords = fromCooordinates(j, i);
+                @NotNull Matrix coords = fromCooordinates(j, i);
                 //coords = MatrixOperations.multiply(rotor, coords);
                 coords = MathUtils.doRotate(coords, angle);
-                int[] rcoords = toCooordinates(coords);
+                @NotNull int[] rcoords = toCooordinates(coords);
                 rotated.setPixel(rcoords[1], rcoords[0], getPixel(i, j));
             }
         }
@@ -271,7 +285,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         if (x_res + x_dist >= getWidth() || y_res + y_dist >= getHeight() || x_res + x_dist < 0 || y_res + y_dist < 0) {
             throw new UnsupportedOperationException("Panning out of range");
         } else {
-            PixelContainer tmp = new PixelContainer(x_res, y_res);
+            @NotNull PixelContainer tmp = new PixelContainer(x_res, y_res);
             int start_x = ((getWidth() - x_res) / 2) + x_dist, start_y = ((getHeight() - y_res) / 2) + y_dist;
             int end_x = (getWidth() - (start_x - x_dist)) + x_dist, end_y = (getHeight() - (start_y - y_dist)) + y_dist;
             for (int i = start_y, k = 0; i < end_y && k < tmp.getHeight(); i++, k++) {
@@ -289,13 +303,14 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     public void pan(int x_res, int y_res, int distance, double angle) {
         pan(x_res, y_res, distance, angle, false);
     }
+    @NotNull
     public PixelContainer subImage(int x_res, int y_res) {
-        PixelContainer subImage = new PixelContainer(this);
+        @NotNull PixelContainer subImage = new PixelContainer(this);
         subImage.pan(x_res, y_res, 0, 0);
         return subImage;
     }
     @Override
-    public int compareTo(PixelContainer o) {
+    public int compareTo(@NotNull PixelContainer o) {
         int difference = 0;
         for (int i = 0; i < getHeight() && i < o.getHeight(); ++i) {
             for (int j = 0; j < getWidth() && j < o.getWidth(); ++j) {
@@ -304,9 +319,10 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
         return difference ^ getPath().compareTo(o.getPath());
     }
+    @NotNull
     @Override
     public String toString() {
-        String pixels = getPath() + "," + getHeight() + "," + getWidth() + "\n";
+        @NotNull String pixels = getPath() + "," + getHeight() + "," + getWidth() + "\n";
         for (int i = 0; i < getHeight(); ++i) {
             for (int j = 0; j < getWidth(); ++j) {
                 pixels += " " + getPixel(i, j);

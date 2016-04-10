@@ -2,6 +2,7 @@ package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     String[][] constdec;
     String z_value;
     String variableCode, oldvariablecode;
-    public Polynomial(String variable, String variableCode, String oldvariablecode, String[][] varconst) {
+    public Polynomial(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
         setZ_value(variable);
         setConstdec(varconst);
         setVariableCode(variableCode);
@@ -24,10 +25,11 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
         terms = new ArrayList<>();
         signs = new ArrayList<>();
     }
+    @NotNull
     public static Polynomial fromString(String polynomial) {
-        Polynomial poly = new Polynomial();
+        @NotNull Polynomial poly = new Polynomial();
         String[] tokens = StringManipulator.split(polynomial, ";");
-        for (String token : tokens) {
+        for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
@@ -54,7 +56,7 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     public String[][] getConstdec() {
         return constdec;
     }
-    public void setConstdec(String[][] constdec) {
+    public void setConstdec(@NotNull String[][] constdec) {
         this.constdec = new String[constdec.length][constdec[0].length];
         for (int i = 0; i < this.constdec.length; i++) {
             System.arraycopy(constdec[i], 0, this.constdec[i], 0, this.constdec[i].length);
@@ -69,19 +71,20 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     public ArrayList<String> getSigns() {
         return signs;
     }
-    public void setSigns(ArrayList<String> signs) {
+    public void setSigns(@NotNull ArrayList<String> signs) {
         this.signs.clear();
         this.signs.addAll(signs);
     }
     public ArrayList<Term> getTerms() {
         return terms;
     }
-    public void setTerms(ArrayList<Term> terms) {
+    public void setTerms(@NotNull ArrayList<Term> terms) {
         this.terms.clear();
         this.terms.addAll(terms);
     }
+    @NotNull
     public Polynomial derivative() {
-        Polynomial deriv = new Polynomial();
+        @NotNull Polynomial deriv = new Polynomial();
         deriv.setSigns(this.signs);
         for (int i = 0; i < terms.size(); i++) {
             deriv.terms.add(terms.get(i).derivative());
@@ -93,22 +96,23 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     }
     public int countVariableTerms() {
         int ctr = 0;
-        for (Term term : terms) {
+        for (@NotNull Term term : terms) {
             if (!term.isConstant()) {
                 ctr++;
             }
         }
         return ctr;
     }
+    @NotNull
     public Complex getDegree() {
-        Complex degree = new Complex(Complex.ZERO);
-        for (Term term : terms) {
+        @NotNull Complex degree = new Complex(Complex.ZERO);
+        for (@NotNull Term term : terms) {
             Complex vardeg;
             try {
                 vardeg = new Complex(term.exponent);
             } catch (IllegalArgumentException iae) {
                 if (!term.isConstant()) {
-                    FunctionEvaluator fe = new FunctionEvaluator(variableCode, oldvariablecode, constdec, false);
+                    @NotNull FunctionEvaluator fe = new FunctionEvaluator(variableCode, oldvariablecode, constdec, false);
                     vardeg = fe.evaluate(term.exponent, true);
                 } else {
                     vardeg = new Complex(Complex.ZERO);
@@ -122,16 +126,17 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     }
     public int countConstantTerms() {
         int ctr = 0;
-        for (Term term : terms) {
+        for (@NotNull Term term : terms) {
             if (term.isConstant()) {
                 ctr++;
             }
         }
         return ctr;
     }
+    @NotNull
     @Override
     public String toString() {
-        String polynomial = "";
+        @NotNull String polynomial = "";
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             polynomial += " " + signs.get(j) + " " + terms.get(i);
         }
@@ -142,7 +147,7 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
         return polynomial;
     }
     @Override
-    public int compareTo(Polynomial o) {
+    public int compareTo(@NotNull Polynomial o) {
         return toString().compareTo(o.toString());
     }
     @Override

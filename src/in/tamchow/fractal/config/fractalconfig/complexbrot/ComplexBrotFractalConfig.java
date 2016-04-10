@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.complexbrot;
 import in.tamchow.fractal.config.Config;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -12,13 +13,13 @@ public class ComplexBrotFractalConfig extends Config implements Serializable {
         setTranstime(transtime);
         setWait(wait);
     }
-    public ComplexBrotFractalConfig(ComplexBrotFractalConfig config) {
+    public ComplexBrotFractalConfig(@NotNull ComplexBrotFractalConfig config) {
         setWait(config.getWait());
         setFps(config.getFps());
         setTranstime(config.transtime);
         setParams(config.getParams());
     }
-    public ComplexBrotFractalConfig(int transtime, int fps, int wait, ComplexBrotFractalParams[] config) {
+    public ComplexBrotFractalConfig(int transtime, int fps, int wait, @NotNull ComplexBrotFractalParams[] config) {
         setFps(fps);
         setTranstime(transtime);
         setWait(wait);
@@ -27,16 +28,17 @@ public class ComplexBrotFractalConfig extends Config implements Serializable {
     public ComplexBrotFractalParams[] getParams() {
         return params;
     }
-    public void setParams(ComplexBrotFractalParams[] config) {
+    public void setParams(@NotNull ComplexBrotFractalParams[] config) {
         this.params = new ComplexBrotFractalParams[config.length];
         for (int i = 0; i < config.length; i++) {
             params[i] = new ComplexBrotFractalParams(config[i]);
         }
     }
+    @NotNull
     @Override
     public String toString() {
-        String representation = "[ComplexBrotFractalConfig]" + "\n" + "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
-        for (ComplexBrotFractalParams param : params) {
+        @NotNull String representation = "[ComplexBrotFractalConfig]" + "\n" + "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
+        for (@NotNull ComplexBrotFractalParams param : params) {
             representation += "\n" + param.getPath();
         }
         representation += "\n[EndFractals]";

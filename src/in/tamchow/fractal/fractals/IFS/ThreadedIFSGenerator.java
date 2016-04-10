@@ -1,6 +1,8 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 /**
  * Threaded IFS Fractal Generator
  * <p/>
@@ -21,7 +23,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
-        for (PartIFSData partImage : data) {
+        for (@Nullable PartIFSData partImage : data) {
             if (partImage != null) ctr++;
         }
         return ctr;
@@ -33,7 +35,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     public void generate() {
         int idx = 0;
         for (int i = 0; i < threads; i++) {
-            SlaveRunner runner = new SlaveRunner(idx);
+            @NotNull SlaveRunner runner = new SlaveRunner(idx);
             master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
             idx++;
             runner.start();
@@ -44,7 +46,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
                     lock.wait(1000);
                 }
                 lock.notifyAll();
-                for (PartIFSData partIFSData : data) {
+                for (@NotNull PartIFSData partIFSData : data) {
                     master.getPlane().add(partIFSData.getPartPlane());
                     master.getAnimation().addFrames(partIFSData.getPartAnimation());
                 }

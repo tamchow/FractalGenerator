@@ -7,6 +7,7 @@ import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Pannable;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import org.jetbrains.annotations.NotNull;
 /**
  * Helper class for on-demand panning of various {@link Pannable} types.
  * Not used by CLI (batch-zooming can be used for this purpose by maintaining same zoom level), but useful for GUI (not implemented)
@@ -31,9 +32,9 @@ public class FractalPanningHelper {
     }
     public static PixelContainer pan(Pannable toPanThis, int x_dist, int y_dist) {
         if (toPanThis instanceof ComplexFractalGenerator || toPanThis instanceof IFSGenerator || toPanThis instanceof ComplexBrotFractalGenerator) {
-            PixelFractalGenerator toPan = (PixelFractalGenerator) toPanThis;
+            @NotNull PixelFractalGenerator toPan = (PixelFractalGenerator) toPanThis;
             try {
-                PixelContainer plane = new PixelContainer(toPan.getPlane());
+                @NotNull PixelContainer plane = new PixelContainer(toPan.getPlane());
                 plane.pan(toPan.getConfiguredWidth(), toPan.getConfiguredHeight(), x_dist, y_dist);
                 return plane;
             } catch (UnsupportedOperationException rangeViolation) {
@@ -50,7 +51,7 @@ public class FractalPanningHelper {
                     }
                     start_y = 0;
                     end_y = toPan.getConfiguredHeight();
-                    ThreadedComplexFractalGenerator panner = new ThreadedComplexFractalGenerator((ComplexFractalGenerator) toPan);
+                    @NotNull ThreadedComplexFractalGenerator panner = new ThreadedComplexFractalGenerator((ComplexFractalGenerator) toPan);
                     panner.generate(start_x, end_x, start_y, end_y);
                     if (y_dist < 0) {
                         start_y = 0;

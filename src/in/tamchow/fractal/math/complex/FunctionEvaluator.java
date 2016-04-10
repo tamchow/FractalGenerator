@@ -1,6 +1,7 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
+import org.jetbrains.annotations.NotNull;
 /**
  * Implements an iterative evaluator for functions described in ComplexOperations,
  * making heavy use of string replacement;
@@ -51,16 +52,17 @@ public class FunctionEvaluator {
         hasBeenSubstituted = false;
         setAdvancedDegree(advancedDegree);
     }
+    @NotNull
     public static FunctionEvaluator prepareIFS(String variableCode, String r_code, String t_code, String p_code, double x, double y) {
-        String[][] varconst = {{"0", "0"}};
-        FunctionEvaluator fe = new FunctionEvaluator(variableCode, String.valueOf(x), varconst);
+        @NotNull String[][] varconst = {{"0", "0"}};
+        @NotNull FunctionEvaluator fe = new FunctionEvaluator(variableCode, String.valueOf(x), varconst);
         fe.addConstant(new String[]{r_code, String.valueOf(Math.sqrt(x * x + y * y))}/*rho*/);
         fe.addConstant(new String[]{t_code, String.valueOf(Math.atan2(y, x))}/*theta*/);
         fe.addConstant(new String[]{p_code, String.valueOf(Math.atan2(x, y))}/*phi*/);
         return fe;
     }
-    public void addConstant(String[] constant) {
-        String[][] tmpconsts = new String[constdec.length][2];
+    public void addConstant(@NotNull String[] constant) {
+        @NotNull String[][] tmpconsts = new String[constdec.length][2];
         for (int i = 0; i < constdec.length; i++) {
             System.arraycopy(constdec[i], 0, tmpconsts[i], 0, tmpconsts.length);
         }
@@ -94,9 +96,10 @@ public class FunctionEvaluator {
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
+    @NotNull
     public Complex getDegree(String function) {
         function = StringManipulator.replace(function, oldvariablecode, variableCode);
-        Complex degree = Complex.ZERO;
+        @NotNull Complex degree = Complex.ZERO;
         if ((function.contains(variableCode) && (!function.contains("^")))) {
             degree = Complex.ONE;
             return degree;
@@ -122,11 +125,11 @@ public class FunctionEvaluator {
                 if (function.charAt(i) == '*' || function.charAt(i) == '/') {
                     int closeLeftIndex = StringManipulator.indexOfBackwards(function, i, ')');
                     int openLeftIndex = StringManipulator.findMatchingOpener(')', function, closeLeftIndex);
-                    Complex dl = getDegree(function.substring(openLeftIndex, closeLeftIndex + 1));
+                    @NotNull Complex dl = getDegree(function.substring(openLeftIndex, closeLeftIndex + 1));
                     int openRightIndex = function.indexOf('(', i);
                     int closeRightIndex = StringManipulator.findMatchingCloser('(', function, openRightIndex);
-                    Complex dr = getDegree(function.substring(openRightIndex, closeRightIndex + 1));
-                    Complex tmpdegree = Complex.ZERO;
+                    @NotNull Complex dr = getDegree(function.substring(openRightIndex, closeRightIndex + 1));
+                    @NotNull Complex tmpdegree = Complex.ZERO;
                     if (function.charAt(i) == '*') {
                         tmpdegree = ComplexOperations.add(dl, dr);
                     } else if (function.charAt(i) == '/') {
@@ -142,12 +145,13 @@ public class FunctionEvaluator {
         while (function.indexOf('^', idx) != -1) {
             varidx = function.indexOf(variableCode, varidx) + 1;
             idx = function.indexOf('^', varidx) + 1;
-            Complex nextDegree = new Complex(function.substring(idx + 1, function.indexOf(' ', idx + 1)));
+            @NotNull Complex nextDegree = new Complex(function.substring(idx + 1, function.indexOf(' ', idx + 1)));
             degree = (nextDegree.modulus() > degree.modulus()) ? nextDegree : degree;
         }
         return degree;
     }
-    public Complex getDegree(Polynomial polynomial) {
+    @NotNull
+    public Complex getDegree(@NotNull Polynomial polynomial) {
         return getDegree(limitedEvaluate(polynomial.toString(), polynomial.countVariableTerms() * 2 + polynomial.countConstantTerms()));
     }
     public String getZ_value() {
@@ -167,7 +171,7 @@ public class FunctionEvaluator {
     }
     private boolean hasNoFunctions(String expr) {
         String[] parts = StringManipulator.split(expr, " ");
-        for (String part : parts) {
+        for (@NotNull String part : parts) {
             for (String function : FUNCTIONS) {
                 if (part.equalsIgnoreCase(function)) {
                     return false;
@@ -203,8 +207,9 @@ public class FunctionEvaluator {
         } while (flag <= 1);
         return ztmp;
     }
-    private Complex eval(String[] processed) {
-        Complex ztmp = new Complex(Complex.ZERO);
+    @NotNull
+    private Complex eval(@NotNull String[] processed) {
+        @NotNull Complex ztmp = new Complex(Complex.ZERO);
         if (processed.length == 1) {
             return new Complex(processed[0]);
         }
@@ -370,7 +375,7 @@ public class FunctionEvaluator {
         }
         return ztmp;
     }
-    private String[] process(String subexpr) {
+    private String[] process(@NotNull String subexpr) {
         String expr;
         if (subexpr.lastIndexOf('(') == -1 || subexpr.indexOf(')') == -1) {
             expr = subexpr;
@@ -382,7 +387,7 @@ public class FunctionEvaluator {
     }
     private String substitute(String expr, boolean isSymbolic) {
         String[] mod = StringManipulator.split(expr, " ");
-        String sub = "";
+        @NotNull String sub = "";
         for (int i = 0; i < mod.length; i++) {
             if (mod[i].equalsIgnoreCase(variableCode) && (!isSymbolic)) {
                 mod[i] = z_value;

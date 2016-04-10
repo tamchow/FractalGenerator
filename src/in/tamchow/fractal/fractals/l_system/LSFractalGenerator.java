@@ -9,6 +9,8 @@ import in.tamchow.fractal.graphicsutilities.graphics.DrawingUtilities;
 import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 /**
  * generates L-System Fractals. Does not implement panning or zooming, as those make no sense
  */
@@ -18,7 +20,7 @@ public class LSFractalGenerator implements FractalGenerator {
     Turtle turtle;
     String[] generations;
     Publisher publisher;
-    public LSFractalGenerator(LSFractalParams params, Publisher publisher) {
+    public LSFractalGenerator(@NotNull LSFractalParams params, Publisher publisher) {
         this.params = params;
         canvas = new PixelContainer(params.getWidth(), params.getHeight());
         DrawingUtilities.fill(canvas, params.getBack_color());
@@ -30,8 +32,8 @@ public class LSFractalGenerator implements FractalGenerator {
     public void generate() {
         for (int i = 0, k = 1; i < generations.length - 1 && k < generations.length; ++i, ++k) {
             for (int j = 0; j < generations[i].length(); ++j) {
-                String toEvolve = String.valueOf(generations[i].charAt(j));
-                UnitGrammar evolutions = getGrammarForCode(toEvolve);
+                @NotNull String toEvolve = String.valueOf(generations[i].charAt(j));
+                @Nullable UnitGrammar evolutions = getGrammarForCode(toEvolve);
                 if (evolutions == null) {
                     throw new LSGrammarException("Undefined code encountered.");
                 } else {
@@ -54,7 +56,7 @@ public class LSFractalGenerator implements FractalGenerator {
         publisher.publish("Completion = " + (completion * 100.0f) + " %", completion);
     }
     private UnitGrammar getGrammarForCode(String code) {
-        for (UnitGrammar grammar : params.getGrammar()) {
+        for (@NotNull UnitGrammar grammar : params.getGrammar()) {
             if (grammar.code.equals(code)) {
                 return grammar;
             }
@@ -67,10 +69,10 @@ public class LSFractalGenerator implements FractalGenerator {
     public String getStateAtIndex(int index) {
         return generations[MathUtils.boundsProtected(index, generations.length)];
     }
-    public void drawState(String stateToDraw) {
+    public void drawState(@NotNull String stateToDraw) {
         double segmentlength = params.getInit_length() * Math.cos(params.getInit_angle()) / stateToDraw.length();
         for (int i = 0; i < stateToDraw.length(); ++i) {
-            UnitGrammar grammar = getGrammarForCode(stateToDraw.charAt(i) + "");
+            @Nullable UnitGrammar grammar = getGrammarForCode(stateToDraw.charAt(i) + "");
             if (grammar == null) {
                 throw new LSGrammarException("Undefined code encountered.");
             }
@@ -87,12 +89,13 @@ public class LSFractalGenerator implements FractalGenerator {
             turtle.draw(grammar.command, data);
         }
     }
+    @NotNull
     public Animation drawStatesAsAnimation() {
         if (params.getFps() <= 0) {
             throw new UnsupportedOperationException("FPS of 0 or below is illegal.");
         }
-        Animation frames = new Animation(params.getFps());
-        for (String state : generations) {
+        @NotNull Animation frames = new Animation(params.getFps());
+        for (@NotNull String state : generations) {
             drawState(state);
             frames.addFrame(getCanvas());
         }

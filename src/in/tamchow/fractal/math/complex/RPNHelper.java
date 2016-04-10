@@ -1,5 +1,6 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
+import org.jetbrains.annotations.NotNull;
 /**
  * Supports dyadic operations on complex numbers as expressions in RPN format
  */
@@ -12,11 +13,11 @@ public class RPNHelper {
             new Operator("/", 5, Associativity.LEFT),
             new Operator("^", 10, Associativity.RIGHT)
     };
-    public static Complex evaluateRPN(String[] tokens) {
+    public static Complex evaluateRPN(@NotNull String[] tokens) {
         if (tokens.length == 0) {
             throw new UnsupportedOperationException("Blank");
         }
-        FixedStack<String> tks = new FixedStack<>(tokens.length);
+        @NotNull FixedStack<String> tks = new FixedStack<>(tokens.length);
         //tks.initStack(tokens);
         tks.pushN(tokens);
         /*for(String token:tokens){
@@ -24,10 +25,10 @@ public class RPNHelper {
         }*/
         return evaluateRPN(tks);
     }
-    public static Complex evaluateInfix(String[] infix) {
+    public static Complex evaluateInfix(@NotNull String[] infix) {
         return evaluateRPN(infixToRPN(infix));
     }
-    public static Complex evaluateRPN(FixedStack<String> tkstack) {
+    public static Complex evaluateRPN(@NotNull FixedStack<String> tkstack) {
         String tk = tkstack.pop();
         Complex x, y;
         try {
@@ -70,7 +71,7 @@ public class RPNHelper {
         return contains(token);
     }
     private static Operator getByToken(String token) {
-        for (Operator operator : OPERATORS) {
+        for (@NotNull Operator operator : OPERATORS) {
             if (operator.symbol.equals(token)) {
                 return operator;
             }
@@ -106,21 +107,22 @@ public class RPNHelper {
         }
         return getByToken(token1).precedence - getByToken(token2).precedence;
     }
-    private static int countOccurrencesOfParentheses(String[] inputTokens) {
+    private static int countOccurrencesOfParentheses(@NotNull String[] inputTokens) {
         int ctr = 0;
-        for (String token : inputTokens) {
+        for (@NotNull String token : inputTokens) {
             if (token.equals("(") || token.equals(")")) {
                 ++ctr;
             }
         }
         return ctr;
     }
-    public static String[] infixToRPN(String[] inputTokens) {
-        String[] out = new String[inputTokens.length - countOccurrencesOfParentheses(inputTokens)];
+    @NotNull
+    public static String[] infixToRPN(@NotNull String[] inputTokens) {
+        @NotNull String[] out = new String[inputTokens.length - countOccurrencesOfParentheses(inputTokens)];
         int outCtr = 0;
-        FixedStack<String> stack = new FixedStack<>(inputTokens.length);
+        @NotNull FixedStack<String> stack = new FixedStack<>(inputTokens.length);
         // For all the input tokens [S1] read the next token [S2]
-        for (String token : inputTokens) {
+        for (@NotNull String token : inputTokens) {
             if (isOperator(token)) {
                 // If token is an operator (x) [S3]
                 while (!stack.isEmpty() && isOperator(stack.peek())) {

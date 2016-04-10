@@ -1,20 +1,25 @@
 package in.tamchow.fractal.math.complex;
+import org.jetbrains.annotations.NotNull;
 /**
  * Provides Utility methods for handling complex numbers
  */
 public class ComplexOperations {
-    public static Complex subtract(Complex z1, Complex z2) {
+    @NotNull
+    public static Complex subtract(@NotNull Complex z1, @NotNull Complex z2) {
         return new Complex(z1.real() - z2.real(), z1.imaginary() - z2.imaginary());
     }
-    public static Complex multiply(Complex z1, Complex z2) {
+    @NotNull
+    public static Complex multiply(@NotNull Complex z1, @NotNull Complex z2) {
         double a = (z1.real() * z2.real() - z1.imaginary() * z2.imaginary());
         double ib = (z1.real() * z2.imaginary() + z1.imaginary() * z2.real());
         return new Complex(a, ib);
     }
-    public static Complex exponent(Complex z) {
+    @NotNull
+    public static Complex exponent(@NotNull Complex z) {
         return power(Complex.E, z);
     }
-    public static Complex power(Complex z1, Complex z2) {
+    @NotNull
+    public static Complex power(@NotNull Complex z1, @NotNull Complex z2) {
         if (z1.equals(Complex.ZERO)) {
             return Complex.ZERO;
         }
@@ -24,62 +29,79 @@ public class ComplexOperations {
         double b = b2 * Math.sin(b1);
         return new Complex(a, b);
     }
-    public static Complex add(Complex z1, Complex z2) {
+    @NotNull
+    public static Complex add(@NotNull Complex z1, @NotNull Complex z2) {
         return new Complex(z1.real() + z2.real(), z1.imaginary() + z2.imaginary());
     }
-    public static Complex log(Complex z, Complex base) {
+    @NotNull
+    public static Complex log(@NotNull Complex z, @NotNull Complex base) {
         return divide(principallog(z), principallog(base));
     }
-    public static Complex divide(Complex z1, Complex z2) {
+    @NotNull
+    public static Complex divide(@NotNull Complex z1, @NotNull Complex z2) {
         double c = z2.real() * z2.real() + z2.imaginary() * z2.imaginary();
         double a = (z1.real() * z2.real() + z1.imaginary() * z2.imaginary()) / c;
         double ib = (z2.real() * z1.imaginary() - z2.imaginary() * z1.real()) / c;
         return new Complex(a, ib);
     }
-    public static Complex principallog(Complex z) {
+    @NotNull
+    public static Complex principallog(@NotNull Complex z) {
         double r = z.modulus();
         return new Complex(Math.log(r), z.arg());
     }
-    public static double distance_squared(Complex z1, Complex z2) {
+    public static double distance_squared(@NotNull Complex z1, @NotNull Complex z2) {
         return (Math.pow(z1.real() - z2.real(), 2) + Math.pow(z1.imaginary() - z2.imaginary(), 2));
     }
-    public static Complex cot(Complex z) {
+    @NotNull
+    public static Complex cot(@NotNull Complex z) {
         return divide(Complex.ONE, tan(z));
     }
-    public static Complex tan(Complex z) {
+    @NotNull
+    public static Complex tan(@NotNull Complex z) {
         return divide(sin(z), cos(z));
     }
-    public static Complex sin(Complex z) {
+    @NotNull
+    public static Complex sin(@NotNull Complex z) {
         return new Complex(Math.sin(z.real()) * Math.cosh(z.imaginary()), Math.cos(z.real()) * Math.sinh(z.imaginary()));
     }
-    public static Complex cos(Complex z) {
+    @NotNull
+    public static Complex cos(@NotNull Complex z) {
         return new Complex(Math.cos(z.real()) * Math.cosh(z.imaginary()), -Math.sin(z.real()) * Math.sinh(z.imaginary()));
     }
-    public static Complex coth(Complex z) {
+    @NotNull
+    public static Complex coth(@NotNull Complex z) {
         return divide(Complex.ONE, tanh(z));
     }
-    public static Complex tanh(Complex z) {
+    @NotNull
+    public static Complex tanh(@NotNull Complex z) {
         return divide(sinh(z), cosh(z));
     }
-    public static Complex sinh(Complex z) {
+    @NotNull
+    public static Complex sinh(@NotNull Complex z) {
         return new Complex(Math.sinh(z.real()) * Math.cos(z.imaginary()), Math.cosh(z.real()) * Math.sin(z.imaginary()));
     }
-    public static Complex cosh(Complex z) {
+    @NotNull
+    public static Complex cosh(@NotNull Complex z) {
         return new Complex(Math.cosh(z.real()) * Math.cos(z.imaginary()), Math.sinh(z.real()) * Math.sin(z.imaginary()));
     }
-    public static Complex sec(Complex z) {
+    @NotNull
+    public static Complex sec(@NotNull Complex z) {
         return divide(Complex.ONE, cos(z));
     }
-    public static Complex sech(Complex z) {
+    @NotNull
+    public static Complex sech(@NotNull Complex z) {
         return divide(Complex.ONE, cosh(z));
     }
-    public static Complex cosec(Complex z) {
+    @NotNull
+    public static Complex cosec(@NotNull Complex z) {
         return divide(Complex.ONE, sin(z));
     }
-    public static Complex cosech(Complex z) {
+    @NotNull
+    public static Complex cosech(@NotNull Complex z) {
         return divide(Complex.ONE, sinh(z));
     }
-    public static Complex flip(Complex z) {
+    @NotNull
+    public static Complex flip(@NotNull Complex z) {
         return new Complex(z.imaginary(), z.real());
     }
 }
