@@ -19,10 +19,11 @@ public class PrimeCounter {
      */
     public static final String START_CODE = "=", TEST_FORMAT = "Input = %d , Output = %d , calculated in %f seconds%n", PROMPT = "Enter numbers to compute pi(x) for (Type \"" + START_CODE + "\" to start):%n", WAIT = "Calculating, please wait...%n", WARNING = "Probably won't work with values close to or more than 2^31%n", TOTAL_OUTPUT_FORMAT = "Total time for all inputs is %f seconds%n";
     /**
-     * {@link #LOCK} is for multithreading purposes.
+     * A constant object of {@link PrimeCounter.Lock}, used for multithreading purposes.
      *
      * @see PrimeCounter.Lock
      */
+    @SuppressWarnings("JavaDoc")
     private static final Object LOCK = new Lock();
     /**
      * Some necessary (and unnecessary) constants.
@@ -57,7 +58,6 @@ public class PrimeCounter {
      * Main method: accepts user input and shows total execution time taken
      *
      * @param args : The command-line arguments
-     * @return Nothing
      */
     public static void main(String[] args) {
         double total_time = 0;
@@ -192,6 +192,7 @@ public class PrimeCounter {
                     try {
                         LOCK.wait(300);
                     } catch (InterruptedException ie) {
+                        ie.printStackTrace();
                     }
                 }
                 LOCK.notifyAll();

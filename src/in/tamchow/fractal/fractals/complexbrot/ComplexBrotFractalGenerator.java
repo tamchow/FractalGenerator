@@ -7,8 +7,9 @@ import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import in.tamchow.fractal.helpers.math.FixedStack;
 import in.tamchow.fractal.helpers.math.MathUtils;
+import in.tamchow.fractal.helpers.stack.Stack;
+import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
@@ -484,7 +485,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         long ctr = 0;
         int level = 0;
         for (int iteration : iterations) {
-            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
+            Stack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {
@@ -562,7 +563,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             toadd = new Complex(getLastConstant());
         }
         for (int iteration : iterations) {
-            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
+            Stack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {
@@ -641,7 +642,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         int level = 0;
         Complex lastConstantBackup = getLastConstant();
         for (int iteration : iterations) {
-            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
+            Stack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {
@@ -714,7 +715,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         int level = 0;
         Complex lastConstantBackup = getLastConstant();
         for (int iteration : iterations) {
-            FixedStack<Complex> last = new FixedStack<>(iteration + 2);
+            Stack<Complex> last = new FixedStack<>(iteration + 2);
             int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {

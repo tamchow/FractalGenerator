@@ -1,5 +1,5 @@
 package in.tamchow.fractal.misc.evilstuff.users;
-import in.tamchow.fractal.helpers.math.FixedStack;
+import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.misc.evilstuff.EvilStuff;
 /**
  * A class which implements a calculator which provides unpredictable functions.
@@ -33,9 +33,8 @@ public class UnpredictableCalculator {
                     EvilStuff.stopDoingEvilStuff();
                 } catch (InterruptedException interrupted) {
                     interrupted.printStackTrace();
-                } finally {
-                    break;
                 }
+                break;
             }
         } while (true);
     }
@@ -89,11 +88,11 @@ class RPNHelper {
         stack = new Precedence[infix.length];
         stack[0] = Precedence.eos;
         Precedence token;
-        for (int i = 0; i < infix.length; i++) {
-            token = getToken(infix[i]);
+        for (String anInfix : infix) {
+            token = getToken(anInfix);
             // if token is operand append to postfix
             if (token == Precedence.operand)
-                postfix += infix[i] + " ";
+                postfix += anInfix + " ";
                 // if token is right parenthesis pop till matching left parenthesis
             else if (token == Precedence.rparen) {
                 while (stack[top] != Precedence.lparen)

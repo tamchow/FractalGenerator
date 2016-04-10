@@ -1,5 +1,5 @@
 package in.tamchow.fractal.math.complex;
-import in.tamchow.fractal.helpers.math.FixedStack;
+import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 /**
  * Supports dyadic operations on complex numbers as expressions in RPN format
  */

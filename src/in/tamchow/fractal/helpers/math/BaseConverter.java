@@ -42,7 +42,7 @@ public class BaseConverter {
     }
     public static long convertToNumber(String inputNumber, int from_base, boolean checkIfNegative) {
         String copyOfInput = inputNumber;
-        boolean isNegative = checkIfNegative ? isNegative(inputNumber) : false;
+        boolean isNegative = checkIfNegative && isNegative(inputNumber);
         if (isNegative) {
             //the provided number is (supposedly) negative
             inputNumber = inputNumber.substring(1, inputNumber.length());

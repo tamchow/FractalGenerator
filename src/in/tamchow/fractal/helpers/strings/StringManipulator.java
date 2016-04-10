@@ -213,9 +213,15 @@ public class StringManipulator {
         return result;
     }
     public static String[] split(String what, String at) {
-        if (what.isEmpty() || at.isEmpty()) {
+        /*if (what.isEmpty() || at.isEmpty()) {
             //the length checks will throw the necessary NullPointerExceptions
             throw new IllegalArgumentException("Empty String");
+        }*/
+        if (what.isEmpty()) {
+            return new String[]{""};
+        }
+        if (at.isEmpty()) {
+            return new String[]{what};
         }
         String[] result = new String[countOccurrencesOf(what, at) + 1];
         if (result.length == 1) {

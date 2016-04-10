@@ -10,8 +10,9 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import in.tamchow.fractal.helpers.math.FixedStack;
 import in.tamchow.fractal.helpers.math.MathUtils;
+import in.tamchow.fractal.helpers.stack.Stack;
+import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
@@ -365,8 +366,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         }
     }
     public void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
-        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
-        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
+        Stack<Complex> last = new FixedStack<>(iterations + 2);
+        Stack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         String functionderiv = "";
         Complex degree = null;
@@ -662,8 +663,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         this.lastConstantIdx = lastConstantIdx;
     }
     public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
-        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
+        Stack<Complex> last = new FixedStack<>(iterations + 2);
+        Stack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {
@@ -896,8 +897,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
                 functionderiv2 = polynomial.derivative().derivative().toString();
             }
         }
-        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
-        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
+        Stack<Complex> last = new FixedStack<>(iterations + 2);
+        Stack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         if (constant != null && constant.equals(Complex.ZERO)) {
             constant = ComplexOperations.divide(Complex.ONE, degree);
@@ -1162,8 +1163,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
         return leastDistanceIdx;
     }
     public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        FixedStack<Complex> last = new FixedStack<>(iterations + 2);
-        FixedStack<Complex> lastd = new FixedStack<>(iterations + 2);
+        Stack<Complex> last = new FixedStack<>(iterations + 2);
+        Stack<Complex> lastd = new FixedStack<>(iterations + 2);
         FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         String functionderiv = "";
         if (color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == Colors.CALCULATIONS.DISTANCE_ESTIMATION_COLOR) {

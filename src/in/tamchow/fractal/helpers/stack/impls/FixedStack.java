@@ -1,10 +1,14 @@
-package in.tamchow.fractal.helpers.math;
-import java.io.Serializable;
+package in.tamchow.fractal.helpers.stack.impls;
+import in.tamchow.fractal.helpers.stack.Stack;
+import in.tamchow.fractal.helpers.stack.StackOverflowException;
+
 import java.util.EmptyStackException;
 /**
- * A generic fixed-length stack
+ * A generic fixed-length stack implementing {@link Stack}
+ *
+ * @see Stack
  */
-public class FixedStack<E> implements Serializable {
+public class FixedStack<E> extends Stack<E> {
     /**
      * Array of elements
      */
@@ -14,7 +18,7 @@ public class FixedStack<E> implements Serializable {
      */
     private int top;
     /**
-     * Parameterized constructor. No default constructor.
+     * Parametrized constructor. No default constructor.
      *
      * @param capacity The maximum size  (capacity) of the stack
      * @see FixedStack#setSize(int)
@@ -70,6 +74,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @param value The value to push
      */
+    @Override
     public void push(E value) {
         if (isFull()) throw new FixedStackOverflowException();
         elements[--top] = value;
@@ -79,6 +84,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @return Whether the stack is full or not
      */
+    @Override
     public boolean isFull() {
         return (top == 0);
     }
@@ -100,6 +106,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @return The popped value
      */
+    @Override
     public E pop() {
         if (isEmpty()) throw new EmptyStackException();
         E value = elements[top];
@@ -111,6 +118,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @return Whether the stack is empty or not
      */
+    @Override
     public boolean isEmpty() {
         return (top == elements.length);
     }
@@ -159,6 +167,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @return The peeked-at value
      */
+    @Override
     public E peek() {
         if (isEmpty()) throw new EmptyStackException();
         return elements[top];
@@ -192,6 +201,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @return The set of elements currently on the stack
      */
+    @Override
     public E[] dumpStack() {
         return elements;
     }
@@ -200,6 +210,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @return The size of the stack
      */
+    @Override
     public int size() {
         return elements.length - top;
     }
@@ -222,6 +233,7 @@ public class FixedStack<E> implements Serializable {
      *
      * @see FixedStack#erase()
      */
+    @Override
     public void clear() {
         erase();
     }
@@ -229,19 +241,11 @@ public class FixedStack<E> implements Serializable {
 /**
  * Custom Stack Overflow Exception class
  */
-class FixedStackOverflowException extends IndexOutOfBoundsException {
+class FixedStackOverflowException extends StackOverflowException {
     /**
      * Constructs the exception with a default message
      */
     public FixedStackOverflowException() {
-        this("Stack Overflow");
-    }
-    /**
-     * Constructs the exception with a custom message
-     *
-     * @param message The custom message
-     */
-    public FixedStackOverflowException(String message) {
-        super(message);
+        super(" Fixed Stack Overflow");
     }
 }

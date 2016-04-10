@@ -29,9 +29,8 @@ public class UnpredictableAdder {
                     EvilStuff.stopDoingEvilStuff();
                 } catch (InterruptedException interrupted) {
                     interrupted.printStackTrace();
-                } finally {
-                    break;
                 }
+                break;
             }
         } while (true);
     }
