@@ -1,6 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.complexbrot;
 import in.tamchow.fractal.config.Config;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
 /**

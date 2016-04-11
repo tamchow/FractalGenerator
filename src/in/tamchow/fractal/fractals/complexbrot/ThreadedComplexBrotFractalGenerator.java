@@ -1,7 +1,7 @@
 package in.tamchow.fractal.fractals.complexbrot;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 
 import java.io.Serializable;
 /**

@@ -7,7 +7,7 @@ import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
 import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Pannable;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Helper class for on-demand panning of various {@link Pannable} types.
  * Not used by CLI (batch-zooming can be used for this purpose by maintaining same zoom level), but useful for GUI (not implemented)
@@ -23,13 +23,16 @@ import org.jetbrains.annotations.NotNull;
  * @see ThreadedIFSGenerator
  */
 public class FractalPanningHelper {
+    @NotNull
     public static PixelContainer pan(Pannable toPan, int distance, double angle) {
         return pan(toPan, distance, angle, false);
     }
+    @NotNull
     public static PixelContainer pan(Pannable toPan, int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         return pan(toPan, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
+    @NotNull
     public static PixelContainer pan(Pannable toPanThis, int x_dist, int y_dist) {
         if (toPanThis instanceof ComplexFractalGenerator || toPanThis instanceof IFSGenerator || toPanThis instanceof ComplexBrotFractalGenerator) {
             @NotNull PixelFractalGenerator toPan = (PixelFractalGenerator) toPanThis;

@@ -1,8 +1,8 @@
 package in.tamchow.fractal.math.symbolics;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,9 +26,9 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
         signs = new ArrayList<>();
     }
     @NotNull
-    public static Polynomial fromString(String polynomial) {
+    public static Polynomial fromString(@NotNull String polynomial) {
         @NotNull Polynomial poly = new Polynomial();
-        String[] tokens = StringManipulator.split(polynomial, ";");
+        @NotNull String[] tokens = StringManipulator.split(polynomial, ";");
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());

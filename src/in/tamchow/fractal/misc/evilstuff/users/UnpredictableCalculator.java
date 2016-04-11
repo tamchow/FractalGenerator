@@ -1,7 +1,7 @@
 package in.tamchow.fractal.misc.evilstuff.users;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.misc.evilstuff.EvilStuff;
-import org.jetbrains.annotations.NotNull;
 /**
  * A class which implements a calculator which provides unpredictable functions.
  * <p/>

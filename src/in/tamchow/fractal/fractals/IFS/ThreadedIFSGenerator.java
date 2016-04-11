@@ -1,8 +1,8 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Threaded IFS Fractal Generator
  * <p/>

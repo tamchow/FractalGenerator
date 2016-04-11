@@ -1,7 +1,7 @@
 package in.tamchow.fractal.platform_tools;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -3,11 +3,11 @@ import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -237,7 +237,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setFunction(data[10]);
         setVariableCode(data[11]);
         setMode(ComplexFractalGenerator.Mode.valueOf(data[12]));
-        String[] con = StringManipulator.split(data[13], ";");
+        @NotNull String[] con = StringManipulator.split(data[13], ";");
         @NotNull String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i] = StringManipulator.split(con[i], ":");

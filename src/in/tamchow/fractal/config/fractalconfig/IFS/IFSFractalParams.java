@@ -1,10 +1,10 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -34,7 +34,7 @@ public class IFSFractalParams implements Serializable {
     private IFSFractalParams() {
         setDepth(1);
         setThreads(1);
-        String[] variableCodes = StringManipulator.split(VARIABLE_CODES, ":");
+        @NotNull String[] variableCodes = StringManipulator.split(VARIABLE_CODES, ":");
         setFrameskip(-1);
         setPath("");
         setX_code(variableCodes[0]);
@@ -73,7 +73,7 @@ public class IFSFractalParams implements Serializable {
     @NotNull
     public static IFSFractalParams fromString(@NotNull String[] input) {
         @NotNull IFSFractalParams params = new IFSFractalParams(); //params.setIfsMode(Boolean.valueOf(input[0]));
-        String[] ifsData = StringManipulator.split(input[0], ":");
+        @NotNull String[] ifsData = StringManipulator.split(input[0], ":");
         if (ifsData.length == 1) {
             params.setIfsMode(Boolean.valueOf(input[0]));
         } else {
@@ -98,7 +98,7 @@ public class IFSFractalParams implements Serializable {
             params.colors = new int[input.length - 9];
             params.weights = new double[input.length - 9];
             for (int i = 9; i < input.length; i++) {
-                String[] parts = StringManipulator.split(input[i], " ");
+                @NotNull String[] parts = StringManipulator.split(input[i], " ");
                 params.xfunctions[i] = parts[0];
                 params.yfunctions[i] = parts[1];
                 params.weights[i] = Double.valueOf(parts[2]);
@@ -110,7 +110,7 @@ public class IFSFractalParams implements Serializable {
             params.colors = new int[input.length - 9];
             params.weights = new double[input.length - 9];
             for (int i = 9; i < input.length; i++) {
-                String[] parts = StringManipulator.split(input[i], " ");
+                @NotNull String[] parts = StringManipulator.split(input[i], " ");
                 params.transforms[i] = new Matrix(parts[0]);
                 params.translators[i] = new Matrix(parts[1]);
                 params.weights[i] = Double.valueOf(parts[2]);
@@ -264,7 +264,7 @@ public class IFSFractalParams implements Serializable {
     private String createCodeString() {
         return String.format("%s:%s:%s:%s:%s", getX_code(), getY_code(), getR_code(), getT_code(), getP_code());
     }
-    public void setZoomConfig(ZoomConfig config) {
+    public void setZoomConfig(@NotNull ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);
     }
     public int getHeight() {

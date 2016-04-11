@@ -1,5 +1,5 @@
 package in.tamchow.fractal.math.matrix;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.util.InputMismatchException;
 /**

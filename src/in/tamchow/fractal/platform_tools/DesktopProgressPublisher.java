@@ -1,6 +1,6 @@
 package in.tamchow.fractal.platform_tools;
 import in.tamchow.fractal.config.Publisher;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * For JavaSE environments for publishing fractal generation progress
  */

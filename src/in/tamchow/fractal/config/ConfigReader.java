@@ -10,10 +10,10 @@ import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageConfig;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,7 +64,7 @@ public class ConfigReader {
         @NotNull ImageConfig imageConfig = new ImageConfig();
         imageConfig.fromString(imgparams);
         if (dimensions != null) {
-            String[] parts = StringManipulator.split(dimensions, ",");
+            @NotNull String[] parts = StringManipulator.split(dimensions, ",");
             imageConfig.setWidth(Integer.valueOf(parts[0]));
             imageConfig.setHeight(Integer.valueOf(parts[1]));
         }

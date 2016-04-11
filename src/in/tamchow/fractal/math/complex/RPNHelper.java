@@ -1,6 +1,6 @@
 package in.tamchow.fractal.math.complex;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
-import org.jetbrains.annotations.NotNull;
 /**
  * Supports dyadic operations on complex numbers as expressions in RPN format
  */

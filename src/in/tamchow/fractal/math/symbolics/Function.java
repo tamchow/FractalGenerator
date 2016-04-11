@@ -1,7 +1,7 @@
 package in.tamchow.fractal.math.symbolics;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,13 +26,13 @@ public class Function implements Serializable, Comparable<Function> {
         terms = new ArrayList<>();
         signs = new ArrayList<>();
     }
-    public static boolean isSpecialFunction(String function) {
+    public static boolean isSpecialFunction(@NotNull String function) {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
     @NotNull
-    public static Function fromString(String function, String variableCode, String oldvariablecode) {
+    public static Function fromString(@NotNull String function, String variableCode, String oldvariablecode) {
         @NotNull Function poly = new Function();
-        String[] tokens = StringManipulator.split(function, "|");
+        @NotNull String[] tokens = StringManipulator.split(function, "|");
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
@@ -115,7 +115,7 @@ public class Function implements Serializable, Comparable<Function> {
     public Complex getDegree() {
         @NotNull Complex degree = new Complex(Complex.ZERO);
         for (@NotNull FunctionTerm term : terms) {
-            Complex vardeg = term.getDegree();
+            @NotNull Complex vardeg = term.getDegree();
             if (vardeg.modulus() > degree.modulus()) {
                 degree = new Complex(vardeg);
             }

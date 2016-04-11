@@ -1,5 +1,5 @@
 package in.tamchow.fractal.misc.primes;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * PrimeCounter - an application/library to calculate the number of prime numbers below a certain number,
  * also mathematically known as pi(x), where x is a natural number greater than one.

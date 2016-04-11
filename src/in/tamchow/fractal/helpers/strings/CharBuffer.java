@@ -1,7 +1,7 @@
 package in.tamchow.fractal.helpers.strings;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -20,6 +20,22 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
         buffer = new char[str.length()];
         str.getChars(0, buffer.length, buffer, 0);
         size = buffer.length;
+    }
+    @NotNull
+    public static Character[] box(@NotNull char[] chars) {
+        @NotNull Character[] boxed = new Character[chars.length];
+        for (int i = 0; i < boxed.length; ++i) {
+            boxed[i] = chars[i];
+        }
+        return boxed;
+    }
+    @NotNull
+    public static char[] unBox(@NotNull Character[] chars) {
+        @NotNull char[] unBoxed = new char[chars.length];
+        for (int i = 0; i < unBoxed.length; ++i) {
+            unBoxed[i] = chars[i];
+        }
+        return unBoxed;
     }
     @Override
     public int length() {
@@ -65,7 +81,7 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     }
     @Override
     public boolean equals(@Nullable Object o) {
-        return o != null && o instanceof CharBuffer && toString().equals(o.toString());
+        return o == this || (o != null && o instanceof CharBuffer && toString().equals(o.toString()));
     }
     public boolean equalsIgnoreCase(@NotNull CharBuffer o) {
         return toString().equalsIgnoreCase(o.toString());
@@ -76,6 +92,6 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     }
     @Override
     public int compareTo(@NotNull CharBuffer o) {
-        return toString().compareTo(o.toString());
+        return (equals(o)) ? 0 : toString().compareTo(o.toString());
     }
 }

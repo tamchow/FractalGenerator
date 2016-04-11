@@ -1,6 +1,6 @@
 package in.tamchow.fractal.math.symbolics;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -26,7 +26,7 @@ public class Term implements Serializable, Comparable<Term> {
         term = term.substring(1, term.length() - 1);//remove leading and trailing braces
         /*term.replace(":^:",":");
         term.replace(":*:",":");*/
-        String[] parts = StringManipulator.split(term, ":");
+        @NotNull String[] parts = StringManipulator.split(term, ":");
         if (parts.length == 0) {
             return new Term("0", "0", "0");
         }

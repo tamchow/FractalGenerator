@@ -1,6 +1,6 @@
 package in.tamchow.fractal.fractals.complex;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -12,7 +12,7 @@ public final class PartComplexFractalData implements Serializable {
     double[][] normalized_escapes;
     int[] histogram;
     int startx, endx, starty, endy;
-    public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, PixelContainer pixelContainer, int startx, int endx, int starty, int endy) {
+    public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, @NotNull PixelContainer pixelContainer, int startx, int endx, int starty, int endy) {
         this.startx = startx;
         this.endx = endx;
         this.starty = starty;

@@ -1,6 +1,6 @@
 package in.tamchow.fractal.helpers.strings;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Miscellaneous: String Manipulation.
  */
@@ -164,6 +164,7 @@ public class StringManipulator {
         }
         return -1;
     }
+    @NotNull
     public static int[] indexesOf(@NotNull String in, char what) {
         return indexesOf(in, "" + what);
     }
@@ -178,6 +179,7 @@ public class StringManipulator {
         }
         return formatted;
     }
+    @NotNull
     public static int[] indexesOf(@NotNull String in, @NotNull String what) {
         @NotNull int[] backup = new int[in.length()], indexes;
         int idx = 0, count = 0;

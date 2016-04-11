@@ -1,5 +1,5 @@
 package in.tamchow.fractal.graphicsutilities.containers;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class Animation implements Serializable, Comparable<Animation> {
     public void setFps(int fps) {
         this.fps = fps;
     }
-    public void setFrame(int idx, PixelContainer frame) {
+    public void setFrame(int idx, @NotNull PixelContainer frame) {
         frames.set(idx, new PixelContainer(frame));
     }
     public void removeFrame(int idx) {
@@ -76,14 +76,14 @@ public class Animation implements Serializable, Comparable<Animation> {
     }
     public void setFrames(@NotNull PixelContainer[] frames) {
         clearFrames();
-        for (PixelContainer pixelContainer : frames) {
+        for (@NotNull PixelContainer pixelContainer : frames) {
             addFrame(pixelContainer);
         }
     }
     public PixelContainer getFrame(int idx) {
         return frames.get(idx);
     }
-    public void addFrame(PixelContainer frame) {
+    public void addFrame(@NotNull PixelContainer frame) {
         frames.add(new PixelContainer(frame));
     }
     public void clearFrames() {

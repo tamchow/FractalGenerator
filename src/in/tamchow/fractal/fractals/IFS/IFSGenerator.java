@@ -1,4 +1,5 @@
 package in.tamchow.fractal.fractals.IFS;
+import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
@@ -7,11 +8,11 @@ import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
-import org.jetbrains.annotations.NotNull;
 /**
  * Generates IFS fractals
  * <p/>
@@ -315,7 +316,11 @@ public class IFSGenerator implements PixelFractalGenerator {
         int index = MathUtils.weightedRandom(params.getWeights());
         @NotNull int[] coord = toCoordinates(point);
         if (render) {
-            plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
+            plane.setPixel(coord[1], coord[0],
+                    Color_Utils_Config.linearInterpolated(
+                            plane.getPixel(coord[1], coord[0]), params.getColors()[index],
+                            params.getWeights()[index], 0));
+            //Use default (proper) linear interpolation
         }
         @NotNull Matrix point = modifyPoint(this.point, index);
         if (point.equals(initial) || isOutOfBounds(point)) {

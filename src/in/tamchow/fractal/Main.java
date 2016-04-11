@@ -18,14 +18,14 @@ import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerat
 import in.tamchow.fractal.fractals.l_system.LSFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
 import in.tamchow.fractal.misc.bs.BrainSext;
 import in.tamchow.fractal.misc.primes.PrimeCounter;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 import in.tamchow.fractal.platform_tools.ImageDisplay;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import java.io.BufferedWriter;
