@@ -132,41 +132,39 @@ public class UnitGrammar implements Serializable {
         }
         public TransformRule(@NotNull String rule) {
             this();//default initialization in case of empty argument
-            if (!rule.isEmpty()) {
-                @NotNull String[] parts = StringManipulator.split(rule, ":");
-                if (!parts[0].isEmpty()) {
-                    switch (parts.length) {
-                        case 1:
-                            try {
-                                transformTo = code;
-                                probability = Math.abs(Double.valueOf(parts[0]));
-                            } catch (NumberFormatException numberFormatException) {
-                                transformTo = parts[0];
-                                probability = 1.0;
-                            }
-                            break;
-                        case 2:
-                            if (rule.contains("<>")) {
-                                transformTo = parts[0];
-                                probability = 1.0;
-                                @NotNull String[] context = StringManipulator.split(parts[2], "<>");
-                                left = context[0].equals("?") ? null : context[0];
-                                right = context[1].equals("?") ? null : context[1];
-                            } else {
-                                transformTo = parts[0];
-                                probability = Math.abs(Double.valueOf(parts[1]));
-                            }
-                            break;
-                        case 3:
+            @NotNull String[] parts = StringManipulator.split(rule, ":");
+            if (!(rule.isEmpty() && parts[0].isEmpty())) {
+                switch (parts.length) {
+                    case 1:
+                        try {
+                            transformTo = code;
+                            probability = Math.abs(Double.valueOf(parts[0]));
+                        } catch (NumberFormatException numberFormatException) {
                             transformTo = parts[0];
-                            probability = Math.abs(Double.valueOf(parts[1]));
+                            probability = 1.0;
+                        }
+                        break;
+                    case 2:
+                        if (rule.contains("<>")) {
+                            transformTo = parts[0];
+                            probability = 1.0;
                             @NotNull String[] context = StringManipulator.split(parts[2], "<>");
                             left = context[0].equals("?") ? null : context[0];
                             right = context[1].equals("?") ? null : context[1];
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Illegal format for transformation rule: " + rule);
-                    }
+                        } else {
+                            transformTo = parts[0];
+                            probability = Math.abs(Double.valueOf(parts[1]));
+                        }
+                        break;
+                    case 3:
+                        transformTo = parts[0];
+                        probability = Math.abs(Double.valueOf(parts[1]));
+                        @NotNull String[] context = StringManipulator.split(parts[2], "<>");
+                        left = context[0].equals("?") ? null : context[0];
+                        right = context[1].equals("?") ? null : context[1];
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Illegal format for transformation rule: " + rule);
                 }
             }
         }
