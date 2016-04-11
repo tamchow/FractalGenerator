@@ -47,7 +47,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
                 }
                 lock.notifyAll();
                 for (@NotNull PartIFSData partIFSData : data) {
-                    master.getPlane().add(partIFSData.getPartPlane());
+                    master.getPlane().add(partIFSData.getPartPlane(), true);
                     master.getAnimation().addFrames(partIFSData.getPartAnimation());
                 }
             }
