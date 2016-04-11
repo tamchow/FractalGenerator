@@ -11,7 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Additive replacement blending support">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1106,13 +1105,7 @@
       <workItem from="1460368532291" duration="5829000" />
       <workItem from="1460374735282" duration="432000" />
       <workItem from="1460375365032" duration="299000" />
-      <workItem from="1460382450546" duration="921000" />
-    </task>
-    <task id="LOCAL-00155" summary="Degree-related functions removed,&#10;Work done on Brot fractals">
-      <created>1457161375015</created>
-      <option name="number" value="00155" />
-      <option name="project" value="LOCAL" />
-      <updated>1457161375108</updated>
+      <workItem from="1460382450546" duration="934000" />
     </task>
     <task id="LOCAL-00156" summary="Improvement for Newton Fractals&#10;">
       <created>1457165410217</created>
@@ -1402,11 +1395,17 @@
       <option name="project" value="LOCAL" />
       <updated>1460375125390</updated>
     </task>
-    <option name="localTasksCounter" value="204" />
+    <task id="LOCAL-00204" summary="Additive replacement blending support">
+      <created>1460383383904</created>
+      <option name="number" value="00204" />
+      <option name="project" value="LOCAL" />
+      <updated>1460383383905</updated>
+    </task>
+    <option name="localTasksCounter" value="205" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="943774000" />
+    <option name="totallyTimeSpent" value="943787000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
