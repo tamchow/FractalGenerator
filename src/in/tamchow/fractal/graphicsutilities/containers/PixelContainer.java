@@ -205,9 +205,18 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
     }
     public void add(@NotNull PixelContainer toAdd) {
+        add(toAdd, false);
+    }
+    public void add(@NotNull PixelContainer toAdd, boolean blend) {
         for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
             for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
-                setPixel(i, j, getPixel(i, j) + toAdd.getPixel(i, j));
+                if (blend) {
+                    //median color between 2 extremes
+                    setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0));
+                } else {
+                    //simple addition
+                    setPixel(i, j, getPixel(i, j) + toAdd.getPixel(i, j));
+                }
             }
         }
     }
