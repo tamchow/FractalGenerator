@@ -1,6 +1,6 @@
 package in.tamchow.fractal.graphicsutilities.containers;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.math.MathUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**

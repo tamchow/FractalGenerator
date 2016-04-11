@@ -1,8 +1,8 @@
 package in.tamchow.fractal.config.fractalconfig.fractal_zooms;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -30,8 +30,8 @@ public class ZoomParams implements Serializable {
         this.level = level;
     }
     @NotNull
-    public static ZoomParams fromString(String params) {
-        String[] parts = StringManipulator.split(params, " ");
+    public static ZoomParams fromString(@NotNull String params) {
+        @NotNull String[] parts = StringManipulator.split(params, " ");
         if (parts.length == 2) {
             return new ZoomParams(new Matrix(parts[0]), Double.valueOf(parts[1]));
         }

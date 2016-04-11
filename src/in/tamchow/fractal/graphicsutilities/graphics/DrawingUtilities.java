@@ -2,7 +2,7 @@ package in.tamchow.fractal.graphicsutilities.graphics;
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Line Drawing Utilities for {@link in.tamchow.fractal.graphicsutilities.containers.PixelContainer}
  *

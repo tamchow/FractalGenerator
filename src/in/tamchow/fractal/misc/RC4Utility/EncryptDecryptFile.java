@@ -1,6 +1,6 @@
 package in.tamchow.fractal.misc.RC4Utility;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 
 import java.io.*;
 import java.util.ArrayList;

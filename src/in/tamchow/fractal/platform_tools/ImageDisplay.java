@@ -8,7 +8,7 @@ import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.transition.Transition;
 import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

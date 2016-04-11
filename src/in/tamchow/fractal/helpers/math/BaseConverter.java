@@ -1,5 +1,5 @@
 package in.tamchow.fractal.helpers.math;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Converts a number in digit representation from one base to another
  * Not guaranteed to work with bases above 65,451 (more characters than which the lookup can use for substituting digits)

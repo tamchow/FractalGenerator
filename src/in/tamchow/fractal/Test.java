@@ -9,11 +9,11 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalRunParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import java.io.File;

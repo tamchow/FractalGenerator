@@ -10,6 +10,8 @@ import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
@@ -20,8 +22,6 @@ import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 /**

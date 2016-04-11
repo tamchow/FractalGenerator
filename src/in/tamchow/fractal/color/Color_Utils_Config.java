@@ -1,10 +1,10 @@
 package in.tamchow.fractal.color;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.ComplexOperations;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -555,7 +555,7 @@ public class Color_Utils_Config implements Serializable {
         palette_type = Colors.PALETTE.valueOf(colors[0]);
         mode = Colors.CALCULATIONS.valueOf(colors[1]);
         byParts = Integer.valueOf(colors[2]);
-        String[] smoothingData = StringManipulator.split(colors[3], ";");
+        @NotNull String[] smoothingData = StringManipulator.split(colors[3], ";");
         if (smoothingData.length > 0) {
             setExponentialSmoothing(Boolean.valueOf(smoothingData[0]));
         }
@@ -572,7 +572,7 @@ public class Color_Utils_Config implements Serializable {
                 setColor_density(Integer.valueOf(colors[8]));
                 break;
             case CUSTOM_PALETTE:
-                String[] parts = StringManipulator.split(colors[8], ";");
+                @NotNull String[] parts = StringManipulator.split(colors[8], ";");
                 @NotNull int[] colorset = new int[parts.length];
                 for (int i = 0; i < colorset.length; i++) {
                     colorset[i] = Integer.valueOf(parts[i + 6], 16);
@@ -594,11 +594,11 @@ public class Color_Utils_Config implements Serializable {
             case SMOOTH_PALETTE_SPLINE:
                 initColorConfig(mode, Integer.valueOf(colors[8]), byParts, logIndex, cyclize);
                 setColor_density(Integer.valueOf(colors[9]));
-                String[] controls = StringManipulator.split(colors[9], ";");
+                @NotNull String[] controls = StringManipulator.split(colors[9], ";");
                 @NotNull int[] control_colors = new int[controls.length];
                 @NotNull double[] control_points = new double[controls.length];
                 for (int i = 0; i < controls.length; i++) {
-                    String[] control = StringManipulator.split(controls[i], " ");
+                    @NotNull String[] control = StringManipulator.split(controls[i], " ");
                     control_colors[i] = Integer.valueOf(control[0]);
                     control_points[i] = Double.valueOf(control[1]);
                 }

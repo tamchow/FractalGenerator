@@ -4,10 +4,10 @@ import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**

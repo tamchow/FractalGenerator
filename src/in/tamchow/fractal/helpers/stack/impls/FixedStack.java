@@ -1,8 +1,8 @@
 package in.tamchow.fractal.helpers.stack.impls;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.StackOverflowException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EmptyStackException;
 /**

@@ -1,6 +1,6 @@
 package in.tamchow.fractal.graphicsutilities.graphics;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Implements turtle graphics at a very basic level
  *
@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Turtle {
     PixelContainer canvas;
-    double x, y;
+    double x, y, angle;
     int back_color, fore_color;
-    double angle;
+    double previous_x, previous_y, previous_angle;
     public Turtle(PixelContainer canvas, int x, int y) {
         this(canvas, x, y, 0);
     }
@@ -23,14 +23,33 @@ public class Turtle {
         this.back_color = back_color;
         this.fore_color = fore_color;
         this.angle = angle;
+        previous_x = this.x;
+        previous_y = this.y;
+        previous_angle = this.angle;
     }
     public void draw(@NotNull TurtleCommand command, double data) {
         switch (command) {
+            case SAVE:
+                previous_angle = angle;
+                previous_x = x;
+                previous_y = y;
+                break;
+            case RELOAD:
+                angle = previous_angle;
+                x = previous_x;
+                y = previous_y;
+                break;
             case FILL_CANVAS:
+                DrawingUtilities.fill(canvas, fore_color);
+                break;
             case CLEAR:
                 DrawingUtilities.fill(canvas, back_color);
+                break;
+            case MOVE_FORWARD:
+                draw_forward(back_color, data);
+                break;
             case DRAW_FORWARD:
-                draw_forward(data);
+                draw_forward(fore_color, data);
                 break;
             case TURN_LEFT:
                 turn(data);
@@ -43,11 +62,11 @@ public class Turtle {
                 break;
         }
     }
-    private void draw_forward(double step) {
+    private void draw_forward(int color, double step) {
         double oldx = x, oldy = y;
         x += step * Math.cos(Math.toRadians(angle));
         y += step * Math.sin(Math.toRadians(angle));
-        DrawingUtilities.drawLine(canvas, oldx, oldy, x, y, fore_color);
+        DrawingUtilities.drawLine(canvas, oldx, oldy, x, y, color);
     }
     private void turn(double delta) {
         angle += delta;
@@ -71,6 +90,6 @@ public class Turtle {
         this.fore_color = fore_color;
     }
     public enum TurtleCommand {
-        DRAW_FORWARD, TURN_LEFT, TURN_RIGHT, FILL_CANVAS, CLEAR, NO_OP
+        DRAW_FORWARD, MOVE_FORWARD, TURN_LEFT, TURN_RIGHT, FILL_CANVAS, CLEAR, SAVE, RELOAD, NO_OP
     }
 }

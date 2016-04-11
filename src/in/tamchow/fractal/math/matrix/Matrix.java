@@ -1,7 +1,7 @@
 package in.tamchow.fractal.math.matrix;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -23,12 +23,12 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     public Matrix(String matrix) {
         matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
-        String[] rows = StringManipulator.split(matrix, ";");
+        @NotNull String[] rows = StringManipulator.split(matrix, ";");
         this.rows = rows.length;
         this.columns = StringManipulator.split(rows[0].substring(1, rows[0].length() - 1), ",").length;
         for (int i = 0; i < matrixData.length && i < rows.length; i++) {
             //trim leading and trailing square brackets
-            String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
+            @NotNull String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
             for (int j = 0; j < matrixData[i].length && j < columns.length; j++) {
                 matrixData[i][j] = Double.valueOf(columns[j]);
             }
@@ -159,7 +159,10 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         return mat;
     }
     @Override
-    public synchronized boolean equals(@Nullable Object that) {
+    public boolean equals(@Nullable Object that) {
+        if (that == this) {
+            return true;
+        }
         if (that == null || (!(that instanceof Matrix))) {
             return false;
         }
@@ -189,6 +192,9 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     @Override
     public int compareTo(@NotNull Matrix other) {
+        if (equals(other)) {
+            return 0;
+        }
         if (other.getNumColumns() + other.getNumRows() != getNumColumns() + getNumRows()) {
             return (other.getNumColumns() + other.getNumRows()) - (getNumColumns() + getNumRows());
         } else {

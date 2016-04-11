@@ -1,5 +1,5 @@
 package in.tamchow.fractal.math.complex;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Provides Utility methods for handling complex numbers
  */

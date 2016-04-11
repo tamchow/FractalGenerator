@@ -3,10 +3,10 @@ import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -74,6 +74,7 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
             System.arraycopy(consts[i], 0, this.consts[i], 0, consts[i].length);
         }
     }
+    @Nullable
     public String getOldvariablecode() {
         return oldvariablecode;
     }
@@ -136,12 +137,12 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         this.switch_rate = switch_rate;
     }
     public void fromString(@NotNull String[] params) {
-        String[] con = StringManipulator.split(params[9], ";");
+        @NotNull String[] con = StringManipulator.split(params[9], ";");
         @NotNull String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i] = StringManipulator.split(con[i], ":");
         }
-        String[] colorcfg = StringManipulator.split(params[10], ",");
+        @NotNull String[] colorcfg = StringManipulator.split(params[10], ",");
         @NotNull Color_Utils_Config colorConfig = new Color_Utils_Config();
         colorConfig.fromString(colorcfg);
         if (params.length == 13) {

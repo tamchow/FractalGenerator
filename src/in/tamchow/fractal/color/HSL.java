@@ -1,6 +1,6 @@
 package in.tamchow.fractal.color;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -14,8 +14,8 @@ public class HSL implements Serializable {
         setLightness(lightness);
     }
     @NotNull
-    public static HSL fromString(String hsl) {
-        String[] parts = StringManipulator.split(hsl, ",");
+    public static HSL fromString(@NotNull String hsl) {
+        @NotNull String[] parts = StringManipulator.split(hsl, ",");
         return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
     }
     public static double hueFromAngle(double radianMeasure) {

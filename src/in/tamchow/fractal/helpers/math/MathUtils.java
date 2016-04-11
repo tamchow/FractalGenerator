@@ -1,9 +1,9 @@
 package in.tamchow.fractal.helpers.math;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 /**
@@ -12,6 +12,51 @@ import java.util.Random;
 public class MathUtils {
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
+    }
+    /**
+     * @param array the array to splice
+     * @param from  the index to splice from (inclusive)
+     * @param to    the index to splice to (inclusive)
+     * @param <T>   the type parameter of array
+     * @return the spliced array in the given range
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[] splice(@NotNull T[] array, int from, int to) {
+        from = boundsProtected(from, array.length);
+        to = boundsProtected(to, array.length);
+        T[] spliced;
+        if (from > to) {
+            spliced = (T[]) new Object[array.length - from + to];
+            int j = 0;
+            for (int i = from; i < array.length && j < spliced.length; ++i, ++j) {
+                spliced[j] = array[i];
+            }
+            for (int i = 0; i <= to; ++i) {
+                spliced[j] = array[i];
+            }
+        } else {
+            spliced = (T[]) new Object[to - from];
+            for (int i = from, j = 0; i <= to && j < spliced.length; ++i, ++j) {
+                spliced[j] = array[i];
+            }
+        }
+        return spliced;
+    }
+    /**
+     * @param string the {@link String} to splice
+     * @param from   the index to splice from (inclusive)
+     * @param to     the index to splice to (inclusive)
+     * @return the spliced {@link String} in the given range
+     */
+    @NotNull
+    public static String splice(@NotNull String string, int from, int to) {
+        from = boundsProtected(from, string.length());
+        to = boundsProtected(to, string.length());
+        if (from > to) {
+            return string.substring(from, string.length()) + string.substring(0, to);
+        } else {
+            return string.substring(from, to);
+        }
     }
     public static int clamp(int ptr, int size) {
         return clamp(ptr, 0, size - 1);//for array indices

@@ -2,10 +2,10 @@ package in.tamchow.fractal.graphicsutilities.containers;
 import in.tamchow.fractal.color.Color_Utils_Config;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.matrix.Matrix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -110,6 +110,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         row = MathUtils.boundsProtected(row, getHeight());
         return pixdata[row];
     }
+    @NotNull
     public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts) {
         @NotNull PixelContainer processed = new PixelContainer(this);
         if (mode == PostProcessMode.NONE) {

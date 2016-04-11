@@ -1,5 +1,5 @@
 package in.tamchow.fractal.config;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.*;
 /**

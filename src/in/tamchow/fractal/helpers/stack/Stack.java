@@ -1,6 +1,6 @@
 package in.tamchow.fractal.helpers.stack;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -1,5 +1,5 @@
 package in.tamchow.fractal.math.complex;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -21,14 +21,14 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     }
     public Complex(double a, double ib, boolean cis) {
         if (cis) {
-            Complex value = ComplexOperations.multiply(new Complex(a),
+            @NotNull Complex value = ComplexOperations.multiply(new Complex(a),
                     ComplexOperations.exponent(ComplexOperations.multiply(Complex.i, new Complex(ib))));
             this.a = value.real();
             this.ib = value.imaginary();
         } else {
             this.a = a;
             this.ib = ib;
-    }
+        }
     }
     public Complex(double a) {
         this(a, 0, false);
@@ -90,6 +90,9 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     }
     @Override
     public int compareTo(@NotNull Complex complex) {
+        if (equals(complex)) {
+            return 0;
+        }
         if (modulus() != complex.modulus()) {
             return Math.round((float) (complex.modulus() - modulus()));
         }
@@ -101,6 +104,9 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     }
     @Override
     public boolean equals(Object complex) {
+        if (complex == this) {
+            return true;
+        }
         if (complex instanceof Complex) {
             if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == ib) {
                 return true;

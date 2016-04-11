@@ -1,7 +1,7 @@
 package in.tamchow.fractal.math.symbolics;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -26,9 +26,9 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     Polynomial coefficient, argument;
     String[][] consts;
     @NotNull
-    public static FunctionTerm fromString(String function, String variableCode, String oldvariablecode) {
+    public static FunctionTerm fromString(@NotNull String function, String variableCode, String oldvariablecode) {
         @NotNull FunctionTerm f = new FunctionTerm();
-        String[] parts = StringManipulator.split(function, ";");
+        @NotNull String[] parts = StringManipulator.split(function, ";");
         f.variableCode = variableCode;
         f.oldvariablecode = oldvariablecode;
         f.coefficient = Polynomial.fromString(parts[0]);
@@ -66,6 +66,7 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     public String toString() {
         return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant.trim() + " )";
     }
+    @NotNull
     public String derivative(int order) {
         coefficient.setConstdec(consts);
         argument.setConstdec(consts);

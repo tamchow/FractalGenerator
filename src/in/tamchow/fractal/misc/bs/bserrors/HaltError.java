@@ -1,6 +1,6 @@
 package in.tamchow.fractal.misc.bs.bserrors;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * BS interpreter's error on "HALT" signal by code ('\' in BS code)
  */

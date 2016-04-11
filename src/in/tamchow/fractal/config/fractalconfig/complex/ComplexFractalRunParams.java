@@ -1,9 +1,9 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.DataFromString;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**

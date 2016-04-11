@@ -1,7 +1,7 @@
 package in.tamchow.fractal.math.complex;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
-import org.jetbrains.annotations.NotNull;
 /**
  * Implements an iterative evaluator for functions described in ComplexOperations,
  * making heavy use of string replacement;
@@ -111,13 +111,13 @@ public class FunctionEvaluator {
         if (function.contains("exp")) {
             int startidx = function.indexOf("exp");
             int endidx = StringManipulator.findMatchingCloser('(', function, function.indexOf('(', startidx + 1));
-            String function2 = StringManipulator.replace(function, function.substring(startidx, endidx + 1), "");
+            @NotNull String function2 = StringManipulator.replace(function, function.substring(startidx, endidx + 1), "");
             return getDegree(function2);
         }
         if (function.contains("log")) {
             int startidx = function.indexOf("log");
             int endidx = StringManipulator.findMatchingCloser('(', function, function.indexOf('(', startidx + 1));
-            String function2 = StringManipulator.replace(function, function.substring(startidx, endidx + 1), "");
+            @NotNull String function2 = StringManipulator.replace(function, function.substring(startidx, endidx + 1), "");
             return getDegree(function2);
         }
         if ((function.contains("*") || function.contains("/")) && advancedDegree) {
@@ -166,11 +166,11 @@ public class FunctionEvaluator {
     public void setConstdec(String[][] constdec) {
         this.constdec = constdec;
     }
-    public double evaluateForIFS(String expr) {
+    public double evaluateForIFS(@NotNull String expr) {
         return evaluate(expr, false).modulus();
     }
-    private boolean hasNoFunctions(String expr) {
-        String[] parts = StringManipulator.split(expr, " ");
+    private boolean hasNoFunctions(@NotNull String expr) {
+        @NotNull String[] parts = StringManipulator.split(expr, " ");
         for (@NotNull String part : parts) {
             for (String function : FUNCTIONS) {
                 if (part.equalsIgnoreCase(function)) {
@@ -180,8 +180,8 @@ public class FunctionEvaluator {
         }
         return true;
     }
-    public Complex evaluate(String expr, boolean isSymbolic) {
-        String subexpr = substitute(expr, isSymbolic);
+    public Complex evaluate(@NotNull String expr, boolean isSymbolic) {
+        @NotNull String subexpr = substitute(expr, isSymbolic);
         Complex ztmp;
         int flag = 0;
         /**Disabled for performance reasons:
@@ -385,8 +385,8 @@ public class FunctionEvaluator {
         expr = expr.trim();
         return StringManipulator.split(expr, " ");
     }
-    private String substitute(String expr, boolean isSymbolic) {
-        String[] mod = StringManipulator.split(expr, " ");
+    private String substitute(@NotNull String expr, boolean isSymbolic) {
+        @NotNull String[] mod = StringManipulator.split(expr, " ");
         @NotNull String sub = "";
         for (int i = 0; i < mod.length; i++) {
             if (mod[i].equalsIgnoreCase(variableCode) && (!isSymbolic)) {
@@ -412,8 +412,9 @@ public class FunctionEvaluator {
         }
         return null;
     }
-    protected String limitedEvaluate(String expr, int depth) {
-        String subexpr = substitute(expr, true);
+    @NotNull
+    protected String limitedEvaluate(@NotNull String expr, int depth) {
+        @NotNull String subexpr = substitute(expr, true);
         Complex ztmp;
         int flag = 0, ctr = 0;
         do {

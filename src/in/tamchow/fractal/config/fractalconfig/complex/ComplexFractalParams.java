@@ -1,10 +1,10 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 /**
@@ -104,12 +104,12 @@ public class ComplexFractalParams implements Serializable {
     public boolean useThreadedGenerator() {
         return (getX_threads() * getY_threads() > 1);
     }
-    public void threadDataFromString(String data) {
-        String[] parts = StringManipulator.split(data, " ");
+    public void threadDataFromString(@NotNull String data) {
+        @NotNull String[] parts = StringManipulator.split(data, " ");
         setX_threads(Integer.valueOf(parts[0]));
         setY_threads(Integer.valueOf(parts[1]));
     }
-    public void setZoomConfig(ZoomConfig config) {
+    public void setZoomConfig(@NotNull ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);
     }
     @NotNull

@@ -1,5 +1,5 @@
 package in.tamchow.fractal.misc.RC4Utility;
-import org.jetbrains.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Implements simple RC4 encryption/decryption
  */
