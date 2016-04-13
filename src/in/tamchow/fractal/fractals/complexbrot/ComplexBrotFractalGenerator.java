@@ -266,7 +266,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         resetCentre_Offset();
     }
     public void resetCentre_Offset() {
-        centre_offset = new Complex(0);
+        centre_offset = Complex.ZERO;
     }
     private void changeMode(@NotNull Complex lastConstant) {
         setLastConstant(lastConstant);
@@ -494,7 +494,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {
-                Complex z = points[j], ztmp2 = new Complex(0);
+                Complex z = points[j], ztmp2 = Complex.ZERO;
                 int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
@@ -573,13 +573,13 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             outer:
             for (int j = start; j < end; ++j) {
                 boolean useJulia = false, useMandelbrot = false;
-                Complex z = points[j], ztmp2 = new Complex(0);
+                Complex z = points[j], ztmp2 = Complex.ZERO;
                 int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
                 if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
                     toadd = points[j];
-                    z = new Complex(0);
+                    z = Complex.ZERO;
                 }
                 last.push(z);
                 while (c <= iteration) {
@@ -651,7 +651,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {
-                @NotNull Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(points[j]) : new Complex(0), ztmp2 = Complex.ZERO;
+                @NotNull Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(points[j]) : Complex.ZERO, ztmp2 = Complex.ZERO;
                 setLastConstant(points[j]);
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());

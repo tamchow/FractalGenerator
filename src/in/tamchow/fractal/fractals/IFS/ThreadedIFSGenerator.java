@@ -47,7 +47,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
                 }
                 lock.notifyAll();
                 for (@NotNull PartIFSData partIFSData : data) {
-                    master.getPlane().add(partIFSData.getPartPlane(), true);
+                    master.getPlane().add(partIFSData.getPartPlane(), true, partIFSData.getPartWeightData());
                     master.getAnimation().addFrames(partIFSData.getPartAnimation());
                 }
             }
@@ -76,7 +76,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         }
         @Override
         public void onCompletion() {
-            data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation());
+            data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
         }

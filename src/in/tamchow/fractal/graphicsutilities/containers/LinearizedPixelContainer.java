@@ -10,7 +10,7 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     private int[] pixdata;
     private int width;
     public LinearizedPixelContainer(PixelContainer source) {
-        if (source instanceof LinearizedPixelContainer) {
+        /*if (source instanceof LinearizedPixelContainer) {
             this.width = source.getWidth();
             this.pixdata = new int[source.getPixels().length];
             System.arraycopy(source.getPixels(), 0, pixdata, 0, pixdata.length);
@@ -20,23 +20,33 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
             for (int i = 0; i < source.getHeight(); i++) {
                 System.arraycopy(source.getPixdata()[i], 0, pixdata, i * width, width);
             }
-        }
+        }*/
+        setPixdata(source.getPixdata());
     }
     public LinearizedPixelContainer(@NotNull int[] pixdata, int width) {
-        this.width = width;
-        this.pixdata = new int[pixdata.length];
-        System.arraycopy(pixdata, 0, this.pixdata, 0, this.pixdata.length);
+        setPixdata(pixdata, width);
     }
     public LinearizedPixelContainer(@NotNull int[][] pixels) {
-        pixdata = new int[pixels.length * pixels[0].length];
-        width = pixels[0].length;
-        for (int i = 0; i < pixels.length; i++) {
-            System.arraycopy(pixels[i], 0, pixdata, i * width, width);
-        }
+        setPixdata(pixels);
     }
     public LinearizedPixelContainer(int width, int height) {
         this.width = width;
         pixdata = new int[height * width];
+    }
+    @Override
+    public int[] getRow(int idx) {
+        idx = MathUtils.boundsProtected(idx, getHeight());
+        int[] row = new int[width];
+        System.arraycopy(pixdata, idx * width, row, 0, width);
+        return row;
+    }
+    @Override
+    public void setSize(int width, int height) {
+        this.width = width;
+        @NotNull int[] tmpData = new int[pixdata.length];
+        System.arraycopy(pixdata, 0, tmpData, 0, tmpData.length);
+        pixdata = new int[width * height];
+        System.arraycopy(tmpData, 0, pixdata, 0, Math.min(pixdata.length, tmpData.length));
     }
     @Override
     public int[] getPixels() {
@@ -51,9 +61,23 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
         }
         return pixels;
     }
+    @Override
+    public void setPixdata(@NotNull int[][] pixels) {
+        pixdata = new int[pixels.length * pixels[0].length];
+        width = pixels[0].length;
+        for (int i = 0; i < pixels.length; i++) {
+            System.arraycopy(pixels[i], 0, pixdata, i * width, width);
+        }
+    }
     @NotNull
-    public PixelContainer toImageData() {
+    public PixelContainer toPixelContainer() {
         return new PixelContainer(getPixdata());
+    }
+    @Override
+    public void setPixdata(@NotNull int[] pixdata, int scan) {
+        this.width = scan;
+        this.pixdata = new int[pixdata.length];
+        System.arraycopy(pixdata, 0, this.pixdata, 0, pixdata.length);
     }
     @Override
     public int getWidth() {
@@ -88,6 +112,6 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     @NotNull
     @Override
     public LinearizedPixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts) {
-        return new LinearizedPixelContainer(toImageData().getPostProcessed(mode, biases, byParts));
+        return new LinearizedPixelContainer(toPixelContainer().getPostProcessed(mode, biases, byParts));
     }
 }

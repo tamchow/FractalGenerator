@@ -35,6 +35,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     boolean completion, silencer;
     Publisher progressPublisher;
     private Animation animation;
+    private double[][] weightDistribution;
     public IFSGenerator(@NotNull IFSFractalParams params, Publisher progressPublisher) {
         setParams(params);
         initIFS(params);
@@ -319,8 +320,10 @@ public class IFSGenerator implements PixelFractalGenerator {
             plane.setPixel(coord[1], coord[0],
                     Color_Utils_Config.linearInterpolated(
                             plane.getPixel(coord[1], coord[0]), params.getColors()[index],
+                            /*Use default (proper) linear interpolation*/
                             params.getWeights()[index], 0));
-            //Use default (proper) linear interpolation
+            weightDistribution[coord[1]][coord[0]] = params.getWeights()[index];
+
         }
         @NotNull Matrix point = modifyPoint(this.point, index);
         if (point.equals(initial) || isOutOfBounds(point)) {
@@ -341,5 +344,8 @@ public class IFSGenerator implements PixelFractalGenerator {
     @Override
     public void pan(int x_dist, int y_dist) {
         zoom(center_x + x_dist, center_y + y_dist, zoom_factor);
+    }
+    public double[][] getWeightDistribution() {
+        return weightDistribution;
     }
 }

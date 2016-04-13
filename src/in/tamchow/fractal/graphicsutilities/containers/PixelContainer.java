@@ -149,11 +149,11 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     public void setSize(int height, int width) {
         @NotNull int[][] tmp = new int[pixdata.length][pixdata[0].length];
         for (int i = 0; i < this.pixdata.length; i++) {
-            System.arraycopy(pixdata[i], 0, tmp[i], 0, this.pixdata[i].length);
+            System.arraycopy(pixdata[i], 0, tmp[i], 0, tmp[i].length);
         }
         this.pixdata = new int[height][width];
         for (int i = 0; i < this.pixdata.length; i++) {
-            System.arraycopy(tmp[i], 0, this.pixdata[i], 0, this.pixdata[i].length);
+            System.arraycopy(tmp[i], 0, this.pixdata[i], 0, Math.min(this.pixdata[i].length, tmp[i].length));
         }
     }
     public void setPixdata(@NotNull int[] pixdata, int scan) {
@@ -205,15 +205,34 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
     }
     public void add(@NotNull PixelContainer toAdd) {
-        add(toAdd, false);
+        add(toAdd, false, null);
     }
-    public void add(@NotNull PixelContainer toAdd, boolean blend) {
-        for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
-            for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
-                if (blend) {
-                    //median color between 2 extremes
-                    setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0));
-                } else {
+    public void add(@NotNull PixelContainer toAdd, boolean blend, @Nullable double[][] biases) {
+        if (toAdd.getHeight() != getHeight() || toAdd.getWidth() != getWidth()) {
+            throw new IllegalArgumentException("Cannot add mismatched dimension containers");
+        }
+        if (blend) {
+            if (biases == null) {
+                for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
+                    for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
+                        //median color between 2 extremes
+                        setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0));
+                    }
+                }
+            } else {
+                if (biases.length != getHeight() || biases[0].length != getWidth()) {
+                    throw new IllegalArgumentException("Cannot blend containers for mismatched dimensions of pixel biases");
+                }
+                for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
+                    for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
+                        //median color between 2 extremes
+                        setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0));
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
+                for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                     //simple addition
                     setPixel(i, j, getPixel(i, j) + toAdd.getPixel(i, j));
                 }

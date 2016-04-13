@@ -5,6 +5,8 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Holds data about 1 unit of grammar in the L-system
  */
@@ -113,6 +115,24 @@ public class UnitGrammar implements Serializable {
             representation += rule + ",";
         }
         return representation.substring(0, representation.length() - 1);//trim trailing ','
+    }
+    public TransformRule[] getContextSensitiveTransforms() {
+        List<TransformRule> rules = new ArrayList<>(transformRules.length);
+        for (TransformRule transformRule : transformRules) {
+            if (transformRule.isContextSensitive()) {
+                rules.add(transformRule);
+            }
+        }
+        return rules.toArray(new TransformRule[rules.size()]);
+    }
+    public TransformRule[] getContextFreeTransforms() {
+        List<TransformRule> rules = new ArrayList<>(transformRules.length);
+        for (TransformRule transformRule : transformRules) {
+            if (!transformRule.isContextSensitive()) {
+                rules.add(transformRule);
+            }
+        }
+        return rules.toArray(new TransformRule[rules.size()]);
     }
     public class TransformRule {
         @Nullable

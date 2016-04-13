@@ -26,20 +26,20 @@ public class Test {
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"}, {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
         int resx = 1920, resy = 1080, iter = 128, switch_rate = 0;
         @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
-        double escrad = 10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 450;
+        double escrad = 10E20, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
         @Nullable String linetrap = null;
         //Note to self: Do NOT use TIA and Exp. Smoothing together.
-        @NotNull Color_Utils_Config cfg = new Color_Utils_Config(Colors.CALCULATIONS.STRIPE_AVERAGE_SPLINE, 4, 25000, 0, true, false);
+        @NotNull Color_Utils_Config cfg = new Color_Utils_Config(Colors.CALCULATIONS.TRIANGLE_AREA_INEQUALITY_SPLINE, 4, 25000, 0, true, false);
         //cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
-        //cfg.setColor_density(-1);//let there be the proper color_density!
+        cfg.setColor_density(-1);//let there be the proper color_density!
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = new Complex(0.1);
         int x_t = 4, y_t = 2;
-        double skew = 0.5 * Math.PI;
+        double skew = 0 * Math.PI;
         func = func2;
         boolean def = (args.length == 0);
         @Nullable ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0);
