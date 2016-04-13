@@ -2,6 +2,7 @@ package in.tamchow.fractal.fractals.complexbrot;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
+import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.io.Serializable;
 /**
@@ -45,7 +46,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             }
             for (@NotNull PartComplexBrotFractalData part : data) {
                 for (int i = 0; i < master.bases.length; ++i) {
-                    master.bases[i] = addDDA(master.bases[i], part.getBases()[i]);
+                    master.bases[i] = MathUtils.intDDAAdd(master.bases[i], part.getBases()[i]);
                 }
             }
             master.createImage();
@@ -53,19 +54,6 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             e.printStackTrace();
             //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
-    }
-    @NotNull
-    private int[][] addDDA(@NotNull int[][] a, @NotNull int[][] b) {
-        if (a.length != b.length || a[0].length != b[0].length) {
-            throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
-        }
-        @NotNull int[][] c = new int[a.length][a[0].length];
-        for (int i = 0; i < c.length; i++) {
-            for (int j = 0; j < c[i].length; j++) {
-                c[i][j] = a[i][j] + b[i][j];
-            }
-        }
-        return c;
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexBrotFractalGenerator copyOfMaster;

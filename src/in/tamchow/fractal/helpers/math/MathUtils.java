@@ -10,6 +10,7 @@ import java.util.Random;
  * Weighted Random Number generator and approximations,prime number calculator
  */
 public class MathUtils {
+    private static final double ULP = 10E-15;
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
@@ -72,6 +73,9 @@ public class MathUtils {
     }
     @NotNull
     public static int[][] intDDAAdd(@NotNull int[][] from, int[][] to) {
+        if (from.length != to.length || from[0].length != to[0].length) {
+            throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
+        }
         @NotNull int[][] sum = new int[from.length][to[0].length];//from and to must have same dimensions
         for (int i = 0; i < sum.length; ++i) {
             for (int j = 0; j < sum.length; ++j) {
@@ -113,11 +117,11 @@ public class MathUtils {
         double sum = 0.0;
         boolean custom = values != null;
         for (double weight : weights) {
-            int afterpoint = (weight + "".substring((weight + "").indexOf('.') + 1)).length();
+            int afterpoint = (String.valueOf(weight).substring((String.valueOf(weight)).indexOf('.') + 1)).length();
             factor = ((afterpoint > factor) ? afterpoint : factor);
             sum += weight;
         }
-        if (custom && (values.length != weights.length || sum != 1.0)) {
+        if (custom && (values.length != weights.length || (sum > 1.0 - ULP && sum < 1.0 + ULP))) {
             throw new IllegalArgumentException("Illegal Parameters");
         }
         factor = Math.round((float) Math.pow(10, factor));

@@ -10,6 +10,9 @@ import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 /**
  * generates L-System Fractals. Does not implement panning or zooming, as those make no sense
  */
@@ -42,13 +45,20 @@ public class LSFractalGenerator implements FractalGenerator {
                     throw new LSGrammarException("Undefined code encountered.");
                 } else {
                     if (evolutions.isContextSensitive()) {
-                        //Use context-sensitive behaviour
-                        @Nullable UnitGrammar.TransformRule evolution = getApplicableContextTransform(evolutions, leftSymbol, rightSymbol);
+                        //Use context-sensitive behaviour as first precedence
+                        @Nullable UnitGrammar.TransformRule evolution = getApplicableContextTransform(evolutions, leftSymbol, rightSymbol, false);
                         if (evolution == null) {
-                            //No production rule found for given context - assume identity production
-                            builder.append(evolutions.code);
+                            //context-sensitive transforms inapplicable, try context-free transforms
+                            evolution = getApplicableContextTransform(evolutions, leftSymbol, rightSymbol, true);
+                            if (evolution == null) {
+                                //No production rule found for any - assume identity production
+                                builder.append(evolutions.code);
+                            } else {
+                                //Context-free production rule found - use associated transformation
+                                builder.append(evolution.transformTo);
+                            }
                         } else {
-                            //No production rule found for given context - use associated transformation
+                            //Production rule found for given context - use associated transformation
                             builder.append(evolution.transformTo);
                         }
                     } else {
@@ -76,29 +86,34 @@ public class LSFractalGenerator implements FractalGenerator {
         }
     }
     private String getDefaultTransformation(@NotNull UnitGrammar evolutions) {
-        return evolutions.transformRules[getTransformRuleIndex(evolutions)].transformTo;
+        return evolutions.transformRules[getTransformRuleIndex(evolutions.transformRules, evolutions)].transformTo;
     }
-    private UnitGrammar.TransformRule getApplicableContextTransform(@NotNull UnitGrammar evolutions, String left, String right) {
+    private UnitGrammar.TransformRule getApplicableContextTransform(@NotNull UnitGrammar evolutions, String left, String right, boolean contextFree) {
         if (!evolutions.isContextSensitive()) {
             return null;
         }
-        for (@NotNull UnitGrammar.TransformRule evolution : evolutions.transformRules) {
-            if (evolution.isContextSensitive() &&
-                    ((evolution.left == null || evolution.left.equals(left)) &&
-                            (evolution.right == null || evolution.right.equals(right)))) {
-                return evolution;
+        List<UnitGrammar.TransformRule> rules = new ArrayList<>(evolutions.transformRules.length);
+        for (@NotNull UnitGrammar.TransformRule evolution :
+                ((contextFree) ? evolutions.getContextFreeTransforms() : evolutions.getContextSensitiveTransforms())) {
+            if ((evolution.left == null || evolution.left.equals(left)) &&
+                    (evolution.right == null || evolution.right.equals(right))) {
+                rules.add(evolution);
             }
+        }
+        if (rules.size() > 0) {
+            return evolutions.transformRules[getTransformRuleIndex(
+                    rules.toArray(new UnitGrammar.TransformRule[rules.size()]), evolutions)];
         }
         return null;
     }
-    private int getTransformRuleIndex(@NotNull UnitGrammar evolutions) {
+    private int getTransformRuleIndex(@NotNull UnitGrammar.TransformRule[] evolutions, @NotNull UnitGrammar grammar) {
         int index;
-        if (evolutions.transformRules.length == 1 && evolutions.transformRules[0].isDeterministic()) {
+        if (evolutions.length == 1 && evolutions[0].isDeterministic()) {
             index = 0;
-        } else if (evolutions.transformRules.length == 1 && (!evolutions.transformRules[0].isDeterministic())) {
+        } else if (evolutions.length == 1 && (!evolutions[0].isDeterministic())) {
             throw new LSGrammarException("Malformed Transformation Rule.");
         } else {
-            index = MathUtils.boundsProtected(MathUtils.weightedRandom(evolutions.getWeights()), evolutions.transformRules.length);
+            index = MathUtils.boundsProtected(MathUtils.weightedRandom(grammar.getWeights()), evolutions.length);
         }
         return index;
     }
