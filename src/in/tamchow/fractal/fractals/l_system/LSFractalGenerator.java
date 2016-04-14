@@ -108,10 +108,13 @@ public class LSFractalGenerator implements FractalGenerator {
     }
     private int getTransformRuleIndex(@NotNull UnitGrammar.TransformRule[] evolutions, @NotNull UnitGrammar grammar) {
         int index;
-        if (evolutions.length == 1 && evolutions[0].isDeterministic()) {
+        if (evolutions.length == 0) {
+            throw new LSGrammarException("Malformed Transformation Rule.");
+        } else if (evolutions.length == 1 && evolutions[0].isDeterministic()) {
             index = 0;
         } else if (evolutions.length == 1 && (!evolutions[0].isDeterministic())) {
-            throw new LSGrammarException("Malformed Transformation Rule.");
+            index = 0;
+            //throw new LSGrammarException("Malformed Transformation Rule.");
         } else {
             index = MathUtils.boundsProtected(MathUtils.weightedRandom(grammar.getWeights()), evolutions.length);
         }
