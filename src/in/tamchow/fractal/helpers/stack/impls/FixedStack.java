@@ -250,6 +250,14 @@ class FixedStackOverflowException extends StackOverflowException {
      * Constructs the exception with a default message
      */
     public FixedStackOverflowException() {
-        super(" Fixed Stack Overflow");
+        this(" Fixed Stack Overflow");
+    }
+    /**
+     * Constructs the exception with a custom message
+     *
+     * @param message the custom message
+     */
+    public FixedStackOverflowException(String message) {
+        super(message);
     }
 }

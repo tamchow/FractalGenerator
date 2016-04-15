@@ -9,10 +9,11 @@ import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
-import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
-import in.tamchow.fractal.math.matrix.MatrixOperations;
+
+import static in.tamchow.fractal.helpers.math.MathUtils.*;
+import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
 /**
  * Generates IFS fractals
  * <p/>
@@ -83,7 +84,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     }
     @Override
     public void setHeight(int height) {
-        height = MathUtils.clamp(height, getPlane().getHeight());
+        height = clamp(height, getPlane().getHeight());
         @NotNull IFSFractalParams modified = new IFSFractalParams(params);
         modified.setHeight(height);
         initIFS(modified);
@@ -102,7 +103,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     }
     @Override
     public void setWidth(int width) {
-        width = MathUtils.clamp(width, getPlane().getWidth());
+        width = clamp(width, getPlane().getWidth());
         @NotNull IFSFractalParams modified = new IFSFractalParams(params);
         modified.setWidth(width);
         initIFS(modified);
@@ -143,21 +144,21 @@ public class IFSGenerator implements PixelFractalGenerator {
         setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
     public void zoom(int cx, int cy, double level) {
-        cx = MathUtils.boundsProtected(cx, plane.getWidth());
-        cy = MathUtils.boundsProtected(cy, plane.getHeight());
+        cx = boundsProtected(cx, plane.getWidth());
+        cy = boundsProtected(cy, plane.getHeight());
         setCentre_offset(fromCoordinates(cx, cy));
         setZoom_factor(level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
     @NotNull
     public Matrix fromCoordinates(int x, int y) {
-        @NotNull Matrix point = new Matrix(new double[][]{{(MathUtils.boundsProtected(x, getImageWidth()) - center_x) / scale},
-                {(center_y - MathUtils.boundsProtected(y, getImageHeight())) / scale}});
+        @NotNull Matrix point = new Matrix(new double[][]{{(boundsProtected(x, getImageWidth()) - center_x) / scale},
+                {(center_y - boundsProtected(y, getImageHeight())) / scale}});
         if (Math.abs(params.getSkew()) > TOLERANCE) {
-            //return MatrixOperations.add(MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()),point), centre_offset);
-            return MatrixOperations.add(MathUtils.doRotate(point, params.getSkew()), centre_offset);
+            //return add(multiply(Matrix.rotationMatrix2D(params.getSkew()),point), centre_offset);
+            return add(doRotate(point, params.getSkew()), centre_offset);
         }
-        return MatrixOperations.add(point, centre_offset);
+        return add(point, centre_offset);
     }
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2);
@@ -180,7 +181,7 @@ public class IFSGenerator implements PixelFractalGenerator {
         return depth;
     }
     public void setDepth(int depth) {
-        this.depth = MathUtils.clamp(depth, 0, plane.getHeight() * plane.getWidth());
+        this.depth = clamp(depth, 0, plane.getHeight() * plane.getWidth());
     }
     double getBase_precision() {
         return base_precision;
@@ -244,7 +245,7 @@ public class IFSGenerator implements PixelFractalGenerator {
         }
         Matrix point = new Matrix(initial);
         for (long i = 0; i <= depth; i++) {
-            int index = MathUtils.weightedRandom(params.getWeights());
+            int index = weightedRandom(params.getWeights());
             int[] coord = toCoordinates(point);
             plane.setPixel(coord[1], coord[0], plane.getPixel(coord[1], coord[0]) + params.getColors()[index]);
             point = modifyPoint(point, index);
@@ -268,10 +269,10 @@ public class IFSGenerator implements PixelFractalGenerator {
         return animation;
     }
     private Matrix normalizePoint(Matrix point) {
-        point = MatrixOperations.subtract(point, centre_offset);
+        point = subtract(point, centre_offset);
         if (Math.abs(params.getSkew()) > TOLERANCE) {
-            //point = MatrixOperations.multiply(Matrix.rotationMatrix2D(params.getSkew()).inverse(),point);
-            point = MathUtils.doRotate(point, -params.getSkew());
+            //point = multiply(Matrix.rotationMatrix2D(params.getSkew()).inverse(),point);
+            point = doRotate(point, -params.getSkew());
         }
         return point;
     }
@@ -284,8 +285,8 @@ public class IFSGenerator implements PixelFractalGenerator {
     @NotNull
     public int[] toCoordinates(Matrix point) {
         point = normalizePoint(point);
-        return new int[]{MathUtils.boundsProtected(Math.round((float) (point.get(0, 0) * scale) + center_x), getImageWidth()),
-                MathUtils.boundsProtected(Math.round(center_y - (float) (point.get(1, 0) * scale)), getImageHeight())};
+        return new int[]{boundsProtected(Math.round((float) (point.get(0, 0) * scale) + center_x), getImageWidth()),
+                boundsProtected(Math.round(center_y - (float) (point.get(1, 0) * scale)), getImageHeight())};
     }
     public synchronized void publishProgress(long val) {
         if (!silencer) {
@@ -303,7 +304,7 @@ public class IFSGenerator implements PixelFractalGenerator {
             fe.setZ_value(String.valueOf(y));
             point.set(1, 0, fe.evaluateForIFS(params.getYfunctions()[index]));
         } else {
-            point = MatrixOperations.add(MatrixOperations.multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
+            point = add(multiply(params.getTransforms()[index], point), params.getTranslators()[index]);
         }
         return point;
     }
@@ -314,7 +315,7 @@ public class IFSGenerator implements PixelFractalGenerator {
         generateStep(true);
     }
     public void generateStep(boolean render) {
-        int index = MathUtils.weightedRandom(params.getWeights());
+        int index = weightedRandom(params.getWeights());
         @NotNull int[] coord = toCoordinates(point);
         if (render) {
             plane.setPixel(coord[1], coord[0],

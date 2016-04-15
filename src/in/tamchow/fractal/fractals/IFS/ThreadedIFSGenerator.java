@@ -34,7 +34,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     }
     public void generate() {
         int idx = 0;
-        for (int i = 0; i < threads; i++) {
+        for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
             @NotNull SlaveRunner runner = new SlaveRunner(idx);
             master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
             idx++;
@@ -71,11 +71,12 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             copyOfMaster.setDepth(iterations);
         }
         @Override
-        public void run() {
+        public void generate() {
             copyOfMaster.generate(index);
+            onCompletion();
         }
         @Override
-        public void onCompletion() {
+        public void onCompleted() {
             data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);

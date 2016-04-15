@@ -63,21 +63,25 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     }
     @NotNull
     protected int[] imageBounds(int y, int x) {
-        int shift = MathUtils.boundsProtected(x / getWidth(), getHeight());
-        if (x < 0) {
-            y -= shift;
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
-        if (x >= getWidth()) {
-            y += shift;
-            x = MathUtils.boundsProtected(x, getWidth());
-        }
+        y += MathUtils.boundsProtected(x / getWidth(), getHeight());
+        x = MathUtils.boundsProtected(x, getWidth());
         y = MathUtils.boundsProtected(y, getHeight());
         return new int[]{y, x};
     }
-    public void setPixel(int y, int x, int val) {
+    protected int normalized(int y, int x) {
+        y += MathUtils.boundsProtected(x / getWidth(), getHeight());
+        x = MathUtils.boundsProtected(x, getWidth());
+        y = MathUtils.boundsProtected(y, getHeight());
+        return y * getWidth() + x;
+    }
+    /*public void setPixel(int y, int x, int val) {
         @NotNull int[] yx = imageBounds(y, x);
-        pixdata[yx[0]][yx[1]] = val;
+        //pixdata[yx[0]][yx[1]] = val;
+        setPixel(yx[0] * getWidth() + yx[1], val);
+    }
+    */
+    public void setPixel(int y, int x, int val) {
+        setPixel(normalized(y, x), val);
     }
     @NotNull
     public HSL[][] toHSL() {
@@ -89,9 +93,13 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         }
         return output;
     }
-    public int getPixel(int y, int x) {
+    /*public int getPixel(int y, int x) {
         @NotNull int[] yx = imageBounds(y, x);
-        return pixdata[yx[0]][yx[1]];
+        //return pixdata[yx[0]][yx[1]];
+        return getPixel(yx[0] * getWidth() + yx[1]);
+    }*/
+    public int getPixel(int y, int x) {
+        return getPixel(normalized(y, x));
     }
     public int getHeight() {
         if (pixdata == null) {
@@ -291,7 +299,8 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     }
     public int getPixel(int i) {
         i = MathUtils.boundsProtected(i, getNum_pixels());
-        return getPixel(i / getWidth(), i % getWidth());
+        //return getPixel(i / getWidth(), i % getWidth());
+        return pixdata[i / getWidth()][i % getWidth()];
     }
     public void setPixel(int i, int val) {
         i = MathUtils.boundsProtected(i, getNum_pixels());

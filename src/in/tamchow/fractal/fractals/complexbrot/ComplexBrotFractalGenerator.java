@@ -9,16 +9,17 @@ import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
-import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
-import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import in.tamchow.fractal.math.complex.ComplexOperations;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.symbolics.Function;
 import in.tamchow.fractal.math.symbolics.Polynomial;
+
+import static in.tamchow.fractal.helpers.math.MathUtils.*;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
+import static in.tamchow.fractal.math.complex.ComplexOperations.*;
 /**
  * ComplexBrot fractal generator
  * NOTE: Only supports the *BROT (excepting MANDELBROT, of course) fractal modes.
@@ -80,7 +81,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     @Override
     public void setHeight(int height) {
-        height = MathUtils.clamp(height, getPlane().getHeight());
+        height = clamp(height, getPlane().getHeight());
         @NotNull ComplexBrotFractalParams modified = new ComplexBrotFractalParams(params);
         modified.setHeight(height);
         initFractal(modified);
@@ -99,7 +100,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     @Override
     public void setWidth(int width) {
-        width = MathUtils.clamp(width, getPlane().getWidth());
+        width = clamp(width, getPlane().getWidth());
         @NotNull ComplexBrotFractalParams modified = new ComplexBrotFractalParams(params);
         modified.setWidth(width);
         initFractal(modified);
@@ -187,8 +188,8 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         }
     }
     private Complex getRandomPoint() {
-        int random_x = MathUtils.boundsProtected(Math.round((float) Math.random() * plane.getWidth()), plane.getWidth()),
-                random_y = MathUtils.boundsProtected(Math.round((float) Math.random() * plane.getHeight()), plane.getHeight());
+        int random_x = boundsProtected(Math.round((float) Math.random() * plane.getWidth()), plane.getWidth()),
+                random_y = boundsProtected(Math.round((float) Math.random() * plane.getHeight()), plane.getHeight());
         return plane_map[random_y][random_x];
     }
     private boolean containsPoint(@Nullable Complex point) {
@@ -211,7 +212,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         plane = plane.falseColor(levels);
     }
     private int getColor(int i, int j, int level) {
-        return MathUtils.boundsProtected(Math.round((float) bases[level][i][j] / getMaximum(bases[level])) * 255, 256);
+        return boundsProtected(Math.round((float) bases[level][i][j] / getMaximum(bases[level])) * 255, 256);
     }
     private int getMaximum(@NotNull int[][] base) {
         int max = 0;
@@ -239,14 +240,14 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     @NotNull
     public int[] toCoordinates(Complex point) {
-        point = ComplexOperations.subtract(point, centre_offset);
+        point = subtract(point, centre_offset);
         if (Math.abs(params.skew) >= params.tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.skew).inverse();
-            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));*/
-            point = MathUtils.matrixToComplex(MathUtils.doRotate(MathUtils.complexToMatrix(point), -params.skew));
+            point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
+            point = matrixToComplex(doRotate(complexToMatrix(point), -params.skew));
         }
-        return new int[]{MathUtils.boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
-                MathUtils.boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
+        return new int[]{boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
+                boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
     }
     public void zoom(@NotNull ZoomParams zoom) {
         if (zoom.centre == null) {
@@ -285,9 +286,9 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     public void zoom(@NotNull Complex centre_offset, double level) {
         if (params.zoomConfig.zooms == null) {
-            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(MathUtils.complexToMatrix(centre_offset), level)});
+            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(complexToMatrix(centre_offset), level)});
         } else {
-            params.zoomConfig.addZoom(new ZoomParams(MathUtils.complexToMatrix(centre_offset), level));
+            params.zoomConfig.addZoom(new ZoomParams(complexToMatrix(centre_offset), level));
         }
         setCentre_offset(centre_offset);
         setZoom_factor(level);
@@ -304,14 +305,14 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     @NotNull
     public Complex fromCoordinates(int x, int y) {
-        @NotNull Complex point = new Complex(((MathUtils.boundsProtected(x, getImageWidth()) - center_x) / scale),
-                ((center_y - MathUtils.boundsProtected(y, getImageWidth())) / scale));
+        @NotNull Complex point = new Complex(((boundsProtected(x, getImageWidth()) - center_x) / scale),
+                ((center_y - boundsProtected(y, getImageWidth())) / scale));
         if (Math.abs(params.skew) > params.tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.skew);
-            point = MathUtils.matrixToComplex(MatrixOperations.multiply(rotor, MathUtils.complexToMatrix(point)));*/
-            point = MathUtils.matrixToComplex(MathUtils.doRotate(MathUtils.complexToMatrix(point), params.skew));
+            point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
+            point = matrixToComplex(doRotate(complexToMatrix(point), params.skew));
         }
-        return ComplexOperations.add(centre_offset, point);
+        return add(centre_offset, point);
     }
     public void mandelbrotToJulia(int cx, int cy, double level) {
         zoom(cx, cy, level);
@@ -324,8 +325,8 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         } else {
             params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
         }
-        cx = MathUtils.boundsProtected(cx, plane.getWidth());
-        cy = MathUtils.boundsProtected(cy, plane.getHeight());
+        cx = boundsProtected(cx, plane.getWidth());
+        cy = boundsProtected(cy, plane.getHeight());
         //setCenter_x(cx);setCenter_y(cy);
         setCentre_offset(fromCoordinates(cx, cy));
         setZoom_factor(level);
@@ -393,7 +394,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         return depth;
     }
     public void setDepth(int depth) {
-        this.depth = MathUtils.clamp(depth, 0, plane.getHeight() * plane.getWidth());
+        this.depth = clamp(depth, 0, plane.getHeight() * plane.getWidth());
     }
     public Complex getCentre_offset() {
         return centre_offset;
@@ -416,7 +417,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         lastConstant = new Complex(value);
     }
     public int getLastConstantIndex() {
-        @NotNull String[] parts = StringManipulator.split(function, " ");
+        @NotNull String[] parts = split(function, " ");
         for (int i = parts.length - 1; i >= 0; i--) {
             if (getConstantIndex(parts[i]) != -1) {
                 setLastConstantIdx(getConstantIndex(parts[i]));
@@ -507,17 +508,17 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                     Complex a = fe.evaluate(function, false);
                     fe.setZ_value(ztmp2.toString());
                     Complex b = fe.evaluate(function, false);
-                    ztmp = ComplexOperations.subtract(z,
-                            ComplexOperations.divide(
-                                    ComplexOperations.multiply(a,
-                                            ComplexOperations.subtract(z, ztmp2)),
-                                    ComplexOperations.subtract(a, b)));
+                    ztmp = subtract(z,
+                            divide(
+                                    multiply(a,
+                                            subtract(z, ztmp2)),
+                                    subtract(a, b)));
                     fe.setZ_value(ztmp.toString());
                     if (fe.evaluate(function, false).modulus() <= tolerance) {
                         c = iteration;
                         break;
                     }
-                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                    if (distance_squared(z, ztmp) <= tolerance) {
                         c = iteration;
                         break;
                     }
@@ -560,7 +561,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             functionderiv = polynomial.derivative().toString();
         }
         if (constant != null && constant.equals(Complex.ZERO)) {
-            constant = ComplexOperations.divide(Complex.ONE, degree);
+            constant = divide(Complex.ONE, degree);
         }
         Complex toadd = Complex.ZERO;
         @NotNull Complex lastConstantBackup = new Complex(getLastConstant());
@@ -613,16 +614,16 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                     last.pop();
                     Complex ztmp;
                     if (constant != null) {
-                        ztmp = ComplexOperations.add(ComplexOperations.subtract(z, ComplexOperations.multiply(constant, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)))), toadd);
+                        ztmp = add(subtract(z, multiply(constant, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)))), toadd);
                     } else {
-                        ztmp = ComplexOperations.add(ComplexOperations.subtract(z, ComplexOperations.divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
+                        ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
                     }
                     fe.setZ_value(ztmp.toString());
                     if (fe.evaluate(function, false).modulus() <= tolerance) {
                         c = iteration;
                         break;
                     }
-                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                    if (distance_squared(z, ztmp) <= tolerance) {
                         c = iteration;
                         break;
                     }
@@ -680,7 +681,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                     last.pop();
                     Complex ztmp = fe.evaluate(function, false);
                     last.push(ztmp);
-                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                    if (distance_squared(z, ztmp) <= tolerance) {
                         c = iteration;
                         break;
                     }
@@ -704,12 +705,12 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     private void updateBases(int c, int iteration, int level, int[][] tmp) {
         if (anti) {
             if (c == iteration) {
-                bases[level] = MathUtils.intDDAAdd(bases[level], tmp);
+                bases[level] = intDDAAdd(bases[level], tmp);
                 ++level;
             }
         } else {
             if (c < iteration) {
-                bases[level] = MathUtils.intDDAAdd(bases[level], tmp);
+                bases[level] = intDDAAdd(bases[level], tmp);
                 ++level;
             }
         }
@@ -750,7 +751,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                     last.pop();
                     Complex ztmp = fe.evaluate(function, false);
                     last.push(ztmp);
-                    if (ComplexOperations.distance_squared(z, ztmp) <= tolerance) {
+                    if (distance_squared(z, ztmp) <= tolerance) {
                         c = iteration;
                         break;
                     }

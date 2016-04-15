@@ -30,7 +30,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     }
     public void generate() {
         int idx = 0;
-        for (int i = 0; i < threads; i++) {
+        for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
             @NotNull int[] coords = master.start_end_coordinates(i, threads);
             @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
             master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
@@ -65,11 +65,12 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             this.end = end;
         }
         @Override
-        public void run() {
+        public void generate() {
             copyOfMaster.generate(start, end);
+            onCompletion();
         }
         @Override
-        public void onCompletion() {
+        public void onCompleted() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);

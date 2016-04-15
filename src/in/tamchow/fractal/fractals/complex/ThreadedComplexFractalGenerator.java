@@ -55,14 +55,12 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     }
     public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
-        for (int i = 0; i < ny; i++) {
-            for (int j = 0; j < nx; j++) {
-                @NotNull int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, j, ny, i);
-                @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-                master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
-                idx++;
-                runner.start();
-            }
+        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < nx * ny; ++t) {
+            @NotNull int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
+            @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
+            idx++;
+            runner.start();
         }
         try {
             synchronized (lock) {
@@ -139,9 +137,9 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                                         colortmp = master.color.splineInterpolated(master.color.createIndex(hue, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
                                     }
                                 }
-                                master.argand.setPixel(i, j, colortmp);
+                                master.getArgand().setPixel(i, j, colortmp);
                             } else {
-                                master.argand.setPixel(i, j, partImage.pixelContainer.getPixel(i, j));
+                                master.getArgand().setPixel(i, j, partImage.pixelContainer.getPixel(i, j));
                             }
                         }
                     }
@@ -156,8 +154,6 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     public boolean allComplete() {
         return (countCompletedThreads() == (nx * ny));
     }
-    private static final class Lock {
-    }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexFractalGenerator copyOfMaster;
         int startx, starty, endx, endy;
@@ -170,12 +166,12 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             this.copyOfMaster = new ComplexFractalGenerator(new ComplexFractalParams(master.getParams()), master.getProgressPublisher());
         }
         @Override
-        public void run() {
+        public void generate() {
             copyOfMaster.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
             onCompletion();
         }
         @Override
-        public void onCompletion() {
+        public void onCompleted() {
             if (copyOfMaster.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || copyOfMaster.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || copyOfMaster.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || copyOfMaster.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
             } else {
