@@ -1,12 +1,14 @@
 package in.tamchow.fractal.color;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
-import in.tamchow.fractal.helpers.math.MathUtils;
-import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-import in.tamchow.fractal.math.complex.ComplexOperations;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.helpers.math.MathUtils.boundsProtected;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
+import static in.tamchow.fractal.math.complex.ComplexOperations.divide;
+import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
 /**
  * Holds colour configuration for  custom palettes
  */
@@ -104,9 +106,9 @@ public class Color_Utils_Config implements Serializable {
     }
     public static int toRGB(int r, int g, int b) {
         if ((r < 0 || r > 255) || (g < 0 || g > 255) || (b < 0 || b > 255)) {
-            r = MathUtils.boundsProtected(r, 256);
-            g = MathUtils.boundsProtected(g, 256);
-            b = MathUtils.boundsProtected(b, 256);
+            r = boundsProtected(r, 256);
+            g = boundsProtected(g, 256);
+            b = boundsProtected(b, 256);
             //throw new IllegalArgumentException("R, G & B values must be between 0 to 255");
         }
         return packRGB(r, g, b);
@@ -135,7 +137,7 @@ public class Color_Utils_Config implements Serializable {
             /*int fa= separateARGB(fromcolor, Colors.RGBCOMPONENTS.ALPHA);
             int ta= separateARGB(tocolor, Colors.RGBCOMPONENTS.ALPHA);
             int na= Math.round((float) (ta * bias + fa * (1 - bias)));*/
-            int na = MathUtils.boundsProtected((int) (bias * 255.0), 0xff);
+            int na = boundsProtected((int) (bias * 255.0), 0xff);
             //na=(int)(bias*255.0);na=(na<0)?0:((na>255)?255:na);
             return alphaBlend(na, separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE));
         } else {
@@ -264,7 +266,7 @@ public class Color_Utils_Config implements Serializable {
         return getColor(fromIndex + Math.round((float) (Math.abs(toIndex - fromIndex) * bias)));
     }
     public int getColor(int index) {
-        return palette[MathUtils.boundsProtected(index, palette.length)];
+        return palette[boundsProtected(index, palette.length)];
     }
     private void initColorConfig(Colors.CALCULATIONS mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
         colors_corrected = false;
@@ -461,7 +463,7 @@ public class Color_Utils_Config implements Serializable {
         }
         @NotNull Complex exp = new Complex(val / min, 0);
         @NotNull Complex base = new Complex(max / min, 0);
-        double idx = ComplexOperations.divide(ComplexOperations.principallog(exp), ComplexOperations.principallog(base)).modulus();
+        double idx = divide(principallog(exp), principallog(base)).modulus();
         return (int) (transform(idx) * color_density) % num_colors;
     }
     public int indexOfColor(int color) {
@@ -513,10 +515,10 @@ public class Color_Utils_Config implements Serializable {
                 h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
                 h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
-        index = MathUtils.boundsProtected(index, palette.length);
-        index1 = MathUtils.boundsProtected(index1, palette.length);
-        i2 = MathUtils.boundsProtected(i2, palette.length);
-        i3 = MathUtils.boundsProtected(i3, palette.length);
+        index = boundsProtected(index, palette.length);
+        index1 = boundsProtected(index1, palette.length);
+        i2 = boundsProtected(i2, palette.length);
+        i3 = boundsProtected(i3, palette.length);
         if (byParts == 0) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
             r1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.RED);
@@ -538,7 +540,7 @@ public class Color_Utils_Config implements Serializable {
         } else if (byParts > 0) {
             double alpha = Math.abs((h0 + h1 + h2 + h3) * bias) * 255.0;
             //alpha=(alpha<0)?0:((alpha>255)?255:alpha);
-            return alphaBlend(MathUtils.boundsProtected((int) alpha, 0xff), separateARGB(palette[index], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index], Colors.RGBCOMPONENTS.BLUE), separateARGB(palette[index1], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index1], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index1], Colors.RGBCOMPONENTS.BLUE));
+            return alphaBlend(boundsProtected((int) alpha, 0xff), separateARGB(palette[index], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index], Colors.RGBCOMPONENTS.BLUE), separateARGB(palette[index1], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index1], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index1], Colors.RGBCOMPONENTS.BLUE));
         } else {
             return basicInterpolateIndex(index, index1, bias);
         }
@@ -555,7 +557,7 @@ public class Color_Utils_Config implements Serializable {
         palette_type = Colors.PALETTE.valueOf(colors[0]);
         mode = Colors.CALCULATIONS.valueOf(colors[1]);
         byParts = Integer.valueOf(colors[2]);
-        @NotNull String[] smoothingData = StringManipulator.split(colors[3], ";");
+        @NotNull String[] smoothingData = split(colors[3], ";");
         if (smoothingData.length > 0) {
             setExponentialSmoothing(Boolean.valueOf(smoothingData[0]));
         }
@@ -572,7 +574,7 @@ public class Color_Utils_Config implements Serializable {
                 setColor_density(Integer.valueOf(colors[8]));
                 break;
             case CUSTOM_PALETTE:
-                @NotNull String[] parts = StringManipulator.split(colors[8], ";");
+                @NotNull String[] parts = split(colors[8], ";");
                 @NotNull int[] colorset = new int[parts.length];
                 for (int i = 0; i < colorset.length; i++) {
                     colorset[i] = Integer.valueOf(parts[i + 6], 16);
@@ -594,11 +596,11 @@ public class Color_Utils_Config implements Serializable {
             case SMOOTH_PALETTE_SPLINE:
                 initColorConfig(mode, Integer.valueOf(colors[8]), byParts, logIndex, cyclize);
                 setColor_density(Integer.valueOf(colors[9]));
-                @NotNull String[] controls = StringManipulator.split(colors[9], ";");
+                @NotNull String[] controls = split(colors[9], ";");
                 @NotNull int[] control_colors = new int[controls.length];
                 @NotNull double[] control_points = new double[controls.length];
                 for (int i = 0; i < controls.length; i++) {
-                    @NotNull String[] control = StringManipulator.split(controls[i], " ");
+                    @NotNull String[] control = split(controls[i], " ");
                     control_colors[i] = Integer.valueOf(control[0]);
                     control_points[i] = Double.valueOf(control[1]);
                 }

@@ -4,17 +4,21 @@ import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
 import in.tamchow.fractal.fractals.FractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
+import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import in.tamchow.fractal.graphicsutilities.graphics.DrawingUtilities;
 import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
-import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static in.tamchow.fractal.graphicsutilities.graphics.DrawingUtilities.fill;
+import static in.tamchow.fractal.helpers.math.MathUtils.boundsProtected;
+import static in.tamchow.fractal.helpers.math.MathUtils.weightedRandom;
 /**
- * generates L-System Fractals. Does not implement panning or zooming, as those make no sense
+ * Generates L-System fractals.
+ * Does not implement panning or zooming, as those make no sense for L-System fractals.
  */
 public class LSFractalGenerator implements FractalGenerator {
     private static final int BUFFER_MULTIPLIER = 2;
@@ -25,8 +29,8 @@ public class LSFractalGenerator implements FractalGenerator {
     Publisher publisher;
     public LSFractalGenerator(@NotNull LSFractalParams params, Publisher publisher) {
         this.params = params;
-        canvas = new PixelContainer(params.getWidth(), params.getHeight());
-        DrawingUtilities.fill(canvas, params.getBack_color());
+        canvas = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
+        fill(canvas, params.getBack_color());
         turtle = new Turtle(canvas, Math.abs(canvas.getWidth() - params.getInit_length()) / 2, canvas.getHeight() / 2, params.getBack_color(), params.getFore_color(), params.getInit_angle());
         generations = new String[params.getDepth()];
         generations[0] = params.getAxiom();
@@ -37,8 +41,8 @@ public class LSFractalGenerator implements FractalGenerator {
             @NotNull StringBuilder builder = new StringBuilder(generations[i].length() * BUFFER_MULTIPLIER);
             for (int j = 0; j < generations[i].length(); ++j) {
                 @NotNull
-                String leftSymbol = String.valueOf(generations[i].charAt(MathUtils.boundsProtected(j - 1, generations[i].length()))),
-                        rightSymbol = String.valueOf(generations[i].charAt(MathUtils.boundsProtected(j + 1, generations[i].length()))),
+                String leftSymbol = String.valueOf(generations[i].charAt(boundsProtected(j - 1, generations[i].length()))),
+                        rightSymbol = String.valueOf(generations[i].charAt(boundsProtected(j + 1, generations[i].length()))),
                         toEvolve = String.valueOf(generations[i].charAt(j));
                 @Nullable UnitGrammar evolutions = getGrammarForCode(toEvolve);
                 if (evolutions == null) {
@@ -116,7 +120,7 @@ public class LSFractalGenerator implements FractalGenerator {
             index = 0;
             //throw new LSGrammarException("Malformed Transformation Rule.");
         } else {
-            index = MathUtils.boundsProtected(MathUtils.weightedRandom(grammar.getWeights()), evolutions.length);
+            index = boundsProtected(weightedRandom(grammar.getWeights()), evolutions.length);
         }
         return index;
     }
@@ -136,7 +140,7 @@ public class LSFractalGenerator implements FractalGenerator {
         drawState(getStateAtIndex(index));
     }
     public String getStateAtIndex(int index) {
-        return generations[MathUtils.boundsProtected(index, generations.length)];
+        return generations[boundsProtected(index, generations.length)];
     }
     public void drawState(@NotNull String stateToDraw) {
         double segmentlength = params.getInit_length() * Math.cos(params.getInit_angle()) / stateToDraw.length();

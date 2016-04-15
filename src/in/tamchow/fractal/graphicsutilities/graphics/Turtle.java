@@ -15,9 +15,10 @@ public class Turtle {
         this(canvas, x, y, 0);
     }
     public Turtle(PixelContainer canvas, int x, int y, double angle) {
-        this(canvas, x, y, 0xffffff, 0x00000, angle);
+        this(canvas, x, y, 0xffffffff, 0xff00000, angle);
     }
     public Turtle(PixelContainer canvas, int x, int y, int back_color, int fore_color, double angle) {
+        this.canvas = canvas;
         this.x = x;
         this.y = y;
         this.back_color = back_color;

@@ -87,7 +87,7 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     public int getHeight() {
         return pixdata.length / width;
     }
-    @Override
+    /*@Override
     public int getPixel(int y, int x) {
         @NotNull int[] yx = imageBounds(y, x);
         return pixdata[yx[0] * getWidth() + yx[1]];
@@ -100,7 +100,7 @@ public class LinearizedPixelContainer extends PixelContainer implements Serializ
     public void setPixel(int y, int x, int val) {
         @NotNull int[] yx = imageBounds(y, x);
         pixdata[yx[0] * getWidth() + yx[1]] = val;
-    }
+    }*/
     @Override
     public int getPixel(int i) {
         return pixdata[MathUtils.boundsProtected(i, pixdata.length)];
