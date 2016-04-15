@@ -33,27 +33,20 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
             @NotNull int[] coords = master.start_end_coordinates(i, threads);
             @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
             idx++;
             runner.start();
         }
-        try {
-            synchronized (lock) {
-                while (!allComplete()) {
-                    lock.wait(1000);
-                }
-                lock.notifyAll();
+        wrapUp();
+    }
+    @Override
+    public void finalizeGeneration() {
+        for (@NotNull PartComplexBrotFractalData part : data) {
+            for (int i = 0; i < master.bases.length; ++i) {
+                master.bases[i] = MathUtils.intDDAAdd(master.bases[i], part.getBases()[i]);
             }
-            for (@NotNull PartComplexBrotFractalData part : data) {
-                for (int i = 0; i < master.bases.length; ++i) {
-                    master.bases[i] = MathUtils.intDDAAdd(master.bases[i], part.getBases()[i]);
-                }
-            }
-            master.createImage();
-        } catch (Exception e) {
-            e.printStackTrace();
-            //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
+        master.createImage();
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexBrotFractalGenerator copyOfMaster;
@@ -73,7 +66,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         public void onCompleted() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
+            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

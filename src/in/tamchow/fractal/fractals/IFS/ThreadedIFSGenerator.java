@@ -36,24 +36,17 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         int idx = 0;
         for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
             @NotNull SlaveRunner runner = new SlaveRunner(idx);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
             idx++;
             runner.start();
         }
-        try {
-            synchronized (lock) {
-                while (!allComplete()) {
-                    lock.wait(1000);
-                }
-                lock.notifyAll();
-                for (@NotNull PartIFSData partIFSData : data) {
-                    master.getPlane().add(partIFSData.getPartPlane(), true, partIFSData.getPartWeightData());
-                    master.getAnimation().addFrames(partIFSData.getPartAnimation());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //master.getProgressPublisher().println("Exception:" + e.getMessage());
+        wrapUp();
+    }
+    @Override
+    public void finalizeGeneration() {
+        for (@NotNull PartIFSData partIFSData : data) {
+            master.getPlane().add(partIFSData.getPartPlane(), true, partIFSData.getPartWeightData());
+            master.getAnimation().addFrames(partIFSData.getPartAnimation());
         }
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
@@ -79,7 +72,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         public void onCompleted() {
             data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
+            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

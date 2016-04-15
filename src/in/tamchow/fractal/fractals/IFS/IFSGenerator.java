@@ -291,7 +291,7 @@ public class IFSGenerator implements PixelFractalGenerator {
     public synchronized void publishProgress(long val) {
         if (!silencer) {
             float completion = (((float) val) / depth);
-            progressPublisher.publish("% completion= " + (completion * 100.0f) + "%", completion);
+            progressPublisher.publish("% completion= " + (completion * 100.0f) + "%", completion, (int) val);
         }
     }
     @NotNull

@@ -122,11 +122,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         }
     }
     @Override
-    public synchronized void publish(String message, double progress) {
+    public synchronized void publish(String message, double progress, int data) {
         parent.setTitle("Generating Fractal: " + message);
     }
     @Override
-    public synchronized void publish(@NotNull String message, double progress, Object... args) {
+    public synchronized void publish(@NotNull String message, double progress, int data, Object... args) {
         parent.setTitle("Generating Fractal: " + String.format(message, args));
     }
     @Override

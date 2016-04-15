@@ -126,7 +126,7 @@ public class LSFractalGenerator implements FractalGenerator {
     }
     private void publishprogress(int progress) {
         float completion = ((float) (progress)) / generations.length;
-        publisher.publish("Completion = " + (completion * 100.0f) + " %", completion);
+        publisher.publish("Completion = " + (completion * 100.0f) + " %", completion, progress);
     }
     private UnitGrammar getGrammarForCode(String code) {
         for (@NotNull UnitGrammar grammar : params.getGrammar()) {
