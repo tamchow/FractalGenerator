@@ -58,96 +58,89 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < nx * ny; ++t) {
             @NotNull int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
             @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / (nx * ny), idx);
             idx++;
             runner.start();
         }
-        try {
-            synchronized (lock) {
-                while (!allComplete()) {
-                    lock.wait(1000);
+        wrapUp();
+    }
+    @Override
+    public void finalizeGeneration() {
+        @NotNull int[] histogram = new int[(int) iterations + 2];
+        int total = 0;
+        if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+            for (@NotNull PartComplexFractalData partImage : buffer) {
+                for (int i = 0; i < histogram.length; i++) {
+                    histogram[i] += partImage.histogram[i];
                 }
-                lock.notifyAll();
-                @NotNull int[] histogram = new int[(int) iterations + 2];
-                int total = 0;
-                if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                    for (@NotNull PartComplexFractalData partImage : buffer) {
-                        for (int i = 0; i < histogram.length; i++) {
-                            histogram[i] += partImage.histogram[i];
-                        }
+            }
+        }
+        for (int i = 0; i < iterations; i++) {
+            total += histogram[i];
+        }
+        if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+            System.arraycopy(MathUtils.rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
+        }
+        double scaling = Math.pow(master.zoom, master.zoom_factor);
+        for (@NotNull PartComplexFractalData partImage : buffer) {
+            for (int i = partImage.starty; i < partImage.endy; i++) {
+                for (int j = partImage.startx; j < partImage.endx; j++) {
+                    master.escapedata[i][j] = partImage.escapedata[i][j];
+                    master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
+                    double normalized_count = master.normalized_escapes[i][j];
+                    int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
+                    if (pj < 0) {
+                        pi = (i == 0) ? i : i - 1;
+                        pj = master.escapedata[pi].length - 1;
                     }
-                }
-                for (int i = 0; i < iterations; i++) {
-                    total += histogram[i];
-                }
-                if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                    System.arraycopy(MathUtils.rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
-                }
-                double scaling = Math.pow(master.zoom, master.zoom_factor);
-                for (@NotNull PartComplexFractalData partImage : buffer) {
-                    for (int i = partImage.starty; i < partImage.endy; i++) {
-                        for (int j = partImage.startx; j < partImage.endx; j++) {
-                            master.escapedata[i][j] = partImage.escapedata[i][j];
-                            master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
-                            double normalized_count = master.normalized_escapes[i][j];
-                            int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
-                            if (pj < 0) {
-                                pi = (i == 0) ? i : i - 1;
-                                pj = master.escapedata[pi].length - 1;
-                            }
-                            if (nj >= master.escapedata[i].length) {
-                                ni = (i == master.escapedata.length - 1) ? i : i + 1;
-                                nj = 0;
-                            }
-                            int ep = master.escapedata[pi][pj], en = master.escapedata[ni][nj], e = master.escapedata[i][j];
-                            if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                                if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
-                                    if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR) {
-                                        int color1 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling)), color2 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling)), color3 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling));
-                                        int colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, master.color.getByParts());
-                                        int colortmp2 = Color_Utils_Config.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, master.color.getByParts());
-                                        if (master.color.isLogIndex()) {
-                                            colortmp = Color_Utils_Config.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, master.color.getByParts());
-                                        } else {
-                                            colortmp = color2;
-                                        }
-                                    } else {
-                                        int idxp = master.color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling),
-                                                idxn = master.color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling), idxt = Math.min(idxp, idxn);
-                                        colortmp = master.color.splineInterpolated(master.color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
-                                    }
+                    if (nj >= master.escapedata[i].length) {
+                        ni = (i == master.escapedata.length - 1) ? i : i + 1;
+                        nj = 0;
+                    }
+                    int ep = master.escapedata[pi][pj], en = master.escapedata[ni][nj], e = master.escapedata[i][j];
+                    if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM || master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+                        if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR || master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_SPLINE) {
+                            if (master.color.getMode() == Colors.CALCULATIONS.RANK_ORDER_LINEAR) {
+                                int color1 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling)), color2 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling)), color3 = master.color.getColor(master.color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling));
+                                int colortmp1 = Color_Utils_Config.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, master.color.getByParts());
+                                int colortmp2 = Color_Utils_Config.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, master.color.getByParts());
+                                if (master.color.isLogIndex()) {
+                                    colortmp = Color_Utils_Config.linearInterpolated(colortmp1, colortmp2, normalized_count - (long) normalized_count, master.color.getByParts());
                                 } else {
-                                    double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
-                                    for (int k = 0; k < e; k += 1) {
-                                        hue += ((double) histogram[k]) / total;
-                                    }
-                                    for (int k = 0; k < en; k += 1) {
-                                        hue2 += ((double) histogram[k]) / total;
-                                    }
-                                    for (int k = 0; k < ep; k += 1) {
-                                        hue3 += ((double) histogram[k]) / total;
-                                    }
-                                    if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
-                                        int colortmp1 = Color_Utils_Config.linearInterpolated(master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
-                                        int colortmp2 = Color_Utils_Config.linearInterpolated(master.color.getColor(master.color.createIndex(hue3, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
-                                        colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, master.color.getByParts());
-                                    } else {
-                                        int idxp = master.color.createIndex(hue3, 0, 1, scaling),
-                                                idxn = master.color.createIndex(hue2, 0, 1, scaling), idxt = Math.min(idxp, idxn);
-                                        colortmp = master.color.splineInterpolated(master.color.createIndex(hue, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
-                                    }
+                                    colortmp = color2;
                                 }
-                                master.getArgand().setPixel(i, j, colortmp);
                             } else {
-                                master.getArgand().setPixel(i, j, partImage.pixelContainer.getPixel(i, j));
+                                int idxp = master.color.createIndex(((double) MathUtils.indexOf(histogram, ep)) / iterations, 0, 1, scaling),
+                                        idxn = master.color.createIndex(((double) MathUtils.indexOf(histogram, en)) / iterations, 0, 1, scaling), idxt = Math.min(idxp, idxn);
+                                colortmp = master.color.splineInterpolated(master.color.createIndex(((double) MathUtils.indexOf(histogram, e)) / iterations, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
+                            }
+                        } else {
+                            double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
+                            for (int k = 0; k < e; k += 1) {
+                                hue += ((double) histogram[k]) / total;
+                            }
+                            for (int k = 0; k < en; k += 1) {
+                                hue2 += ((double) histogram[k]) / total;
+                            }
+                            for (int k = 0; k < ep; k += 1) {
+                                hue3 += ((double) histogram[k]) / total;
+                            }
+                            if (master.color.getMode() == Colors.CALCULATIONS.COLOR_HISTOGRAM_LINEAR) {
+                                int colortmp1 = Color_Utils_Config.linearInterpolated(master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue2, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
+                                int colortmp2 = Color_Utils_Config.linearInterpolated(master.color.getColor(master.color.createIndex(hue3, 0, 1, scaling)), master.color.getColor(master.color.createIndex(hue, 0, 1, scaling)), normalized_count - (long) normalized_count, master.color.getByParts());
+                                colortmp = Color_Utils_Config.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, master.color.getByParts());
+                            } else {
+                                int idxp = master.color.createIndex(hue3, 0, 1, scaling),
+                                        idxn = master.color.createIndex(hue2, 0, 1, scaling), idxt = Math.min(idxp, idxn);
+                                colortmp = master.color.splineInterpolated(master.color.createIndex(hue, 0, 1, scaling), idxt, normalized_count - (long) normalized_count);
                             }
                         }
+                        master.getArgand().setPixel(i, j, colortmp);
+                    } else {
+                        master.getArgand().setPixel(i, j, partImage.pixelContainer.getPixel(i, j));
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //master.getProgressPublisher().println("Exception:" + e.getMessage());
         }
     }
     @Override
@@ -178,7 +171,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new PixelContainer(copyOfMaster.getArgand()), startx, endx, starty, endy);
             }
             float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
+            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

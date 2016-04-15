@@ -1258,7 +1258,8 @@ public final class ComplexFractalGenerator implements PixelFractalGenerator {
     public void publishProgress(long ctr, int i, int startx, int endx, int j, int starty, int endy) {
         if (!silencer) {
             float completion = ((float) ((i - starty) * (endx - startx) + (j - startx)) / ((endx - startx) * (endy - starty)));
-            progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion);
+            progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion,
+                    (i * (endx - startx) + j));
         }
     }
     private int indexOfRoot(@NotNull Complex z) {

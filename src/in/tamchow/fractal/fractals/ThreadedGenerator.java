@@ -9,6 +9,21 @@ public abstract class ThreadedGenerator {
     public abstract int countCompletedThreads();
     public abstract boolean allComplete();
     public abstract void generate();
+    public abstract void finalizeGeneration();
+    public void wrapUp() {
+        try {
+            synchronized (lock) {
+                while (!allComplete()) {
+                    lock.wait(1000);
+                }
+                lock.notifyAll();
+                finalizeGeneration();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //master.getProgressPublisher().println("Exception:" + e.getMessage());
+        }
+    }
     public void resume() {
         synchronized (lock) {
             for (SlaveRunner runner : threads) {

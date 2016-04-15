@@ -385,7 +385,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
     }
     private void publishProgress(long ctr, int start, int end, int current) {
         float completion = Math.round(((float) current) / (end - start));
-        progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion);
+        progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
     }
     public double calculateBasePrecision() {
         return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
