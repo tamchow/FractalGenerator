@@ -37,7 +37,11 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             idx++;
             runner.start();
         }
-        wrapUp();
+        try {
+            wrapUp();
+        } catch (InterruptedException interrupted) {
+            interrupted.printStackTrace();
+        }
     }
     @Override
     public void finalizeGeneration() {
