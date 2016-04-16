@@ -40,7 +40,11 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             idx++;
             runner.start();
         }
-        wrapUp();
+        try {
+            wrapUp();
+        } catch (InterruptedException interrupted) {
+            interrupted.printStackTrace();
+        }
     }
     @Override
     public void finalizeGeneration() {

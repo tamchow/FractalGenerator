@@ -62,7 +62,11 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             idx++;
             runner.start();
         }
-        wrapUp();
+        try {
+            wrapUp();
+        } catch (InterruptedException interrupted) {
+            interrupted.printStackTrace();
+        }
     }
     @Override
     public void finalizeGeneration() {
