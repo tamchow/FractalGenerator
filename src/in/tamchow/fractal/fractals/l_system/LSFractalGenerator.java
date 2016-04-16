@@ -9,6 +9,8 @@ import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
+import in.tamchow.fractal.helpers.strings.CharBuffer;
+import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class LSFractalGenerator implements FractalGenerator {
     }
     public void generate() {
         for (int i = 0, k = 1; i < generations.length - 1 && k < generations.length; ++i, ++k) {
-            @NotNull StringBuilder builder = new StringBuilder(generations[i].length() * BUFFER_MULTIPLIER);
+            @NotNull CharBuffer builder = new ResizableCharBuffer(generations[i].length() * BUFFER_MULTIPLIER);
             for (int j = 0; j < generations[i].length(); ++j) {
                 @NotNull
                 String leftSymbol = String.valueOf(generations[i].charAt(boundsProtected(j - 1, generations[i].length()))),

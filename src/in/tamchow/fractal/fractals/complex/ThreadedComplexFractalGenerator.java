@@ -86,7 +86,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
             System.arraycopy(MathUtils.rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
         }
         double scaling = Math.pow(master.zoom, master.zoom_factor);
-        for (@NotNull PartComplexFractalData partImage : buffer) {
+        for (@Nullable PartComplexFractalData partImage : buffer) {
+            if (partImage == null) {
+                continue;
+            }
             for (int i = partImage.starty; i < partImage.endy; i++) {
                 for (int j = partImage.startx; j < partImage.endx; j++) {
                     master.escapedata[i][j] = partImage.escapedata[i][j];

@@ -48,7 +48,10 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     }
     @Override
     public void finalizeGeneration() {
-        for (@NotNull PartIFSData partIFSData : data) {
+        for (@Nullable PartIFSData partIFSData : data) {
+            if (partIFSData == null) {
+                continue;
+            }
             master.getPlane().add(partIFSData.getPartPlane(), true, partIFSData.getPartWeightData());
             master.getAnimation().addFrames(partIFSData.getPartAnimation());
         }

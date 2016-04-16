@@ -45,7 +45,10 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     }
     @Override
     public void finalizeGeneration() {
-        for (@NotNull PartComplexBrotFractalData part : data) {
+        for (@Nullable PartComplexBrotFractalData part : data) {
+            if (part == null) {
+                continue;
+            }
             for (int i = 0; i < master.bases.length; ++i) {
                 master.bases[i] = MathUtils.intDDAAdd(master.bases[i], part.getBases()[i]);
             }
