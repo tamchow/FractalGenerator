@@ -3,11 +3,11 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * PrimeCounter - an application/library to calculate the number of prime numbers below a certain number,
  * also mathematically known as pi(x), where x is a natural number greater than one.
- * <p/>
+ * <p>
  * Uses sieves and multithreaded and optimized trial division.
- * <p/>
+ * <p>
  * Timing facility is built-in.
- * <p/>
+ * <p>
  * This is public domain software, licensed under the Apache License 2.0
  *
  * @author Tamoghna Chowdhury
@@ -28,7 +28,7 @@ public class PrimeCounter {
     private static final Object LOCK = new Lock();
     /**
      * Some necessary (and unnecessary) constants.
-     * <p/>
+     * <p>
      * For further documentation, see {@link #PrimeCounter(int, int, int, int, int)}
      */
     public final int NUM_THREADS, LOW_LIM, SPLIT_LIM, HIGH_LIM, REDUCE_FACTOR;

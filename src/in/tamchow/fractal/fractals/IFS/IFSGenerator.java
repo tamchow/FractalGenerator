@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.IFS;
-import in.tamchow.fractal.color.Color_Utils_Config;
+import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
@@ -16,14 +16,14 @@ import static in.tamchow.fractal.helpers.math.MathUtils.*;
 import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
 /**
  * Generates IFS fractals
- * <p/>
+ * <p>
  * Hack to support multithreading:
- * <p/>
+ * <p>
  * Actually makes 2 passes:
  * 1 in single threaded initialization phase without rendering to get starting points for threads (fast)
- * & 1 in multithreaded mode for rendering/animation (slow)
+ * &amp; 1 in multithreaded mode for rendering/animation (slow)
  */
-public class IFSGenerator implements PixelFractalGenerator {
+public class IFSGenerator extends PixelFractalGenerator {
     private static final double TOLERANCE = 1E-15;
     static Matrix[] points;
     static Matrix initial;
@@ -258,6 +258,10 @@ public class IFSGenerator implements PixelFractalGenerator {
         initial = points[index];
         int frameskip = Math.abs(params.getFrameskip()) + 1;//to skip 1 frame, it must divide by 2, etc.
         for (long i = 0; i <= depth && (!completion); i++) {
+            if (stop) {
+                return;
+            }
+            checkAndDoPause();
             generateStep();
             publishProgress(i);
             if (params.isAnimated() && i % frameskip == 0) {
@@ -319,7 +323,7 @@ public class IFSGenerator implements PixelFractalGenerator {
         @NotNull int[] coord = toCoordinates(point);
         if (render) {
             plane.setPixel(coord[1], coord[0],
-                    Color_Utils_Config.linearInterpolated(
+                    Colorizer.linearInterpolated(
                             plane.getPixel(coord[1], coord[0]), params.getColors()[index],
                             /*Use default (proper) linear interpolation*/
                             params.getWeights()[index], 0));

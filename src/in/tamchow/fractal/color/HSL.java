@@ -23,9 +23,9 @@ public class HSL implements Serializable {
     }
     @NotNull
     public static HSL fromRGB(int color) {
-        int ri = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.RED),
-                gi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
-                bi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
+        int ri = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.RED),
+                gi = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
+                bi = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
                 max = (ri > gi && ri > bi) ? ri : (gi > bi) ? gi : bi,
                 min = (ri < gi && ri < bi) ? ri : (gi < bi) ? gi : bi, c = max - min;
         double r = ri / 255.0, g = gi / 255.0, b = bi / 255.0, h, s, l = 0.5 * (max + min);
@@ -133,6 +133,6 @@ public class HSL implements Serializable {
             b += Math.round((float) x * 255);
             g += 0;
         }
-        return Color_Utils_Config.toRGB(r, g, b);
+        return Colorizer.toRGB(r, g, b);
     }
 }

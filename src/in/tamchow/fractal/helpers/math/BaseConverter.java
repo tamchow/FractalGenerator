@@ -102,6 +102,8 @@ public class BaseConverter {
     }
     /**
      * Utility method for parsing an array of Strings to an array of ints
+     * @param data the {@link String} array to parse into a an {@code int} array
+     * @return {@code int} array containing the parsed values
      */
     @NotNull
     private static int[] parseStringsToIntegers(@NotNull String[] data) {
@@ -113,6 +115,8 @@ public class BaseConverter {
     }
     /**
      * Utility method for parsing an array of Strings to an array of doubles
+     * @param data the {@link String} array to parse into a an {@code double} array
+     * @return {@code double} array containing the parsed values
      */
     @NotNull
     private static double[] parseStringsToDoubles(@NotNull String[] data) {

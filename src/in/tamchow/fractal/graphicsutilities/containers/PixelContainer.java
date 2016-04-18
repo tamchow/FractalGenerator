@@ -1,5 +1,5 @@
 package in.tamchow.fractal.graphicsutilities.containers;
-import in.tamchow.fractal.color.Color_Utils_Config;
+import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.helpers.annotations.NotNull;
@@ -124,26 +124,26 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         if (mode == PostProcessMode.NONE) {
             return processed;
         }
-        for (int i = 1; i < processed.getPixdata().length - 1; i++) {
-            for (int j = 1; j < processed.getPixdata()[i].length - 1; j++) {
-                int left = pixdata[i][j - 1], right = pixdata[i][j + 1], top = pixdata[i - 1][j], bottom = pixdata[i + 1][j];
-                int top_left = pixdata[i - 1][j - 1], top_right = pixdata[i - 1][j + 1], bottom_left = pixdata[i + 1][j - 1], bottom_right = pixdata[i + 1][j + 1];
+        for (int i = 1; i < processed.getHeight() - 1; i++) {
+            for (int j = 1; j < processed.getWidth() - 1; j++) {
+                int left = getPixel(i, j - 1), right = getPixel(i, j + 1), top = getPixel(i - 1, j), bottom = getPixel(i + 1, j);
+                int top_left = getPixel(i - 1, j - 1), top_right = getPixel(i - 1, j + 1), bottom_left = getPixel(i + 1, j - 1), bottom_right = getPixel(i + 1, j + 1);
                 double average = (top_left + top + top_right + left + right + bottom_left + bottom + bottom_right) / 8;
                 switch (mode) {
                     case AVERAGE:
-                        processed.setPixel(i, j, (int) average);
+                        processed.setPixel(i, j, Math.round((float) average));
                         break;
                     case WEIGHTED_AVERAGE:
-                        processed.setPixel(i, j, (int) ((average + pixdata[i][j]) / 2));
+                        processed.setPixel(i, j, Math.round((float) ((average + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_AVERAGE:
-                        processed.setPixel(i, j, Color_Utils_Config.linearInterpolated((int) average, pixdata[i][j], biases[i][j] - (long) biases[i][j], byParts));
+                        processed.setPixel(i, j, Colorizer.linearInterpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
                         break;
                     case INTERPOLATED:
-                        processed.setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
+                        processed.setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
                         break;
                     case NEGATIVE:
-                        processed.setPixel(i, j, Color_Utils_Config.toRGB(0xff - Color_Utils_Config.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED), 0xff - Color_Utils_Config.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), 0xff - Color_Utils_Config.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                        processed.setPixel(i, j, Colorizer.toRGB(0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED), 0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), 0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
                         break;
                     case NONE:
                         break;
@@ -224,7 +224,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0));
+                        setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0));
                     }
                 }
             } else {
@@ -234,7 +234,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Color_Utils_Config.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0));
+                        setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0));
                     }
                 }
             }
@@ -252,7 +252,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         @NotNull PixelContainer falseColored = new PixelContainer(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
-                falseColored.setPixel(i, j, Color_Utils_Config.toRGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                falseColored.setPixel(i, j, Colorizer.toRGB(Colorizer.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Colorizer.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Colorizer.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
             }
         }
         return falseColored;
@@ -262,7 +262,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         @NotNull PixelContainer falseColored = new PixelContainer(r.getWidth(), r.getHeight());
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
-                falseColored.setPixel(i, j, Color_Utils_Config.packARGB(Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA), Color_Utils_Config.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Color_Utils_Config.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Color_Utils_Config.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                falseColored.setPixel(i, j, Colorizer.packARGB(Colorizer.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA), Colorizer.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Colorizer.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Colorizer.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
             }
         }
         return falseColored;
@@ -304,7 +304,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     }
     public void setPixel(int i, int val) {
         i = MathUtils.boundsProtected(i, getNum_pixels());
-        setPixel(i / getWidth(), i % getWidth(), val);
+        pixdata[i / getWidth()][i % getWidth()] = val;
     }
     @Override
     public void pan(int distance, double angle) {

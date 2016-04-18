@@ -1,5 +1,5 @@
 package in.tamchow.fractal.graphicsutilities.graphics;
-import in.tamchow.fractal.color.Color_Utils_Config;
+import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
@@ -7,7 +7,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * Line Drawing Utilities for {@link in.tamchow.fractal.graphicsutilities.containers.PixelContainer}
  *
  * @see in.tamchow.fractal.graphicsutilities.containers.PixelContainer
- * @see Color_Utils_Config#linearInterpolated(int, int, double, int)
+ * @see Colorizer#linearInterpolated(int, int, double, int)
  * @see in.tamchow.fractal.color.Colors.BASE_COLORS
  */
 public class DrawingUtilities {
@@ -83,7 +83,7 @@ public class DrawingUtilities {
     }
     private static void plot(@NotNull PixelContainer canvas, int color, double x, double y, double brightness) {
         canvas.setPixel(Math.round((float) y), Math.round((float) x),
-                Color_Utils_Config.linearInterpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0));
+                Colorizer.linearInterpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0));
     }
     private static double fpart(double x) {
         return x - Math.floor(x);
@@ -100,7 +100,7 @@ public class DrawingUtilities {
      * @param to_x   ending ordinate
      * @param to_y   ending abscissa
      * @param color  line pixel color
-     *               <p/>
+     *               <p>
      *               Deprecated.
      *               Use the {@link DrawingUtilities#drawLine(PixelContainer, double, double, double, double, int)}
      */

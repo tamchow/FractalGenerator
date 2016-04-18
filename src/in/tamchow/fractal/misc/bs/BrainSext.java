@@ -13,11 +13,11 @@ import java.util.Scanner;
  * Interpreter for custom BF-family language christened "BrainSext"(raw pun and acronym for "Brains Extended",
  * capable of interpreting PBrain, BrainFlow, pure BF (directly),
  * equivalent command sets from Extended BF,and  a set of extended behaviour from PointerLang
- * <a href="http://codegolf.stackexchange.com/questions/52277/write-an-interpreter-for-my-new-esoteric-language-pointerlang?rq=1">here</a>>
+ * <a href="http://codegolf.stackexchange.com/questions/52277/write-an-interpreter-for-my-new-esoteric-language-pointerlang?rq=1">here</a>
  * (with replacement by equivalent or extended command codes)
- * <p/>
+ * <p>
  * Example "Hello World" program:
- * <p/>
+ * </p>
  * <pre>[G2.]\Hello World</pre>
  *
  * Explanation:

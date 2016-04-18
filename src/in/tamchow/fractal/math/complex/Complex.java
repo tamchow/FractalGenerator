@@ -81,6 +81,9 @@ public final class Complex extends Number implements Serializable, Comparable<Co
     public double imaginary() {
         return ib;
     }
+    public double cabs() {
+        return (a * a) + (ib * ib);
+    }
     private boolean isInCorrectFormat(@NotNull String complex) {
         if (complex.length() <= 0) return false;
         if (complex.contains(",")) {
@@ -100,7 +103,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         return toString().compareTo(complex.toString());
     }
     public double modulus() {
-        return Math.sqrt((a * a) + (ib * ib));
+        return Math.sqrt(cabs());
     }
     @Override
     public boolean equals(Object complex) {

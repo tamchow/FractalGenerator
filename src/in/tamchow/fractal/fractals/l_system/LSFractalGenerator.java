@@ -22,7 +22,7 @@ import static in.tamchow.fractal.helpers.math.MathUtils.weightedRandom;
  * Generates L-System fractals.
  * Does not implement panning or zooming, as those make no sense for L-System fractals.
  */
-public class LSFractalGenerator implements FractalGenerator {
+public class LSFractalGenerator extends FractalGenerator {
     private static final int BUFFER_MULTIPLIER = 2;
     LSFractalParams params;
     PixelContainer canvas;
@@ -42,8 +42,11 @@ public class LSFractalGenerator implements FractalGenerator {
         for (int i = 0, k = 1; i < generations.length - 1 && k < generations.length; ++i, ++k) {
             @NotNull CharBuffer builder = new ResizableCharBuffer(generations[i].length() * BUFFER_MULTIPLIER);
             for (int j = 0; j < generations[i].length(); ++j) {
-                @NotNull
-                String leftSymbol = String.valueOf(generations[i].charAt(boundsProtected(j - 1, generations[i].length()))),
+                if (stop) {
+                    return;
+                }
+                checkAndDoPause();
+                @NotNull String leftSymbol = String.valueOf(generations[i].charAt(boundsProtected(j - 1, generations[i].length()))),
                         rightSymbol = String.valueOf(generations[i].charAt(boundsProtected(j + 1, generations[i].length()))),
                         toEvolve = String.valueOf(generations[i].charAt(j));
                 @Nullable UnitGrammar evolutions = getGrammarForCode(toEvolve);
@@ -147,6 +150,10 @@ public class LSFractalGenerator implements FractalGenerator {
     public void drawState(@NotNull String stateToDraw) {
         double segmentlength = params.getInit_length() * Math.cos(params.getInit_angle()) / stateToDraw.length();
         for (int i = 0; i < stateToDraw.length(); ++i) {
+            if (stop) {
+                return;
+            }
+            checkAndDoPause();
             @Nullable UnitGrammar grammar = getGrammarForCode(stateToDraw.charAt(i) + "");
             if (grammar == null) {
                 throw new LSGrammarException("Undefined code encountered.");
@@ -171,6 +178,10 @@ public class LSFractalGenerator implements FractalGenerator {
         }
         @NotNull Animation frames = new Animation(params.getFps());
         for (@NotNull String state : generations) {
+            if (stop) {
+                return frames;
+            }
+            checkAndDoPause();
             drawState(state);
             frames.addFrame(getCanvas());
         }

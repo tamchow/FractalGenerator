@@ -3,7 +3,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.misc.evilstuff.EvilStuff;
 /**
  * A class which implements a calculator which provides unpredictable additions.
- * <p/>
+ * <p>
  * Uses {@link EvilStuff}
  *
  * @author Tamoghna Chowdhury

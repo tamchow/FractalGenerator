@@ -93,6 +93,7 @@ public class FixedStack<E> extends Stack<E> {
     /**
      * Pops a set of values from the stack
      *
+     * @param n the number of values to pop
      * @return The popped values
      */
     @NotNull

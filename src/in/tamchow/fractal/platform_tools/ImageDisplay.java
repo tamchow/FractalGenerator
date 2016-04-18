@@ -17,7 +17,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 /**
- * Swing app to display images & complex number fractals
+ * Swing app to display images &amp; complex number fractals
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Publisher {
     BufferedImage[] img;

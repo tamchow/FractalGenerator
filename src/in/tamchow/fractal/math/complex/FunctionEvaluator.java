@@ -181,6 +181,13 @@ public class FunctionEvaluator {
         }
         return true;
     }
+    public Complex evaluate(@NotNull String expr, Complex z_value) {
+        String z_value_backup = this.z_value;
+        setZ_value(z_value.toString());
+        Complex result = evaluate(expr, false);
+        setZ_value(z_value_backup);
+        return result;
+    }
     public Complex evaluate(@NotNull String expr, boolean isSymbolic) {
         @NotNull String subexpr = substitute(expr, isSymbolic);
         Complex ztmp;
