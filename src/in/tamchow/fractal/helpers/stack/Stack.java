@@ -8,9 +8,9 @@ import java.util.EmptyStackException;
 import java.util.Iterator;
 /**
  * Abstract Stack Base class. Implements {@link java.util.Collection}.
- * <p/>
+ * <p>
  * Known implementors:
- * <p/>
+ * <p>
  * {@link FixedStack} - A fixed-length array-based stack.
  *
  * @see java.util.Collection
@@ -58,8 +58,23 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
      * @see Collection#contains(Object)
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean contains(Object o) {
-        return false;
+        return indexOf((E) o) >= 0;
+    }
+    /**
+     *
+     * @param item the item whose index has to be found
+     * @return the 0-based index of {@code item} if it exists in this stack, or -1 if it doesn't
+     */
+    public int indexOf(E item) {
+        E[] items = dumpStack();
+        for (int i = 0; i < items.length; ++i) {
+            if (item.equals(items[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
     /**
      * @return {@link StackIterator}
@@ -81,7 +96,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
     }
     /**
      * @return the elements of this stack
-     * @see Collection#toArray(T[])
+     * @see Collection#toArray(Object[])
      */
     @NotNull
     @Override
@@ -108,7 +123,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
     /**
      * @param item the {@link Object} to remove
      * @return does not return
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException as {@code Stack} does not support this operation
      * @see Collection#removeAll(Collection)
      */
     @Override
@@ -144,7 +159,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
     /**
      * @param c the {@link Collection} to remove
      * @return does not return
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException as {@code Stack} does not support this operation
      * @see Collection#removeAll(Collection)
      */
     @Override
@@ -154,7 +169,7 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
     /**
      * @param c the {@link Collection} to retain
      * @return does not return
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException as {@code Stack} does not support this operation
      * @see Collection#retainAll(Collection)
      */
     @Override

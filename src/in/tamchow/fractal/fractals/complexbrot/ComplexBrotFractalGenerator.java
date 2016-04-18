@@ -28,7 +28,7 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.*;
  * @see ComplexFractalGenerator
  * @see ComplexBrotFractalParams
  */
-public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
+public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     static Complex[][] plane_map;
     private static Complex[] points;
     private static long sumIterations;
@@ -495,26 +495,29 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
             @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
             outer:
             for (int j = start; j < end; ++j) {
-                Complex z = points[j], ztmp2 = Complex.ZERO;
+                Complex z = points[j], ztmp2 = Complex.ZERO, zold = Complex.ZERO;
                 int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
                 while (c <= iteration) {
+                    if (stop) {
+                        return;
+                    }
+                    checkAndDoPause();
                     Complex ztmp;
                     last.pop();
                     ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
                     last.push(z);
                     fe.setOldvalue(ztmp2.toString());
                     Complex a = fe.evaluate(function, false);
-                    fe.setZ_value(ztmp2.toString());
-                    Complex b = fe.evaluate(function, false);
+                    Complex b = fe.evaluate(function, zold);
                     ztmp = subtract(z,
                             divide(
                                     multiply(a,
-                                            subtract(z, ztmp2)),
+                                            subtract(z, zold)),
                                     subtract(a, b)));
                     fe.setZ_value(ztmp.toString());
-                    if (fe.evaluate(function, false).modulus() <= tolerance) {
+                    if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
                         c = iteration;
                         break;
                     }
@@ -584,6 +587,10 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                 }
                 last.push(z);
                 while (c <= iteration) {
+                    if (stop) {
+                        return;
+                    }
+                    checkAndDoPause();
                     if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
                         if (mandelbrotToJulia) {
                             if (c % switch_rate == 0) {
@@ -619,7 +626,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                         ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
                     }
                     fe.setZ_value(ztmp.toString());
-                    if (fe.evaluate(function, false).modulus() <= tolerance) {
+                    if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
                         c = iteration;
                         break;
                     }
@@ -643,6 +650,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         }
     }
     private void mandelbrotGenerate(int start, int end) {
+        double bailout = escape_radius * escape_radius + tolerance;
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         int level = 0;
@@ -661,7 +669,11 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                 last.push(z);
                 int c = 0;
                 boolean useJulia = false;
-                while (c <= iteration && z.modulus() < escape_radius) {
+                while (c <= iteration && z.cabs() <= bailout) {
+                    if (stop) {
+                        return;
+                    }
+                    checkAndDoPause();
                     if (mandelbrotToJulia) {
                         if (c % switch_rate == 0) {
                             useJulia = (!useJulia);
@@ -716,6 +728,7 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
         }
     }
     private void juliaGenerate(int start, int end) {
+        double bailout = escape_radius * escape_radius + tolerance;
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         int level = 0;
@@ -731,7 +744,11 @@ public class ComplexBrotFractalGenerator implements PixelFractalGenerator {
                 last.push(z);
                 int c = 0;
                 boolean useMandelBrot = false;
-                while (c <= iteration && z.modulus() < escape_radius) {
+                while (c <= iteration && z.cabs() <= bailout) {
+                    if (stop) {
+                        return;
+                    }
+                    checkAndDoPause();
                     if (juliaToMandelbrot) {
                         if (c % switch_rate == 0) {
                             useMandelBrot = (!useMandelBrot);

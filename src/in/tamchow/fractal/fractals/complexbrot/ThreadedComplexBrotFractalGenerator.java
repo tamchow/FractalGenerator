@@ -65,12 +65,20 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             this.end = end;
         }
         @Override
+        public synchronized void pause() throws InterruptedException {
+            copyOfMaster.pause();
+        }
+        @Override
+        public synchronized void resume() throws InterruptedException {
+            copyOfMaster.resume();
+        }
+        @Override
         public void generate() {
             copyOfMaster.generate(start, end);
             onCompletion();
         }
         @Override
-        public void onCompleted() {
+        public void onCompletion() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);

@@ -5,11 +5,11 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Threaded IFS Fractal Generator
- * <p/>
+ * <p>
  * Note: May produce unpredictable results. Use not recommended.
- * <p/>
+ * <p>
  * Expected result: Images with {@link IFSFractalParams#depth} times added colors.
- * <p/>
+ * <p>
  * Debugging in progress.
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
@@ -71,12 +71,20 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             copyOfMaster.setDepth(iterations);
         }
         @Override
+        public synchronized void pause() throws InterruptedException {
+            copyOfMaster.pause();
+        }
+        @Override
+        public synchronized void resume() throws InterruptedException {
+            copyOfMaster.resume();
+        }
+        @Override
         public void generate() {
             copyOfMaster.generate(index);
             onCompletion();
         }
         @Override
-        public void onCompleted() {
+        public void onCompletion() {
             data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);

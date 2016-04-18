@@ -1,6 +1,6 @@
 /**
  * Base package and project info
- * <p/>
+ * <p>
  * Most utility methods are Nullable
  */
 package in.tamchow.fractal;

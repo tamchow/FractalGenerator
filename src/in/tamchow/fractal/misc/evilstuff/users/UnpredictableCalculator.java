@@ -4,7 +4,7 @@ import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.misc.evilstuff.EvilStuff;
 /**
  * A class which implements a calculator which provides unpredictable functions.
- * <p/>
+ * <p>
  * Uses {@link EvilStuff}
  *
  * @author Tamoghna Chowdhury
