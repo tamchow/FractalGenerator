@@ -30,11 +30,11 @@ public class Transition {
     public Animation getFrames() {
         return frames;
     }
-    public void setFrames(Animation frames) {
-        this.frames = frames;
-    }
     public void setFrames(@NotNull PixelContainer[] frames) {
         this.frames.setFrames(frames);
+    }
+    public void setFrames(Animation frames) {
+        this.frames = frames;
     }
     public PixelContainer getImg2() {
         return img2;
