@@ -1,11 +1,16 @@
 package in.tamchow.fractal.helpers.strings;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Miscellaneous: String Manipulation.
  */
-public class StringManipulator {
+public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';
-    public static String doCyclicShift(String input) {
-        char[] processor = input.toCharArray();
+    private StringManipulator() {
+    }
+    @NotNull
+    public static String doCyclicShift(@NotNull String input) {
+        @NotNull char[] processor = input.toCharArray();
         for (int i = 1; i < processor.length; i++) {
             char tmp = processor[i];
             processor[i] = processor[0];
@@ -19,7 +24,7 @@ public class StringManipulator {
         long other = num / 10;
         return (long) (one * Math.pow(10, digits)) + other;
     }
-    public static int indexOfBackwards(String search, int startindex, char tosearch) {
+    public static int indexOfBackwards(@NotNull String search, int startindex, char tosearch) {
         for (int i = startindex; i > 0; i--) {
             if (search.charAt(i) == tosearch) {
                 return i;
@@ -27,7 +32,7 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int indexOfBetweenBackwards(String search, int startindex, int endindex, char tosearch) {
+    public static int indexOfBetweenBackwards(@NotNull String search, int startindex, int endindex, char tosearch) {
         for (int i = startindex; i > endindex; i--) {
             if (search.charAt(i) == tosearch) {
                 return i;
@@ -35,7 +40,7 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int indexOfBetween(String search, int startindex, int endindex, char tosearch) {
+    public static int indexOfBetween(@NotNull String search, int startindex, int endindex, char tosearch) {
         for (int i = startindex; i < endindex; i++) {
             if (search.charAt(i) == tosearch) {
                 return i;
@@ -43,7 +48,7 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int findMatchingOpener(char toMatch, String in, int closeIndex) {
+    public static int findMatchingOpener(char toMatch, @NotNull String in, int closeIndex) {
         int openIndex = closeIndex;
         int counter = 0;
         while (counter >= 0 && openIndex >= 0) {
@@ -80,7 +85,7 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int findMatchingCloser(char toMatch, String in, int openIndex) {
+    public static int findMatchingCloser(char toMatch, @NotNull String in, int openIndex) {
         int closeIndex = openIndex;
         int counter = 0;
         while (counter >= 0 && closeIndex < in.length()) {
@@ -117,7 +122,7 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int getNumFromIndex(String str, int idx) {
+    public static int getNumFromIndex(@NotNull String str, int idx) {
         String num = "";
         boolean negative = false;
         if (str.charAt(idx) == '_') {
@@ -137,7 +142,7 @@ public class StringManipulator {
         }
         return Integer.valueOf(num);
     }
-    public static int nthIndexBackwards(String s, char c, int idx, int n) {
+    public static int nthIndexBackwards(@NotNull String s, char c, int idx, int n) {
         int ctr = 0;
         for (int i = idx; i >= 0; i--) {
             if (ctr == n) {
@@ -149,7 +154,7 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int nthIndex(String s, char c, int idx, int n) {
+    public static int nthIndex(@NotNull String s, char c, int idx, int n) {
         int ctr = 0;
         for (int i = idx; i < s.length(); i++) {
             if (ctr == n) {
@@ -161,21 +166,24 @@ public class StringManipulator {
         }
         return -1;
     }
-    public static int[] indexesOf(String in, char what) {
+    @NotNull
+    public static int[] indexesOf(@NotNull String in, char what) {
         return indexesOf(in, "" + what);
     }
-    public static int countOccurrencesOf(String in, char what) {
+    public static int countOccurrencesOf(@NotNull String in, char what) {
         return countOccurrencesOf(in, "" + what);
     }
-    public static String format(String toFormat, String[][] details) {
-        String formatted = "";
+    @NotNull
+    public static String format(@NotNull String toFormat, @NotNull String[][] details) {
+        @NotNull String formatted = "";
         for (String[] detail : details) {
             formatted = replace(toFormat, detail[0], detail[1]);
         }
         return formatted;
     }
-    public static int[] indexesOf(String in, String what) {
-        int[] backup = new int[in.length()], indexes;
+    @NotNull
+    public static int[] indexesOf(@NotNull String in, @NotNull String what) {
+        @NotNull int[] backup = new int[in.length()], indexes;
         int idx = 0, count = 0;
         while ((idx = in.indexOf(what, idx)) != -1) {
             backup[count++] = idx++;
@@ -184,13 +192,15 @@ public class StringManipulator {
         System.arraycopy(backup, 0, indexes, 0, count);
         return indexes;
     }
-    public static int countOccurrencesOf(String in, String what) {
+    public static int countOccurrencesOf(@NotNull String in, @NotNull String what) {
         return indexesOf(in, what).length;
     }
-    public static String delete(String value, String what) {
+    @NotNull
+    public static String delete(@NotNull String value, @NotNull String what) {
         return replace(value, what, "");
     }
-    public static String replace(String value, String from, String to) {
+    @NotNull
+    public static String replace(@NotNull String value, @NotNull String from, @Nullable String to) {
         if (value.length() == 0 || from.length() == 0) {
             //the length checks will throw the necessary NullPointerExceptions
             return value;
@@ -198,10 +208,10 @@ public class StringManipulator {
         if (to == null) {
             to = "";
         }
-        String result = value;
+        @NotNull String result = value;
         int lastIndex = 0, index = value.indexOf(from), fl = from.length(), replaceCount = countOccurrencesOf(value, from);
         if (index != -1) {
-            CharBuffer buffer = new CharBuffer(result.length() - replaceCount * (fl - to.length()));
+            @NotNull CharBuffer buffer = new CharBuffer(result.length() - replaceCount * (fl - to.length()));
             while (index != -1) {
                 buffer.append(value.substring(lastIndex, index)).append(to);
                 lastIndex = index + fl;
@@ -212,7 +222,8 @@ public class StringManipulator {
         }
         return result;
     }
-    public static String[] split(String what, String at) {
+    @NotNull
+    public static String[] split(@NotNull String what, @NotNull String at) {
         /*if (what.isEmpty() || at.isEmpty()) {
             //the length checks will throw the necessary NullPointerExceptions
             throw new IllegalArgumentException("Empty String");
@@ -223,7 +234,7 @@ public class StringManipulator {
         if (at.isEmpty()) {
             return new String[]{what};
         }
-        String[] result = new String[countOccurrencesOf(what, at) + 1];
+        @NotNull String[] result = new String[countOccurrencesOf(what, at) + 1];
         if (result.length == 1) {
             result[0] = what;
             return result;

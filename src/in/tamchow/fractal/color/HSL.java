@@ -1,4 +1,5 @@
 package in.tamchow.fractal.color;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
@@ -12,17 +13,19 @@ public class HSL implements Serializable {
         setSaturation(saturation);
         setLightness(lightness);
     }
-    public static HSL fromString(String hsl) {
-        String[] parts = StringManipulator.split(hsl, ",");
+    @NotNull
+    public static HSL fromString(@NotNull String hsl) {
+        @NotNull String[] parts = StringManipulator.split(hsl, ",");
         return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
     }
     public static double hueFromAngle(double radianMeasure) {
         return radianMeasure / (2 * Math.PI);
     }
+    @NotNull
     public static HSL fromRGB(int color) {
-        int ri = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.RED),
-                gi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
-                bi = Color_Utils_Config.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
+        int ri = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.RED),
+                gi = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
+                bi = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
                 max = (ri > gi && ri > bi) ? ri : (gi > bi) ? gi : bi,
                 min = (ri < gi && ri < bi) ? ri : (gi < bi) ? gi : bi, c = max - min;
         double r = ri / 255.0, g = gi / 255.0, b = bi / 255.0, h, s, l = 0.5 * (max + min);
@@ -48,13 +51,14 @@ public class HSL implements Serializable {
     @Override
     public boolean equals(Object other) {
         if (other instanceof HSL) {
-            HSL that = (HSL) other;
+            @NotNull HSL that = (HSL) other;
             if (that.getHue() == getHue() && that.getLightness() == getLightness() && that.getSaturation() == getSaturation()) {
                 return true;
             }
         }
         return false;
     }
+    @NotNull
     @Override
     public String toString() {
         return hue + "," + saturation + "," + lightness;
@@ -129,6 +133,6 @@ public class HSL implements Serializable {
             b += Math.round((float) x * 255);
             g += 0;
         }
-        return Color_Utils_Config.toRGB(r, g, b);
+        return Colorizer.toRGB(r, g, b);
     }
 }

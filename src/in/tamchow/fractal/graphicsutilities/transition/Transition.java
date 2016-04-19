@@ -1,8 +1,10 @@
 package in.tamchow.fractal.graphicsutilities.transition;
-import in.tamchow.fractal.color.Color_Utils_Config;
+import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Creates transitions between images.
  * Note: Images to be transitioned between must be of the same resolution. No scaling is implemented here.
@@ -12,7 +14,7 @@ public class Transition {
     private Animation frames;
     private TransitionTypes transtype;
     private int transtime;
-    public Transition(TransitionTypes transtype, PixelContainer img1, PixelContainer img2, int fps, int time) {
+    public Transition(TransitionTypes transtype, @NotNull PixelContainer img1, @NotNull PixelContainer img2, int fps, int time) {
         setImg1(img1);
         setImg2(img2);
         frames = new Animation(fps);
@@ -28,22 +30,22 @@ public class Transition {
     public Animation getFrames() {
         return frames;
     }
-    public void setFrames(PixelContainer[] frames) {
-        this.frames.setFrames(frames);
-    }
     public void setFrames(Animation frames) {
         this.frames = frames;
+    }
+    public void setFrames(@NotNull PixelContainer[] frames) {
+        this.frames.setFrames(frames);
     }
     public PixelContainer getImg2() {
         return img2;
     }
-    public void setImg2(PixelContainer img2) {
+    public void setImg2(@NotNull PixelContainer img2) {
         this.img2 = new PixelContainer(img2);
     }
     public PixelContainer getImg1() {
         return img1;
     }
-    public void setImg1(PixelContainer img1) {
+    public void setImg1(@NotNull PixelContainer img1) {
         this.img1 = new PixelContainer(img1);
     }
     public TransitionTypes getTranstype() {
@@ -54,8 +56,8 @@ public class Transition {
     }
     public void doTransition() {
         frames.clearFrames();
-        PixelContainer tmp = new PixelContainer(img1);
-        int[][] pixdata = tmp.getPixdata();
+        @NotNull PixelContainer tmp = new PixelContainer(img1);
+        @Nullable int[][] pixdata = tmp.getPixdata();
         frames.addFrame(img1);
         int numframes = frames.getFps() * transtime;
         int bandwidth = img2.getWidth() / numframes;
@@ -137,10 +139,10 @@ public class Transition {
                 for (int i = 0; i <= numframes; i++) {
                     for (int j = 0; j < img2.getHeight(); j++) {
                         for (int k = 0; k < img2.getWidth(); k++) {
-                            int r = (int) (Color_Utils_Config.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * ((double) i / numframes) + Color_Utils_Config.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * (1 - ((double) i / numframes)));
-                            int g = (int) (Color_Utils_Config.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * ((double) i / numframes) + Color_Utils_Config.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * (1 - ((double) i / numframes)));
-                            int b = (int) (Color_Utils_Config.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * ((double) i / numframes) + Color_Utils_Config.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * (1 - ((double) i / numframes)));
-                            tmp.setPixel(j, k, Color_Utils_Config.packRGB(r, g, b));
+                            int r = (int) (Colorizer.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * ((double) i / numframes) + Colorizer.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * (1 - ((double) i / numframes)));
+                            int g = (int) (Colorizer.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * ((double) i / numframes) + Colorizer.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * (1 - ((double) i / numframes)));
+                            int b = (int) (Colorizer.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * ((double) i / numframes) + Colorizer.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * (1 - ((double) i / numframes)));
+                            tmp.setPixel(j, k, Colorizer.packRGB(r, g, b));
                         }
                     }
                     frames.addFrame(tmp);

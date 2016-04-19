@@ -1,14 +1,10 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Threaded IFS Fractal Generator
- * <p/>
- * Note: May produce unpredictable results. Use not recommended.
- * <p/>
- * Expected result: Images with {@link IFSFractalParams#depth} times added colors.
- * <p/>
- * Debugging in progress.
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
     IFSGenerator master;
@@ -17,11 +13,12 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     public ThreadedIFSGenerator(IFSGenerator generator) {
         master = generator;
         threads = master.getParams().getThreads();
+        data = new PartIFSData[threads];
     }
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
-        for (PartIFSData partImage : data) {
+        for (@Nullable PartIFSData partImage : data) {
             if (partImage != null) ctr++;
         }
         return ctr;
@@ -32,26 +29,26 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     }
     public void generate() {
         int idx = 0;
-        for (int i = 0; i < threads; i++) {
-            SlaveRunner runner = new SlaveRunner(idx);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
+        for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
+            @NotNull SlaveRunner runner = new SlaveRunner(idx);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
             idx++;
             runner.start();
         }
         try {
-            synchronized (lock) {
-                while (!allComplete()) {
-                    lock.wait(1000);
-                }
-                lock.notifyAll();
-                for (PartIFSData partIFSData : data) {
-                    master.getPlane().add(partIFSData.getPartPlane());
-                    master.getAnimation().addFrames(partIFSData.getPartAnimation());
-                }
+            wrapUp();
+        } catch (InterruptedException interrupted) {
+            interrupted.printStackTrace();
+        }
+    }
+    @Override
+    public void finalizeGeneration() {
+        for (@Nullable PartIFSData partIFSData : data) {
+            if (partIFSData == null) {
+                continue;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //master.getProgressPublisher().println("Exception:" + e.getMessage());
+            master.getPlane().add(partIFSData.getPartPlane(), true, partIFSData.getPartWeightData());
+            master.getAnimation().addFrames(partIFSData.getPartAnimation());
         }
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
@@ -69,14 +66,23 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             copyOfMaster.setDepth(iterations);
         }
         @Override
-        public void run() {
+        public synchronized void pause() throws InterruptedException {
+            copyOfMaster.pause();
+        }
+        @Override
+        public synchronized void resume() throws InterruptedException {
+            copyOfMaster.resume();
+        }
+        @Override
+        public void generate() {
             copyOfMaster.generate(index);
+            onCompletion();
         }
         @Override
         public void onCompletion() {
-            data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation());
+            data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
+            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

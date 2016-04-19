@@ -1,4 +1,6 @@
 package in.tamchow.fractal.helpers.stack.impls;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.StackOverflowException;
 
@@ -64,7 +66,7 @@ public class FixedStack<E> extends Stack<E> {
      *
      * @param values The values to push
      */
-    public void pushN(E[] values) {
+    public void pushN(@NotNull E[] values) {
         for (E value : values) {
             push(value);
         }
@@ -91,10 +93,12 @@ public class FixedStack<E> extends Stack<E> {
     /**
      * Pops a set of values from the stack
      *
+     * @param n the number of values to pop
      * @return The popped values
      */
+    @NotNull
     public E[] popN(int n) {
-        @SuppressWarnings("unchecked")
+        @NotNull @SuppressWarnings("unchecked")
         E[] values = (E[]) new Object[n];
         for (int i = 0; i < n; i++) {
             values[i] = pop();
@@ -128,8 +132,9 @@ public class FixedStack<E> extends Stack<E> {
      * @param n The number of values to peek at
      * @return The peeked-at values
      */
+    @NotNull
     public E[] peekN(int n) {
-        @SuppressWarnings("unchecked")
+        @NotNull @SuppressWarnings("unchecked")
         E[] values = (E[]) new Object[n];
         for (int i = 0; i < n; i++) {
             values[i] = peek(i);
@@ -178,7 +183,7 @@ public class FixedStack<E> extends Stack<E> {
      * @see FixedStack#initStack(Object[])
      */
     public void reverse() {
-        @SuppressWarnings("unchecked")
+        @NotNull @SuppressWarnings("unchecked")
         E[] reversed = (E[]) new Object[elements.length];
         for (int i = 0, j = reversed.length - 1; i < elements.length && j >= 0; i++, j--) {
             reversed[j] = elements[i];
@@ -192,7 +197,7 @@ public class FixedStack<E> extends Stack<E> {
      * @see FixedStack#pushN(Object[])
      * @see FixedStack#setSize(int)
      */
-    public void initStack(E[] elements) {
+    public void initStack(@NotNull E[] elements) {
         setSize(elements.length);
         pushN(elements);
     }
@@ -223,7 +228,7 @@ public class FixedStack<E> extends Stack<E> {
      */
     public int sizeN() {
         int size = 0;
-        for (E i : elements) {
+        for (@Nullable E i : elements) {
             if (i != null) ++size;
         }
         return size;
@@ -246,6 +251,14 @@ class FixedStackOverflowException extends StackOverflowException {
      * Constructs the exception with a default message
      */
     public FixedStackOverflowException() {
-        super(" Fixed Stack Overflow");
+        this(" Fixed Stack Overflow");
+    }
+    /**
+     * Constructs the exception with a custom message
+     *
+     * @param message the custom message
+     */
+    public FixedStackOverflowException(String message) {
+        super(message);
     }
 }

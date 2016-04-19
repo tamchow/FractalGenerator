@@ -1,4 +1,6 @@
 package in.tamchow.fractal.math.matrix;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
@@ -8,10 +10,10 @@ import java.io.Serializable;
 public final class Matrix extends Number implements Serializable, Comparable<Matrix> {
     private int rows, columns;
     private double[][] matrixData;
-    public Matrix(double[][] matrixData) {
+    public Matrix(@NotNull double[][] matrixData) {
         initMatrix(matrixData.length, matrixData[0].length, matrixData);
     }
-    public Matrix(Matrix old) {
+    public Matrix(@NotNull Matrix old) {
         initMatrix(old.getNumRows(), old.getNumColumns(), old.getMatrixData());
     }
     public Matrix(int rows, int columns) {
@@ -21,30 +23,34 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     public Matrix(String matrix) {
         matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
-        String[] rows = StringManipulator.split(matrix, ";");
+        @NotNull String[] rows = StringManipulator.split(matrix, ";");
         this.rows = rows.length;
         this.columns = StringManipulator.split(rows[0].substring(1, rows[0].length() - 1), ",").length;
         for (int i = 0; i < matrixData.length && i < rows.length; i++) {
             //trim leading and trailing square brackets
-            String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
+            @NotNull String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
             for (int j = 0; j < matrixData[i].length && j < columns.length; j++) {
                 matrixData[i][j] = Double.valueOf(columns[j]);
             }
         }
     }
+    @NotNull
     public static Matrix rotationMatrix2D(double angle) {
         return new Matrix(new double[][]{{Math.cos(angle), Math.sin(angle)}, {-Math.sin(angle), Math.cos(angle)}});
     }
+    @NotNull
     public static Matrix nullMatrix(int order) {
         return nullMatrix(order, order);
     }
+    @NotNull
     public static Matrix nullMatrix(int rows, int columns) {
         return new Matrix(rows, columns);
     }
+    @NotNull
     public static Matrix identityMatrix(int order) {
         int rows = Math.round((float) Math.sqrt(order));
         //Note: For an identity matrix, rows=columns, so we reuse `rows` as `columns`
-        Matrix matrix = new Matrix(rows, rows);
+        @NotNull Matrix matrix = new Matrix(rows, rows);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < rows; j++) {
                 if (i == j) {
@@ -56,7 +62,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         }
         return matrix;
     }
-    private void initMatrix(int rows, int columns, double[][] matrixData) {
+    private void initMatrix(int rows, int columns, @NotNull double[][] matrixData) {
         setMatrixData(matrixData);
         setNumRows(rows);
         setNumColumns(columns);
@@ -76,7 +82,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     public double[][] getMatrixData() {
         return matrixData;
     }
-    public void setMatrixData(double[][] matrixData) {
+    public void setMatrixData(@NotNull double[][] matrixData) {
         this.matrixData = new double[matrixData.length][matrixData[0].length];
         for (int i = 0; i < matrixData.length; i++) {
             System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData[i].length);
@@ -85,8 +91,9 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     public synchronized void set(int i, int j, double value) {
         matrixData[i][j] = value;
     }
+    @NotNull
     public Matrix transpose() {
-        Matrix transposedMatrix = new Matrix(getNumColumns(), getNumRows());
+        @NotNull Matrix transposedMatrix = new Matrix(getNumColumns(), getNumRows());
         for (int i = 0; i < getNumRows(); i++) {
             for (int j = 0; j < getNumColumns(); j++) {
                 transposedMatrix.set(j, i, get(i, j));
@@ -97,8 +104,9 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     public boolean isSquare() {
         return rows == columns;
     }
+    @NotNull
     public Matrix createSubMatrix(int excluding_row, int excluding_col) {
-        Matrix mat = new Matrix(getNumRows() - 1, getNumColumns() - 1);
+        @NotNull Matrix mat = new Matrix(getNumRows() - 1, getNumColumns() - 1);
         int r = -1;
         for (int i = 0; i < getNumRows(); i++) {
             if (i == excluding_row) continue;
@@ -123,7 +131,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     public double determinant() {
         return determinant(this);
     }
-    public double determinant(Matrix matrix) {
+    public double determinant(@NotNull Matrix matrix) {
         if (!matrix.isSquare()) throw new IllegalArgumentException("Matrix needs to be square.");
         if (matrix.size() == 1) {
             return matrix.get(0, 0);
@@ -140,8 +148,9 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     public Matrix inverse() {
         return MatrixOperations.multiply(cofactor().transpose(), 1.0 / determinant());
     }
+    @NotNull
     public Matrix cofactor() {
-        Matrix mat = new Matrix(getNumRows(), getNumColumns());
+        @NotNull Matrix mat = new Matrix(getNumRows(), getNumColumns());
         for (int i = 0; i < getNumRows(); i++) {
             for (int j = 0; j < getNumColumns(); j++) {
                 mat.set(i, j, changeSign(i) * changeSign(j) * determinant(createSubMatrix(i, j)));
@@ -150,11 +159,14 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         return mat;
     }
     @Override
-    public synchronized boolean equals(Object that) {
+    public boolean equals(@Nullable Object that) {
+        if (that == this) {
+            return true;
+        }
         if (that == null || (!(that instanceof Matrix))) {
             return false;
         }
-        Matrix other = (Matrix) that;
+        @Nullable Matrix other = (Matrix) that;
         if (!(getNumColumns() == other.getNumColumns() && getNumRows() == other.getNumRows())) return false;
         for (int i = 0; i < other.getNumRows(); i++) {
             for (int j = 0; j < other.getNumColumns(); j++) {
@@ -163,10 +175,11 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         }
         return true;
     }
+    @NotNull
     @Override
     public String toString() {
-        String matrix = "";
-        for (double[] aMatrixData : matrixData) {
+        @NotNull String matrix = "";
+        for (@NotNull double[] aMatrixData : matrixData) {
             for (double anAMatrixData : aMatrixData) {
                 matrix += anAMatrixData + ",";
             }
@@ -178,7 +191,10 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         return matrixData[i][j];
     }
     @Override
-    public int compareTo(Matrix other) {
+    public int compareTo(@NotNull Matrix other) {
+        if (equals(other)) {
+            return 0;
+        }
         if (other.getNumColumns() + other.getNumRows() != getNumColumns() + getNumRows()) {
             return (other.getNumColumns() + other.getNumRows()) - (getNumColumns() + getNumRows());
         } else {
@@ -188,7 +204,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     private double sumAllElements() {
         double sum = 0;
-        for (double[] row : matrixData) {
+        for (@NotNull double[] row : matrixData) {
             for (double element : row) {
                 sum += element;
             }

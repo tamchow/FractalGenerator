@@ -1,9 +1,12 @@
 package in.tamchow.fractal.misc.bs.bserrors;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * BS unmatched literal exception
  */
 public class UnmatchedLiteralException extends RuntimeException {
     String message;
+    @Nullable
     Throwable cause;
     public UnmatchedLiteralException(String message) {
         this.message = message;
@@ -13,14 +16,17 @@ public class UnmatchedLiteralException extends RuntimeException {
         this.message = message;
         this.cause = cause;
     }
+    @NotNull
     @Override
     public String toString() {
         return getMessage();
     }
+    @NotNull
     @Override
     public String getMessage() {
         return message + ((cause == null) ? "" : cause.getMessage());
     }
+    @NotNull
     @Override
     public String getLocalizedMessage() {
         return message + ((cause == null) ? "" : cause.getLocalizedMessage());

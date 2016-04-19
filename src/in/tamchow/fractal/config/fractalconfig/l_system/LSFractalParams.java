@@ -1,5 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class LSFractalParams implements Serializable {
     int fps;
     double init_angle;
     UnitGrammar[] grammar;
-    public LSFractalParams(LSFractalParams old) {
+    public LSFractalParams(@NotNull LSFractalParams old) {
         setPath(old.getPath());
         setPostProcessMode(old.getPostProcessMode());
         setHeight(old.getHeight());
@@ -50,7 +51,7 @@ public class LSFractalParams implements Serializable {
     public UnitGrammar[] getGrammar() {
         return grammar;
     }
-    public void setGrammar(UnitGrammar[] grammar) {
+    public void setGrammar(@NotNull UnitGrammar[] grammar) {
         this.grammar = new UnitGrammar[grammar.length];
         for (int i = 0; i < this.grammar.length; i++) {
             this.grammar[i] = new UnitGrammar(grammar[i]);
@@ -92,8 +93,8 @@ public class LSFractalParams implements Serializable {
     public void setPath(String path) {
         this.path = path;
     }
-    public void fromString(String[] data) {
-        String[] init = StringManipulator.split(data[0], ",");
+    public void fromString(@NotNull String[] data) {
+        @NotNull String[] init = StringManipulator.split(data[0], ",");
         if (init.length == 6) {
             width = Integer.valueOf(init[0]);
             height = Integer.valueOf(init[1]);

@@ -1,5 +1,5 @@
 package in.tamchow.fractal.helpers.math;
-
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Converts a number in digit representation from one base to another
  * Not guaranteed to work with bases above 65,451 (more characters than which the lookup can use for substituting digits)
@@ -7,16 +7,19 @@ package in.tamchow.fractal.helpers.math;
  * @author Tamoghna Chowdhury
  * @version 1.2
  */
-public class BaseConverter {
+public final class BaseConverter {
     public static final int RESTRICTED_CHARS_COUNT = 84, MAX_LOOKUP_LENGTH = Character.MAX_VALUE - RESTRICTED_CHARS_COUNT;
     protected static final String negativeBaseErrorMessage = "Negative or zero base values are illegal - supplied bases were %d & %d.", invalidInputNumberErrorMessage = "The supplied number (%s) for base conversion is invalid.", tooLargeBaseForLookupErrorMessage = "Not enough available characters for substitution. Number of available characters is %d , minimum required number is %d";
+    @NotNull
     private static String lookup = "0123456789ABCDEFGHIJKLMNOPQRSTWXYZabcdefghijklmnopqrstwxyz+/=,?!;:\"'^`~|\\@#$%&*_<>(){}";
+    private BaseConverter() {
+    }
     private static void updateLookup(int base) {
         if (base > MAX_LOOKUP_LENGTH) {//Substitution and digit lookup may be impossible, so we we throw an exception here
             throw new IllegalArgumentException(String.format(tooLargeBaseForLookupErrorMessage, lookup.length(), base));
         }
         int charsToAdd = base - lookup.length();
-        char[] extras = new char[charsToAdd];
+        @NotNull char[] extras = new char[charsToAdd];
         if (charsToAdd > 0) {
             for (int i = 0; i < Character.MAX_VALUE && charsToAdd > 0; ++i) {
                 if ((!lookup.contains("" + (char) i)) &&
@@ -33,15 +36,14 @@ public class BaseConverter {
             throw new IllegalArgumentException(String.format(tooLargeBaseForLookupErrorMessage, lookup.length(), base));
         }
     }
-
-    public static long convertToNumber(String inputNumber, int from_base) {
+    public static long convertToNumber(@NotNull String inputNumber, int from_base) {
         return convertToNumber(inputNumber, from_base, true);
     }
-    private static boolean isNegative(String number) {
+    private static boolean isNegative(@NotNull String number) {
         return number.startsWith("-");
     }
-    public static long convertToNumber(String inputNumber, int from_base, boolean checkIfNegative) {
-        String copyOfInput = inputNumber;
+    public static long convertToNumber(@NotNull String inputNumber, int from_base, boolean checkIfNegative) {
+        @NotNull String copyOfInput = inputNumber;
         boolean isNegative = checkIfNegative && isNegative(inputNumber);
         if (isNegative) {
             //the provided number is (supposedly) negative
@@ -61,7 +63,7 @@ public class BaseConverter {
         }
         return isNegative ? -number : number;
     }
-    public static long convertToNumber(int[] digits, int from_base) {
+    public static long convertToNumber(@NotNull int[] digits, int from_base) {
         long number = 0;
         int length = digits.length;
         for (int i = 0; i < length; ++i) {
@@ -78,9 +80,9 @@ public class BaseConverter {
         }
         return num_digits;
     }
-
+    @NotNull
     private static int[] createDigits(long number, int to_base) {
-        int[] digits = new int[countDigits(number, to_base)];
+        @NotNull int[] digits = new int[countDigits(number, to_base)];
         int num_digits = 0;
         while (number > 0) {
             digits[num_digits++] = (int) (number % to_base);
@@ -88,12 +90,11 @@ public class BaseConverter {
         }
         return digits;
     }
-
-    public static String changeBase(String inputNumber, int from_base, int to_base) {
+    @NotNull
+    public static String changeBase(@NotNull String inputNumber, int from_base, int to_base) {
         return changeBase(inputNumber, from_base, to_base, true);
     }
-
-    private static boolean isInvalidInputNumber(String inputNumber, int from_base) {
+    private static boolean isInvalidInputNumber(@NotNull String inputNumber, int from_base) {
         //there should be no more than 1 - sign, which should have been removed already if it exists
         return inputNumber.contains("-") ||
                 //there should be no more than 1 fixed point, which should have been removed already if it exists
@@ -103,9 +104,12 @@ public class BaseConverter {
     }
     /**
      * Utility method for parsing an array of Strings to an array of ints
+     * @param data the {@link String} array to parse into a an {@code int} array
+     * @return {@code int} array containing the parsed values
      */
-    private static int[] parseStringsToIntegers(String[] data) {
-        int[] ints = new int[data.length];
+    @NotNull
+    private static int[] parseStringsToIntegers(@NotNull String[] data) {
+        @NotNull int[] ints = new int[data.length];
         for (int i = 0; i < data.length; ++i) {
             ints[i] = Integer.valueOf(data[i]);
         }
@@ -113,15 +117,18 @@ public class BaseConverter {
     }
     /**
      * Utility method for parsing an array of Strings to an array of doubles
+     * @param data the {@link String} array to parse into a an {@code double} array
+     * @return {@code double} array containing the parsed values
      */
-    private static double[] parseStringsToDoubles(String[] data) {
-        double[] ints = new double[data.length];
+    @NotNull
+    private static double[] parseStringsToDoubles(@NotNull String[] data) {
+        @NotNull double[] ints = new double[data.length];
         for (int i = 0; i < data.length; ++i) {
             ints[i] = Double.valueOf(data[i]);
         }
         return ints;
     }
-    public static double convertToNumber(double[] digits, double from_base) {
+    public static double convertToNumber(@NotNull double[] digits, double from_base) {
         double number = 0;
         int length = digits.length;
         for (int i = 0; i < length; ++i) {
@@ -129,8 +136,9 @@ public class BaseConverter {
         }
         return number;
     }
+    @NotNull
     private static double[] createDigits(double number, double to_base) {
-        double[] digits = new double[countDigits(number, to_base)];
+        @NotNull double[] digits = new double[countDigits(number, to_base)];
         int num_digits = 0;
         while (number > 0) {
             digits[num_digits++] = (number % to_base);
@@ -146,26 +154,28 @@ public class BaseConverter {
         }
         return num_digits;
     }
-    public static double[] changeBase(double[] digits, double from_base, double to_base) {
+    @NotNull
+    public static double[] changeBase(@NotNull double[] digits, double from_base, double to_base) {
         return createDigits(convertToNumber(digits, from_base), to_base);
     }
-    public static String changeBase(String inputNumber, double from_base, double to_base) {
-        String new_number = "";
+    @NotNull
+    public static String changeBase(@NotNull String inputNumber, double from_base, double to_base) {
+        @NotNull String new_number = "";
         boolean isNegative = false;
         if (inputNumber.startsWith("-")) {
             isNegative = true;
             inputNumber = inputNumber.substring(1, inputNumber.length());
         }
-        double[] digits = changeBase(parseStringsToDoubles(inputNumber.split("\\s+")), from_base, to_base);
+        @NotNull double[] digits = changeBase(parseStringsToDoubles(inputNumber.split("\\s+")), from_base, to_base);
         for (int i = digits.length - 1; i >= 0; --i) {
             new_number += digits[i] + " ";
         }
         new_number = new_number.trim();
         return isNegative ? "-" + new_number : new_number;
     }
-
-    public static String changeBase(String inputNumber, int from_base, int to_base, boolean substituteNumerics) {
-        String copyOfInput = inputNumber;
+    @NotNull
+    public static String changeBase(@NotNull String inputNumber, int from_base, int to_base, boolean substituteNumerics) {
+        @NotNull String copyOfInput = inputNumber;
         boolean isNegative = isNegative(inputNumber);
         if (isNegative) {
             //the provided number is (supposedly) negative

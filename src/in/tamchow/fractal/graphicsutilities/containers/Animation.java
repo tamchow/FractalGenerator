@@ -1,4 +1,6 @@
 package in.tamchow.fractal.graphicsutilities.containers;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 /**
@@ -15,20 +17,21 @@ public class Animation implements Serializable, Comparable<Animation> {
         this.fps = fps;
         frames = new ArrayList<>();
     }
-    public Animation(int fps, PixelContainer[] frames) {
+    public Animation(int fps, @NotNull PixelContainer[] frames) {
         this.fps = fps;
         this.frames = new ArrayList<>();
         setFrames(frames);
     }
-    public Animation(Animation other) {
+    public Animation(@NotNull Animation other) {
         this.fps = other.fps;
         this.frames = new ArrayList<>(other.frames);
     }
+    @NotNull
     @Override
     public String toString() {
         return fps + " " + frames.toString();
     }
-    public void addFrames(Animation frames) {
+    public void addFrames(@NotNull Animation frames) {
         for (int i = 0; i < frames.getNumFrames(); ++i) {
             this.frames.add(frames.getFrame(i));
         }
@@ -54,7 +57,7 @@ public class Animation implements Serializable, Comparable<Animation> {
     public void setFps(int fps) {
         this.fps = fps;
     }
-    public void setFrame(int idx, PixelContainer frame) {
+    public void setFrame(int idx, @NotNull PixelContainer frame) {
         frames.set(idx, new PixelContainer(frame));
     }
     public void removeFrame(int idx) {
@@ -63,28 +66,30 @@ public class Animation implements Serializable, Comparable<Animation> {
     public void removeFrame(PixelContainer frame) {
         frames.remove(frame);
     }
+    @NotNull
     public PixelContainer[] getFrames() {
-        PixelContainer[] tmp = new PixelContainer[frames.size()];
+        @NotNull PixelContainer[] tmp = new PixelContainer[frames.size()];
         for (int i = 0; i < frames.size(); i++) {
             tmp[i] = getFrame(i);
         }
         return tmp;
     }
-    public void setFrames(PixelContainer[] frames) {
+    public void setFrames(@NotNull PixelContainer[] frames) {
         clearFrames();
-        for (PixelContainer pixelContainer : frames) {
+        for (@NotNull PixelContainer pixelContainer : frames) {
             addFrame(pixelContainer);
         }
     }
     public PixelContainer getFrame(int idx) {
         return frames.get(idx);
     }
-    public void addFrame(PixelContainer frame) {
+    public void addFrame(@NotNull PixelContainer frame) {
         frames.add(new PixelContainer(frame));
     }
     public void clearFrames() {
         frames.clear();
     }
+    @NotNull
     public String sizeDataString() {
         return "" + fps + "," + frames.size();
     }
@@ -97,7 +102,7 @@ public class Animation implements Serializable, Comparable<Animation> {
         return toString().hashCode();
     }
     @Override
-    public int compareTo(Animation o) {
+    public int compareTo(@NotNull Animation o) {
         int difference = 0;
         for (int i = 0; i < getNumFrames() && i < o.getNumFrames(); ++i) {
             difference += getFrame(i).compareTo(o.getFrame(i));

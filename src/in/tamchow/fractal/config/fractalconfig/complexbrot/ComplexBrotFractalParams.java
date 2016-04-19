@@ -3,6 +3,8 @@ import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
@@ -15,6 +17,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ZoomConfig zoomConfig;
     public PixelContainer.PostProcessMode postprocessMode;
     public int width, height, num_threads, switch_rate, num_points;
+    @Nullable
     public Complex newton_constant;
     public int[] iterations;
     public double zoom, zoom_level, base_precision, skew, tolerance, escape_radius;
@@ -22,10 +25,10 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ComplexFractalGenerator.Mode mode;
     public String[][] constants;
     public boolean anti;
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
-        this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", mode, constants, anti);
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti) {
+        this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti);
     }
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, ComplexFractalGenerator.Mode mode, String[][] constants, boolean anti) {
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti) {
         this();
         setWidth(width);
         setHeight(height);
@@ -54,8 +57,8 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setNum_points(1);
         setNum_threads(1);
     }
-    public ComplexBrotFractalParams(ComplexBrotFractalParams old) {
-        this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getMode(), old.getConstants(), old.isAnti());
+    public ComplexBrotFractalParams(@NotNull ComplexBrotFractalParams old) {
+        this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti());
         setPath(old.getPath());
         setPostProcessMode(old.getPostProcessMode());
         setNewton_constant(old.getNewton_constant());
@@ -75,10 +78,11 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public void setPostProcessMode(PixelContainer.PostProcessMode postProcessMode) {
         this.postprocessMode = postProcessMode;
     }
+    @Nullable
     public Complex getNewton_constant() {
         return newton_constant;
     }
-    public void setNewton_constant(Complex newton_constant) {
+    public void setNewton_constant(@Nullable Complex newton_constant) {
         this.newton_constant = (newton_constant != null) ? new Complex(newton_constant) : null;
     }
     public int getSwitch_rate() {
@@ -138,7 +142,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public String[][] getConstants() {
         return constants;
     }
-    public void setConstants(String[][] constants) {
+    public void setConstants(@NotNull String[][] constants) {
         this.constants = new String[constants.length][2];
         for (int i = 0; i < constants.length; i++) {
             System.arraycopy(constants[i], 0, this.constants[i], 0, this.constants[i].length);
@@ -171,7 +175,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public int[] getIterations() {
         return iterations;
     }
-    public void setIterations(int[] iterations) {
+    public void setIterations(@NotNull int[] iterations) {
         this.iterations = new int[iterations.length];
         //System.arraycopy(iterations, 0, this.iterations, 0, this.iterations.length);
         for (int i = 0; i < iterations.length; ++i) {
@@ -205,9 +209,10 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public void setZoomConfig(ZoomConfig zoomConfig) {
         this.zoomConfig = zoomConfig;
     }
+    @NotNull
     private String constantsToString() {
-        String representation = "";
-        for (String[] constant : constants) {
+        @NotNull String representation = "";
+        for (@NotNull String[] constant : constants) {
             for (String s : constant) {
                 representation += s + ":";
             }
@@ -232,31 +237,33 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setFunction(data[10]);
         setVariableCode(data[11]);
         setMode(ComplexFractalGenerator.Mode.valueOf(data[12]));
-        String[] con = StringManipulator.split(data[13], ";");
-        String[][] consts = new String[con.length][2];
+        @NotNull String[] con = StringManipulator.split(data[13], ";");
+        @NotNull String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i] = StringManipulator.split(con[i], ":");
         }
         setConstants(consts);
         setAnti(Boolean.valueOf(data[14]));
     }
-    private String integersToString(int[] ints) {
-        String string = "";
+    private String integersToString(@NotNull int[] ints) {
+        @NotNull String string = "";
         for (int anInt : ints) {
             string += anInt + ",";
         }
         return string.substring(0, string.length() - 1);//trim trailing ','
     }
-    private int[] integersFromStrings(String[] strings) {
-        int[] ints = new int[strings.length];
+    @NotNull
+    private int[] integersFromStrings(@NotNull String[] strings) {
+        @NotNull int[] ints = new int[strings.length];
         for (int i = 0; i < ints.length; ++i) {
             ints[i] = Integer.valueOf(strings[i]);
         }
         return ints;
     }
+    @Nullable
     @Override
     public String toString() {
-        String representation = "Postprocessing:" + postprocessMode + "\nThreads:" + num_threads + ((newton_constant != null) ? "\nNewton_constant:" + newton_constant : "");
+        @Nullable String representation = "Postprocessing:" + postprocessMode + "\nThreads:" + num_threads + ((newton_constant != null) ? "\nNewton_constant:" + newton_constant : "");
         representation += "%n%d%n%d%n%s%n%f%n%f%n%f%n%f%n%f%n%f%nSwitch_Mode_Rate:%d%n%d%n%s%n%s%nOld_variable_code:%s%n%s%n%s%n%s";
         representation = String.format(representation, width, height, integersToString(iterations), base_precision, zoom, zoom_level, escape_radius, tolerance, skew, switch_rate, num_points, function, variableCode, oldVariableCode, constantsToString(), anti);
         if (zoomConfig != null) {

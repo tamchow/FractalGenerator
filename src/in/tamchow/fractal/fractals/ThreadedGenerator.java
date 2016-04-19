@@ -3,13 +3,46 @@ package in.tamchow.fractal.fractals;
  * Abstract superclass for threaded fractal generator
  */
 public abstract class ThreadedGenerator {
-    public final Object lock = new Lock();
+    protected final Object lock = new Lock();
+    protected SlaveRunner[] threads;
+    protected int currentlyCompletedThreads;
     public abstract int countCompletedThreads();
     public abstract boolean allComplete();
     public abstract void generate();
+    public abstract void finalizeGeneration();
+    public void wrapUp() throws InterruptedException {
+        synchronized (lock) {
+            while (!allComplete()) {
+                lock.wait(1000);
+            }
+            lock.notifyAll();
+            finalizeGeneration();
+        }
+    }
+    public void resume() throws InterruptedException {
+        synchronized (lock) {
+            for (SlaveRunner runner : threads) {
+                runner.resume();
+            }
+        }
+        //generate();
+    }
+    public void pause() throws InterruptedException {
+        currentlyCompletedThreads = countCompletedThreads();
+        synchronized (lock) {
+            for (SlaveRunner runner : threads) {
+                runner.pause();
+            }
+            /*try {
+                Thread.currentThread().join();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }*/
+        }
+    }
     private static final class Lock {
     }
-    public abstract class SlaveRunner extends Thread {
+    public abstract class SlaveRunner implements Runnable {
         public Thread executor;
         public int index;
         public SlaveRunner(int index) {
@@ -21,7 +54,13 @@ public abstract class ThreadedGenerator {
             }
             executor.start();
         }
-        public abstract void run();
+        public abstract void pause() throws InterruptedException;
+        public abstract void resume() throws InterruptedException;
+        @Override
+        public void run() {
+            generate();
+        }
+        public abstract void generate();
         public abstract void onCompletion();
     }
 }

@@ -1,5 +1,8 @@
 package in.tamchow.fractal.fractals.complexbrot;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
+import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
+import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.io.Serializable;
 /**
@@ -12,11 +15,12 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
         threads = master.getParams().getNum_threads();
+        data = new PartComplexBrotFractalData[threads];
     }
     @Override
     public int countCompletedThreads() {
         int ctr = 0;
-        for (PartComplexBrotFractalData partImage : data) {
+        for (@Nullable PartComplexBrotFractalData partImage : data) {
             if (partImage != null) ctr++;
         }
         return ctr;
@@ -27,42 +31,30 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     }
     public void generate() {
         int idx = 0;
-        for (int i = 0; i < threads; i++) {
-            int[] coords = master.start_end_coordinates(i, threads);
-            SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), idx);
+        for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
+            @NotNull int[] coords = master.start_end_coordinates(i, threads);
+            @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
             idx++;
             runner.start();
         }
         try {
-            synchronized (lock) {
-                while (!allComplete()) {
-                    lock.wait(1000);
-                }
-                lock.notifyAll();
-            }
-            for (PartComplexBrotFractalData part : data) {
-                for (int i = 0; i < master.bases.length; ++i) {
-                    master.bases[i] = addDDA(master.bases[i], part.getBases()[i]);
-                }
-            }
-            master.createImage();
-        } catch (Exception e) {
-            e.printStackTrace();
-            //master.getProgressPublisher().println("Exception:" + e.getMessage());
+            wrapUp();
+        } catch (InterruptedException interrupted) {
+            interrupted.printStackTrace();
         }
     }
-    private int[][] addDDA(int[][] a, int[][] b) {
-        if (a.length != b.length || a[0].length != b[0].length) {
-            throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
-        }
-        int[][] c = new int[a.length][a[0].length];
-        for (int i = 0; i < c.length; i++) {
-            for (int j = 0; j < c[i].length; j++) {
-                c[i][j] = a[i][j] + b[i][j];
+    @Override
+    public void finalizeGeneration() {
+        for (@Nullable PartComplexBrotFractalData part : data) {
+            if (part == null) {
+                continue;
+            }
+            for (int i = 0; i < master.bases.length; ++i) {
+                master.bases[i] = MathUtils.intDDAAdd(master.bases[i], part.getBases()[i]);
             }
         }
-        return c;
+        master.createImage();
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexBrotFractalGenerator copyOfMaster;
@@ -74,14 +66,23 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             this.end = end;
         }
         @Override
-        public void run() {
+        public synchronized void pause() throws InterruptedException {
+            copyOfMaster.pause();
+        }
+        @Override
+        public synchronized void resume() throws InterruptedException {
+            copyOfMaster.resume();
+        }
+        @Override
+        public void generate() {
             copyOfMaster.generate(start, end);
+            onCompletion();
         }
         @Override
         public void onCompletion() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion);
+            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

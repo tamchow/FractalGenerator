@@ -1,12 +1,13 @@
 package in.tamchow.fractal.graphicsutilities.graphics;
-import in.tamchow.fractal.color.Color_Utils_Config;
+import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Line Drawing Utilities for {@link in.tamchow.fractal.graphicsutilities.containers.PixelContainer}
  *
  * @see in.tamchow.fractal.graphicsutilities.containers.PixelContainer
- * @see Color_Utils_Config#linearInterpolated(int, int, double, int)
+ * @see Colorizer#linearInterpolated(int, int, double, int)
  * @see in.tamchow.fractal.color.Colors.BASE_COLORS
  */
 public class DrawingUtilities {
@@ -20,7 +21,7 @@ public class DrawingUtilities {
      * @param to_y   ending abscissa
      * @param color  line pixel color
      */
-    public static void drawLine(PixelContainer canvas, double from_x, double from_y, double to_x, double to_y, int color) {
+    public static void drawLine(@NotNull PixelContainer canvas, double from_x, double from_y, double to_x, double to_y, int color) {
         boolean steep = Math.abs(to_y - from_y) > Math.abs(to_x - from_x);
         if (steep) {
             double t = from_x;
@@ -80,9 +81,9 @@ public class DrawingUtilities {
             intery = intery + gradient;
         }
     }
-    private static void plot(PixelContainer canvas, int color, double x, double y, double brightness) {
+    private static void plot(@NotNull PixelContainer canvas, int color, double x, double y, double brightness) {
         canvas.setPixel(Math.round((float) y), Math.round((float) x),
-                Color_Utils_Config.linearInterpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0));
+                Colorizer.linearInterpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0));
     }
     private static double fpart(double x) {
         return x - Math.floor(x);
@@ -99,12 +100,12 @@ public class DrawingUtilities {
      * @param to_x   ending ordinate
      * @param to_y   ending abscissa
      * @param color  line pixel color
-     *               <p/>
+     *               <p>
      *               Deprecated.
      *               Use the {@link DrawingUtilities#drawLine(PixelContainer, double, double, double, double, int)}
      */
     @Deprecated
-    public static void drawLine(PixelContainer canvas, int from_x, int from_y, int to_x, int to_y, int color) {
+    public static void drawLine(@NotNull PixelContainer canvas, int from_x, int from_y, int to_x, int to_y, int color) {
         int deltax = Math.abs(to_x - from_x), deltay = Math.abs(to_y - from_y),
                 numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y, yinc1, yinc2;
         if (deltax >= deltay) {
@@ -155,7 +156,7 @@ public class DrawingUtilities {
      * @param canvas the {@link PixelContainer} to fill color
      * @param color  fill color
      */
-    public static void fill(PixelContainer canvas, int color) {
+    public static void fill(@NotNull PixelContainer canvas, int color) {
         for (int i = 0; i < canvas.getHeight(); i++) {
             for (int j = 0; j < canvas.getWidth(); j++) {
                 canvas.setPixel(i, j, color);
@@ -173,7 +174,7 @@ public class DrawingUtilities {
      * @param thickness the thickness of the border
      * @param color     line pixel color
      */
-    public static void drawRect(PixelContainer canvas, int startx, int starty, int endx, int endy, int thickness, int color) {
+    public static void drawRect(@NotNull PixelContainer canvas, int startx, int starty, int endx, int endy, int thickness, int color) {
         int oldcolor = canvas.getPixel((endy - starty) / 2, (endx - startx) / 2);
         fillRect(canvas, startx, starty, endx, endy, color);
         fillRect(canvas, startx + thickness, starty + thickness, endx - thickness, endy - thickness, oldcolor);
@@ -188,7 +189,7 @@ public class DrawingUtilities {
      * @param endy   ending abscissa
      * @param color  line pixel color
      */
-    public static void fillRect(PixelContainer canvas, int startx, int starty, int endx, int endy, int color) {
+    public static void fillRect(@NotNull PixelContainer canvas, int startx, int starty, int endx, int endy, int color) {
         for (int i = starty; i < endy; i++) {
             for (int j = startx; j < endx; j++) {
                 canvas.setPixel(i, j, color);

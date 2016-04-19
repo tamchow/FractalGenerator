@@ -1,4 +1,5 @@
 package in.tamchow.fractal.math.symbolics;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
@@ -20,11 +21,12 @@ public class Term implements Serializable, Comparable<Term> {
         setConstval(constval);
         setConstant(true);
     }
+    @NotNull
     public static Term fromString(String term) {
         term = term.substring(1, term.length() - 1);//remove leading and trailing braces
         /*term.replace(":^:",":");
         term.replace(":*:",":");*/
-        String[] parts = StringManipulator.split(term, ":");
+        @NotNull String[] parts = StringManipulator.split(term, ":");
         if (parts.length == 0) {
             return new Term("0", "0", "0");
         }
@@ -64,8 +66,9 @@ public class Term implements Serializable, Comparable<Term> {
             constval = this.coefficient;
         }
     }
+    @NotNull
     public Term derivative() {
-        Term deriv = new Term("0");
+        @NotNull Term deriv = new Term("0");
         if (!isConstant()) {
             deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - 1", this.variable);
         }
@@ -85,7 +88,7 @@ public class Term implements Serializable, Comparable<Term> {
         return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
     }
     @Override
-    public int compareTo(Term o) {
+    public int compareTo(@NotNull Term o) {
         return toString().compareTo(o.toString());
     }
     @Override

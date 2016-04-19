@@ -1,5 +1,6 @@
 package in.tamchow.fractal.fractals.complex;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
 /**
@@ -11,7 +12,7 @@ public final class PartComplexFractalData implements Serializable {
     double[][] normalized_escapes;
     int[] histogram;
     int startx, endx, starty, endy;
-    public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, PixelContainer pixelContainer, int startx, int endx, int starty, int endy) {
+    public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, @NotNull PixelContainer pixelContainer, int startx, int endx, int starty, int endy) {
         this.startx = startx;
         this.endx = endx;
         this.starty = starty;
@@ -19,7 +20,7 @@ public final class PartComplexFractalData implements Serializable {
         initData(escapedata, normalized_escapes);
         this.pixelContainer = new PixelContainer(pixelContainer);
     }
-    public PartComplexFractalData(int[][] escapedata, double[][] normalized_escapes, int[] histogram, int startx, int endx, int starty, int endy) {
+    public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, @NotNull int[] histogram, int startx, int endx, int starty, int endy) {
         this.startx = startx;
         this.endx = endx;
         this.starty = starty;
@@ -28,7 +29,7 @@ public final class PartComplexFractalData implements Serializable {
         this.histogram = new int[histogram.length];
         System.arraycopy(histogram, 0, this.histogram, 0, this.histogram.length);
     }
-    private void initData(int[][] escapedata, double[][] normalized_escapes) {
+    private void initData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes) {
         this.escapedata = new int[escapedata.length][escapedata[0].length];
         for (int i = 0; i < escapedata.length; i++) {
             System.arraycopy(escapedata[i], 0, this.escapedata[i], 0, this.escapedata[i].length);
