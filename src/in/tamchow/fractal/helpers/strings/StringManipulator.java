@@ -4,8 +4,10 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Miscellaneous: String Manipulation.
  */
-public class StringManipulator {
+public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';
+    private StringManipulator() {
+    }
     @NotNull
     public static String doCyclicShift(@NotNull String input) {
         @NotNull char[] processor = input.toCharArray();

@@ -5,12 +5,6 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Threaded IFS Fractal Generator
- * <p>
- * Note: May produce unpredictable results. Use not recommended.
- * <p>
- * Expected result: Images with {@link IFSFractalParams#depth} times added colors.
- * <p>
- * Debugging in progress.
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
     IFSGenerator master;
@@ -19,6 +13,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
     public ThreadedIFSGenerator(IFSGenerator generator) {
         master = generator;
         threads = master.getParams().getThreads();
+        data = new PartIFSData[threads];
     }
     @Override
     public int countCompletedThreads() {

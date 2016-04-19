@@ -1,4 +1,5 @@
 package in.tamchow.fractal.fractals.complexbrot;
+import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
@@ -9,6 +10,7 @@ import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
+import in.tamchow.fractal.helpers.math.MersenneTwister;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.math.complex.Complex;
@@ -73,7 +75,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     }
     @Override
     public int getImageHeight() {
-        return getPlane().getWidth();
+        return getPlane().getHeight();
     }
     @Override
     public int getHeight() {
@@ -125,6 +127,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         this.function = function;
     }
     private void initFractal(@NotNull ComplexBrotFractalParams params) {
+        plane = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
         setFunction(params.getFunction());
         setConstants(params.getConstants());
         setZoom(params.getZoom());
@@ -136,7 +139,6 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         setEscape_radius(params.getEscape_radius());
         silencer = params.useThreadedGenerator();
         anti = params.isAnti();
-        plane = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
         resetCentre();
         setScale(this.base_precision * Math.pow(zoom, zoom_factor));
         setVariableCode(params.getVariableCode());
@@ -162,6 +164,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         if (points == null) {
             createPoints();
         }
+        bases = new int[iterations.length][getImageHeight()][getImageWidth()];
     }
     public int[][][] getBases() {
         return bases;
@@ -172,7 +175,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             Complex random_point;
             do {
                 random_point = getRandomPoint();
-            } while (!containsPoint(random_point));
+            } while (containsPoint(random_point));
             points[i] = random_point;
         }
         return points;
@@ -188,8 +191,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         }
     }
     private Complex getRandomPoint() {
-        int random_x = boundsProtected(Math.round((float) Math.random() * plane.getWidth()), plane.getWidth()),
-                random_y = boundsProtected(Math.round((float) Math.random() * plane.getHeight()), plane.getHeight());
+        int random_x = boundsProtected(Math.round((float) new MersenneTwister().nextDouble() * plane.getWidth()), plane.getWidth()),
+                random_y = boundsProtected(Math.round((float) new MersenneTwister().nextDouble() * plane.getHeight()), plane.getHeight());
         return plane_map[random_y][random_x];
     }
     private boolean containsPoint(@Nullable Complex point) {
@@ -202,17 +205,24 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     }
     public void createImage() {
         @NotNull PixelContainer[] levels = new PixelContainer[bases.length];
+        int[] maxima = new int[levels.length];
+        for (int i = 0; i < maxima.length; ++i) {
+            maxima[i] = getMaximum(bases[i]);
+        }
         for (int i = 0; i < bases.length; ++i) {
+            levels[i] = new PixelContainer(getImageWidth(), getImageHeight());
             for (int j = 0; j < bases[i].length; ++j) {
                 for (int k = 0; k < bases[i][j].length; ++k) {
-                    levels[i].setPixel(j, k, getColor(j, k, i));
+                    levels[i].setPixel(j, k, getColor(j, k, i, maxima[i]));
                 }
             }
         }
         plane = plane.falseColor(levels);
     }
-    private int getColor(int i, int j, int level) {
-        return boundsProtected(Math.round((float) bases[level][i][j] / getMaximum(bases[level])) * 255, 256);
+    private int getColor(int i, int j, int level, int maximum) {
+        //int channel = boundsProtected(Math.round((float) bases[level][i][j] / maximum) * 255, 256);
+        int channel = boundsProtected(Math.round((float) (Math.sqrt(bases[level][i][j]) / Math.sqrt(maximum))) * 255, 256);
+        return Colorizer.toGray(channel);
     }
     private int getMaximum(@NotNull int[][] base) {
         int max = 0;
@@ -384,8 +394,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         }
     }
     private void publishProgress(long ctr, int start, int end, int current) {
-        float completion = Math.round(((float) current) / (end - start));
-        progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
+        if (!silencer) {
+            float completion = Math.round(((float) current) / (end - start));
+            progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
+        }
     }
     public double calculateBasePrecision() {
         return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
@@ -489,14 +501,14 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     private void secantGenerate(int start, int end) {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
-        int level = 0;
-        for (int iteration : iterations) {
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+            int c = 0;
             outer:
             for (int j = start; j < end; ++j) {
                 Complex z = points[j], ztmp2 = Complex.ZERO, zold = Complex.ZERO;
-                int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
                 while (c <= iteration) {
@@ -535,17 +547,15 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     ctr++;
                 }
-                last.clear();
-                updateBases(c, iteration, level, tmp);
-                ++level;
             }
+            last.clear();
+            updateBases(c, iteration, level, tmp);
         }
     }
     private void newtonGenerate(int start, int end) {
         @Nullable Complex constant = params.getNewton_constant();
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
-        int level = 0;
         Complex degree;
         @NotNull String functionderiv = "";
         if (Function.isSpecialFunction(function)) {
@@ -571,14 +581,15 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
             toadd = new Complex(getLastConstant());
         }
-        for (int iteration : iterations) {
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+            int c = 0;
             outer:
             for (int j = start; j < end; ++j) {
                 boolean useJulia = false, useMandelbrot = false;
                 Complex z = points[j], ztmp2 = Complex.ZERO;
-                int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
                 if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
@@ -643,21 +654,20 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     ctr++;
                 }
-                last.clear();
-                updateBases(c, iteration, level, tmp);
-                ++level;
             }
+            last.clear();
+            updateBases(c, iteration, level, tmp);
         }
     }
     private void mandelbrotGenerate(int start, int end) {
         double bailout = escape_radius * escape_radius + tolerance;
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
-        int level = 0;
         Complex lastConstantBackup = getLastConstant();
-        for (int iteration : iterations) {
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
             outer:
             for (int j = start; j < end; ++j) {
                 @NotNull Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(points[j]) : Complex.ZERO, ztmp2 = Complex.ZERO;
@@ -710,7 +720,6 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 }
                 last.clear();
                 updateBases(c, iteration, level, tmp);
-                ++level;
             }
         }
     }
@@ -718,12 +727,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         if (anti) {
             if (c == iteration) {
                 bases[level] = intDDAAdd(bases[level], tmp);
-                ++level;
             }
         } else {
             if (c < iteration) {
                 bases[level] = intDDAAdd(bases[level], tmp);
-                ++level;
             }
         }
     }
@@ -731,18 +738,18 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         double bailout = escape_radius * escape_radius + tolerance;
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
-        int level = 0;
         Complex lastConstantBackup = getLastConstant();
-        for (int iteration : iterations) {
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[plane.getHeight()][plane.getWidth()];
+            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+            int c = 0;
             outer:
             for (int j = start; j < end; ++j) {
                 Complex z = points[j], ztmp2 = Complex.ZERO;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
                 last.push(z);
-                int c = 0;
                 boolean useMandelBrot = false;
                 while (c <= iteration && z.cabs() <= bailout) {
                     if (stop) {
@@ -783,10 +790,9 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     ctr++;
                 }
-                last.clear();
-                updateBases(c, iteration, level, tmp);
-                ++level;
             }
+            last.clear();
+            updateBases(c, iteration, level, tmp);
         }
     }
     public void setEscape_radius(double escape_radius) {

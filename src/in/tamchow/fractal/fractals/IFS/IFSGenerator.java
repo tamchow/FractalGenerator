@@ -76,7 +76,7 @@ public class IFSGenerator extends PixelFractalGenerator {
     }
     @Override
     public int getImageHeight() {
-        return getPlane().getWidth();
+        return getPlane().getHeight();
     }
     @Override
     public int getHeight() {

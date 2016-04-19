@@ -4,7 +4,7 @@ import java.io.Serializable;
  * Interface which indicates that an implementor can generate a fractal
  */
 public abstract class FractalGenerator implements Serializable {
-    protected boolean stop, pause;
+    protected volatile boolean stop, pause;
     public abstract void generate();
     public void stop() {
         stop = true;

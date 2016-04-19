@@ -4,13 +4,35 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.matrix.MatrixOperations;
-
-import java.util.Random;
 /**
  * Weighted Random Number generator and approximations,prime number calculator
  */
-public class MathUtils {
+public final class MathUtils {
     private static final double ULP = 10E-15;
+    private MathUtils() {
+    }
+    public static String MDAtoString(Object[][] items) {
+        String representation = "[";
+        for (Object[] subitems : items) {
+            for (Object item : subitems) {
+                representation += String.valueOf(item);
+            }
+            representation = representation.substring(0, representation.length() - 1);//trims trailing ','
+            representation += "],\n";
+        }
+        return representation.trim().substring(0, representation.length() - 1);//trims trailing ','
+    }
+    public static String intMDAtoString(int[][] items) {
+        String representation = "[";
+        for (int[] subitems : items) {
+            for (int item : subitems) {
+                representation += String.valueOf(item) + ",";
+            }
+            representation = representation.substring(0, representation.length() - 1);//trims trailing ','
+            representation += "],\n";
+        }
+        return representation.trim().substring(0, representation.length() - 1);//trims trailing ','
+    }
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
@@ -73,7 +95,7 @@ public class MathUtils {
     }
     @NotNull
     public static int[][] intDDAAdd(@NotNull int[][] from, int[][] to) {
-        if (from.length != to.length || from[0].length != to[0].length) {
+        if ((from.length != to.length) || (from[0].length != to[0].length)) {
             throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
         }
         @NotNull int[][] sum = new int[from.length][to[0].length];//from and to must have same dimensions
@@ -134,7 +156,7 @@ public class MathUtils {
             rand[i] = (custom) ? values[pidx] : pidx;
             ++i;
         }
-        return rand[new Random().nextInt(rand.length)];
+        return rand[new MersenneTwister().nextInt(rand.length)];
     }
     @NotNull
     public static int[] translateCoordinates(int x, int y, int ix, int iy, int fx, int fy) {
