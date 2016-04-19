@@ -25,10 +25,10 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ComplexFractalGenerator.Mode mode;
     public String[][] constants;
     public boolean anti;
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, ComplexFractalGenerator.Mode mode, @NotNull String[][] constants, boolean anti) {
-        this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", mode, constants, anti);
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti) {
+        this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti);
     }
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, ComplexFractalGenerator.Mode mode, @NotNull String[][] constants, boolean anti) {
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti) {
         this();
         setWidth(width);
         setHeight(height);
@@ -58,7 +58,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setNum_threads(1);
     }
     public ComplexBrotFractalParams(@NotNull ComplexBrotFractalParams old) {
-        this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getMode(), old.getConstants(), old.isAnti());
+        this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti());
         setPath(old.getPath());
         setPostProcessMode(old.getPostProcessMode());
         setNewton_constant(old.getNewton_constant());

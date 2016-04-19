@@ -15,6 +15,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
         threads = master.getParams().getNum_threads();
+        data = new PartComplexBrotFractalData[threads];
     }
     @Override
     public int countCompletedThreads() {

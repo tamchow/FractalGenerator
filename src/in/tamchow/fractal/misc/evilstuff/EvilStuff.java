@@ -9,9 +9,9 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * </p>
  * Ridiculous output can only be seen if int (in the range of a {@link Byte}
  * calculations are autoboxed to {@link java.lang.Integer}
- * <p/>
+ * <p>
  * Try {@link java.io.PrintStream#format(String, Object...)} of {@link System#out} for best results!
- *
+ * </p>
  * @author Tamoghna Chowdhury
  * @version 19.03.2016
  */
