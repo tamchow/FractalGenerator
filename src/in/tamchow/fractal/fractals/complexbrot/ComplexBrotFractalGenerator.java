@@ -446,11 +446,17 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             this.base_precision = base_precision;
         }
     }
-    private void publishProgress(long ctr, int current) {
+    private void publishProgress(long ctr, int current, int start, int end, int iteration) {
         if (!silencer) {
-            float completion = ((float) ctr) / maxiter;
+            float completion = (((float) current * iteration)) / ((end - start) * iterations.length);
             progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
         }
+    }
+    private void publishProgress(long ctr, int i, int j, int startx, int endx, int starty, int endy, int iteration) {
+        int current = Math.abs(i * (endx - startx) + j),
+                total = Math.abs((endy - starty) * (endx - startx)) * iterations.length;
+        float completion = ((float) current * iteration) / total;
+        progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
     }
     public double calculateBasePrecision() {
         return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
@@ -684,7 +690,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         }
                         z = new Complex(ztmp);
                         fe.setZ_value(z.toString());
-                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        publishProgress(ctr, (int) j * yPointsPerPixel, (int) i * xPointsPerPixel, startx, endx, starty, endy, iteration);
                         c++;
                         if (ctr > maxiter) {
                             break outer;
@@ -748,7 +754,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         z = new Complex(ztmp);
                         fe.setZ_value(z.toString());
                         fe.setOldvalue(ztmp2.toString());
-                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        publishProgress(ctr, (int) j * yPointsPerPixel, (int) i * xPointsPerPixel, startx, endx, starty, endy, iteration);
                         c++;
                         if (ctr > maxiter) {
                             break outer;
@@ -818,7 +824,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         }
                         z = new Complex(ztmp);
                         fe.setZ_value(z.toString());
-                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        publishProgress(ctr, (int) j * yPointsPerPixel, (int) i * xPointsPerPixel, startx, endx, starty, endy, iteration);
                         c++;
                         if (ctr > maxiter) {
                             break outer;
@@ -900,7 +906,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
                     fe.setOldvalue(ztmp2.toString());
-                    publishProgress(ctr, j);
+                    publishProgress(ctr, j, start, end, iteration);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -1009,7 +1015,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    publishProgress(ctr, j);
+                    publishProgress(ctr, j, start, end, iteration);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -1073,7 +1079,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    publishProgress(ctr, j);
+                    publishProgress(ctr, j, start, end, iteration);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -1145,7 +1151,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         }
                         z = new Complex(ztmp);
                         fe.setZ_value(z.toString());
-                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        publishProgress(ctr, (int) j * yPointsPerPixel, (int) i * xPointsPerPixel, startx, endx, starty, endy, iteration);
                         c++;
                         if (ctr > maxiter) {
                             break outer;
@@ -1231,7 +1237,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    publishProgress(ctr, j);
+                    publishProgress(ctr, j, start, end, iteration);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
