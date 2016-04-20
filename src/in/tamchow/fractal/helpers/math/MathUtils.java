@@ -100,7 +100,7 @@ public final class MathUtils {
         }
         for (int i = 0; i < to.length; ++i) {
             for (int j = 0; j < to[i].length; ++j) {
-                to[i][j] = from[i][j] + to[i][j];
+                to[i][j] += from[i][j];
             }
         }
     }

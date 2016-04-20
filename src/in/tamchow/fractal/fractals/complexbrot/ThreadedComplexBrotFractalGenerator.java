@@ -16,6 +16,8 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
         if (master.isSequential()) {
+            nx = master.getParams().getxThreads();
+            ny = master.getParams().getyThreads();
             threads = nx * ny;
         } else {
             threads = master.getParams().getNum_threads();
@@ -75,7 +77,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
                 continue;
             }
             for (int i = 0; i < master.bases.length; ++i) {
-                MathUtils.intDDAAdd(master.bases[i], part.getBases()[i]);
+                MathUtils.intDDAAdd(part.getBases()[i], master.bases[i]);
             }
             //master.setDiscardedPoints(master.getDiscardedPointsCount()+part.getDiscardedPoints());
         }

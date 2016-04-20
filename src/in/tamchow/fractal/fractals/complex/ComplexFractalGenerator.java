@@ -1985,8 +1985,6 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     @Override
     public void pan(int x_dist, int y_dist) {
         zoom(center_x + x_dist, center_y + y_dist, zoom_factor);
-        int histogram_length = histogram.length;
-        histogram = new int[histogram_length];
         @NotNull int[][] tmp_escapes = new int[escapedata.length][escapedata[0].length];
         @NotNull double[][] tmp_normalized_escapes = new double[normalized_escapes.length][normalized_escapes[0].length];
         @NotNull PixelContainer tmp_argand = new LinearizedPixelContainer(argand);

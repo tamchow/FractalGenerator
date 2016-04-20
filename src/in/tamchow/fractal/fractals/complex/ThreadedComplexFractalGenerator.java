@@ -43,6 +43,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         this.constant = config.runParams.constant;
         nx = config.getX_threads();
         ny = config.getY_threads();
+        threads = nx * ny;
         buffer = new PartComplexFractalData[nx * ny];
     }
     @Override
