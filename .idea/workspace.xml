@@ -1168,13 +1168,7 @@
       <workItem from="1461051223736" duration="266000" />
       <workItem from="1461065944541" duration="7329000" />
       <workItem from="1461128247910" duration="8775000" />
-      <workItem from="1461137223147" duration="228000" />
-    </task>
-    <task id="LOCAL-00165" summary="Generified FixedStack&#10;Replaced BS IntStack&#10;Added RPN helper for Complex Expressions">
-      <created>1458469744581</created>
-      <option name="number" value="00165" />
-      <option name="project" value="LOCAL" />
-      <updated>1458469745914</updated>
+      <workItem from="1461137223147" duration="251000" />
     </task>
     <task id="LOCAL-00166" summary="Generified FixedStack&#10;Replaced BS IntStack&#10;Added RPN helper for Complex Expressions">
       <created>1458484506548</created>
@@ -1464,11 +1458,17 @@
       <option name="project" value="LOCAL" />
       <updated>1461137058219</updated>
     </task>
-    <option name="localTasksCounter" value="214" />
+    <task id="LOCAL-00214" summary="Sequential Brot&#10;Documentation updates">
+      <created>1461137456643</created>
+      <option name="number" value="00214" />
+      <option name="project" value="LOCAL" />
+      <updated>1461137456644</updated>
+    </task>
+    <option name="localTasksCounter" value="215" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1009106000" />
+    <option name="totallyTimeSpent" value="1009129000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
