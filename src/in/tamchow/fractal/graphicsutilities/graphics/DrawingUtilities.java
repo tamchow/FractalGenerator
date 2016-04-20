@@ -17,9 +17,9 @@ public class DrawingUtilities {
      * @param canvas the {@link PixelContainer} to draw this line on
      * @param from_x starting ordinate
      * @param from_y starting abscissa
-     * @param to_x   ending ordinate
-     * @param to_y   ending abscissa
-     * @param color  line pixel color
+     * @param to_x ending ordinate
+     * @param to_y ending abscissa
+     * @param color line pixel color
      */
     public static void drawLine(@NotNull PixelContainer canvas, double from_x, double from_y, double to_x, double to_y, int color) {
         boolean steep = Math.abs(to_y - from_y) > Math.abs(to_x - from_x);
@@ -97,12 +97,12 @@ public class DrawingUtilities {
      * @param canvas the {@link PixelContainer} to draw this line on
      * @param from_x starting ordinate
      * @param from_y starting abscissa
-     * @param to_x   ending ordinate
-     * @param to_y   ending abscissa
-     * @param color  line pixel color
-     *               <p>
-     *               Deprecated.
-     *               Use the {@link DrawingUtilities#drawLine(PixelContainer, double, double, double, double, int)}
+     * @param to_x ending ordinate
+     * @param to_y ending abscissa
+     * @param color line pixel color
+     *
+     * Deprecated.
+     * Use the {@link DrawingUtilities#drawLine(PixelContainer, double, double, double, double, int)}
      */
     @Deprecated
     public static void drawLine(@NotNull PixelContainer canvas, int from_x, int from_y, int to_x, int to_y, int color) {
@@ -154,7 +154,7 @@ public class DrawingUtilities {
      * Color fill
      *
      * @param canvas the {@link PixelContainer} to fill color
-     * @param color  fill color
+     * @param color fill color
      */
     public static void fill(@NotNull PixelContainer canvas, int color) {
         for (int i = 0; i < canvas.getHeight(); i++) {
@@ -166,13 +166,13 @@ public class DrawingUtilities {
     /**
      * Rectangle outline of specific thickness
      *
-     * @param canvas    the {@link PixelContainer} to draw this rectangle outline on
-     * @param startx    starting ordinate
-     * @param starty    starting abscissa
-     * @param endx      ending ordinate
-     * @param endy      ending abscissa
+     * @param canvas the {@link PixelContainer} to draw this rectangle outline on
+     * @param startx starting ordinate
+     * @param starty starting abscissa
+     * @param endx ending ordinate
+     * @param endy ending abscissa
      * @param thickness the thickness of the border
-     * @param color     line pixel color
+     * @param color line pixel color
      */
     public static void drawRect(@NotNull PixelContainer canvas, int startx, int starty, int endx, int endy, int thickness, int color) {
         int oldcolor = canvas.getPixel((endy - starty) / 2, (endx - startx) / 2);
@@ -185,9 +185,9 @@ public class DrawingUtilities {
      * @param canvas the {@link PixelContainer} to draw this rectangle on
      * @param startx starting ordinate
      * @param starty starting abscissa
-     * @param endx   ending ordinate
-     * @param endy   ending abscissa
-     * @param color  line pixel color
+     * @param endx ending ordinate
+     * @param endy ending abscissa
+     * @param color line pixel color
      */
     public static void fillRect(@NotNull PixelContainer canvas, int startx, int starty, int endx, int endy, int color) {
         for (int i = starty; i < endy; i++) {

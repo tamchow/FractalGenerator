@@ -25,9 +25,9 @@ public class Test {
     public static void main(@NotNull String[] args) {
         @NotNull String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + e", variableCode = "z", poly = "{1:z:3};+;{d:z:1};+;{e:z:0}", poly2 = "{f:z:0};sin;{1:z:1}", poly3 = "{1:z:5};+;{e:z:0}", func2 = "z ^ 2 + f";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"}, {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
-        int resx = 1920, resy = 1080, iter = 16, switch_rate = 0, num_points = 100000;
+        int resx = 1920, resy = 1080, iter = 16, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.BUDDHABROT;
+        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.MANDELBROT;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
         @Nullable String linetrap = null;
         @NotNull Colorizer cfg = new Colorizer(Colors.MODE.RANK_ORDER_LINEAR, 4, 25000, 0, true, false);
@@ -39,7 +39,7 @@ public class Test {
         cfg.setColor_density(-1);//let there be the proper color_density!
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = Complex.ONE;//new Complex(0.1);
-        int x_t = 4, y_t = 2;
+        int x_t = 1, y_t = 2;
         double skew = 0 * Math.PI;
         func = func2;
         boolean def = (args.length == 0);
@@ -69,8 +69,8 @@ public class Test {
             jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());
         }
         //jgen.zoom(1170, 214, 1);
-        boolean anti = false;
-        ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(resx, resy, x_t, switch_rate, num_points, iterations, zoom, zoompow, baseprec, escrad, tolerance, skew, func, variableCode, consts, fracmode, anti);
+        boolean anti = false, clamp = true;
+        ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(resx, resy, x_t, switch_rate, num_points, max_hit_threshold, iterations, zoom, zoompow, baseprec, escrad, tolerance, skew, func, variableCode, consts, fracmode, anti, clamp);
         //ComplexBrotFractalGenerator cbgen=new ComplexBrotFractalGenerator(cbparams,new DesktopProgressPublisher());
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
@@ -86,6 +86,8 @@ public class Test {
         } else {
             jgen.generate();
         }
+        //System.out.println(cbgen.getDiscardedPointsCount()+" "+cbgen.getDiscardedPointsFraction());
+        //try {new BufferedWriter(new FileWriter("D:/log.txt",false)).write(MathUtils.intMDAtoString(cbgen.getBases()[0]));}catch (IOException ignored){}
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         @NotNull File pic = new File("D:/Fractal.png");

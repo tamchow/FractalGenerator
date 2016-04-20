@@ -32,34 +32,54 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.*;
  */
 public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     static Complex[][] plane_map;
+    private static volatile int discardedPoints;
     private static Complex[] points;
     private static long sumIterations;
     ComplexBrotFractalParams params;
     ComplexFractalGenerator.Mode mode;
     Publisher progressPublisher;
     PixelContainer plane;
-    int center_x, center_y, lastConstantIdx;
-    double zoom;
-    double zoom_factor;
-    double base_precision;
-    double scale;
-    double tolerance;
-    double escape_radius;
-    int depth;
-    int switch_rate;
+    double zoom, zoom_factor, base_precision, scale, tolerance, escape_radius;
     Complex centre_offset, lastConstant;
     String[][] constants;
     String function;
     int[][][] bases;
     int[] iterations;
-    boolean silencer, anti, mandelbrotToJulia, juliaToMandelbrot;
+    boolean silencer, anti, sequential, mandelbrotToJulia, juliaToMandelbrot;
     String variableCode, oldVariableCode;
+    private boolean clamped;
+    private int max_hit_threshold, center_x, center_y, lastConstantIdx, xPointsPerPixel, yPointsPerPixel, depth, switch_rate;
     private long maxiter;
     public ComplexBrotFractalGenerator(@NotNull ComplexBrotFractalParams params, Publisher progressPublisher) {
         this.params = params;
         initFractal(params);
         doZooms(params.zoomConfig);
         setProgressPublisher(progressPublisher);
+    }
+    public boolean isClamped() {
+        return clamped;
+    }
+    public void setClamped(boolean clamped) {
+        this.clamped = clamped;
+    }
+    public boolean isSequential() {
+        return sequential;
+    }
+    public void setSequential(boolean sequential) {
+        this.sequential = sequential;
+    }
+    /**
+     * @param nx:No. of threads horizontally
+     * @param ix:Index of thread horizontally
+     * @param ny:No. of threads vertically
+     * @param iy:Index of thread vertically
+     * @return the start and end coordinates for a particular thread's rendering region
+     * @see ComplexFractalGenerator#start_end_coordinates(int, int, int, int)
+     * @see ComplexFractalGenerator#start_end_coordinates(int, int, int, int, int, int, int, int)
+     */
+    @NotNull
+    protected int[] start_end_coordinates(int nx, int ix, int ny, int iy) {
+        return ComplexFractalGenerator.start_end_coordinates(0, getImageWidth(), 0, getImageHeight(), nx, ix, ny, iy);
     }
     @Override
     public void doZooms(@NotNull ZoomConfig zoomConfig) {
@@ -126,6 +146,12 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     public void setFunction(String function) {
         this.function = function;
     }
+    public int getMax_hit_threshold() {
+        return max_hit_threshold;
+    }
+    public void setMax_hit_threshold(int max_hit_threshold) {
+        this.max_hit_threshold = max_hit_threshold;
+    }
     private void initFractal(@NotNull ComplexBrotFractalParams params) {
         plane = new LinearizedPixelContainer(params.getWidth(), params.getHeight());
         setFunction(params.getFunction());
@@ -139,11 +165,14 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         setEscape_radius(params.getEscape_radius());
         silencer = params.useThreadedGenerator();
         anti = params.isAnti();
+        sequential = params.isSequential();
+        setClamped(params.isClamped());
         resetCentre();
         setScale(this.base_precision * Math.pow(zoom, zoom_factor));
         setVariableCode(params.getVariableCode());
         setOldVariableCode(params.getOldVariableCode());
         setTolerance(params.getTolerance());
+        setMax_hit_threshold(params.getMaxHitThreshold());
         sumIterations = sumIterations();
         lastConstant = new Complex(-1, 0);
         mandelbrotToJulia = false;
@@ -157,12 +186,17 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 mandelbrotToJulia = true;
             }
         }
-        if (plane_map == null) {
-            plane_map = new Complex[plane.getHeight()][plane.getWidth()];
-            populateMap();
-        }
-        if (points == null) {
-            createPoints();
+        if (sequential) {
+            xPointsPerPixel = params.getxPointsPerPixel();
+            yPointsPerPixel = params.getyPointsPerPixel();
+        } else {
+            if (plane_map == null) {
+                plane_map = new Complex[plane.getHeight()][plane.getWidth()];
+                populateMap();
+            }
+            if (points == null) {
+                createPoints();
+            }
         }
         bases = new int[iterations.length][getImageHeight()][getImageWidth()];
     }
@@ -179,6 +213,9 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             points[i] = random_point;
         }
         return points;
+    }
+    public void setDiscardedPoints(int discardedPoints) {
+        ComplexBrotFractalGenerator.discardedPoints = discardedPoints;
     }
     @NotNull
     protected int[] start_end_coordinates(int idx, int maxIdx) {
@@ -221,7 +258,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     }
     private int getColor(int i, int j, int level, int maximum) {
         //int channel = boundsProtected(Math.round((float) bases[level][i][j] / maximum) * 255, 256);
-        int channel = boundsProtected(Math.round((float) (Math.sqrt(bases[level][i][j]) / Math.sqrt(maximum))) * 255, 256);
+        int channel = boundsProtected(Math.round((float) ((Math.sqrt(bases[level][i][j]) / Math.sqrt(maximum)) * 255)), 256);
+        /*if (bases[level][i][j] != 0) {
+            System.out.println(channel + " - " + bases[level][i][j] + " - " + maximum);
+        }*/
         return Colorizer.toGray(channel);
     }
     private int getMaximum(@NotNull int[][] base) {
@@ -231,7 +271,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 if (val >= max) max = val;
             }
         }
-        return max;
+        if (max_hit_threshold < 0) {
+            return max;
+        }
+        return max > max_hit_threshold ? max_hit_threshold : max;
     }
     public Publisher getProgressPublisher() {
         return progressPublisher;
@@ -245,20 +288,30 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     public void setParams(ComplexBrotFractalParams params) {
         this.params = params;
     }
+    @Override
     public PixelContainer getPlane() {
         return plane;
     }
     @NotNull
     public int[] toCoordinates(Complex point) {
+        if (sequential) {
+            point = new Complex(xPointsPerPixel * point.real(), yPointsPerPixel * point.imaginary());
+        }
         point = subtract(point, centre_offset);
         if (Math.abs(params.skew) >= params.tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.skew).inverse();
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
             point = matrixToComplex(doRotate(complexToMatrix(point), -params.skew));
         }
-        return new int[]{boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
-                boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
+        if (clamped) {
+            return new int[]{clamp(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
+                    clamp(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
+        } else {
+            return new int[]{boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
+                    boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
+        }
     }
+    @Override
     public void zoom(@NotNull ZoomParams zoom) {
         if (zoom.centre == null) {
             zoom(zoom.centre_x, zoom.centre_y, zoom.level);
@@ -393,9 +446,9 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             this.base_precision = base_precision;
         }
     }
-    private void publishProgress(long ctr, int start, int end, int current) {
+    private void publishProgress(long ctr, int current) {
         if (!silencer) {
-            float completion = Math.round(((float) current) / (end - start));
+            float completion = ((float) ctr) / maxiter;
             progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
         }
     }
@@ -461,9 +514,37 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     @Override
     public void pan(int x_dist, int y_dist) {
         zoom(center_x + x_dist, center_y + y_dist, zoom_factor);
+        if (sequential) {
+            @NotNull PixelContainer tmp_plane = new LinearizedPixelContainer(plane);
+            plane = new PixelContainer(tmp_plane.getWidth(), tmp_plane.getHeight());
+            if (y_dist < 0) {
+                for (int i = 0, j = y_dist; i < plane.getHeight() - y_dist && j < plane.getHeight(); i++, j++) {
+                    rangedCopyHelper(i, j, x_dist, tmp_plane);
+                }
+            } else {
+                for (int i = (-y_dist), j = 0; i < plane.getHeight() && j < plane.getHeight() + y_dist; i++, j++) {
+                    rangedCopyHelper(i, j, x_dist, tmp_plane);
+                }
+            }
+        }
+    }
+    private void rangedCopyHelper(int i, int j, int x_dist, @NotNull PixelContainer tmp_plane) {
+        if (x_dist < 0) {
+            for (int k = (-x_dist), l = 0; k < tmp_plane.getWidth() && l < tmp_plane.getWidth() + x_dist; k++, l++) {
+                plane.setPixel(j, l, tmp_plane.getPixel(i, k));
+            }
+        } else {
+            for (int k = 0, l = x_dist; k < tmp_plane.getWidth() - x_dist && l < tmp_plane.getWidth(); k++, l++) {
+                plane.setPixel(j, l, tmp_plane.getPixel(i, k));
+            }
+        }
     }
     public void generate() {
-        generate(0, depth);
+        if (sequential) {
+            generate(0, getImageWidth(), 0, getImageHeight());
+        } else {
+            generate(0, depth);
+        }
     }
     private long sumIterations() {
         long sum = 0;
@@ -471,6 +552,284 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             sum += iteration;
         }
         return sum;
+    }
+    public void generate(int startx, int endx, int starty, int endy) {
+        maxiter = (endx - startx) * (endy - starty) * sumIterations;
+        switch (mode) {
+            case RUDYBROT:
+            case BUDDHABROT:
+                mandelbrotGenerate(startx, endx, starty, endy);
+                break;
+            case JULIABROT:
+                juliaGenerate(startx, endx, starty, endy);
+                break;
+            case NEWTONBROT:
+            case JULIA_NOVABROT:
+            case MANDELBROT_NOVABROT:
+                newtonGenerate(startx, endx, starty, endy);
+                break;
+            case SECANTBROT:
+                secantGenerate(startx, endx, starty, endy);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported fractal render mode");
+        }
+        if (!silencer) {
+            //Don't create the image if in multithreaded mode, the threaded generator handles it
+            createImage();
+        }
+    }
+    private void newtonGenerate(int startx, int endx, int starty, int endy) {
+        @Nullable Complex constant = params.getNewton_constant();
+        @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        Complex degree;
+        @NotNull String functionderiv = "";
+        if (Function.isSpecialFunction(function)) {
+            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode);
+            func.setConsts(constants);
+            function = func.toString();
+            degree = func.getDegree();
+            functionderiv = func.derivative(1);
+        } else {
+            @NotNull Polynomial polynomial = Polynomial.fromString(function);
+            polynomial.setConstdec(constants);
+            polynomial.setVariableCode(variableCode);
+            polynomial.setOldvariablecode(oldVariableCode);
+            function = polynomial.toString();
+            degree = polynomial.getDegree();
+            functionderiv = polynomial.derivative().toString();
+        }
+        if (constant != null && constant.equals(Complex.ZERO)) {
+            constant = divide(Complex.ONE, degree);
+        }
+        Complex toadd = Complex.ZERO;
+        @NotNull Complex lastConstantBackup = new Complex(getLastConstant());
+        if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
+            toadd = new Complex(getLastConstant());
+        }
+        Complex x_start = fromCoordinates(startx, getImageHeight() / 2),
+                y_start = fromCoordinates(getImageWidth() / 2, starty),
+                x_end = fromCoordinates(endx, getImageHeight() / 2),
+                y_end = fromCoordinates(getImageWidth() / 2, endy);
+        double incr_x = (x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth()),
+                incr_y = (y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight());
+        outer:
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            int c = 0;
+            for (double i = x_start.real(); i < x_end.real(); i += incr_x) {
+                for (double j = y_start.imaginary(); j < y_end.imaginary(); j += incr_y) {
+                    Complex point = new Complex(i, j);
+                    @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+                    boolean useJulia = false, useMandelbrot = false;
+                    Complex z = point, ztmp2 = Complex.ZERO;
+                    fe.setZ_value(z.toString());
+                    fe.setOldvalue(ztmp2.toString());
+                    if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
+                        toadd = point;
+                        z = Complex.ZERO;
+                    }
+                    last.push(z);
+                    while (c <= iteration) {
+                        if (stop) {
+                            return;
+                        }
+                        checkAndDoPause();
+                        if (mode == ComplexFractalGenerator.Mode.MANDELBROT_NOVABROT) {
+                            if (mandelbrotToJulia) {
+                                if (c % switch_rate == 0) {
+                                    useJulia = (!useJulia);
+                                }
+                                if (useJulia) {
+                                    toadd = lastConstantBackup;
+                                } else {
+                                    toadd = point;
+                                }
+                            }
+                        }
+                        if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
+                            if (juliaToMandelbrot) {
+                                if (c % switch_rate == 0) {
+                                    useMandelbrot = (!useMandelbrot);
+                                }
+                                if (useMandelbrot) {
+                                    toadd = point;
+                                } else {
+                                    toadd = lastConstantBackup;
+                                }
+                            }
+                        }
+                        last.pop();
+                        ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                        last.push(z);
+                        last.pop();
+                        @NotNull int[] coords = toCoordinates(z);
+                        ++tmp[coords[1]][coords[0]];
+                        Complex ztmp;
+                        if (constant != null) {
+                            ztmp = add(subtract(z, multiply(constant, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)))), toadd);
+                        } else {
+                            ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
+                        }
+                        fe.setZ_value(ztmp.toString());
+                        if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
+                            c = iteration;
+                            break;
+                        }
+                        if (distance_squared(z, ztmp) <= tolerance) {
+                            c = iteration;
+                            break;
+                        }
+                        z = new Complex(ztmp);
+                        fe.setZ_value(z.toString());
+                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        c++;
+                        if (ctr > maxiter) {
+                            break outer;
+                        }
+                        ctr++;
+                    }
+                    last.clear();
+                    updateBases(c, iteration, level, tmp);
+                }
+            }
+        }
+    }
+    private void secantGenerate(int startx, int endx, int starty, int endy) {
+        @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        Complex x_start = fromCoordinates(startx, getImageHeight() / 2),
+                y_start = fromCoordinates(getImageWidth() / 2, starty),
+                x_end = fromCoordinates(endx, getImageHeight() / 2),
+                y_end = fromCoordinates(getImageWidth() / 2, endy);
+        double incr_x = (x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth()),
+                incr_y = (y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight());
+        outer:
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            int c = 0;
+            for (double i = x_start.real(); i < x_end.real(); i += incr_x) {
+                for (double j = y_start.imaginary(); j < y_end.imaginary(); j += incr_y) {
+                    Complex point = new Complex(i, j);
+                    @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+                    Complex z = point, ztmp2 = Complex.ZERO, zold = Complex.ZERO;
+                    fe.setZ_value(z.toString());
+                    fe.setOldvalue(ztmp2.toString());
+                    while (c <= iteration) {
+                        if (stop) {
+                            return;
+                        }
+                        checkAndDoPause();
+                        last.pop();
+                        ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                        last.push(z);
+                        fe.setOldvalue(ztmp2.toString());
+                        Complex a = fe.evaluate(function, false);
+                        Complex b = fe.evaluate(function, zold);
+                        @NotNull int[] coords = toCoordinates(z);
+                        ++tmp[coords[1]][coords[0]];
+                        Complex ztmp = subtract(z,
+                                divide(
+                                        multiply(a,
+                                                subtract(z, zold)),
+                                        subtract(a, b)));
+                        fe.setZ_value(ztmp.toString());
+                        if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
+                            c = iteration;
+                            break;
+                        }
+                        if (distance_squared(z, ztmp) <= tolerance) {
+                            c = iteration;
+                            break;
+                        }
+                        z = new Complex(ztmp);
+                        fe.setZ_value(z.toString());
+                        fe.setOldvalue(ztmp2.toString());
+                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        c++;
+                        if (ctr > maxiter) {
+                            break outer;
+                        }
+                        ctr++;
+                    }
+                    last.clear();
+                    updateBases(c, iteration, level, tmp);
+                }
+            }
+        }
+    }
+    private void juliaGenerate(int startx, int endx, int starty, int endy) {
+        double bailout = escape_radius * escape_radius + tolerance;
+        @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        Complex lastConstantBackup = getLastConstant();
+        Complex x_start = fromCoordinates(startx, getImageHeight() / 2),
+                y_start = fromCoordinates(getImageWidth() / 2, starty),
+                x_end = fromCoordinates(endx, getImageHeight() / 2),
+                y_end = fromCoordinates(getImageWidth() / 2, endy);
+        double incr_x = (x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth()),
+                incr_y = (y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight());
+        outer:
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            for (double i = x_start.real(); i < x_end.real(); i += incr_x) {
+                for (double j = y_start.imaginary(); j < y_end.imaginary(); j += incr_y) {
+                    Complex point = new Complex(i, j);
+                    @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+                    int c = 0;
+                    Complex z = point, ztmp2 = Complex.ZERO;
+                    fe.setZ_value(z.toString());
+                    fe.setOldvalue(ztmp2.toString());
+                    last.push(z);
+                    boolean useMandelBrot = false;
+                    while (c <= iteration && z.cabs() <= bailout) {
+                        if (stop) {
+                            return;
+                        }
+                        checkAndDoPause();
+                        if (juliaToMandelbrot) {
+                            if (c % switch_rate == 0) {
+                                useMandelBrot = (!useMandelBrot);
+                            }
+                            if (useMandelBrot) {
+                                setLastConstant(point);
+                                fe.setConstdec(constants);
+                            } else {
+                                setLastConstant(lastConstantBackup);
+                                fe.setConstdec(constants);
+                            }
+                        }
+                        last.pop();
+                        ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                        last.push(z);
+                        fe.setOldvalue(ztmp2.toString());
+                        last.pop();
+                        @NotNull int[] coords = toCoordinates(z);
+                        ++tmp[coords[1]][coords[0]];
+                        Complex ztmp = fe.evaluate(function, false);
+                        last.push(ztmp);
+                        if (distance_squared(z, ztmp) <= tolerance) {
+                            c = iteration;
+                            break;
+                        }
+                        z = new Complex(ztmp);
+                        fe.setZ_value(z.toString());
+                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        c++;
+                        if (ctr > maxiter) {
+                            break outer;
+                        }
+                        ctr++;
+                    }
+                    last.clear();
+                    updateBases(c, iteration, level, tmp);
+                }
+            }
+        }
     }
     public void generate(int start, int end) {
         maxiter = (end - start) * sumIterations;
@@ -501,13 +860,13 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     private void secantGenerate(int start, int end) {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
+        outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
             int c = 0;
-            outer:
             for (int j = start; j < end; ++j) {
+                @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
                 Complex z = points[j], ztmp2 = Complex.ZERO, zold = Complex.ZERO;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
@@ -516,14 +875,15 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         return;
                     }
                     checkAndDoPause();
-                    Complex ztmp;
                     last.pop();
                     ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
                     last.push(z);
                     fe.setOldvalue(ztmp2.toString());
                     Complex a = fe.evaluate(function, false);
                     Complex b = fe.evaluate(function, zold);
-                    ztmp = subtract(z,
+                    @NotNull int[] coords = toCoordinates(z);
+                    ++tmp[coords[1]][coords[0]];
+                    Complex ztmp = subtract(z,
                             divide(
                                     multiply(a,
                                             subtract(z, zold)),
@@ -540,16 +900,16 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
                     fe.setOldvalue(ztmp2.toString());
-                    publishProgress(ctr, start, end, j);
+                    publishProgress(ctr, j);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
                     }
                     ctr++;
                 }
+                last.clear();
+                updateBases(c, iteration, level, tmp);
             }
-            last.clear();
-            updateBases(c, iteration, level, tmp);
         }
     }
     private void newtonGenerate(int start, int end) {
@@ -581,13 +941,13 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
             toadd = new Complex(getLastConstant());
         }
+        outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
             int c = 0;
-            outer:
             for (int j = start; j < end; ++j) {
+                @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
                 boolean useJulia = false, useMandelbrot = false;
                 Complex z = points[j], ztmp2 = Complex.ZERO;
                 fe.setZ_value(z.toString());
@@ -630,6 +990,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
                     last.push(z);
                     last.pop();
+                    @NotNull int[] coords = toCoordinates(z);
+                    ++tmp[coords[1]][coords[0]];
                     Complex ztmp;
                     if (constant != null) {
                         ztmp = add(subtract(z, multiply(constant, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)))), toadd);
@@ -647,16 +1009,16 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    publishProgress(ctr, start, end, j);
+                    publishProgress(ctr, j);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
                     }
                     ctr++;
                 }
+                last.clear();
+                updateBases(c, iteration, level, tmp);
             }
-            last.clear();
-            updateBases(c, iteration, level, tmp);
         }
     }
     private void mandelbrotGenerate(int start, int end) {
@@ -664,12 +1026,12 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         Complex lastConstantBackup = getLastConstant();
+        outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
-            outer:
             for (int j = start; j < end; ++j) {
+                @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
                 @NotNull Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(points[j]) : Complex.ZERO, ztmp2 = Complex.ZERO;
                 setLastConstant(points[j]);
                 fe.setZ_value(z.toString());
@@ -701,6 +1063,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     last.push(z);
                     fe.setOldvalue(ztmp2.toString());
                     last.pop();
+                    @NotNull int[] coords = toCoordinates(z);
+                    ++tmp[coords[1]][coords[0]];
                     Complex ztmp = fe.evaluate(function, false);
                     last.push(ztmp);
                     if (distance_squared(z, ztmp) <= tolerance) {
@@ -708,10 +1072,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         break;
                     }
                     z = new Complex(ztmp);
-                    @NotNull int[] coords = toCoordinates(z);
-                    ++tmp[coords[1]][coords[0]];
                     fe.setZ_value(z.toString());
-                    publishProgress(ctr, start, end, j);
+                    publishProgress(ctr, j);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
@@ -723,29 +1085,112 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             }
         }
     }
+    private void mandelbrotGenerate(int startx, int endx, int starty, int endy) {
+        double bailout = escape_radius * escape_radius + tolerance;
+        @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
+        long ctr = 0;
+        Complex lastConstantBackup = getLastConstant();
+        Complex x_start = fromCoordinates(startx, getImageHeight() / 2),
+                y_start = fromCoordinates(getImageWidth() / 2, starty),
+                x_end = fromCoordinates(endx, getImageHeight() / 2),
+                y_end = fromCoordinates(getImageWidth() / 2, endy);
+        double incr_x = (x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth()),
+                incr_y = (y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight());
+        outer:
+        for (int level = 0; level < iterations.length; ++level) {
+            int iteration = iterations[level];
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            for (double i = x_start.real(); i < x_end.real(); i += incr_x) {
+                for (double j = y_start.imaginary(); j < y_end.imaginary(); j += incr_y) {
+                    Complex point = new Complex(i, j);
+                    @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+                    @NotNull Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(point) : Complex.ZERO, ztmp2 = Complex.ZERO;
+                    setLastConstant(point);
+                    fe.setZ_value(z.toString());
+                    fe.setOldvalue(ztmp2.toString());
+                    fe.setConstdec(this.constants);
+                    fe.setZ_value(z.toString());
+                    last.push(z);
+                    int c = 0;
+                    boolean useJulia = false;
+                    while (c <= iteration && z.cabs() <= bailout) {
+                        if (stop) {
+                            return;
+                        }
+                        checkAndDoPause();
+                        if (mandelbrotToJulia) {
+                            if (c % switch_rate == 0) {
+                                useJulia = (!useJulia);
+                            }
+                            if (useJulia) {
+                                setLastConstant(lastConstantBackup);
+                                fe.setConstdec(constants);
+                            } else {
+                                setLastConstant(point);
+                                fe.setConstdec(constants);
+                            }
+                        }
+                        last.pop();
+                        ztmp2 = (last.size() > 0) ? last.peek() : ztmp2;
+                        last.push(z);
+                        fe.setOldvalue(ztmp2.toString());
+                        last.pop();
+                        @NotNull int[] coords = toCoordinates(z);
+                        ++tmp[coords[1]][coords[0]];
+                        Complex ztmp = fe.evaluate(function, false);
+                        last.push(ztmp);
+                        if (distance_squared(z, ztmp) <= tolerance) {
+                            c = iteration;
+                            break;
+                        }
+                        z = new Complex(ztmp);
+                        fe.setZ_value(z.toString());
+                        publishProgress(ctr, (int) (((j * yPointsPerPixel) * (endx - startx)) + (i * xPointsPerPixel)));
+                        c++;
+                        if (ctr > maxiter) {
+                            break outer;
+                        }
+                        ctr++;
+                    }
+                    last.clear();
+                    updateBases(c, iteration, level, tmp);
+                }
+            }
+        }
+    }
     private void updateBases(int c, int iteration, int level, int[][] tmp) {
         if (anti) {
             if (c == iteration) {
-                bases[level] = intDDAAdd(bases[level], tmp);
+                intDDAAdd(bases[level], tmp);
+            } else {
+                ++discardedPoints;
             }
         } else {
             if (c < iteration) {
-                bases[level] = intDDAAdd(bases[level], tmp);
+                intDDAAdd(bases[level], tmp);
+            } else {
+                ++discardedPoints;
             }
         }
+    }
+    public int getDiscardedPointsCount() {
+        return discardedPoints;
+    }
+    public double getDiscardedPointsFraction() {
+        return (double) discardedPoints / points.length;
     }
     private void juliaGenerate(int start, int end) {
         double bailout = escape_radius * escape_radius + tolerance;
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         Complex lastConstantBackup = getLastConstant();
+        outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
             @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
-            @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
-            int c = 0;
-            outer:
             for (int j = start; j < end; ++j) {
+                @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
+                int c = 0;
                 Complex z = points[j], ztmp2 = Complex.ZERO;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
@@ -773,6 +1218,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     last.push(z);
                     fe.setOldvalue(ztmp2.toString());
                     last.pop();
+                    @NotNull int[] coords = toCoordinates(z);
+                    ++tmp[coords[1]][coords[0]];
                     Complex ztmp = fe.evaluate(function, false);
                     last.push(ztmp);
                     if (distance_squared(z, ztmp) <= tolerance) {
@@ -780,19 +1227,17 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         break;
                     }
                     z = new Complex(ztmp);
-                    @NotNull int[] coords = toCoordinates(z);
-                    ++tmp[coords[1]][coords[0]];
                     fe.setZ_value(z.toString());
-                    publishProgress(ctr, start, end, j);
+                    publishProgress(ctr, j);
                     c++;
                     if (ctr > maxiter) {
                         break outer;
                     }
                     ctr++;
                 }
+                last.clear();
+                updateBases(c, iteration, level, tmp);
             }
-            last.clear();
-            updateBases(c, iteration, level, tmp);
         }
     }
     public void setEscape_radius(double escape_radius) {

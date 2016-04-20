@@ -8,9 +8,9 @@ import java.util.EmptyStackException;
 import java.util.Iterator;
 /**
  * Abstract Stack Base class. Implements {@link java.util.Collection}.
- * <p>
+ *
  * Known implementors:
- * <p>
+ *
  * {@link FixedStack} - A fixed-length array-based stack.
  *
  * @see java.util.Collection
@@ -63,7 +63,6 @@ public abstract class Stack<E> implements Collection<E>, Serializable {
         return indexOf((E) o) >= 0;
     }
     /**
-     *
      * @param item the item whose index has to be found
      * @return the 0-based index of {@code item} if it exists in this stack, or -1 if it doesn't
      */

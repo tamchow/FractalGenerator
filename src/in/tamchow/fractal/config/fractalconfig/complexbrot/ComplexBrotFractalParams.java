@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ZoomConfig zoomConfig;
     public PixelContainer.PostProcessMode postprocessMode;
-    public int width, height, num_threads, switch_rate, num_points;
+    public int width, height, num_threads, switch_rate, num_points, xThreads, yThreads, xPointsPerPixel, yPointsPerPixel;
     @Nullable
     public Complex newton_constant;
     public int[] iterations;
@@ -24,12 +24,75 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public String function, variableCode, oldVariableCode, path;
     public ComplexFractalGenerator.Mode mode;
     public String[][] constants;
-    public boolean anti;
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti) {
-        this(width, height, num_threads, switch_rate, num_points, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti);
+    public boolean anti, sequential;
+    private int maxHitThreshold;
+    private boolean clamped;
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+        this(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped);
     }
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti) {
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
         this();
+        init(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped);
+    }
+    public ComplexBrotFractalParams(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+        this(width, height, xThreads, yThreads, switch_rate, xPointsPerPixel, yPointsPerPixel, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped);
+    }
+    public ComplexBrotFractalParams(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+        this();
+        init(width, height, xThreads, yThreads, switch_rate, xPointsPerPixel, yPointsPerPixel, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped);
+    }
+    public ComplexBrotFractalParams() {
+        setPath("");
+        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
+        zoomConfig = new ZoomConfig();
+        setNewton_constant(null);
+        setNum_points(1);
+        setNum_threads(1);
+    }
+    public ComplexBrotFractalParams(@NotNull ComplexBrotFractalParams old) {
+        if (old.isSequential()) {
+            init(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getMaxHitThreshold(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti(), old.isClamped());
+        } else {
+            init(old.getWidth(), old.getHeight(), old.getxThreads(), old.getyThreads(), old.getSwitch_rate(), old.getxPointsPerPixel(), old.getyPointsPerPixel(), old.getMaxHitThreshold(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti(), old.isClamped());
+        }
+        setPath(old.getPath());
+        setPostProcessMode(old.getPostProcessMode());
+        setNewton_constant(old.getNewton_constant());
+        if (old.zoomConfig.zooms != null) {
+            this.zoomConfig = new ZoomConfig(old.getZoomConfig());
+        }
+    }
+    public int getxThreads() {
+        return xThreads;
+    }
+    public void setxThreads(int xThreads) {
+        this.xThreads = xThreads;
+    }
+    public int getyThreads() {
+        return yThreads;
+    }
+    public void setyThreads(int yThreads) {
+        this.yThreads = yThreads;
+    }
+    public int getxPointsPerPixel() {
+        return xPointsPerPixel;
+    }
+    public void setxPointsPerPixel(int xPointsPerPixel) {
+        this.xPointsPerPixel = xPointsPerPixel;
+    }
+    public int getyPointsPerPixel() {
+        return yPointsPerPixel;
+    }
+    public void setyPointsPerPixel(int yPointsPerPixel) {
+        this.yPointsPerPixel = yPointsPerPixel;
+    }
+    public boolean isSequential() {
+        return sequential;
+    }
+    public void setSequential(boolean sequential) {
+        this.sequential = sequential;
+    }
+    private void init(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
         setWidth(width);
         setHeight(height);
         setSwitch_rate(switch_rate);
@@ -45,26 +108,37 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setVariableCode(variableCode);
         setOldVariableCode(oldVariableCode);
         setMode(mode);
+        setMaxHitThreshold(maxHitThreshold);
         setConstants(constants);
         setAnti(anti);
+        setClamped(clamped);
         setNum_threads(num_threads);
+        setSequential(false);
     }
-    public ComplexBrotFractalParams() {
-        setPath("");
-        setPostProcessMode(PixelContainer.PostProcessMode.NONE);
-        zoomConfig = new ZoomConfig();
-        setNewton_constant(null);
-        setNum_points(1);
-        setNum_threads(1);
-    }
-    public ComplexBrotFractalParams(@NotNull ComplexBrotFractalParams old) {
-        this(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti());
-        setPath(old.getPath());
-        setPostProcessMode(old.getPostProcessMode());
-        setNewton_constant(old.getNewton_constant());
-        if (old.zoomConfig.zooms != null) {
-            this.zoomConfig = new ZoomConfig(old.getZoomConfig());
-        }
+    private void init(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+        setWidth(width);
+        setHeight(height);
+        setSwitch_rate(switch_rate);
+        setxPointsPerPixel(xPointsPerPixel);
+        setyPointsPerPixel(yPointsPerPixel);
+        setxThreads(xThreads);
+        setyThreads(yThreads);
+        setIterations(iterations);
+        setZoom(zoom);
+        setZoom_level(zoom_level);
+        setBase_precision(base_precision);
+        setEscape_radius(escape_radius);
+        setTolerance(tolerance);
+        setSkew(skew);
+        setFunction(function);
+        setVariableCode(variableCode);
+        setOldVariableCode(oldVariableCode);
+        setMode(mode);
+        setMaxHitThreshold(maxHitThreshold);
+        setConstants(constants);
+        setAnti(anti);
+        setClamped(clamped);
+        setSequential(true);
     }
     public double getEscape_radius() {
         return escape_radius;
@@ -201,6 +275,9 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         this.base_precision = base_precision;
     }
     public boolean useThreadedGenerator() {
+        if (isSequential()) {
+            return xThreads * yThreads > 1;
+        }
         return num_threads > 1;
     }
     public ZoomConfig getZoomConfig() {
@@ -224,26 +301,36 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     @Override
     public void fromString(String[] data) {
         setNum_threads(1);
-        setWidth(Integer.valueOf(data[0]));
-        setHeight(Integer.valueOf(data[1]));
-        setIterations(integersFromStrings(StringManipulator.split(data[2], ",")));
-        setBase_precision(Double.valueOf(data[3]));
-        setZoom(Double.valueOf(data[4]));
-        setZoom_level(Double.valueOf(data[5]));
-        setEscape_radius(Double.valueOf(data[6]));
-        setTolerance(Double.valueOf(data[7]));
-        setSkew(Double.valueOf(data[8]));
-        setNum_points(Integer.valueOf(data[9]));
-        setFunction(data[10]);
-        setVariableCode(data[11]);
-        setMode(ComplexFractalGenerator.Mode.valueOf(data[12]));
-        @NotNull String[] con = StringManipulator.split(data[13], ";");
+        setSequential(Boolean.valueOf(data[0]));
+        setWidth(Integer.valueOf(data[1]));
+        setHeight(Integer.valueOf(data[2]));
+        setIterations(integersFromStrings(StringManipulator.split(data[3], ",")));
+        setBase_precision(Double.valueOf(data[4]));
+        setZoom(Double.valueOf(data[5]));
+        setZoom_level(Double.valueOf(data[6]));
+        setEscape_radius(Double.valueOf(data[7]));
+        setTolerance(Double.valueOf(data[8]));
+        setSkew(Double.valueOf(data[9]));
+        setMaxHitThreshold(Integer.valueOf(data[10]));
+        setFunction(data[11]);
+        setVariableCode(data[12]);
+        setMode(ComplexFractalGenerator.Mode.valueOf(data[13]));
+        @NotNull String[] con = StringManipulator.split(data[14], ";");
         @NotNull String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i] = StringManipulator.split(con[i], ":");
         }
         setConstants(consts);
-        setAnti(Boolean.valueOf(data[14]));
+        setAnti(Boolean.valueOf(data[15]));
+        setClamped(Boolean.valueOf(data[16]));
+        if (isSequential()) {
+            setxPointsPerPixel(Integer.valueOf(data[17]));
+            setyPointsPerPixel(Integer.valueOf(data[18]));
+            setxThreads(Integer.valueOf(data[19]));
+            setyThreads(Integer.valueOf(data[20]));
+        } else {
+            setNum_points(Integer.valueOf(data[17]));
+        }
     }
     private String integersToString(@NotNull int[] ints) {
         @NotNull String string = "";
@@ -263,12 +350,28 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     @Nullable
     @Override
     public String toString() {
-        @Nullable String representation = "Postprocessing:" + postprocessMode + "\nThreads:" + num_threads + ((newton_constant != null) ? "\nNewton_constant:" + newton_constant : "");
-        representation += "%n%d%n%d%n%s%n%f%n%f%n%f%n%f%n%f%n%f%nSwitch_Mode_Rate:%d%n%d%n%s%n%s%nOld_variable_code:%s%n%s%n%s%n%s";
-        representation = String.format(representation, width, height, integersToString(iterations), base_precision, zoom, zoom_level, escape_radius, tolerance, skew, switch_rate, num_points, function, variableCode, oldVariableCode, constantsToString(), anti);
+        @Nullable String representation = "Postprocessing:" + postprocessMode + ((isSequential()) ? "\nThreads:" + num_threads : "") + ((newton_constant != null) ? "\nNewton_constant:" + newton_constant : "") + "\n" + isSequential() + "\nSwitch_mode_rate:" + switch_rate + "\nOld_variable_code" + oldVariableCode;
+        representation += width + "\n" + height + "\n" + integersToString(iterations) + "\n" + base_precision + "\n" + zoom + "\n" + zoom_level + "\n" + escape_radius + "\n" + tolerance + "\n" + skew + "\n" + maxHitThreshold + "\n" + function + "\n" + variableCode + "\n" + mode + "\n" + constantsToString() + "\n" + isAnti() + "\n" + isClamped() + "\n";
+        if (isSequential()) {
+            representation += xPointsPerPixel + "\n" + yPointsPerPixel + "\n" + xThreads + "\n" + yThreads;
+        } else {
+            representation += num_points;
+        }
         if (zoomConfig != null) {
             representation += "\n" + zoomConfig;
         }
         return representation;
+    }
+    public int getMaxHitThreshold() {
+        return maxHitThreshold;
+    }
+    public void setMaxHitThreshold(int maxHitThreshold) {
+        this.maxHitThreshold = maxHitThreshold;
+    }
+    public boolean isClamped() {
+        return clamped;
+    }
+    public void setClamped(boolean clamped) {
+        this.clamped = clamped;
     }
 }

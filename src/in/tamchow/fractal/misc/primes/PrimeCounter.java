@@ -3,11 +3,11 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * PrimeCounter - an application/library to calculate the number of prime numbers below a certain number,
  * also mathematically known as pi(x), where x is a natural number greater than one.
- * <p>
+ *
  * Uses sieves and multithreaded and optimized trial division.
- * <p>
+ *
  * Timing facility is built-in.
- * <p>
+ *
  * This is public domain software, licensed under the Apache License 2.0
  *
  * @author Tamoghna Chowdhury
@@ -28,7 +28,7 @@ public class PrimeCounter {
     private static final Object LOCK = new Lock();
     /**
      * Some necessary (and unnecessary) constants.
-     * <p>
+     *
      * For further documentation, see {@link #PrimeCounter(int, int, int, int, int)}
      */
     public final int NUM_THREADS, LOW_LIM, SPLIT_LIM, HIGH_LIM, REDUCE_FACTOR;
@@ -42,10 +42,10 @@ public class PrimeCounter {
     /**
      * Parameterized Constructor - configures calculation parameters
      *
-     * @param NUM_THREADS   : The number of threads to be used in multithreaded trial division.
-     * @param LOW_LIM       : The minimum value of 'x' for which trial division will be used.
-     * @param SPLIT_LIM     : The value which determines how many threads will be used. {@link #NUM_THREADS}
-     * @param HIGH_LIM      : The value of 'x' for which the {@link #bitPrimeSieve(long)} will be used.
+     * @param NUM_THREADS : The number of threads to be used in multithreaded trial division.
+     * @param LOW_LIM : The minimum value of 'x' for which trial division will be used.
+     * @param SPLIT_LIM : The value which determines how many threads will be used. {@link #NUM_THREADS}
+     * @param HIGH_LIM : The value of 'x' for which the {@link #bitPrimeSieve(long)} will be used.
      * @param REDUCE_FACTOR : The value which determines the packing density {@link #bitPrimeSieve(long)} will use.
      */
     public PrimeCounter(int NUM_THREADS, int LOW_LIM, int SPLIT_LIM, int HIGH_LIM, int REDUCE_FACTOR) {
@@ -123,8 +123,8 @@ public class PrimeCounter {
      * Uses 2,3,5,7 wheel factorization for elimination (hardcoded for performance reasons)
      *
      * @param MAX : argument x for pi(x)
-     *            Will delegate to {@link #primeCount(long)} for MAX&lt;LOW_LIM,
-     *            and to {@link #bitPrimeSieve(long)} for MAX&gt;HIGH_LIM, for performance reasons.
+     * Will delegate to {@link #primeCount(long)} for MAX&lt;LOW_LIM,
+     * and to {@link #bitPrimeSieve(long)} for MAX&gt;HIGH_LIM, for performance reasons.
      * @return The number of prime numbers &lt;= MAX
      * @see #primeCount(long)
      * @see #bitPrimeSieve(long)

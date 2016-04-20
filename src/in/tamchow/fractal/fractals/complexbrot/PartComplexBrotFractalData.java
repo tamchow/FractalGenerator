@@ -6,9 +6,11 @@ import java.io.Serializable;
  * Holds a part of a fractal's data for threaded generation.
  */
 public class PartComplexBrotFractalData implements Serializable {
-    int[][][] bases;
-    public PartComplexBrotFractalData(@NotNull int[][][] base) {
-        setBase(base);
+    private int[][][] bases;
+    private int discardedPoints;
+    public PartComplexBrotFractalData(@NotNull int[][][] bases, int discardedPoints) {
+        setBase(bases);
+        this.discardedPoints = discardedPoints;
     }
     public void setBase(@NotNull int[][][] bases) {
         this.bases = new int[bases.length][bases[0].length][bases[0][0].length];
@@ -20,5 +22,8 @@ public class PartComplexBrotFractalData implements Serializable {
     }
     public int[][][] getBases() {
         return bases;
+    }
+    public int getDiscardedPoints() {
+        return discardedPoints;
     }
 }

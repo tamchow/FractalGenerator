@@ -82,7 +82,7 @@ public class RPNHelper {
      * Test the associativity of a certain operator token .
      *
      * @param token The token to be tested (needs to operator).
-     * @param type  Associativity.LEFT or Associativity.RIGHT
+     * @param type Associativity.LEFT or Associativity.RIGHT
      * @return True if the tokenType equals the input parameter type .
      */
     private static boolean isAssociative(String token, Associativity type) {

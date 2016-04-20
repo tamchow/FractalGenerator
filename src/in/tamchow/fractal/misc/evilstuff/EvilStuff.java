@@ -12,6 +12,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * <p>
  * Try {@link java.io.PrintStream#format(String, Object...)} of {@link System#out} for best results!
  * </p>
+ *
  * @author Tamoghna Chowdhury
  * @version 19.03.2016
  */
@@ -49,8 +50,8 @@ public class EvilStuff {
      * Shuffles the cache.
      * Should work for any distribution whose nested cache class index is known.
      *
-     * @param victim           The class whose cache should be shuffled. Recommend {@link Integer}
-     * @param cacheID          The name of the cache array in the victim class
+     * @param victim The class whose cache should be shuffled. Recommend {@link Integer}
+     * @param cacheID The name of the cache array in the victim class
      * @param cacheFieldNumber The index of the cache nested class
      */
     public static void doEvilStuff(@NotNull Class<?> victim, @NotNull String cacheID, int cacheFieldNumber) {
@@ -60,7 +61,7 @@ public class EvilStuff {
      * Shuffles the cache.
      * Default for OpenJDK or Oracle distributions
      *
-     * @param victim  The class whose cache should be shuffled. Recommend {@link Integer}
+     * @param victim The class whose cache should be shuffled. Recommend {@link Integer}
      * @param cacheID The name of the cache array in the victim class
      */
     public static void doEvilStuff(@NotNull final Class<? extends Number> victim, @NotNull final String cacheID) {
@@ -75,9 +76,9 @@ public class EvilStuff {
      * Shuffles the cache.
      * Does the real work.
      *
-     * @param victim  The class whose cache should be shuffled. Recommend {@link Integer}
+     * @param victim The class whose cache should be shuffled. Recommend {@link Integer}
      * @param cacheID The name of the cache array in the victim class
-     * @param cache   The cache nested class
+     * @param cache The cache nested class
      */
     public static void doEvilStuff(final Class<?> victim, @NotNull final String cacheID, @NotNull final Class cache) {
         java.lang.reflect.Field c;
@@ -121,11 +122,11 @@ public class EvilStuff {
      * Shuffles the cache.
      * Should work for any distribution whose nested cache class index is known.
      *
-     * @param victim           The class whose cache should be shuffled. Recommend {@link Integer}
-     * @param cacheID          The name of the cache array in the victim class
+     * @param victim The class whose cache should be shuffled. Recommend {@link Integer}
+     * @param cacheID The name of the cache array in the victim class
      * @param cacheFieldNumber The index of the cache nested class
-     * @param threadName       The name of the thread which will be created
-     * @param waitPeriod       The time to wait in milliseconds between iterations
+     * @param threadName The name of the thread which will be created
+     * @param waitPeriod The time to wait in milliseconds between iterations
      */
     public static void repeatedlyDoEvilStuff(@NotNull Class<?> victim, @NotNull String cacheID, int cacheFieldNumber, final String threadName, final int waitPeriod) {
         repeatedlyDoEvilStuff(victim, cacheID, victim.getDeclaredClasses()[cacheFieldNumber], threadName, waitPeriod);
@@ -134,8 +135,8 @@ public class EvilStuff {
      * Repeatedly shuffles the cache.
      * Default for OpenJDK or Oracle distributions
      *
-     * @param victim     The class whose cache should be shuffled. Recommend {@link Integer}
-     * @param cacheID    The name of the cache array in the victim class
+     * @param victim The class whose cache should be shuffled. Recommend {@link Integer}
+     * @param cacheID The name of the cache array in the victim class
      * @param threadName The name of the thread which will be created
      * @param waitPeriod The time to wait in milliseconds between iterations
      */
@@ -151,9 +152,9 @@ public class EvilStuff {
      * Repeatedly shuffles the cache.
      * Does the real work.
      *
-     * @param victim     The class whose cache should be shuffled. Recommend {@link Integer}
-     * @param cacheID    The name of the cache array in the victim class
-     * @param cache      The cache nested class
+     * @param victim The class whose cache should be shuffled. Recommend {@link Integer}
+     * @param cacheID The name of the cache array in the victim class
+     * @param cache The cache nested class
      * @param threadName The name of the thread which will be created
      * @param waitPeriod The time to wait in milliseconds between iterations
      */

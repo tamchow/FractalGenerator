@@ -71,7 +71,6 @@ public final class BaseConverter {
         }
         return number;
     }
-
     private static int countDigits(long number, int to_base) {
         int num_digits = 0;
         while (number > 0) {
@@ -104,6 +103,7 @@ public final class BaseConverter {
     }
     /**
      * Utility method for parsing an array of Strings to an array of ints
+     *
      * @param data the {@link String} array to parse into a an {@code int} array
      * @return {@code int} array containing the parsed values
      */
@@ -117,6 +117,7 @@ public final class BaseConverter {
     }
     /**
      * Utility method for parsing an array of Strings to an array of doubles
+     *
      * @param data the {@link String} array to parse into a an {@code double} array
      * @return {@code double} array containing the parsed values
      */

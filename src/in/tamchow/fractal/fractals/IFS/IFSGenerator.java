@@ -16,9 +16,9 @@ import static in.tamchow.fractal.helpers.math.MathUtils.*;
 import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
 /**
  * Generates IFS fractals
- * <p>
+ *
  * Hack to support multithreading:
- * <p>
+ *
  * Actually makes 2 passes:
  * 1 in single threaded initialization phase without rendering to get starting points for threads (fast)
  * &amp; 1 in multithreaded mode for rendering/animation (slow)
@@ -328,7 +328,6 @@ public class IFSGenerator extends PixelFractalGenerator {
                             /*Use default (proper) linear interpolation*/
                             params.getWeights()[index], 0));
             weightDistribution[coord[1]][coord[0]] = params.getWeights()[index];
-
         }
         @NotNull Matrix point = modifyPoint(this.point, index);
         if (point.equals(initial) || isOutOfBounds(point)) {

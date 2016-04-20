@@ -79,6 +79,27 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, Publisher progressPublisher, int switch_rate, @NotNull Complex trap_point, String linetrap) {
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, 0), null), progressPublisher);
     }
+    @NotNull
+    public static int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
+        //for multithreading purposes
+        int start_x = startx, end_x, start_y = starty, end_y;
+        int x_dist = Math.round((float) (endx - startx) / nx), y_dist = Math.round((float) (endy - starty) / ny);
+        if (ix == (nx - 1)) {
+            start_x += (nx - 1) * x_dist;
+            end_x = endx;
+        } else {
+            start_x += ix * x_dist;
+            end_x = (ix + 1) * x_dist;
+        }
+        if (iy == (ny - 1)) {
+            start_y += (ny - 1) * y_dist;
+            end_y = endy;
+        } else {
+            start_y += iy * y_dist;
+            end_y = (iy + 1) * y_dist;
+        }
+        return new int[]{start_x, end_x, start_y, end_y};
+    }
     @Override
     public void doZooms(@NotNull ZoomConfig zoomConfig) {
         if (zoomConfig.zooms != null) {
@@ -205,36 +226,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         this.mode = mode;
     }
     /**
-     * @param nx:No.   of threads horizontally
+     * @param nx:No. of threads horizontally
      * @param ix:Index of thread horizontally
-     * @param ny:No.   of threads vertically
+     * @param ny:No. of threads vertically
      * @param iy:Index of thread vertically
      * @return the start and end coordinates for a particular thread's rendering region
      */
     @NotNull
     protected int[] start_end_coordinates(int nx, int ix, int ny, int iy) {
-        return start_end_coordinates(0, argand.getWidth(), 0, argand.getHeight(), nx, ix, ny, iy);
-    }
-    @NotNull
-    protected int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
-        //for multithreading purposes
-        int start_x = startx, end_x, start_y = starty, end_y;
-        int x_dist = Math.round((float) (endx - startx) / nx), y_dist = Math.round((float) (endy - starty) / ny);
-        if (ix == (nx - 1)) {
-            start_x += (nx - 1) * x_dist;
-            end_x = endx;
-        } else {
-            start_x += ix * x_dist;
-            end_x = (ix + 1) * x_dist;
-        }
-        if (iy == (ny - 1)) {
-            start_y += (ny - 1) * y_dist;
-            end_y = endy;
-        } else {
-            start_y += iy * y_dist;
-            end_y = (iy + 1) * y_dist;
-        }
-        return new int[]{start_x, end_x, start_y, end_y};
+        return start_end_coordinates(0, getImageWidth(), 0, getImageHeight(), nx, ix, ny, iy);
     }
     public double getZoom() {
         return zoom;
@@ -651,6 +651,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     /**
      * NOTE:Call after generating the fractal, as this uses data from {@code escapdedata}
+     *
      * @param depth the iteration count to be considered as a boundary
      * @return The boundary points
      * @deprecated No replacement

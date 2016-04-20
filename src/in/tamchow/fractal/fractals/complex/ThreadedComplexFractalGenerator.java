@@ -22,7 +22,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     double escape_radius;
     @Nullable
     Complex constant;
-    int nx, ny;
+    int nx, ny, threads;
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
         this.master = master;
         this.iterations = iterations;
@@ -30,6 +30,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         this.constant = constant;
         nx = x_threads;
         ny = y_threads;
+        threads = nx * ny;
         buffer = new PartComplexFractalData[nx * ny];
     }
     public ThreadedComplexFractalGenerator(@NotNull ComplexFractalGenerator master) {
@@ -53,14 +54,14 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         return ctr;
     }
     public void generate() {
-        generate(0, master.argand.getWidth(), 0, master.argand.getHeight());
+        generate(0, master.getImageWidth(), 0, master.getImageHeight());
     }
     public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
-        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < nx * ny; ++t) {
-            @NotNull int[] coords = master.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
+        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads; ++t) {
+            @NotNull int[] coords = ComplexFractalGenerator.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
             @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / (nx * ny), idx);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
             idx++;
             runner.start();
         }

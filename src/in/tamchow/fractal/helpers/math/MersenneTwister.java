@@ -5,30 +5,98 @@ import java.io.IOException;
 import java.io.Serializable;
 /**
  * A PseudoRandom Number Generator (PRNG) based on the Mersenne Twister algorithm.
+ * <br>
+ * This does not guarantee concurrent usability of a single instance as no methods are synchronized.
+ * <p>
  * Adapted from:
- * <p/>
  * <a href="https://cs.gmu.edu/~sean/research/mersenne/MersenneTwisterFast.java">Sean Luke's Fast Mersenne Twister</a>
- * <p/>
- * Methods are hard-inlined for speed as in the original.
+ * </p>
+ *
+ *
+ * <ol>
+ * <li>Methods are hard-inlined for speed as in the original.</li>
+ * <li>Modern documentation comments are my contribution.</li>
+ * <li>Ranged random methods are also my contribution</li>
+ * </ol>
+ *
+ *<h3>License</h3>
+ *
+ * Copyright (c) 2003 by Sean Luke. <br>
+ * Portions copyright (c) 1993 by Michael Lecuyer. <br>
+ * All rights reserved. <br>
+ *
+ * <p>Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * <ul>
+ * <li> Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * <li> Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * <li> Neither the name of the copyright owners, their employers, nor the
+ * names of its contributors may be used to endorse or promote products
+ * derived from this software without specific prior written permission.
+ * </ul>
+ * <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @author Sean Luke, Tamoghna Chowdhury
+ * @version 23
  */
 public strictfp class MersenneTwister implements Serializable, Cloneable {
-    // Serialization
-    private static final long serialVersionUID = -8219700664442619525L;  // locked as of Version 15
-    // Period parameters
+    /**
+     * Serialization identifier constant
+     */
+    private static final long serialVersionUID = -8219700664442619525L;
+    /**
+     * Period parameters
+     */
     private static final int N = 624;
     private static final int M = 397;
-    private static final int MATRIX_A = 0x9908b0df;   //    private static final * constant vector a
-    private static final int UPPER_MASK = 0x80000000; // most significant w-r bits
-    private static final int LOWER_MASK = 0x7fffffff; // least significant r bits
-    // Tempering parameters
+    /**
+     * <code>private static final</code> * constant vector {@code a}
+     */
+    private static final int MATRIX_A = 0x9908b0df;
+    /**
+     * Most significant w-r bits
+     */
+    private static final int UPPER_MASK = 0x80000000;
+    /**
+     * Least significant r bits
+     */
+    private static final int LOWER_MASK = 0x7fffffff;
+    /**
+     * Tempering parameters
+     */
     private static final int TEMPERING_MASK_B = 0x9d2c5680;
     private static final int TEMPERING_MASK_C = 0xefc60000;
-    private int mt[]; // the array for the state vector
-    private int mti; // mti==N+1 means mt[N] is not initialized
+    /**
+     * The array for the state vector
+     */
+    private int mt[];
+    /**
+     * <code>mti==N+1</code> means {@code mt[N]} is not initialized
+     */
+    private int mti;
     private int mag01[];
     // a good initial seed (of int size, though stored in a long)
     //private static final long GOOD_SEED = 4357;
+    /**
+     * Gaussian distribution indicator
+     */
     private double __nextNextGaussian;
+    /**
+     * Gaussian distribution indicator
+     */
     private boolean __haveNextNextGaussian;
     /**
      * Constructor using the default seed.
@@ -58,7 +126,11 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
     public MersenneTwister(int[] array) {
         setSeed(array);
     }
-    /* We're overriding all internal data, to my knowledge, so this should be okay */
+    /**
+     * We're overriding all internal data, to my knowledge, so this should be okay
+     *
+     * @return a clone of this {@link MersenneTwister} as an {@link Object}
+     */
     @Override
     public Object clone() {
         try {
@@ -71,11 +143,16 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         } // should never happen
     }
     /**
-     * Returns true if the MersenneTwisterFast's current internal state is equal to another MersenneTwisterFast.
+     * Returns true if this {@link MersenneTwister}'s current internal state is equal to another {@link MersenneTwister}.
+     * That another is {@code other}.
+     * <br>
      * This is roughly the same as {@link MersenneTwister#equals(Object)}, except that it compares based on value but does not
      * guarantee the contract of immutability (obviously random number generators are immutable).
+     * <br>
      * Note that this does NOT check to see if the internal gaussian storage is the same
-     * for both.  You can guarantee that the internal gaussian storage is the same (and so the
+     * for both.
+     * <br>
+     * You can guarantee that the internal Gaussian storage is the same (and so the
      * {@link MersenneTwister#nextGaussian()} methods will return the same values)
      * by calling {@link MersenneTwister#clearGaussian()} on both objects.
      *
@@ -93,7 +170,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         return true;
     }
     /**
-     * Reads the entire state of the MersenneTwister RNG from the stream
+     * Reads the entire state of the {@link MersenneTwister} RNG from the stream
+     * @param stream the {@link DataInputStream} to load the {@link MersenneTwister} from.
+     * @throws IOException on any I/O error
      */
     public void readState(DataInputStream stream) throws IOException {
         int len = mt.length;
@@ -105,7 +184,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         __haveNextNextGaussian = stream.readBoolean();
     }
     /**
-     * Writes the entire state of the MersenneTwister RNG to the stream
+     * Writes the entire state of the {@link MersenneTwister} RNG to the stream
+     * @param stream the {@link DataOutputStream} to write this {@link MersenneTwister} to.
+     * @throws IOException on any I/O error
      */
     public void writeState(DataOutputStream stream) throws IOException {
         int len = mt.length;
@@ -181,6 +262,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         }
         mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */
     }
+    /**
+     * @return a random integer  drawn uniformly from 0 to {@link Integer#MAX_VALUE}
+     */
     public int nextInt() {
         int y;
         if (mti >= N)   // generate N words at one time
@@ -207,6 +291,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         y ^= (y >>> 18);                        // TEMPERING_SHIFT_L(y)
         return y;
     }
+    /**
+     * @return a random {@code short} value  drawn uniformly from 0 to {@link Short#MAX_VALUE}
+     */
     public short nextShort() {
         int y;
         if (mti >= N)   // generate N words at one time
@@ -233,6 +320,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         y ^= (y >>> 18);                        // TEMPERING_SHIFT_L(y)
         return (short) (y >>> 16);
     }
+    /**
+     * @return a random UTF-16 character as an {@code char} value drawn uniformly from {@code '\0'} to {@link Character#MAX_VALUE}
+     */
     public char nextChar() {
         int y;
         if (mti >= N)   // generate N words at one time
@@ -259,6 +349,11 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         y ^= (y >>> 18);                        // TEMPERING_SHIFT_L(y)
         return (char) (y >>> 16);
     }
+    /**
+     * Simulates a fair coin toss.
+     *
+     * @return a {@code boolean} with equal probability of either {@code true} or {@code false}
+     */
     public boolean nextBoolean() {
         int y;
         if (mti >= N)   // generate N words at one time
@@ -286,11 +381,14 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         return ((y >>> 31) != 0);
     }
     /**
-     * This generates a coin flip with a probability <tt>probability</tt>
-     * of returning true, else returning false.  <tt>probability</tt> must
-     * be between 0.0 and 1.0, inclusive.   Not as precise a random real
-     * event as nextBoolean(double), but twice as fast. To explicitly
-     * use this, remember you may need to cast to float first.
+     * This generates a coin flip with a probability {@code probability}
+     * of returning {@code true}, else returning {@code false}. Not as precise a random real
+     * event as {@link MersenneTwister#nextBoolean(double)}, but twice as fast. To explicitly
+     * use this, remember you may need to cast to {@code float} first.
+     *
+     * @param probability the probability of returning {@code true}
+     * @return {@code true} or {@code false} as regards the {@code probability}
+     * @throws IllegalArgumentException if {@code probability} is not between 0.0 and 1.0, inclusive
      */
     public boolean nextBoolean(float probability) {
         int y;
@@ -323,9 +421,12 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         return (y >>> 8) / ((float) (1 << 24)) < probability;
     }
     /**
-     * This generates a coin flip with a probability <tt>probability</tt>
-     * of returning true, else returning false.  <tt>probability</tt> must
-     * be between 0.0 and 1.0, inclusive.
+     * This generates a coin flip with a probability {@code probability}
+     * of returning {@code true}, else returning {@code false}.
+     *
+     * @param probability the probability of returning {@code true}
+     * @return {@code true} or {@code false} as regards the {@code probability}
+     * @throws IllegalArgumentException if {@code probability} is not between 0.0 and 1.0, inclusive
      */
     public boolean nextBoolean(double probability) {
         int y;
@@ -382,6 +483,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         /* derived from nextDouble documentation in jdk 1.2 docs, see top */
         return ((((long) (y >>> 6)) << 27) + (z >>> 5)) / (double) (1L << 53) < probability;
     }
+    /**
+     * @return a random {@code byte} value drawn uniformly from 0 to {@link Byte#MAX_VALUE}
+     */
     public byte nextByte() {
         int y;
         if (mti >= N)   // generate N words at one time
@@ -408,6 +512,12 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         y ^= (y >>> 18);                        // TEMPERING_SHIFT_L(y)
         return (byte) (y >>> 24);
     }
+    /**
+     * Fills the provided {@code byte[]}{@code bytes} with random byte values
+     *
+     * @param bytes the {@code byte[]} to fill with random bytes
+     * @see MersenneTwister#nextByte()
+     */
     public void nextBytes(byte[] bytes) {
         int y;
         for (int x = 0; x < bytes.length; x++) {
@@ -437,8 +547,7 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         }
     }
     /**
-     * Returns a long drawn uniformly from 0 to n-1.  Suffice it to say,
-     * n must be greater than 0, or an IllegalArgumentException is raised.
+     * @return a {@code long} drawn uniformly from 0 to {@link Long#MAX_VALUE}
      */
     public long nextLong() {
         int y;
@@ -490,8 +599,18 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         return (((long) y) << 32) + (long) z;
     }
     /**
-     * Returns a long drawn uniformly from 0 to n-1.  Suffice it to say,
-     * n must be &gt; 0, or an IllegalArgumentException is raised.
+     * @param min the lower limit
+     * @param max the upper limit
+     * @return a {@code long} drawn uniformly from {@code min} to {@code max-1}.
+     */
+    public long nextLong(long min, long max) {
+        long diff = Math.abs(max - min);
+        return nextLong(diff) + diff;
+    }
+    /**
+     * @param n the upper limit
+     * @return a {@code long} drawn uniformly from 0 to n-1.
+     * @throws IllegalArgumentException if {@code n} &lt; 0
      */
     public long nextLong(long n) {
         if (n <= 0)
@@ -550,8 +669,17 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         return val;
     }
     /**
-     * Returns a random double in the half-open range from [0.0,1.0).  Thus 0.0 is a valid
-     * result but 1.0 is not.
+     * @param min the lower limit
+     * @param max the upper limit
+     * @return random {@code double} in the range {@code min} and {@code max}
+     */
+    public double nextDouble(double min, double max) {
+        double diff = Math.abs(max - min);
+        return nextDouble() * diff + (min > max ? min : max);
+    }
+    /**
+     * @return a random {@code double} in the half-open range from [0.0,1.0).
+     * Thus, 0.0 is a valid result, but 1.0 is not.
      */
     public double nextDouble() {
         int y;
@@ -606,7 +734,7 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
     }
     /**
      * Returns a double in the range from 0.0 to 1.0, possibly inclusive of 0.0 and 1.0 themselves.  Thus:
-     * <p/>
+     *
      * <table border=0>
      * <tr><th>Expression</th><th>Interval</th></tr>
      * <tr><td>nextDouble(false, false)</td><td>(0.0, 1.0)</td></tr>
@@ -615,8 +743,13 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
      * <tr><td>nextDouble(true, true)</td><td>[0.0, 1.0]</td></tr>
      * <caption>Table of intervals</caption>
      * </table>
-     * <p/>
+     *
      * <p>This version preserves all possible random values in the double range.
+     *
+     * @param includeOne whether to include 1.0d
+     * @param includeZero whether to include 0.0d
+     *
+     * @return an {@code double} in the range [0.0, 1.0], (0.0, 1.0), [0.0, 1.0) or (0.0,1.0] as above.
      */
     public double nextDouble(boolean includeZero, boolean includeOne) {
         double d = 0.0;
@@ -638,6 +771,9 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
     public void clearGaussian() {
         __haveNextNextGaussian = false;
     }
+    /**
+     * @return a random {@code double value} in a Gaussian distribution
+     */
     public double nextGaussian() {
         if (__haveNextNextGaussian) {
             __haveNextNextGaussian = false;
@@ -753,8 +889,17 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         }
     }
     /**
-     * Returns a random float in the half-open range from [0.0f,1.0f).  Thus 0.0f is a valid
-     * result but 1.0f is not.
+     * @param min the lower limit
+     * @param max the upper limit
+     * @return random {@code float} in the range {@code min} and {@code max}
+     */
+    public float nextFloat(float min, float max) {
+        float diff = Math.abs(max - min);
+        return nextFloat() * diff + (min > max ? min : max);
+    }
+    /**
+     * @return a random {@code float} in the half-open range from [0.0f,1.0f).
+     * Thus 0.0f is a valid result but 1.0f is not.
      */
     public float nextFloat() {
         int y;
@@ -784,7 +929,7 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
     }
     /**
      * Returns a float in the range from 0.0f to 1.0f, possibly inclusive of 0.0f and 1.0f themselves.  Thus:
-     * <p/>
+     *
      * <table border=0>
      * <tr><th>Expression</th><th>Interval</th></tr>
      * <tr><td>nextFloat(false, false)</td><td>(0.0f, 1.0f)</td></tr>
@@ -793,8 +938,13 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
      * <tr><td>nextFloat(true, true)</td><td>[0.0f, 1.0f]</td></tr>
      * <caption>Table of intervals</caption>
      * </table>
-     * <p/>
+     *
      * <p>This version preserves all possible random values in the float range.
+     *
+     * @param includeOne whether to include 1.0f
+     * @param includeZero whether to include 0.0f
+     *
+     * @return an {@code float} in the range [0.0, 1.0], (0.0, 1.0), [0.0, 1.0) or (0.0,1.0] as above.
      */
     public float nextFloat(boolean includeZero, boolean includeOne) {
         float d = 0.0f;
@@ -807,8 +957,18 @@ public strictfp class MersenneTwister implements Serializable, Cloneable {
         return d;
     }
     /**
-     * Returns an integer drawn uniformly from 0 to n-1.  Suffice it to say,
-     * n must be &gt; 0, or an IllegalArgumentException is raised.
+     * @param min the lower limit
+     * @param max the upper limit
+     * @return an integer drawn uniformly from {@code min} to {@code max-1}.
+     */
+    public int nextInt(int min, int max) {
+        int diff = Math.abs(max - min);
+        return nextInt(diff) + diff;
+    }
+    /**
+     * @param n the upper limit
+     * @return an integer drawn uniformly from 0 to n-1.
+     * @throws IllegalArgumentException if {@code n} &lt; 0
      */
     public int nextInt(int n) {
         if (n <= 0)

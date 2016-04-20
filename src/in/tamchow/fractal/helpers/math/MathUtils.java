@@ -15,12 +15,12 @@ public final class MathUtils {
         String representation = "[";
         for (Object[] subitems : items) {
             for (Object item : subitems) {
-                representation += String.valueOf(item);
+                representation += String.valueOf(item) + ",";
             }
             representation = representation.substring(0, representation.length() - 1);//trims trailing ','
-            representation += "],\n";
+            representation += "],\n[";
         }
-        return representation.trim().substring(0, representation.length() - 1);//trims trailing ','
+        return representation.trim().substring(0, representation.length() - 3);//trims trailing stuff
     }
     public static String intMDAtoString(int[][] items) {
         String representation = "[";
@@ -29,18 +29,18 @@ public final class MathUtils {
                 representation += String.valueOf(item) + ",";
             }
             representation = representation.substring(0, representation.length() - 1);//trims trailing ','
-            representation += "],\n";
+            representation += "],\n[";
         }
-        return representation.trim().substring(0, representation.length() - 1);//trims trailing ','
+        return representation.trim().substring(0, representation.length() - 3);//trims trailing stuff
     }
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
     }
     /**
      * @param array the array to splice
-     * @param from  the index to splice from (inclusive)
-     * @param to    the index to splice to (inclusive)
-     * @param <T>   the type parameter of array
+     * @param from the index to splice from (inclusive)
+     * @param to the index to splice to (inclusive)
+     * @param <T> the type parameter of array
      * @return the spliced array in the given range
      */
     @SuppressWarnings("unchecked")
@@ -67,8 +67,8 @@ public final class MathUtils {
     }
     /**
      * @param string the {@link String} to splice
-     * @param from   the index to splice from (inclusive)
-     * @param to     the index to splice to (inclusive)
+     * @param from the index to splice from (inclusive)
+     * @param to the index to splice to (inclusive)
      * @return the spliced {@link String} in the given range
      */
     @NotNull
@@ -94,17 +94,15 @@ public final class MathUtils {
         return (ptr < min) ? min : ((ptr > max) ? max : ptr);
     }
     @NotNull
-    public static int[][] intDDAAdd(@NotNull int[][] from, int[][] to) {
+    public static void intDDAAdd(@NotNull int[][] from, int[][] to) {
         if ((from.length != to.length) || (from[0].length != to[0].length)) {
             throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
         }
-        @NotNull int[][] sum = new int[from.length][to[0].length];//from and to must have same dimensions
-        for (int i = 0; i < sum.length; ++i) {
-            for (int j = 0; j < sum.length; ++j) {
-                sum[i][j] = from[i][j] + to[i][j];
+        for (int i = 0; i < to.length; ++i) {
+            for (int j = 0; j < to[i].length; ++j) {
+                to[i][j] = from[i][j] + to[i][j];
             }
         }
-        return sum;
     }
     @NotNull
     public static String numberLineRepresentation(float number, int precision) {
