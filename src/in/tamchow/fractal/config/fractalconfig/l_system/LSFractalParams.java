@@ -95,29 +95,16 @@ public class LSFractalParams implements Serializable {
     }
     public void fromString(@NotNull String[] data) {
         @NotNull String[] init = StringManipulator.split(data[0], ",");
-        if (init.length == 6) {
+        if (init.length == 7) {
             width = Integer.valueOf(init[0]);
             height = Integer.valueOf(init[1]);
             depth = Integer.valueOf(init[2]);
             axiom = init[3];
             fore_color = Integer.valueOf(init[4]);
             back_color = Integer.valueOf(init[5]);
+            fps = Integer.valueOf(init[6]);
             init_length = width;
             init_angle = 0.0;
-        } else if (init.length == 7) {
-            width = Integer.valueOf(init[0]);
-            height = Integer.valueOf(init[1]);
-            depth = Integer.valueOf(init[2]);
-            axiom = init[3];
-            fore_color = Integer.valueOf(init[4]);
-            back_color = Integer.valueOf(init[5]);
-            try {
-                init_length = Integer.valueOf(init[6]);
-                init_angle = 0.0;
-            } catch (NumberFormatException nfe) {
-                init_angle = Double.valueOf(init[6]);
-                init_length = width;
-            }
         } else if (init.length == 8) {
             width = Integer.valueOf(init[0]);
             height = Integer.valueOf(init[1]);
@@ -125,8 +112,24 @@ public class LSFractalParams implements Serializable {
             axiom = init[3];
             fore_color = Integer.valueOf(init[4]);
             back_color = Integer.valueOf(init[5]);
-            init_length = Integer.valueOf(init[6]);
-            init_angle = Double.valueOf(init[7]);
+            fps = Integer.valueOf(init[6]);
+            try {
+                init_length = Integer.valueOf(init[7]);
+                init_angle = 0.0;
+            } catch (NumberFormatException nfe) {
+                init_angle = Double.valueOf(init[7]);
+                init_length = width;
+            }
+        } else if (init.length == 9) {
+            width = Integer.valueOf(init[0]);
+            height = Integer.valueOf(init[1]);
+            depth = Integer.valueOf(init[2]);
+            axiom = init[3];
+            fore_color = Integer.valueOf(init[4]);
+            back_color = Integer.valueOf(init[5]);
+            fps = Integer.valueOf(init[6]);
+            init_length = Integer.valueOf(init[7]);
+            init_angle = Double.valueOf(init[8]);
         }
         grammar = new UnitGrammar[data.length - 1];
         for (int i = 1; i < data.length; i++) {
@@ -153,10 +156,9 @@ public class LSFractalParams implements Serializable {
     }
     @Override
     public String toString() {
-        String representation = String.format("%d%n%d%n%d%n%d%n%dn%d%n%f%n",
-                width, height, depth, fore_color, back_color, init_length, init_angle);
+        String representation = width + "," + height + "," + depth + "," + axiom + "," + fore_color + "," + back_color + "," + init_length + "," + init_angle;
         for (UnitGrammar rule : grammar) {
-            representation += rule + "\n";
+            representation += "\n" + rule;
         }
         return representation;
     }

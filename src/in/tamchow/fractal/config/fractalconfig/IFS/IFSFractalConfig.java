@@ -3,6 +3,8 @@ import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.*;
 /**
  * Holds configuration for an IFS fractal
  */
@@ -37,12 +39,12 @@ public class IFSFractalConfig extends Config implements Serializable {
     @NotNull
     @Override
     public String toString() {
-        String representation = String.format("[IFSFractalConfig]%n[Globals]%n%d%n%d%n%d%nEndGlobals]%n[Fractals]",
+        String representation = String.format(IFS + "%n" + GLOBALS + "%n%d%n%d$n%d%n" + ENDGLOBALS + "%n" + FRACTALS,
                 transtime, fps, wait);
         for (@NotNull IFSFractalParams param : params) {
             representation += "\n" + param.getPath();
         }
-        representation += "\n[EndFractals]";
-        return representation + "\n";
+        representation += "\n" + ENDFRACTALS;
+        return representation;
     }
 }

@@ -197,7 +197,12 @@ public class UnitGrammar implements Serializable {
         @NotNull
         @Override
         public String toString() {
-            return transformTo + ":" + probability;
+            String representation = "";
+            if (isContextSensitive()) {
+                representation += ((left == null) ? "?" : left) + "<>" + ((right == null) ? "?" : right) + ":";
+            }
+            representation += transformTo + ":" + probability;
+            return representation;
         }
     }
 }

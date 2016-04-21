@@ -3,6 +3,8 @@ import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.*;
 /**
  * Holds batch parameters for Complex brot fractals
  */
@@ -37,11 +39,12 @@ public class ComplexBrotFractalConfig extends Config implements Serializable {
     @NotNull
     @Override
     public String toString() {
-        @NotNull String representation = "[ComplexBrotFractalConfig]" + "\n" + "[Globals]\n" + transtime + "\n" + fps + "\n" + wait + "\n[EndGlobals]\n[Fractals]";
+        String representation = String.format(COMPLEXBROT + "%n" + GLOBALS + "%n%d%n%d$n%d%n" + ENDGLOBALS + "%n" + FRACTALS,
+                transtime, fps, wait);
         for (@NotNull ComplexBrotFractalParams param : params) {
             representation += "\n" + param.getPath();
         }
-        representation += "\n[EndFractals]";
-        return representation + "\n";
+        representation += "\n" + ENDFRACTALS;
+        return representation;
     }
 }

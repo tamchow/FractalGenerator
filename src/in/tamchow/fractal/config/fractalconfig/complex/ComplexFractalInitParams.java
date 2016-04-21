@@ -9,6 +9,10 @@ import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.ENDINIT;
+import static in.tamchow.fractal.config.Strings.BLOCKS.INIT;
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.*;
 /**
  * Parameters for configuring the initialization of a fractal
  */
@@ -83,14 +87,14 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     }
     @Override
     public String toString() {
-        String representation = "[Initconfig]%n%d%n%d%n%f%n%f%n%f%n%s%n%s%n%s%n%s%nOld_variable_code:%s$n%f%n%s%nSwitch_Mode_Rate:%d%nTrap_point:%s%n";
+        String representation = INIT + "%n%d%n%d%n%f%n%f%n%f%n%s%n%s%n%s%n%s%n" + OLD_VARIABLE_CODE + "%s$n%f%n%s%n" + SWITCH_RATE + "%d%n" + TRAP_POINT + "%s%n";
         representation = String.format(representation, width, height, zoom, zoom_factor,
                 base_precision, fractal_mode, function, constantsToString(), variableCode,
                 oldvariablecode, tolerance, color, switch_rate, trap_point);
         if (linetrap != null) {
-            representation += "Trap_line:" + linetrap + "\n";
+            representation += TRAP_LINE + linetrap + "\n";
         }
-        representation += skew + "\n[EndInitconfig]";
+        representation += skew + "\n" + ENDINIT;
         return representation;
     }
     @NotNull

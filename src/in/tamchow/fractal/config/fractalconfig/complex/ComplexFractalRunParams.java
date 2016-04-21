@@ -6,6 +6,9 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.ENDRUN;
+import static in.tamchow.fractal.config.Strings.BLOCKS.RUN;
 /**
  * Parameters for configuring the generation of a fractal
  */
@@ -78,9 +81,9 @@ public class ComplexFractalRunParams implements Serializable, DataFromString {
     @Override
     public String toString() {
         if (fully_configured) {
-            return String.format("[Runconfig]%n%d%n%d%n%d%n%d%n%d%n%f%n%s%n[EndRunconfig]", start_x, end_x, start_y, end_y, iterations, escape_radius, (constant == null) ? "" : constant);
+            return String.format(RUN + "%n%d%n%d%n%d%n%d%n%d%n%f%n%s%n" + ENDRUN, start_x, end_x, start_y, end_y, iterations, escape_radius, (constant == null) ? "" : constant);
         }
-        return String.format("[Runconfig]%n%d%n%f%n%s%n[EndRunconfig]", iterations, escape_radius, (constant == null) ? "" : constant);
+        return String.format(RUN + "%n%d%n%f%n%s%n" + ENDRUN, iterations, escape_radius, (constant == null) ? "" : constant);
     }
     /**
      * @param params: Pass in -1 for escape_radius in case of Newton Fractal Mode

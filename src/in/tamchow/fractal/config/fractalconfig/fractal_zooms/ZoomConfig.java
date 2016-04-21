@@ -2,6 +2,9 @@ package in.tamchow.fractal.config.fractalconfig.fractal_zooms;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.ENDZOOMS;
+import static in.tamchow.fractal.config.Strings.BLOCKS.ZOOMS;
 /**
  * Holds a set of fractal zooms
  */
@@ -30,11 +33,11 @@ public class ZoomConfig implements Serializable {
     @NotNull
     @Override
     public String toString() {
-        @NotNull String representation = "[Zooms]";
+        @NotNull String representation = ZOOMS;
         for (ZoomParams zoom : zooms) {
             representation += "\n" + zoom;
         }
-        representation += "\n[EndZooms]";
+        representation += "\n" + ENDZOOMS;
         return representation;
     }
     public void addZoom(ZoomParams zoom) {

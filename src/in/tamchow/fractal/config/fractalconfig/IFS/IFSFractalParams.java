@@ -7,6 +7,8 @@ import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.*;
 /**
  * Holds Parameters for an IFS fractal
  */
@@ -244,9 +246,10 @@ public class IFSFractalParams implements Serializable {
     @NotNull
     @Override
     public String toString() {
-        @NotNull String representation = (frameskip >= 0) ? "Frameskip:" + frameskip : "";
-        representation += (postProcessMode != null) ? "Postprocessing:" + postProcessMode : "";
-        representation += "\n" + ifsMode + ((ifsMode) ? ":" + createCodeString() : "") + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
+        @NotNull String representation = THREADS + threads + "\n" +
+                ((frameskip >= 0) ? FRAMESKIP + frameskip + "\n" : "");
+        representation += (postProcessMode != null) ? POSTPROCESSING + postProcessMode + "\n" : "";
+        representation += ifsMode + ((ifsMode) ? ":" + createCodeString() : "") + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {
             for (int i = 0; i < weights.length; i++) {
                 representation += "\n" + xfunctions[i] + " " + yfunctions[i] + " " + weights[i] + " " + colors[i];
@@ -259,7 +262,7 @@ public class IFSFractalParams implements Serializable {
         if (zoomConfig != null) {
             representation += "\n" + zoomConfig;
         }
-        return representation;
+        return representation.trim();
     }
     private String createCodeString() {
         return String.format("%s:%s:%s:%s:%s", getX_code(), getY_code(), getR_code(), getT_code(), getP_code());

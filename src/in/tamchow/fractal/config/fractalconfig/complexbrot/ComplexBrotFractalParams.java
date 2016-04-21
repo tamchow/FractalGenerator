@@ -10,6 +10,8 @@ import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.*;
 /**
  * Holds parameters for a ComplexBrot fractal
  */
@@ -350,7 +352,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     @Nullable
     @Override
     public String toString() {
-        @Nullable String representation = "Postprocessing:" + postprocessMode + ((isSequential()) ? "\nThreads:" + num_threads : "") + ((newton_constant != null) ? "\nNewton_constant:" + newton_constant : "") + "\n" + isSequential() + "\nSwitch_mode_rate:" + switch_rate + "\nOld_variable_code" + oldVariableCode;
+        @Nullable String representation = POSTPROCESSING + postprocessMode + ((isSequential()) ? "\n" + THREADS + num_threads : "") + ((newton_constant != null) ? "\n" + NEWTON_CONSTANT + newton_constant : "") + "\n" + isSequential() + "\n" + SWITCH_RATE + switch_rate + "\n" + OLD_VARIABLE_CODE + oldVariableCode;
         representation += width + "\n" + height + "\n" + integersToString(iterations) + "\n" + base_precision + "\n" + zoom + "\n" + zoom_level + "\n" + escape_radius + "\n" + tolerance + "\n" + skew + "\n" + maxHitThreshold + "\n" + function + "\n" + variableCode + "\n" + mode + "\n" + constantsToString() + "\n" + isAnti() + "\n" + isClamped() + "\n";
         if (isSequential()) {
             representation += xPointsPerPixel + "\n" + yPointsPerPixel + "\n" + xThreads + "\n" + yThreads;

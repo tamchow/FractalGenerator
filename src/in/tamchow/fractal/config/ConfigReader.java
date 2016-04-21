@@ -20,41 +20,45 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.*;
+import static in.tamchow.fractal.config.Strings.COMMENT;
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.*;
 /**
  * Reads the configuration of fractals or images from a file
  */
 public class ConfigReader {
     public static boolean isFileImageConfig(@NotNull File file) throws FileNotFoundException {
-        return new Scanner(file).nextLine().equals("[ImageConfig]");
+        return new Scanner(file).nextLine().equals(IMAGE);
     }
     public static boolean isFileComplexFractalConfig(@NotNull File file) throws FileNotFoundException {
-        return new Scanner(file).nextLine().equals("[ComplexFractalConfig]");
+        return new Scanner(file).nextLine().equals(COMPLEX);
     }
     public static boolean isFileComplexBrotFractalConfig(@NotNull File file) throws FileNotFoundException {
-        return new Scanner(file).nextLine().equals("[ComplexBrotFractalConfig]");
+        return new Scanner(file).nextLine().equals(COMPLEXBROT);
     }
     public static boolean isFileIFSFractalConfig(@NotNull File file) throws FileNotFoundException {
-        return new Scanner(file).nextLine().equals("[IFSFractalConfig]");
+        return new Scanner(file).nextLine().equals(IFS);
     }
     public static boolean isFileLSFractalConfig(@NotNull File file) throws FileNotFoundException {
-        return new Scanner(file).nextLine().equals("[LSFractalConfig]");
+        return new Scanner(file).nextLine().equals(LS);
     }
     public static ImageConfig getImageConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
         @NotNull Scanner in = new Scanner(cfgfile);
         @Nullable String dimensions = null;
         @NotNull ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[ImageConfig]")) {
+        if (!in.nextLine().equals(IMAGE)) {
             return null;
         }
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (!line.startsWith("#")) {
-                if (line.startsWith("Dimensions:")) {
-                    dimensions = line.substring("Dimensions:".length()).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.startsWith(DIMENSIONS)) {
+                    dimensions = line.substring(DIMENSIONS.length()).trim();
                     continue;
                 }
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
@@ -73,20 +77,20 @@ public class ConfigReader {
     public static ComplexFractalConfig getComplexFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
         @NotNull Scanner in = new Scanner(cfgfile);
         @NotNull ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[ComplexFractalConfig]")) {
+        if (!in.nextLine().equals(COMPLEX)) {
             return null;
         }
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
-        @NotNull List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        @NotNull List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        @NotNull List<String> globalcfg = lines.subList(lines.indexOf(GLOBALS) + 1, lines.indexOf(ENDGLOBALS));
+        @NotNull List<String> specCfg = lines.subList(lines.indexOf(FRACTALS) + 1, lines.indexOf(ENDFRACTALS));
         @NotNull ComplexFractalConfig complexFractalConfig = new ComplexFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
         @NotNull ComplexFractalParams[] complexFractalParams = new ComplexFractalParams[specCfg.size()];
         for (int i = 0; i < complexFractalParams.length; i++) {
@@ -102,47 +106,47 @@ public class ConfigReader {
         @Nullable String thread_data = null, post_process_mode = null, switch_rate = null, trap_point = null, trap_line = null, oldvariablecode = null;
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (line.startsWith("Threads:")) {
-                thread_data = line.substring("Threads:".length()).trim();
+            if (line.startsWith(THREADS)) {
+                thread_data = line.substring(THREADS.length()).trim();
                 continue;
             }
-            if (line.startsWith("Switch_Mode_Rate:")) {
-                switch_rate = line.substring("Switch_Mode_Rate:".length()).trim();
+            if (line.startsWith(SWITCH_RATE)) {
+                switch_rate = line.substring(SWITCH_RATE.length()).trim();
                 continue;
             }
-            if (line.startsWith("Postprocessing:")) {
-                post_process_mode = line.substring("Postprocessing:".length()).trim();
+            if (line.startsWith(POSTPROCESSING)) {
+                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
                 continue;
             }
-            if (line.startsWith("Trap_point:")) {
-                trap_point = line.substring("Trap_point:".length()).trim();
+            if (line.startsWith(TRAP_POINT)) {
+                trap_point = line.substring(TRAP_POINT.length()).trim();
                 continue;
             }
-            if (line.startsWith("Trap_line:")) {
-                trap_line = line.substring("Trap_line:".length()).trim();
+            if (line.startsWith(TRAP_LINE)) {
+                trap_line = line.substring(TRAP_LINE.length()).trim();
                 continue;
             }
-            if (line.startsWith("Old_variable_code:")) {
-                oldvariablecode = line.substring("Old_variable_code:".length()).trim();
+            if (line.startsWith(OLD_VARIABLE_CODE)) {
+                oldvariablecode = line.substring(OLD_VARIABLE_CODE.length()).trim();
                 continue;
             }
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
         @Nullable String[] zooms = null;
-        if (lines.indexOf("[Zooms]") >= 0) {
-            @NotNull List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));
+        if (lines.indexOf(ZOOMS) >= 0) {
+            @NotNull List<String> zoomsConfig = lines.subList(lines.indexOf(ZOOMS) + 1, lines.indexOf(ENDZOOMS));
             zooms = new String[zoomsConfig.size()];
             zoomsConfig.toArray(zooms);
         }
-        @NotNull List<String> initConfig = lines.subList(lines.indexOf("[Initconfig]") + 1, lines.indexOf("[EndInitconfig]"));
+        @NotNull List<String> initConfig = lines.subList(lines.indexOf(INIT) + 1, lines.indexOf(ENDINIT));
         @NotNull String[] init = new String[initConfig.size()];
         initConfig.toArray(init);
-        @NotNull List<String> runConfig = lines.subList(lines.indexOf("[Runconfig]") + 1, lines.indexOf("[EndRunconfig]"));
+        @NotNull List<String> runConfig = lines.subList(lines.indexOf(RUN) + 1, lines.indexOf(ENDRUN));
         @NotNull String[] run = new String[runConfig.size()];
         initConfig.toArray(run);
         @NotNull ComplexFractalParams complexFractalParams = new ComplexFractalParams();
@@ -175,20 +179,20 @@ public class ConfigReader {
     public static IFSFractalConfig getIFSFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
         @NotNull Scanner in = new Scanner(cfgfile);
         @NotNull ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[IFSFractalConfig]")) {
+        if (!in.nextLine().equals(IFS)) {
             return null;
         }
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
-        @NotNull List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        @NotNull List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        @NotNull List<String> globalcfg = lines.subList(lines.indexOf(GLOBALS) + 1, lines.indexOf(ENDGLOBALS));
+        @NotNull List<String> specCfg = lines.subList(lines.indexOf(FRACTALS) + 1, lines.indexOf(ENDFRACTALS));
         @NotNull IFSFractalConfig ifsFractalConfig = new IFSFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
         @NotNull IFSFractalParams[] ifsFractalParams = new IFSFractalParams[specCfg.size()];
         for (int i = 0; i < ifsFractalParams.length; i++) {
@@ -204,26 +208,26 @@ public class ConfigReader {
         @Nullable String frameskip = null, post_process_mode = null, threads = null;
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (line.startsWith("Frameskip:")) {
-                frameskip = line.substring("Frameskip:".length()).trim();
+            if (line.startsWith(FRAMESKIP)) {
+                frameskip = line.substring(FRAMESKIP.length()).trim();
             }
-            if (line.startsWith("Threads:")) {
-                threads = line.substring("Threads:".length()).trim();
+            if (line.startsWith(THREADS)) {
+                threads = line.substring(THREADS.length()).trim();
             }
-            if (line.startsWith("Postprocessing:")) {
-                post_process_mode = line.substring("Postprocessing:".length()).trim();
+            if (line.startsWith(POSTPROCESSING)) {
+                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
                 continue;
             }
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
         @Nullable String[] zooms = null;
-        if (lines.indexOf("[Zooms]") >= 0) {
-            @NotNull List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));
+        if (lines.indexOf(ZOOMS) >= 0) {
+            @NotNull List<String> zoomsConfig = lines.subList(lines.indexOf(ZOOMS) + 1, lines.indexOf(ENDZOOMS));
             zooms = new String[zoomsConfig.size()];
             zoomsConfig.toArray(zooms);
         }
@@ -248,20 +252,20 @@ public class ConfigReader {
     public static ComplexBrotFractalConfig getComplexBrotFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
         @NotNull Scanner in = new Scanner(cfgfile);
         @NotNull ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[ComplexBrotFractalConfig]")) {
+        if (!in.nextLine().equals(COMPLEXBROT)) {
             return null;
         }
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
-        @NotNull List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        @NotNull List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        @NotNull List<String> globalcfg = lines.subList(lines.indexOf(GLOBALS) + 1, lines.indexOf(ENDGLOBALS));
+        @NotNull List<String> specCfg = lines.subList(lines.indexOf(FRACTALS) + 1, lines.indexOf(ENDFRACTALS));
         @NotNull ComplexBrotFractalConfig complexBrotFractalConfig = new ComplexBrotFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
         @NotNull ComplexBrotFractalParams[] complexBrotFractalParams = new ComplexBrotFractalParams[specCfg.size()];
         for (int i = 0; i < complexBrotFractalParams.length; i++) {
@@ -277,35 +281,35 @@ public class ConfigReader {
         @Nullable String constant = null, threads = null, post_process_mode = null, oldvariablecode = null, switch_rate = null;
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (line.startsWith("Threads:")) {
-                threads = line.substring("Threads:".length()).trim();
+            if (line.startsWith(THREADS)) {
+                threads = line.substring(THREADS.length()).trim();
             }
-            if (line.startsWith("Postprocessing:")) {
-                post_process_mode = line.substring("Postprocessing:".length()).trim();
+            if (line.startsWith(POSTPROCESSING)) {
+                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
                 continue;
             }
-            if (line.startsWith("Newton_constant:")) {
-                constant = line.substring("Newton_constant:".length()).trim();
+            if (line.startsWith(NEWTON_CONSTANT)) {
+                constant = line.substring(NEWTON_CONSTANT.length()).trim();
                 continue;
             }
-            if (line.startsWith("Old_variable_code:")) {
-                oldvariablecode = line.substring("Old_variable_code:".length()).trim();
+            if (line.startsWith(OLD_VARIABLE_CODE)) {
+                oldvariablecode = line.substring(OLD_VARIABLE_CODE.length()).trim();
                 continue;
             }
-            if (line.startsWith("Switch_Mode_Rate:")) {
-                switch_rate = line.substring("Switch_Mode_Rate:".length()).trim();
+            if (line.startsWith(SWITCH_RATE)) {
+                switch_rate = line.substring(SWITCH_RATE.length()).trim();
                 continue;
             }
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
         @Nullable String[] zooms = null;
-        if (lines.indexOf("[Zooms]") >= 0) {
-            @NotNull List<String> zoomsConfig = lines.subList(lines.indexOf("[Zooms]") + 1, lines.indexOf("[EndZooms]"));
+        if (lines.indexOf(ZOOMS) >= 0) {
+            @NotNull List<String> zoomsConfig = lines.subList(lines.indexOf(ZOOMS) + 1, lines.indexOf(ENDZOOMS));
             zooms = new String[zoomsConfig.size()];
             zoomsConfig.toArray(zooms);
         }
@@ -337,20 +341,20 @@ public class ConfigReader {
     public static LSFractalConfig getLSFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
         @NotNull Scanner in = new Scanner(cfgfile);
         @NotNull ArrayList<String> lines = new ArrayList<>();
-        if (!in.nextLine().equals("[LSFractalConfig]")) {
+        if (!in.nextLine().equals(LS)) {
             return null;
         }
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
         }
-        @NotNull List<String> globalcfg = lines.subList(lines.indexOf("[Globals]") + 1, lines.indexOf("[EndGlobals]"));
-        @NotNull List<String> specCfg = lines.subList(lines.indexOf("[Fractals]") + 1, lines.indexOf("[EndFractals]"));
+        @NotNull List<String> globalcfg = lines.subList(lines.indexOf(GLOBALS) + 1, lines.indexOf(ENDGLOBALS));
+        @NotNull List<String> specCfg = lines.subList(lines.indexOf(FRACTALS) + 1, lines.indexOf(ENDFRACTALS));
         @NotNull LSFractalConfig ifsFractalConfig = new LSFractalConfig(Integer.valueOf(globalcfg.get(0)), Integer.valueOf(globalcfg.get(1)), Integer.valueOf(globalcfg.get(2)));
         @NotNull LSFractalParams[] ifsFractalParams = new LSFractalParams[specCfg.size()];
         for (int i = 0; i < ifsFractalParams.length; i++) {
@@ -366,17 +370,13 @@ public class ConfigReader {
         @Nullable String post_process_mode = null, fps = null;
         while (in.hasNext()) {
             String line = in.nextLine();
-            if (line.startsWith("Postprocessing:")) {
-                post_process_mode = line.substring("Postprocessing:".length()).trim();
+            if (line.startsWith(POSTPROCESSING)) {
+                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
                 continue;
             }
-            if (line.startsWith("FPS:")) {
-                fps = line.substring("FPS:".length()).trim();
-                continue;
-            }
-            if (!line.startsWith("#")) {
-                if (line.contains("#")) {
-                    line = line.substring(0, line.indexOf("#")).trim();
+            if (!line.startsWith(COMMENT)) {
+                if (line.contains(COMMENT)) {
+                    line = line.substring(0, line.indexOf(COMMENT)).trim();
                 }
                 lines.add(line);
             }
@@ -387,9 +387,6 @@ public class ConfigReader {
         lsFractalParams.fromString(params);
         if (post_process_mode != null) {
             lsFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
-        }
-        if (fps != null) {
-            lsFractalParams.setFps(Integer.valueOf(fps));
         }
         lsFractalParams.setPath(file.getAbsolutePath());
         return lsFractalParams;

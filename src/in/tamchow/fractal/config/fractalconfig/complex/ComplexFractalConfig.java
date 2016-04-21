@@ -3,6 +3,8 @@ import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.*;
 /**
  * Configuration for the fractal
  */
@@ -36,12 +38,12 @@ public class ComplexFractalConfig extends Config implements Serializable {
     }
     @Override
     public String toString() {
-        String representation = String.format("[ComplexFractalConfig]%n[Globals]%n%d%n%d$n%d%n[EndGlobals]%n[Fractals]",
+        String representation = String.format(COMPLEX + "%n" + GLOBALS + "%n%d%n%d$n%d%n" + ENDGLOBALS + "%n" + FRACTALS,
                 transtime, fps, wait);
         for (@NotNull ComplexFractalParams param : params) {
             representation += "\n" + param.getPath();
         }
-        representation += "\n[EndFractals]";
+        representation += "\n" + ENDFRACTALS;
         return representation;
     }
 }

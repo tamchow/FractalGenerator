@@ -32,36 +32,10 @@ public class FractalPanningHelper {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         return pan(toPan, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
+    @SuppressWarnings("unchecked")
     @NotNull
     public static PixelContainer pan(Pannable toPanThis, int x_dist, int y_dist) {
         if (toPanThis instanceof PixelFractalGenerator) {
-            if (toPanThis instanceof ComplexBrotFractalGenerator &&
-                    ((ComplexBrotFractalGenerator) toPanThis).isSequential()) {
-                ComplexBrotFractalGenerator toPan = (ComplexBrotFractalGenerator) toPanThis;
-                toPan.pan(x_dist, y_dist);
-                int start_x, end_x, start_y, end_y;
-                if (x_dist < 0) {
-                    start_x = toPan.getConfiguredWidth() + x_dist;
-                    end_x = toPan.getConfiguredWidth();
-                } else {
-                    start_x = 0;
-                    end_x = x_dist;
-                }
-                start_y = 0;
-                end_y = toPan.getConfiguredHeight();
-                @NotNull ThreadedComplexBrotFractalGenerator panner = new ThreadedComplexBrotFractalGenerator(toPan);
-                panner.generate(start_x, end_x, start_y, end_y);
-                if (y_dist < 0) {
-                    start_y = 0;
-                    end_y = (-y_dist);
-                } else {
-                    start_y = toPan.getConfiguredHeight() - y_dist;
-                    end_y = toPan.getConfiguredHeight();
-                }
-                start_x = 0;
-                end_x = toPan.getConfiguredWidth();
-                panner.generate(start_x, end_x, start_y, end_y);
-            }
             @NotNull PixelFractalGenerator toPan = (PixelFractalGenerator) toPanThis;
             try {
                 @NotNull PixelContainer plane = new PixelContainer(toPan.getPlane());
@@ -82,6 +56,32 @@ public class FractalPanningHelper {
                     start_y = 0;
                     end_y = toPan.getConfiguredHeight();
                     @NotNull ThreadedComplexFractalGenerator panner = new ThreadedComplexFractalGenerator((ComplexFractalGenerator) toPan);
+                    panner.generate(start_x, end_x, start_y, end_y);
+                    if (y_dist < 0) {
+                        start_y = 0;
+                        end_y = (-y_dist);
+                    } else {
+                        start_y = toPan.getConfiguredHeight() - y_dist;
+                        end_y = toPan.getConfiguredHeight();
+                    }
+                    start_x = 0;
+                    end_x = toPan.getConfiguredWidth();
+                    panner.generate(start_x, end_x, start_y, end_y);
+                } else if (toPanThis instanceof ComplexBrotFractalGenerator &&
+                        ((ComplexBrotFractalGenerator) toPanThis).isSequential()) {
+                    toPan = (ComplexBrotFractalGenerator) toPanThis;
+                    toPan.pan(x_dist, y_dist);
+                    int start_x, end_x, start_y, end_y;
+                    if (x_dist < 0) {
+                        start_x = toPan.getConfiguredWidth() + x_dist;
+                        end_x = toPan.getConfiguredWidth();
+                    } else {
+                        start_x = 0;
+                        end_x = x_dist;
+                    }
+                    start_y = 0;
+                    end_y = toPan.getConfiguredHeight();
+                    @NotNull ThreadedComplexBrotFractalGenerator panner = new ThreadedComplexBrotFractalGenerator((ComplexBrotFractalGenerator) toPan);
                     panner.generate(start_x, end_x, start_y, end_y);
                     if (y_dist < 0) {
                         start_y = 0;

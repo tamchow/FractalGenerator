@@ -7,6 +7,9 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.BLOCKS.IMAGE;
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.DIMENSIONS;
 /**
  * Stores configuration data for the image display function
  */
@@ -70,9 +73,9 @@ public class ImageConfig extends Config implements DataFromString, Serializable 
     }
     @NotNull
     public String toString() {
-        @NotNull String representation = "[ImageConfig]\n";
+        @NotNull String representation = IMAGE + "\n";
         if (customDimensions()) {
-            representation += "Dimensions:" + width + "," + height + "\n";
+            representation += DIMENSIONS + width + "," + height + "\n";
         }
         for (ImageParams param : params) {
             representation += param + "\n";

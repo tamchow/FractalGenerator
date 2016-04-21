@@ -7,8 +7,11 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
 import java.io.Serializable;
+
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.POSTPROCESSING;
+import static in.tamchow.fractal.config.Strings.DECLARATIONS.THREADS;
 /**
- * Encapsulates @code ComplexFractalInitParams and @code ComplexFractalRunParams
+ * Encapsulates {@code ComplexFractalInitParams} and {@code ComplexFractalRunParams}
  */
 public class ComplexFractalParams implements Serializable {
     @Nullable
@@ -115,6 +118,6 @@ public class ComplexFractalParams implements Serializable {
     @NotNull
     @Override
     public String toString() {
-        return "Threads:" + x_threads + "," + y_threads + "\nPostprocessing:" + postprocessMode + "\n" + ((zoomConfig != null) ? (zoomConfig + "\n") : "") + initParams + "\n" + runParams + "\n";
+        return THREADS + x_threads + "," + y_threads + "\n" + POSTPROCESSING + postprocessMode + "\n" + ((zoomConfig != null) ? (zoomConfig + "\n") : "") + initParams + "\n" + runParams + "\n";
     }
 }
