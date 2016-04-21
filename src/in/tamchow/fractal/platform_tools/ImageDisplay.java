@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 //import java.util.HashMap;
 //import java.util.Map;
@@ -23,7 +24,7 @@ import java.io.File;
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Publisher {
     BufferedImage[] img;
-    Image todraw;
+    BufferedImage todraw;
     JFrame parent;
     int width, height, ctr, subctr;
     ImageConfig imgconf;
@@ -51,27 +52,34 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             }
             initDisplay(config, width, height);
         } else if (config instanceof ComplexFractalConfig) {
-            initDisplay(config, ((ComplexFractalConfig) config).getParams()[0].initParams.width, ((ComplexFractalConfig) config).getParams()[0].initParams.height);
+            initDisplay(config,
+                    ((ComplexFractalConfig) config).getParams()[0].initParams.width,
+                    ((ComplexFractalConfig) config).getParams()[0].initParams.height);
         }
     }
-    public static void show(Config config, String title) {
-        @NotNull ImageDisplay id = new ImageDisplay(config);
-        @NotNull JScrollPane scrollPane = new JScrollPane(id);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        id.parent = new JFrame(title);
-        id.parent.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
+    public static void show(final Config config, final String title) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                @NotNull ImageDisplay id = new ImageDisplay(config);
+                @NotNull JScrollPane scrollPane = new JScrollPane(id);
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                id.parent = new JFrame(title);
+                id.parent.addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                id.parent.addKeyListener(id);
+                id.parent.add(scrollPane);
+                id.parent.pack();
+                id.running = true;
+                id.parent.setVisible(true);
+                @NotNull Thread thread = new Thread(id);
+                thread.start();
             }
         });
-        id.parent.addKeyListener(id);
-        id.parent.add(scrollPane);
-        id.parent.pack();
-        id.running = true;
-        id.parent.setVisible(true);
-        @NotNull Thread thread = new Thread(id);
-        thread.start();
     }
     private void initDisplay(Config config, int width, int height) {
         if (config instanceof ImageConfig) {
@@ -132,23 +140,28 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public BufferedImage progressiveScale(BufferedImage img,
                                           int targetWidth, int targetHeight, Object hint,
                                           boolean progressiveBilinear) {
-        int type = (img.getTransparency() == Transparency.OPAQUE) ?
-                BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
-        BufferedImage ret = img;
-        BufferedImage scratchImage = null;
-        Graphics2D g2 = null;
+        int type = img.getType();
+        //(img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        @NotNull BufferedImage ret = img, scratchImage = null;
+        @NotNull Graphics2D g2 = null;
         int w, h;
         int prevW = ret.getWidth();
         int prevH = ret.getHeight();
         if (progressiveBilinear) {
-// Use multistep technique: start with original size,
-// then scale down in multiple passes with drawImage()
-// until the target size is reached
+            /**
+             * Use multi-step technique: start with original size,
+             * then scale down in multiple passes with an
+             * {@link Graphics#drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+             * until the target size is reached.
+             */
             w = img.getWidth();
             h = img.getHeight();
         } else {
-// Use one-step technique: scale directly from original
-// size to target size with a single drawImage() call
+            /**
+             * Use one-step technique: scale directly from original
+             * size to target size with a single
+             * {@link Graphics#drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)} call.
+             */
             w = targetWidth;
             h = targetHeight;
         }
@@ -166,9 +179,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 }
             }
             if (scratchImage == null) {
-// Use a single scratch buffer for all iterations
-// and then copy to the final, correctly sized image
-// before returning
+                /**
+                 * Use a single scratch buffer for all iterations
+                 * and then copy to the final, correctly sized image
+                 * before returning.
+                 */
                 scratchImage = new BufferedImage(w, h, type);
                 g2 = scratchImage.createGraphics();
             }
@@ -178,6 +193,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             prevW = w;
             prevH = h;
             ret = scratchImage;
+            //g2.dispose();
         } while (w != targetWidth || h != targetHeight);
         if (g2 != null) {
             g2.dispose();
@@ -220,9 +236,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     if (i == img.length - 1) {
                         k = 0;
                     }
-                    @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition, ImageConverter.toImageData(img[i]), ImageConverter.toImageData(img[k]), imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
+                    @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition,
+                            ImageConverter.toImageData(img[i]), ImageConverter.toImageData(img[k]),
+                            imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
                     transition.doTransition();
-                    Animation anim = transition.getFrames();
+                    @NotNull Animation anim = transition.getFrames();
                     for (int j = subctr; j < anim.getNumFrames(); j++) {
                         todraw = ImageConverter.toImage(anim.getFrame(j));
                         paint(this.getGraphics());
@@ -246,14 +264,15 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     current = new ComplexFractalGenerator(fracconf.getParams()[i], this);
                 }
                 if (fracconf.getParams()[i].useThreadedGenerator()) {
-                    @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
+                    @NotNull ThreadedComplexFractalGenerator threaded =
+                            new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
                     threaded.generate();
                 } else {
                     current.generate();
                 }
                 todraw = ImageConverter.toImage(current.getArgand());
                 zoomedin = false;
-                paint(this.getGraphics());
+                repaint(getGraphics().getClipBounds());
                 try {
                     Thread.sleep(1000 * fracconf.getWait());
                 } catch (InterruptedException ignored) {
@@ -267,8 +286,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             i++;
         }
     }
-    public void paint(@NotNull Graphics g) {
-        g.drawImage(todraw, 0, 0, null);
+    @Override
+    public void paintComponent(@NotNull Graphics g) {
+        super.paintComponent(g);
+        Rectangle clip = g.getClipBounds();
+        g.drawImage(todraw, clip.x, clip.y, clip.width, clip.height, null);
     }
     @NotNull
     public Dimension getPreferredSize() {
@@ -283,15 +305,30 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         if (e.getKeyChar() == ' ') {
             running = (!running);
         } else if (e.getKeyChar() == 's' || e.getKeyChar() == 'S') {
-            @NotNull JFileChooser fileChooser = new JFileChooser();
-            fileChooser.showSaveDialog(this);
-            try {
-                @NotNull BufferedImage buf = new BufferedImage(todraw.getWidth(null), todraw.getHeight(null), BufferedImage.TYPE_INT_RGB);
-                buf.getGraphics().drawImage(todraw, 0, 0, null);
-                ImageIO.write(buf, "jpg", fileChooser.getSelectedFile());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            @NotNull final JComponent parent = this;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    @NotNull final JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.showSaveDialog(parent);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                @NotNull BufferedImage buf = new BufferedImage(
+                                        todraw.getWidth(), todraw.getHeight(),
+                                        todraw.getType());
+                                @NotNull Graphics2D graphics2D = buf.createGraphics();
+                                @NotNull Rectangle clip = graphics2D.getClipBounds();
+                                graphics2D.drawImage(buf, clip.x, clip.y, clip.width, clip.height, null);
+                                ImageIO.write(buf, "jpg", fileChooser.getSelectedFile());
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            });
         }
     }
     @Override
@@ -306,7 +343,8 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 current.zoom(e.getX(), e.getY(), zoomin);
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     zoomin++;
-                } else if (e.getButton() == MouseEvent.BUTTON3 || (e.isControlDown() && e.getButton() == MouseEvent.BUTTON1)) {
+                } else if (e.getButton() == MouseEvent.BUTTON3 ||
+                        (e.isControlDown() && e.getButton() == MouseEvent.BUTTON1)) {
                     zoomin--;
                 }
                 running = true;
