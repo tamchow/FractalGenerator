@@ -85,27 +85,35 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         if (config instanceof ImageConfig) {
             try {
                 @NotNull ImageConfig imageConfig = (ImageConfig) config;
+                BufferedImage first = ImageIO.read(new File(imageConfig.getParams()[0].image.getPath()));
                 if (width == -1) {
-                    width = ImageIO.read(new File(imageConfig.getParams()[0].image.getPath())).getWidth();
+                    width = first.getWidth();
                 }
                 if (height == -1) {
-                    height = ImageIO.read(new File(imageConfig.getParams()[0].image.getPath())).getHeight();
+                    height = first.getHeight();
                 }
                 this.width = width;
                 this.height = height;
-                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
                 imgconf = imageConfig;
                 img = new BufferedImage[imageConfig.getParams().length];
                 ctr = 0;
                 subctr = 0;
-                for (int i = 0; i < img.length; i++) {
+                for (int i = 1; i < img.length; ++i) {
                     if (imageConfig.getParams()[i].image.getPixdata() == null) {
                         img[i] = ImageIO.read(new File(imageConfig.getParams()[i].image.getPath()));
                     } else {
                         img[i] = ImageConverter.toImage(imageConfig.getParams()[i].image);
                     }
-                    img[i] = scale(img[i], this.width, this.height);
+                    BufferedImage tmp = getGraphicsConfiguration().createCompatibleImage(
+                            img[i].getWidth(), img[i].getHeight(), img[i].getTransparency());
+                    Graphics2D graphics2D = tmp.createGraphics();
+                    Rectangle clip = graphics2D.getClipBounds();
+                    graphics2D.drawImage(img[i], clip.x, clip.y, clip.width, clip.height, null);
+                    graphics2D.dispose();
+                    img[i] = scale(tmp, this.width, this.height);
                 }
+                todraw = getGraphicsConfiguration().createCompatibleImage(
+                        first.getWidth(), first.getHeight(), first.getTransparency());
                 fractal_mode = false;
             } catch (Exception e) {
                 System.err.print("Image read error: " + e.getMessage());
@@ -115,7 +123,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 @NotNull ComplexFractalConfig complexFractalConfig = (ComplexFractalConfig) config;
                 this.width = complexFractalConfig.getParams()[0].initParams.width;
                 this.height = complexFractalConfig.getParams()[0].initParams.height;
-                todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                todraw = getGraphicsConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
                 fracconf = complexFractalConfig;
                 img = new BufferedImage[complexFractalConfig.getParams().length];
                 ctr = 0;
@@ -140,7 +148,8 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public BufferedImage progressiveScale(BufferedImage img,
                                           int targetWidth, int targetHeight, Object hint,
                                           boolean progressiveBilinear) {
-        int type = img.getType();
+        int transparency = img.getTransparency();
+        //int type = img.getType();
         //(img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
         @NotNull BufferedImage ret = img, scratchImage = null;
         @NotNull Graphics2D g2 = null;
@@ -184,7 +193,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                  * and then copy to the final, correctly sized image
                  * before returning.
                  */
-                scratchImage = new BufferedImage(w, h, type);
+                scratchImage = getGraphicsConfiguration().createCompatibleImage(w, h, transparency);
                 g2 = scratchImage.createGraphics();
             }
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -198,13 +207,14 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
         if (g2 != null) {
             g2.dispose();
         }
-// If we used a scratch buffer that is larger than our
-// target size, create an image of the right size and copy
-// the results into it
+        /**
+         * If we used a scratch buffer that is larger than our
+         * target size, create an image of the right size and copy
+         *  the results into it.
+         */
         if (targetWidth != ret.getWidth() ||
                 targetHeight != ret.getHeight()) {
-            scratchImage = new BufferedImage(targetWidth,
-                    targetHeight, type);
+            scratchImage = getGraphicsConfiguration().createCompatibleImage(targetWidth, targetHeight, transparency);
             g2 = scratchImage.createGraphics();
             g2.drawImage(ret, 0, 0, null);
             g2.dispose();
@@ -243,7 +253,9 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     @NotNull Animation anim = transition.getFrames();
                     for (int j = subctr; j < anim.getNumFrames(); j++) {
                         todraw = ImageConverter.toImage(anim.getFrame(j));
-                        paint(this.getGraphics());
+                        revalidate();
+                        repaint(getGraphics().getClipBounds());
+                        //paint(getGraphics());
                         if (!running) {
                             ctr = i - 1;
                             subctr = j;
@@ -270,9 +282,11 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 } else {
                     current.generate();
                 }
-                todraw = ImageConverter.toImage(current.getArgand());
+                todraw = ImageConverter.toImage(current.getPlane());
                 zoomedin = false;
+                revalidate();
                 repaint(getGraphics().getClipBounds());
+                //paint(getGraphics());
                 try {
                     Thread.sleep(1000 * fracconf.getWait());
                 } catch (InterruptedException ignored) {
@@ -283,7 +297,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 i = ctr;
                 continue;
             }
-            i++;
+            ++i;
         }
     }
     @Override
@@ -315,9 +329,8 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                         @Override
                         public void run() {
                             try {
-                                @NotNull BufferedImage buf = new BufferedImage(
-                                        todraw.getWidth(), todraw.getHeight(),
-                                        todraw.getType());
+                                @NotNull BufferedImage buf = getGraphicsConfiguration().createCompatibleImage(
+                                        todraw.getWidth(), todraw.getHeight(), todraw.getTransparency());
                                 @NotNull Graphics2D graphics2D = buf.createGraphics();
                                 @NotNull Rectangle clip = graphics2D.getClipBounds();
                                 graphics2D.drawImage(buf, clip.x, clip.y, clip.width, clip.height, null);
