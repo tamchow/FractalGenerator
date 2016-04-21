@@ -3,7 +3,8 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
-import in.tamchow.fractal.math.matrix.MatrixOperations;
+
+import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
 /**
  * Weighted Random Number generator and approximations,prime number calculator
  */
@@ -231,14 +232,19 @@ public final class MathUtils {
     public static Complex matrixToComplex(@NotNull Matrix data) {
         return new Complex(data.get(0, 0), data.get(1, 0));
     }
+    /**
+     * Uses the 3-shears rotation technique over conventional rotation techniques for
+     * improved image quality.
+     */
     @NotNull
     public static Matrix doRotate(@NotNull Matrix point, double angle) {
-        /** Uses the 3-shears rotation technique over conventional rotation techniques for
-         * improved image quality.
-         */
         @NotNull Matrix tanMatrix = new Matrix(new double[][]{{1, -Math.tan(angle / 2)}, {0, 1}});
         @NotNull Matrix sinMatrix = new Matrix(new double[][]{{1, 0}, {Math.sin(angle), 1}});
-        return MatrixOperations.multiply(tanMatrix, MatrixOperations.multiply(sinMatrix, MatrixOperations.multiply(tanMatrix, point)));
+        return multiply(tanMatrix, multiply(sinMatrix, multiply(tanMatrix, point)));
+    }
+    @NotNull
+    public static Matrix doRotate(@NotNull Matrix point, @NotNull Matrix origin, double angle) {
+        return add(doRotate(subtract(point, origin), angle), origin);
     }
     @NotNull
     public int[] mostEfficientfactor(int a) {

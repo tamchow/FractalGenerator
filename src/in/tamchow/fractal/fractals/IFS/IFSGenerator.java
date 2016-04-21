@@ -152,13 +152,13 @@ public class IFSGenerator extends PixelFractalGenerator {
     }
     @NotNull
     public Matrix fromCoordinates(int x, int y) {
-        @NotNull Matrix point = new Matrix(new double[][]{{(boundsProtected(x, getImageWidth()) - center_x) / scale},
-                {(center_y - boundsProtected(y, getImageHeight())) / scale}});
+        @NotNull Matrix point = add(new Matrix(new double[][]{{(boundsProtected(x, getImageWidth()) - center_x) / scale},
+                {(center_y - boundsProtected(y, getImageHeight())) / scale}}), centre_offset);
         if (Math.abs(params.getSkew()) > TOLERANCE) {
             //return add(multiply(Matrix.rotationMatrix2D(params.getSkew()),point), centre_offset);
-            return add(doRotate(point, params.getSkew()), centre_offset);
+            return add(doRotate(point, centre_offset, params.getSkew()), centre_offset);
         }
-        return add(point, centre_offset);
+        return point;
     }
     public void resetCentre() {
         setCenter_x(plane.getWidth() / 2);
@@ -273,11 +273,11 @@ public class IFSGenerator extends PixelFractalGenerator {
         return animation;
     }
     private Matrix normalizePoint(Matrix point) {
-        point = subtract(point, centre_offset);
         if (Math.abs(params.getSkew()) > TOLERANCE) {
             //point = multiply(Matrix.rotationMatrix2D(params.getSkew()).inverse(),point);
-            point = doRotate(point, -params.getSkew());
+            point = doRotate(point, centre_offset, -params.getSkew());
         }
+        point = subtract(point, centre_offset);
         return point;
     }
     public boolean isOutOfBounds(Matrix point) {

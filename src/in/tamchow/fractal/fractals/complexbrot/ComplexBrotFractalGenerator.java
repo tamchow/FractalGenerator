@@ -296,13 +296,14 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     public int[] toCoordinates(Complex point) {
         if (sequential) {
             point = new Complex(xPointsPerPixel * point.real(), yPointsPerPixel * point.imaginary());
+            centre_offset = new Complex(xPointsPerPixel * centre_offset.real(), yPointsPerPixel * centre_offset.imaginary());
         }
-        point = subtract(point, centre_offset);
         if (Math.abs(params.skew) >= params.tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.skew).inverse();
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
-            point = matrixToComplex(doRotate(complexToMatrix(point), -params.skew));
+            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), -params.skew));
         }
+        point = subtract(point, centre_offset);
         if (clamped) {
             return new int[]{clamp(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
                     clamp(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
@@ -368,14 +369,14 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     }
     @NotNull
     public Complex fromCoordinates(int x, int y) {
-        @NotNull Complex point = new Complex(((boundsProtected(x, getImageWidth()) - center_x) / scale),
-                ((center_y - boundsProtected(y, getImageWidth())) / scale));
+        @NotNull Complex point = add(new Complex(((boundsProtected(x, getImageWidth()) - center_x) / scale),
+                ((center_y - boundsProtected(y, getImageWidth())) / scale)), centre_offset);
         if (Math.abs(params.skew) > params.tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.skew);
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
-            point = matrixToComplex(doRotate(complexToMatrix(point), params.skew));
+            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), params.skew));
         }
-        return add(centre_offset, point);
+        return point;
     }
     public void mandelbrotToJulia(int cx, int cy, double level) {
         zoom(cx, cy, level);
@@ -523,7 +524,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         if (sequential) {
             @NotNull PixelContainer tmp_plane = new LinearizedPixelContainer(plane);
             plane = new PixelContainer(tmp_plane.getWidth(), tmp_plane.getHeight());
-            if (y_dist < 0) {
+            if (y_dist > 0) {
                 for (int i = 0, j = y_dist; i < plane.getHeight() - y_dist && j < plane.getHeight(); i++, j++) {
                     rangedCopyHelper(i, j, x_dist, tmp_plane);
                 }

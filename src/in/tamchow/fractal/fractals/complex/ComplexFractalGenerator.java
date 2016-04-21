@@ -1808,12 +1808,12 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     @NotNull
     public int[] toCoordinates(Complex point) {
-        point = subtract(point, centre_offset);
         if (Math.abs(params.initParams.skew) >= tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew).inverse();
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
-            point = matrixToComplex(doRotate(complexToMatrix(point), -params.initParams.skew));
+            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), -params.initParams.skew));
         }
+        point = subtract(point, centre_offset);
         return new int[]{boundsProtected(Math.round((float) (point.real() * scale) + center_x), getImageWidth()),
                 boundsProtected(Math.round(center_y - (float) (point.imaginary() * scale)), getImageHeight())};
     }
@@ -1926,14 +1926,14 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     @NotNull
     public Complex fromCoordinates(int x, int y) {
-        @NotNull Complex point = new Complex(((boundsProtected(x, getImageWidth()) - center_x) / scale),
-                ((center_y - boundsProtected(y, getImageWidth())) / scale));
+        @NotNull Complex point = add(new Complex(((boundsProtected(x, getImageWidth()) - center_x) / scale),
+                ((center_y - boundsProtected(y, getImageWidth())) / scale)), centre_offset);
         if (Math.abs(params.initParams.skew) > tolerance) {
             /*Matrix rotor = Matrix.rotationMatrix2D(params.initParams.skew);
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
-            point = matrixToComplex(doRotate(complexToMatrix(point), params.initParams.skew));
+            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), params.initParams.skew));
         }
-        return add(centre_offset, point);
+        return point;
     }
     public void setCentre_offset(@NotNull Complex centre_offset) {
         this.centre_offset = new Complex(centre_offset);
@@ -1995,7 +1995,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         argand = new PixelContainer(tmp_argand.getWidth(), tmp_argand.getHeight());
         escapedata = new int[tmp_escapes.length][tmp_escapes[0].length];
         normalized_escapes = new double[tmp_normalized_escapes.length][tmp_normalized_escapes[0].length];
-        if (y_dist < 0) {
+        if (y_dist > 0) {
             for (int i = 0, j = y_dist; i < argand.getHeight() - y_dist && j < argand.getHeight(); i++, j++) {
                 rangedCopyHelper(i, j, x_dist, tmp_escapes, tmp_normalized_escapes, tmp_argand);
             }
