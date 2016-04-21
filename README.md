@@ -1,6 +1,6 @@
 # FractalGenerator
 <html>
-A <b>Java</b> fractal generator (currently without an input/configuration UI, soon through a configuration file),
+A <b>Java</b> fractal generator (currently all input is handled through configuration files),
 that implements display of custom functions, with constant declaration processing, in both Mandelbrot,Newton, Nova (both Julia and Mandelbrot  types), Secant and Julia modes.
 
 Newton Mode only supports simple polynomials with complex exponents and coefficients allowed, but the polynomial must be in a special format, which is documented in .idea/description.html or the Wiki Description page.
