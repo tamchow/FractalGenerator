@@ -16,12 +16,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+//import java.util.HashMap;
+//import java.util.Map;
 /**
  * Swing app to display images &amp; complex number fractals
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Publisher {
     BufferedImage[] img;
-    Image[] rimg;
     Image todraw;
     JFrame parent;
     int width, height, ctr, subctr;
@@ -87,17 +88,15 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
                 imgconf = imageConfig;
                 img = new BufferedImage[imageConfig.getParams().length];
-                rimg = new Image[imageConfig.getParams().length];
                 ctr = 0;
                 subctr = 0;
                 for (int i = 0; i < img.length; i++) {
                     if (imageConfig.getParams()[i].image.getPixdata() == null) {
                         img[i] = ImageIO.read(new File(imageConfig.getParams()[i].image.getPath()));
-                        rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
                     } else {
                         img[i] = ImageConverter.toImage(imageConfig.getParams()[i].image);
-                        rimg[i] = img[i].getScaledInstance(this.width, this.height, Image.SCALE_SMOOTH);
                     }
+                    img[i] = scale(img[i], this.width, this.height);
                 }
                 fractal_mode = false;
             } catch (Exception e) {
@@ -111,7 +110,6 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 todraw = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
                 fracconf = complexFractalConfig;
                 img = new BufferedImage[complexFractalConfig.getParams().length];
-                rimg = new Image[complexFractalConfig.getParams().length];
                 ctr = 0;
                 subctr = 0;
                 zoomin = 1.0;
@@ -120,6 +118,83 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 System.err.print("Complex Fractal Configuration read error: " + e.getMessage());
             }
         }
+    }
+    private BufferedImage scale(BufferedImage bufferedImage, int width, int height) {
+        /*Graphics2D graphics2d=bufferedImage.createGraphics();
+        Map<RenderingHints.Key,Object> renderingHints=new HashMap<>();
+        renderingHints.put(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        renderingHints.put(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        graphics2d.addRenderingHints(renderingHints);
+        graphics2d.drawImage(bufferedImage,0,0,width,height,null);
+        graphics2d.dispose();*/
+        return progressiveScale(bufferedImage, width, height, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+    }
+    public BufferedImage progressiveScale(BufferedImage img,
+                                          int targetWidth, int targetHeight, Object hint,
+                                          boolean progressiveBilinear) {
+        int type = (img.getTransparency() == Transparency.OPAQUE) ?
+                BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage ret = img;
+        BufferedImage scratchImage = null;
+        Graphics2D g2 = null;
+        int w, h;
+        int prevW = ret.getWidth();
+        int prevH = ret.getHeight();
+        if (progressiveBilinear) {
+// Use multistep technique: start with original size,
+// then scale down in multiple passes with drawImage()
+// until the target size is reached
+            w = img.getWidth();
+            h = img.getHeight();
+        } else {
+// Use one-step technique: scale directly from original
+// size to target size with a single drawImage() call
+            w = targetWidth;
+            h = targetHeight;
+        }
+        do {
+            if (progressiveBilinear && w > targetWidth) {
+                w /= 2;
+                if (w < targetWidth) {
+                    w = targetWidth;
+                }
+            }
+            if (progressiveBilinear && h > targetHeight) {
+                h /= 2;
+                if (h < targetHeight) {
+                    h = targetHeight;
+                }
+            }
+            if (scratchImage == null) {
+// Use a single scratch buffer for all iterations
+// and then copy to the final, correctly sized image
+// before returning
+                scratchImage = new BufferedImage(w, h, type);
+                g2 = scratchImage.createGraphics();
+            }
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    hint);
+            g2.drawImage(ret, 0, 0, w, h, 0, 0, prevW, prevH, null);
+            prevW = w;
+            prevH = h;
+            ret = scratchImage;
+        } while (w != targetWidth || h != targetHeight);
+        if (g2 != null) {
+            g2.dispose();
+        }
+// If we used a scratch buffer that is larger than our
+// target size, create an image of the right size and copy
+// the results into it
+        if (targetWidth != ret.getWidth() ||
+                targetHeight != ret.getHeight()) {
+            scratchImage = new BufferedImage(targetWidth,
+                    targetHeight, type);
+            g2 = scratchImage.createGraphics();
+            g2.drawImage(ret, 0, 0, null);
+            g2.dispose();
+            ret = scratchImage;
+        }
+        return ret;
     }
     @Override
     public synchronized void publish(String message, double progress, int data) {
@@ -131,10 +206,10 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     }
     @Override
     public void run() {
-        for (int i = ctr; i < rimg.length; ) {
+        for (int i = ctr; i < img.length; ) {
             if (!fractal_mode) {
                 if (imgconf.getParams()[i].transition == TransitionTypes.NONE) {
-                    todraw = rimg[i];
+                    todraw = img[i];
                     paint(this.getGraphics());
                     if (!running) {
                         ctr = i - 1;
@@ -142,10 +217,10 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     }
                 } else {
                     int k = i + 1;
-                    if (i == rimg.length - 1) {
+                    if (i == img.length - 1) {
                         k = 0;
                     }
-                    @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition, ImageConverter.toImageData(rimg[i]), ImageConverter.toImageData(rimg[k]), imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
+                    @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition, ImageConverter.toImageData(img[i]), ImageConverter.toImageData(img[k]), imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
                     transition.doTransition();
                     Animation anim = transition.getFrames();
                     for (int j = subctr; j < anim.getNumFrames(); j++) {
