@@ -21,6 +21,7 @@ import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
+import in.tamchow.fractal.misc.bs.BF2Java;
 import in.tamchow.fractal.misc.bs.BrainSext;
 import in.tamchow.fractal.misc.primes.PrimeCounter;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
@@ -46,6 +47,10 @@ public class Main {
             @NotNull String[] modArgs = new String[args.length - 1];
             System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             BrainSext.main(modArgs);
+        } else if (args[0].equalsIgnoreCase("/BF2J")) {
+            @NotNull String[] modArgs = new String[args.length - 1];
+            System.arraycopy(args, 1, modArgs, 0, modArgs.length);
+            BF2Java.main(modArgs);
         } else if (args[0].equalsIgnoreCase("/primecount") || args[0].equalsIgnoreCase("/pc")) {
             @NotNull String[] modArgs = new String[args.length - 1];
             System.arraycopy(args, 1, modArgs, 0, modArgs.length);
