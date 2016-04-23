@@ -17,7 +17,7 @@ import java.util.Iterator;
  * @see java.lang.Iterable
  * @see FixedStack
  */
-public abstract class Stack<E> implements Collection<E>, Serializable {
+public abstract class Stack<E> implements Collection<E>, Serializable, Cloneable {
     /**
      * @param item the item to push on to this stack
      * @throws StackOverflowException if the stack is full.

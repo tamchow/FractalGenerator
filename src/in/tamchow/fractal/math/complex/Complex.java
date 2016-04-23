@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
  */
-public final class Complex extends Number implements Serializable, Comparable<Complex> {
+public final class Complex extends Number implements Serializable, Comparable<Complex>, Cloneable {
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);
     private static final String DECIMAL_REGEX = "^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$";
     private double a, ib;
@@ -70,6 +70,14 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         double modulusRange = upperBound.modulus() - lowerBound.modulus(), argRange = upperBound.arg() - lowerBound.arg();
         double randomModulus = Math.random() * modulusRange, randomArg = Math.random() * argRange;
         return new Complex(randomModulus, randomArg, true);
+    }
+    @Override
+    public Object clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException ignored) {
+        }
+        return new Complex(this);
     }
     @NotNull
     public Complex negated() {

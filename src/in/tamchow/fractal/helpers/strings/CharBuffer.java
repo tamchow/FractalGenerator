@@ -5,10 +5,10 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.io.Serializable;
 /**
- * No-nonsense Character Buffer which is faster than StringBuilder.
+ * Little-nonsense Character Buffer which is faster than StringBuilder.
  * Does not cache String representation for performance reasons.
  */
-public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Serializable {
+public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Serializable, Cloneable {
     public static final int DEFAULT_CAPACITY = 10;
     @NotNull
     protected char[] buffer;
@@ -74,6 +74,14 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
         System.arraycopy(original, from, copy, 0,
                 Math.min(original.length - from, newLength));
         return copy;
+    }
+    @Override
+    public Object clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException ignored) {
+        }
+        return new CharBuffer(this);
     }
     @Override
     public int length() {

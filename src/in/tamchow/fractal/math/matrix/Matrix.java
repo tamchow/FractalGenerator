@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Holds a rectangular matrix
  */
-public final class Matrix extends Number implements Serializable, Comparable<Matrix> {
+public final class Matrix extends Number implements Serializable, Comparable<Matrix>, Cloneable {
     private int rows, columns;
     private double[][] matrixData;
     public Matrix(@NotNull double[][] matrixData) {
@@ -61,6 +61,14 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
             }
         }
         return matrix;
+    }
+    @Override
+    public Object clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException ignored) {
+        }
+        return new Matrix(this);
     }
     private void initMatrix(int rows, int columns, @NotNull double[][] matrixData) {
         setMatrixData(matrixData);

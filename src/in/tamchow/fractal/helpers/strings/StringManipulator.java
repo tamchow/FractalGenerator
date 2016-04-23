@@ -2,7 +2,7 @@ package in.tamchow.fractal.helpers.strings;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
- * Miscellaneous: String Manipulation.
+ * Miscellaneous: String manipulating utility methods.
  */
 public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';

@@ -4,6 +4,7 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.StackOverflowException;
 
+import java.util.Collection;
 import java.util.EmptyStackException;
 /**
  * A generic fixed-length stack implementing {@link Stack}
@@ -20,6 +21,22 @@ public class FixedStack<E> extends Stack<E> {
      */
     private int top;
     /**
+     * Initializes this {@link FixedStack} with the contents of {@code other}
+     * @param other the {@link Stack} whose elements are used to initialize this {@link Stack}
+     */
+    public FixedStack(Stack<E> other) {
+        initStack(other.dumpStack());
+    }
+    /**
+     * Initializes this {@link FixedStack} with the contents of {@code other}
+     *
+     * @param other the {@link Collection} whose elements are used to initialize this {@link Stack}
+     */
+    @SuppressWarnings("unchecked")
+    public FixedStack(Collection<E> other) {
+        initStack(other.toArray((E[]) new Object[0]));
+    }
+    /**
      * Parametrized constructor. No default constructor.
      *
      * @param capacity The maximum size  (capacity) of the stack
@@ -28,6 +45,20 @@ public class FixedStack<E> extends Stack<E> {
      */
     public FixedStack(int capacity) {
         setSize(capacity);
+    }
+    /**
+     * Clones this {@link FixedStack}
+     *
+     * @return a deep copy of this {@link FixedStack} as an {@link Object}
+     * @see Object#clone()
+     */
+    @Override
+    public Object clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException ignored) {
+        }
+        return new FixedStack<>(this);
     }
     /**
      * Resets the stack top pointer depending on whether the stack is empty or full
