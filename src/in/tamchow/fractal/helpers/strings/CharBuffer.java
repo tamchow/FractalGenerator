@@ -25,6 +25,19 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
         str.getChars(0, buffer.length, buffer, 0);
         size = buffer.length;
     }
+    public CharBuffer(char value[], int offset, int count) {
+        if (offset < 0) {
+            throw new StringIndexOutOfBoundsException(offset);
+        }
+        if (count < 0) {
+            throw new StringIndexOutOfBoundsException(count);
+        }
+        // Note: offset or count might be near -1>>>1.
+        if (offset > value.length - count) {
+            throw new StringIndexOutOfBoundsException(offset + count);
+        }
+        this.buffer = copyOfRange(value, offset, offset + count);
+    }
     @NotNull
     public static Character[] box(@NotNull char[] chars) {
         @NotNull Character[] boxed = new Character[chars.length];
@@ -40,6 +53,16 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
             unBoxed[i] = chars[i];
         }
         return unBoxed;
+    }
+    @NotNull
+    private static char[] copyOfRange(@NotNull char[] original, int from, int to) {
+        int newLength = to - from;
+        if (newLength < 0)
+            throw new IllegalArgumentException(from + " > " + to);
+        char[] copy = new char[newLength];
+        System.arraycopy(original, from, copy, 0,
+                Math.min(original.length - from, newLength));
+        return copy;
     }
     @Override
     public int length() {
@@ -64,16 +87,24 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     }
     @NotNull
     public CharBuffer append(@NotNull CharSequence csq) {
+        //size = calculateSize();
         int csq_length = csq.length(), end = size + csq_length;
         if (csq instanceof String) {
             ((String) csq).getChars(0, csq_length, buffer, size);
         } else {
             for (int i = size; i < end; ++i) {
-                buffer[i] = csq.charAt(i);
+                buffer[i] = csq.charAt(i - size);
             }
         }
         size = end;
         return this;
+    }
+    private int calculateSize() {
+        int ctr = 0;
+        while (ctr < buffer.length && buffer[ctr] != '\0') {
+            ++ctr;
+        }
+        return ctr;
     }
     @NotNull
     public CharBuffer append(@NotNull CharSequence csq, int start, int end) {
@@ -97,5 +128,44 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     @Override
     public int compareTo(@NotNull CharBuffer o) {
         return (equals(o)) ? 0 : toString().compareTo(o.toString());
+    }
+    @NotNull
+    public CharBuffer trim() {
+        int len = buffer.length;
+        int st = 0;
+        char[] val = buffer;
+        while ((st < len) && (Character.isWhitespace(val[st]))) {
+            st++;
+        }
+        while ((st < len) && (Character.isWhitespace(val[len - 1]))) {
+            len--;
+        }
+        return ((st > 0) || (len < buffer.length)) ? subBuffer(st, len) : this;
+    }
+    @NotNull
+    public CharBuffer subBuffer(int beginIndex, int endIndex) {
+        if (beginIndex < 0) {
+            throw new StringIndexOutOfBoundsException(beginIndex);
+        }
+        if (endIndex > buffer.length) {
+            throw new StringIndexOutOfBoundsException(endIndex);
+        }
+        int subLen = endIndex - beginIndex;
+        if (subLen < 0) {
+            throw new StringIndexOutOfBoundsException(subLen);
+        }
+        return ((beginIndex == 0) && (endIndex == buffer.length)) ? this
+                : new CharBuffer(buffer, beginIndex, subLen);
+    }
+    @NotNull
+    public CharBuffer subBuffer(int beginIndex) {
+        if (beginIndex < 0) {
+            throw new StringIndexOutOfBoundsException(beginIndex);
+        }
+        int subLen = buffer.length - beginIndex;
+        if (subLen < 0) {
+            throw new StringIndexOutOfBoundsException(subLen);
+        }
+        return (beginIndex == 0) ? this : new CharBuffer(buffer, beginIndex, subLen);
     }
 }

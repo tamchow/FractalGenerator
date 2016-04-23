@@ -23,7 +23,7 @@ public class ResizableCharBuffer extends CharBuffer {
     @Override
     public CharBuffer append(CharSequence csq) {
         if (size + csq.length() >= buffer.length) {
-            resize(buffer.length + (2 * csq.length()));
+            resize(buffer.length + (RESIZE_FACTOR * csq.length()));
         }
         return super.append(csq);
     }

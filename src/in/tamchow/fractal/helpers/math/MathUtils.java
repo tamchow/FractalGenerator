@@ -235,6 +235,9 @@ public final class MathUtils {
     /**
      * Uses the 3-shears rotation technique over conventional rotation techniques for
      * improved image quality.
+     * @param angle the angle by which to rotate {@code point} about the global origin (0,0)
+     * @param point the {@link Matrix} indicating the point to be rotated
+     * @return the rotated point
      */
     @NotNull
     public static Matrix doRotate(@NotNull Matrix point, double angle) {
@@ -242,6 +245,15 @@ public final class MathUtils {
         @NotNull Matrix sinMatrix = new Matrix(new double[][]{{1, 0}, {Math.sin(angle), 1}});
         return multiply(tanMatrix, multiply(sinMatrix, multiply(tanMatrix, point)));
     }
+    /**
+     * Same as {@link MathUtils#doRotate(Matrix, double)} above,
+     * but does the rotation about the specified {@code origin} instead of the global one.
+     *
+     * @param angle the angle by which to rotate {@code point} about the given {@code origin}
+     * @param point the {@link Matrix} indicating the point to be rotated
+     * @param origin the {@link Matrix} indicating the origin about which {@code point} is to be rotated.
+     * @return the rotated point
+     */
     @NotNull
     public static Matrix doRotate(@NotNull Matrix point, @NotNull Matrix origin, double angle) {
         return add(doRotate(subtract(point, origin), angle), origin);

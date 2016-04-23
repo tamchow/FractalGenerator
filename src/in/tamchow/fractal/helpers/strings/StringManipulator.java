@@ -8,6 +8,22 @@ public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';
     private StringManipulator() {
     }
+    public static String createCharRepeats(char c, int repeats) {
+        CharBuffer buffer = new CharBuffer(repeats);
+        for (int i = 0; i < repeats; ++i) {
+            buffer.append(c);
+        }
+        return buffer.toString();
+    }
+    public static int getCharRepeats(String str, int idx) {
+        int ctr = 1;
+        char current = str.charAt(idx++);
+        while (idx < str.length() && current == str.charAt(idx)) {
+            ++ctr;
+            ++idx;
+        }
+        return ctr;
+    }
     @NotNull
     public static String doCyclicShift(@NotNull String input) {
         @NotNull char[] processor = input.toCharArray();

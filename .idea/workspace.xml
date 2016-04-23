@@ -10,8 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Added miscellaneous BFk compiler. Documentation not updated.">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
@@ -85,8 +91,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/ThreadedGenerator.java" />
@@ -101,7 +105,6 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/BaseConverter.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/evilstuff/EvilStuff.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.java" />
@@ -127,14 +130,17 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
       </list>
     </option>
   </component>
@@ -203,6 +209,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -256,7 +263,6 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -284,11 +290,11 @@
     <property name="last.edited.regexp" value="Sample,T" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\misc\evilstuff\users" />
+    </key>
     <key name="OPEN_URL_DIALOG">
       <recent name="http://www.github.com/tamchow/FractalGenerator" />
-    </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="in.tamchow.fractal.config.color" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\helpers\stack\impls" />
@@ -297,8 +303,8 @@
       <recent name="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\helpers\math" />
       <recent name="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\imgutils\containers" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Programming\Projects\FractalGenerator\src\in\tamchow\fractal\misc\evilstuff\users" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="in.tamchow.fractal.config.color" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Test">
@@ -1135,13 +1141,9 @@
       <workItem from="1461258908780" duration="1163000" />
       <workItem from="1461316283866" duration="650000" />
       <workItem from="1461321405705" duration="88000" />
-      <workItem from="1461334063911" duration="828000" />
-    </task>
-    <task id="LOCAL-00179" summary="ComplexBrot code additions&#10;">
-      <created>1459240754030</created>
-      <option name="number" value="00179" />
-      <option name="project" value="LOCAL" />
-      <updated>1459240754031</updated>
+      <workItem from="1461334063911" duration="846000" />
+      <workItem from="1461395489013" duration="2231000" />
+      <workItem from="1461397880082" duration="4766000" />
     </task>
     <task id="LOCAL-00180" summary="ComplexBrot code additions&#10;">
       <created>1459243926322</created>
@@ -1431,11 +1433,17 @@
       <option name="project" value="LOCAL" />
       <updated>1461321473177</updated>
     </task>
-    <option name="localTasksCounter" value="228" />
+    <task id="LOCAL-00228" summary="Added miscellaneous BFk compiler. Documentation not updated.">
+      <created>1461335337801</created>
+      <option name="number" value="00228" />
+      <option name="project" value="LOCAL" />
+      <updated>1461335337801</updated>
+    </task>
+    <option name="localTasksCounter" value="229" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1037801000" />
+    <option name="totallyTimeSpent" value="1044816000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1457,15 +1465,18 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.5128593" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3207856" sideWeight="0.4969743" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.4871407" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.4969743" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25718608" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.66939443" sideWeight="0.4969743" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1473,12 +1484,9 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.66939443" sideWeight="0.4969743" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39770868" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.4871407" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="UpdateCopyrightCheckinHandler">
@@ -1548,69 +1556,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17495711">
-          <caret line="7" column="33" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5540309">
-          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/ThreadedGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13972603">
-          <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/evilstuff/EvilStuff.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6054795">
-          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20821919">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/package-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MersenneTwister.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29109588">
-          <caret line="13" column="2" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/net/URLClassLoader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -1786,13 +1731,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="63" selection-start-line="5" selection-start-column="63" selection-end-line="5" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Animation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23287672">
@@ -1899,13 +1837,108 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/Appendable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3327616">
+          <caret line="50" column="17" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/util/Arrays.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3659" column="69" selection-start-line="3659" selection-start-column="37" selection-end-line="3659" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.965517">
+          <caret line="1958" column="5" selection-start-line="1945" selection-start-column="4" selection-end-line="1958" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5540309">
+          <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/CharacterData00.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3327616">
+          <caret line="476" column="12" selection-start-line="476" selection-start-column="12" selection-end-line="476" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/CharacterData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3327616">
+          <caret line="75" column="31" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="116" column="43" selection-start-line="116" selection-start-column="43" selection-end-line="116" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2821#2822#0" expanded="false" />
+            <element signature="e#2869#2870#0" expanded="false" />
+            <element signature="e#3101#3102#0" expanded="false" />
+            <element signature="e#3165#3166#0" expanded="false" />
+            <element signature="e#3207#3208#0" expanded="false" />
+            <element signature="e#3251#3252#0" expanded="false" />
+            <element signature="e#3315#3316#0" expanded="false" />
+            <element signature="e#3390#3391#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/Character.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.84562606">
+          <caret line="6788" column="30" selection-start-line="6788" selection-start-column="30" selection-end-line="6788" selection-end-column="30" />
+          <folding>
+            <element signature="e#244761#244762#0" expanded="false" />
+            <element signature="e#244805#244806#0" expanded="false" />
+            <element signature="e#246241#246242#0" expanded="false" />
+            <element signature="e#246315#246316#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7667239">
-          <caret line="185" column="27" selection-start-line="185" selection-start-column="27" selection-end-line="185" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.20926243">
+          <caret line="256" column="45" selection-start-line="256" selection-start-column="45" selection-end-line="256" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19554031">
+          <caret line="252" column="105" selection-start-line="252" selection-start-column="105" selection-end-line="252" selection-end-column="105" />
+          <folding />
         </state>
       </provider>
     </entry>
