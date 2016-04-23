@@ -14,6 +14,12 @@ public class ResizableCharBuffer extends CharBuffer {
     public ResizableCharBuffer(@NotNull String str) {
         super(str);
     }
+    public ResizableCharBuffer(@NotNull CharBuffer buffer) {
+        super(buffer);
+    }
+    public ResizableCharBuffer(@NotNull CharSequence csq) {
+        super(csq);
+    }
     public void resize(int newSize) {
         char[] tmp = new char[buffer.length];
         System.arraycopy(buffer, 0, tmp, 0, tmp.length);
