@@ -9,16 +9,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Added miscellaneous BFk compiler. Documentation not updated.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" />
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Updated miscellaneous BFk compiler. Documentation updated.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1143,19 +1135,7 @@
       <workItem from="1461321405705" duration="88000" />
       <workItem from="1461334063911" duration="846000" />
       <workItem from="1461395489013" duration="2231000" />
-      <workItem from="1461397880082" duration="4766000" />
-    </task>
-    <task id="LOCAL-00180" summary="ComplexBrot code additions&#10;">
-      <created>1459243926322</created>
-      <option name="number" value="00180" />
-      <option name="project" value="LOCAL" />
-      <updated>1459243926323</updated>
-    </task>
-    <task id="LOCAL-00181" summary="ComplexBrot code additions&#10;">
-      <created>1459265931084</created>
-      <option name="number" value="00181" />
-      <option name="project" value="LOCAL" />
-      <updated>1459265931085</updated>
+      <workItem from="1461397880082" duration="5865000" />
     </task>
     <task id="LOCAL-00182" summary="ComplexBrot code additions&#10;">
       <created>1459266963029</created>
@@ -1439,11 +1419,23 @@
       <option name="project" value="LOCAL" />
       <updated>1461335337801</updated>
     </task>
-    <option name="localTasksCounter" value="229" />
+    <task id="LOCAL-00229" summary="Updated miscellaneous BFk compiler. Documentation updated.">
+      <created>1461413764373</created>
+      <option name="number" value="00229" />
+      <option name="project" value="LOCAL" />
+      <updated>1461413764374</updated>
+    </task>
+    <task id="LOCAL-00230" summary="Updated miscellaneous BFk compiler. Documentation updated.">
+      <created>1461413866968</created>
+      <option name="number" value="00230" />
+      <option name="project" value="LOCAL" />
+      <updated>1461413866968</updated>
+    </task>
+    <option name="localTasksCounter" value="231" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1044816000" />
+    <option name="totallyTimeSpent" value="1045915000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1464,11 +1456,11 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.5128593" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3207856" sideWeight="0.4969743" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3207856" sideWeight="0.4969743" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.4871407" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.4969743" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1507,7 +1499,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Restructuring of code" />
     <MESSAGE value="BaseConverter Improved" />
     <MESSAGE value="Bugfixes" />
     <MESSAGE value="Code restructuring&#10;IFS Multithreading fixes" />
@@ -1532,7 +1523,8 @@
     <MESSAGE value="Image Scaling Improvement in ImageDisplay" />
     <MESSAGE value="Threading Improvement in ImageDisplay" />
     <MESSAGE value="Added miscellaneous BFk compiler. Documentation not updated." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added miscellaneous BFk compiler. Documentation not updated." />
+    <MESSAGE value="Updated miscellaneous BFk compiler. Documentation updated." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated miscellaneous BFk compiler. Documentation updated." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1899,14 +1891,14 @@
           <caret line="116" column="43" selection-start-line="116" selection-start-column="43" selection-end-line="116" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#2821#2822#0" expanded="false" />
-            <element signature="e#2869#2870#0" expanded="false" />
-            <element signature="e#3101#3102#0" expanded="false" />
-            <element signature="e#3165#3166#0" expanded="false" />
-            <element signature="e#3207#3208#0" expanded="false" />
-            <element signature="e#3251#3252#0" expanded="false" />
-            <element signature="e#3315#3316#0" expanded="false" />
-            <element signature="e#3390#3391#0" expanded="false" />
+            <element signature="e#3739#3740#0" expanded="false" />
+            <element signature="e#3787#3788#0" expanded="false" />
+            <element signature="e#4019#4020#0" expanded="false" />
+            <element signature="e#4083#4084#0" expanded="false" />
+            <element signature="e#4125#4126#0" expanded="false" />
+            <element signature="e#4169#4170#0" expanded="false" />
+            <element signature="e#4233#4234#0" expanded="false" />
+            <element signature="e#4308#4309#0" expanded="false" />
           </folding>
         </state>
       </provider>
