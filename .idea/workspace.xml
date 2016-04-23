@@ -1135,7 +1135,7 @@
       <workItem from="1461321405705" duration="88000" />
       <workItem from="1461334063911" duration="846000" />
       <workItem from="1461395489013" duration="2231000" />
-      <workItem from="1461397880082" duration="5865000" />
+      <workItem from="1461397880082" duration="5844000" />
     </task>
     <task id="LOCAL-00182" summary="ComplexBrot code additions&#10;">
       <created>1459266963029</created>
@@ -1435,7 +1435,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1045915000" />
+    <option name="totallyTimeSpent" value="1045894000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
