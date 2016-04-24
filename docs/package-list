@@ -20,6 +20,7 @@ in.tamchow.fractal.helpers.math
 in.tamchow.fractal.helpers.stack
 in.tamchow.fractal.helpers.stack.impls
 in.tamchow.fractal.helpers.strings
+in.tamchow.fractal.math
 in.tamchow.fractal.math.complex
 in.tamchow.fractal.math.matrix
 in.tamchow.fractal.math.symbolics
