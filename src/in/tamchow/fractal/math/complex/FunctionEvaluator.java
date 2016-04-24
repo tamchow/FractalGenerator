@@ -1,5 +1,6 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.math.Comparator;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
@@ -155,6 +156,28 @@ public class FunctionEvaluator {
     public Complex getDegree(@NotNull Polynomial polynomial) {
         return getDegree(limitedEvaluate(polynomial.toString(), polynomial.countVariableTerms() * 2 + polynomial.countConstantTerms()));
     }
+    public boolean hasConditional(String function) {
+        return function.contains("?") || function.contains(":");//conditional syntax similar to Java's ternary operator
+    }
+    public String processConditional(String function) {
+        if (hasConditional(function)) {
+            while (hasConditional(function)) {
+                String conditionalExpression = function.substring(function.lastIndexOf('['), function.indexOf(']') + 1),
+                        conditional = conditionalExpression.substring(1, conditionalExpression.length() - 1).trim(),//trim square brackets
+                        replaceWith = "";
+                String[] parts = split(conditional, "?"),
+                        comparison = split(parts[0], " "),
+                        replace = split(parts[1], ":");
+                boolean result = ComplexComparator.compare(
+                        new Complex(comparison[0]),
+                        new Complex(comparison[2]),
+                        Comparator.fromAlias(parts[1]));
+                replaceWith = result ? replace[0] : replace[1];
+                function = replace(function, conditionalExpression, replaceWith);
+            }
+        }
+        return function;
+    }
     public String getZ_value() {
         return z_value;
     }
@@ -190,6 +213,7 @@ public class FunctionEvaluator {
     }
     public Complex evaluate(@NotNull String expr, boolean isSymbolic) {
         @NotNull String subexpr = substitute(expr, isSymbolic);
+        subexpr = processConditional(subexpr);
         Complex ztmp;
         int flag = 0;
         /**Disabled for performance reasons:

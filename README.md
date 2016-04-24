@@ -1,5 +1,7 @@
 # FractalGenerator
 <html>
+For proper project documentation, refer <a href="http://tamchow.github.io/FractalGenerator/index.html">here</a>.
+
 A <b>Java</b> fractal generator (currently all input is handled through configuration files),
 that implements display of custom functions, with constant declaration processing, in both Mandelbrot,Newton, Nova (both Julia and Mandelbrot  types), Secant and Julia modes.
 

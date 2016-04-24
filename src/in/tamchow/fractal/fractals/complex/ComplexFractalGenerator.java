@@ -13,6 +13,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
+import in.tamchow.fractal.helpers.strings.CharBuffer;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
@@ -1675,6 +1676,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             case HISTOGRAM_LINEAR:
             case RANK_ORDER_LINEAR:
             case RANK_ORDER_SPLINE:
+            case ASCII_ART:
                 colortmp = 0x000000;
                 break;//Don't need to deal with this here, it's post-calculated
             case NEWTON_NORMALIZED_2:
@@ -1805,6 +1807,25 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
         colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
         return colortmp;
+    }
+    @NotNull
+    public String createASCIIArt(int iterations) {
+        char[] lookup = new char[iterations];
+        for (int i = 0, c = 0; i < lookup.length - 1 && c < Character.MAX_VALUE; ++c) {
+            if (!(Character.isWhitespace((char) c)) || Character.isISOControl((char) c)) {
+                lookup[i] = (char) c;
+                ++i;
+            }
+        }
+        lookup[lookup.length - 1] = ' ';
+        CharBuffer buffer = new CharBuffer((getImageWidth() + 1) * getImageHeight());
+        for (int[] anEscapedata : escapedata) {
+            for (int anAnEscapedata : anEscapedata) {
+                buffer.append(lookup[anAnEscapedata]);
+            }
+            buffer.append('\n');
+        }
+        return buffer.toString().trim();
     }
     @NotNull
     public int[] toCoordinates(Complex point) {

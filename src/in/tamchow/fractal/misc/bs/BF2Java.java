@@ -11,15 +11,18 @@ import static in.tamchow.fractal.helpers.strings.StringManipulator.createCharRep
 import static in.tamchow.fractal.helpers.strings.StringManipulator.getCharRepeats;
 /**
  * Compiles pure Brainfuck to Java
- *
+ * <br>
  * Available CLI switches:
- * 1. -s : Followed by integer specifying memory size.
- * 2. -f : Followed by absolute or relative path to input file. Extension does not matter.
- * 3. -i : Enables the optimizer.
- * 4. -o : Changes the output path to whatever follows it.
- * 5. -w : Enables the optimizer and allows for memory wrapping.
- * 6. -c : Adds comments representing the source.
- *
+ * <ol>
+ *  <li>-s : Followed by integer specifying memory size.</li>
+ *  <li>-f : Followed by absolute or relative path to input file. Extension does not matter.</li>
+ *  <li>-i : Enables the optimizer.</li>
+ *  <li>-o : Changes the output path to whatever follows it.</li>
+ *  <li>-w : Enables the optimizer and allows for memory wrapping.</li>
+ *  <li>-c : Adds comments representing the source.</li>
+ *  <li>-t : Specifies the data type of the memory array (any Java primitive type works)</li>
+ * </ol>
+ * <br>
  * Except when using '-f', the program code must be the first argument in the list.
  *
  * @author Tamoghna Chowdhury
@@ -92,6 +95,9 @@ public class BF2Java {
         return builder.toString().trim();
     }
     public static String compileOptimize(String programName, int memorySize, String memoryType, String BFProgram, boolean addComments) {
+        if (BFProgram.indexOf('<') >= 0 && BFProgram.indexOf('>') >= 0 && BFProgram.indexOf('<') < BFProgram.indexOf('>')) {
+            return compileWrapOptimize(programName, memorySize, memoryType, BFProgram, addComments);
+        }
         BF2Java bf2j = new BF2Java(programName, memorySize, memoryType);
         CharBuffer builder = new ResizableCharBuffer();
         builder.append(bf2j.classHeader).append(bf2j.initHeader).append(bf2j.pointerHeader).append(bf2j.mainHeader);
@@ -303,7 +309,8 @@ public class BF2Java {
         List<String> argList = Arrays.asList(args);
         int oIndex = argList.indexOf("-o"),
                 fIndex = argList.indexOf("-f"),
-                sIndex = argList.indexOf("-s");
+                sIndex = argList.indexOf("-s"),
+                tIndex = argList.indexOf("-t");
         if (fIndex >= 0) {
             File inputFile = new File(argList.get(fIndex + 1));
             String inputPath = inputFile.getAbsolutePath(), inputFileName = inputFile.getName();
@@ -325,6 +332,9 @@ public class BF2Java {
         }
         if (oIndex >= 0) {
             output = argList.get(oIndex + 1);
+        }
+        if (tIndex >= 0) {
+            type = argList.get(tIndex + 1);
         }
         if (argList.contains("-c")) {
             addComments = true;

@@ -1,5 +1,12 @@
 <html>
 <head>
+    Java CLI Fractal Generator
+</head>
+<body>
+<p>
+    For proper project documentation, refer <a href="http://tamchow.github.io/FractalGenerator/index.html">here</a>.
+</p>
+<p>
     A <b>Java</b> fractal generator (currently UI-silent, with configuration through a file),
     that implements display of custom functions,
     with constant declaration processing, in Mandelbrot, Newton,Secant,Nova (both Mandelbrot and Julia types) and Julia
@@ -11,55 +18,76 @@
     2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale
     or palette coloring, which is slow and has the same limitations as Newton/Nova mode as it uses the same mathematics
     (symbolic differentiation) backend.
-
-    Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
-    The automatic degree calculation system has less issues with grouped operations, especially if considering division
-    or multiplication in the equation.
-    This calculation can be manually overriden after initializing the fractal generator with
-    <pre>setDegree(double)</pre>
-    of the
-    <pre>ComplexFractalGenerator</pre>
-    object in the
-    <pre>Test</pre>
-    class.
-    This could be made more accessible once a GUI is made.
-    Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a
-    complex value.
-
-    Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B
-    components.
-
-    The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe
-    Average, as well as Histogram coloring (by extension Rank-Order mapping) and Color Distance Estimation,Orbit and
-    Line Traps and Gaussian Distance and Epsilon Cross, by default.
-
-    The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct
-    and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation
-    and traps.<br>
-    Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
-</head>
-<body>
+    <br>
+    There's also an ASCII art output type, for, you know,
+<pre>ComplexFractalGenerator</pre>
+objects.
+<br>
+Degrees of functions are auto-calculated for use in calculating the renormalized iteration count.
+The automatic degree calculation system has less issues with grouped operations, especially if considering division
+or multiplication in the equation.
+This calculation can be manually overriden after initializing the fractal generator with
+<pre>setDegree(double)</pre>
+of the
+<pre>ComplexFractalGenerator</pre>
+object in the
+<pre>Test</pre>
+class.
+This could be made more accessible once a GUI is made.
+Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a
+complex value.
+<br>
+Indexing of colours can be linear or logarithmic (which provides better results than sqrt scaling).
+<br>
+Colors can be interpolated directly or via their R, G and B components, or via their palette indices (in spline
+interpolation only).
+<br>
+The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe
+Average, as well as Histogram coloring (by extension Rank-Order mapping) and Color Distance Estimation,Orbit and
+Line Traps and Gaussian Distance and Epsilon Cross, by default.
+<br>
+The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct
+and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation
+and traps.<br>
+Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
+</p>
 <p>
     Supported modes: Julia, Mandelbrot, Newton, Nova (both mandelbrot and Julia variants) and Secant, with Buddhabrot
     technique variations available for each.
     <br>
     Newton/Nova fractal generator can handle simple polynomials with complex coefficients and exponents, but uses a
     different input format:
-
-    {coefficient:variable:exponent};+;{coefficient:variable:exponent};-;{coefficient:variable:exponent},etc.
-
-    It can also handle simple transcendental functions like log,exp,sin,sinh,cos,cosh.
-
-    This is the input format:
-
-    [polynomial];[function];[polynomial];[constant]|+|[polynomial];[function];[polynomial];[constant],...
-
-    The 1<sup>st</sup> polynomial is the coefficient,the 2<sup>nd</sup> is the function argument.
-    The constant is optional. Replace the terms in the square bracket with applicable terms, e.g.
-
-    {1:z:0};sin;{1:z:2};{f:z:0}
     <br>
-    Colors currently available are based on:
+    {<i>coefficient</i>:<i>variable</i>:<i>exponent</i>};<i>+ or -</i>;{<i>coefficient</i>:<i>variable</i>:<i>exponent</i>},etc.
+    <br>
+    It can also handle simple transcendental functions like log,exp,sin,sinh,cos,cosh.
+    <br>
+    This is the input format:
+    <br>
+    <i>polynomial</i>;<i>function</i>;<i>polynomial</i>;<i>constant</i>|<i>+ or -</i>|<i>polynomial</i>;<i>function</i>;<i>polynomial</i>;<i>constant</i>,...
+    <br>
+    The 1<sup>st</sup> polynomial is the coefficient,the 2<sup>nd</sup> is the function argument.
+    The constant is optional.
+    <br>
+    <i>{1:z:0};sin;{1:z:2};{f:z:0}</i>
+    <br>
+    Standard expressions can have embedded conditionals of the form:
+    <br>
+    [ <i>conditional</i> ? <i>result if conditional is true</i> : <i>result if conditional is false</i> ]
+    <br>
+    This is similar to the Java ternary operator syntax, and all Java primitive comparisons are supported, except:
+    <br>
+<ol>
+    <li>The equality comparison is "=" instead of the Java "=="</li>
+    <li>No boolean logic operations are available.<br>To get around this, use:</li>
+    <ol>
+        <li>Nested conditionals for Boolean AND</li>
+        <li>Consecutive conditionals for Boolean OR</li>
+        <li>I don't know of a workaround for Boolean XOR, but who uses it anyway?</li>
+    </ol>
+</ol>
+<br>
+Colorings currently available are based on:
 <ol>
     <li>Simple mode: iteration count is used as a direct index into the palette (interpolation available as
         SIMPLE_SMOOTH)
@@ -70,23 +98,25 @@
     </li>
     <li>High contrast Grayscale mode</li>
     <li>Low Contrast Grayscale Mode</li>
-    <li>Full custom or base-step, or linear-interpolated control points gradient palette mode by fractional iteration
+    <li>Full custom or base-step, or linear- or spline-interpolated control points gradient palette mode by fractional
+        iteration
         count (interpolation available)
     </li>
     <li>Randomized palette mode by fractional iteration count (interpolation available)</li>
     <li>Newton Mode - maximum modulus (linear or spline) or root reached</li>
     <li>Domain coloring- standard or faux on basis of lightness parameter</li>
-    <li>Histogram Coloring or Rank-Order color mapping (linear and spline interpolation available)</li>
+    <li>Histogram Coloring (interpolation available)</li>
+    <li>Rank-order color maping (interpolation available)</li>
 </ol>
 <br>
 The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as
 Newton mode as it uses the same mathematics (symbolic differentiation) backend.
 <br>
-Support for IFS Affine Transform or function-based fractals such as the fern is in place.
-
+Support for IFS Affine Transform or function-based fractals or L-System ones such as the fern are in place.
+<br>
 Multithreading -- Available for complex number fractals and IFS fractals
 (not including L-System ones and animations)! Use is encouraged, but memory requirements are a bit high.
-
+<br>
 More standard coloring methods are there, such as:
 <ol>
     <li>Triangle Area Inequality</li>
@@ -97,11 +127,7 @@ More standard coloring methods are there, such as:
     <li>Epsilon Cross Distance</li>
 </ol>
 Also, these modes support Catmull-Rom Spline and linear interpolation.
-
-Distance Estimation has been included, but as it involves differentiation and so uses the same backend as Newton
-Fractals, it is subject to
-the same constraints on polynomials and style of input. This method produces grayscale or color images.
-
+<br>
 These coloring methods will affect only the palette-based methods of colouring.
 </p>
 
@@ -113,19 +139,21 @@ These coloring methods will affect only the palette-based methods of colouring.
     speedup during generation (12 threads). Also, there might be OOM errors in very intensive cases.
     I still encourage people to use multithreading, with up to 14 threads (7*2).
 </p>
+<br>
 <p>
     Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb
     rule, for quadrupling total resolution, double base precision for best results.
 </p>
+<br>
 <p>
     Default debug and progress is output to console, and the final image(s) are saved serially as
-<pre>Fractal_[no.].png</pre>
+<pre>Fractal_<i>no.</i>.png</pre>
 (except for animated IFS and/or L-System fractals, which are output frame-by-frame into a folder) in the output
 directory specified in the CMD arguments to the program.
 </p>
-
+<br>
 <p>
-    There is also an included image viewer, which can also display fractal images. Enable it with the
+    There is also an included image viewer, which can also  generate and display standard complex number fractals. Enable it with the
 <pre>-v</pre>
 command-line switch.
 <br>
@@ -137,11 +165,11 @@ All input to the application is currently handled by:
     <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
     <li>Or use the pre-configured test shell script</li>
 </ol>
-
+<br>
 Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in
 .ini files.
 </p>
-
+<br>
 <p>
     I do not have much time for putting in documenting comments.
     I'll put them in and update files as and when possible.
