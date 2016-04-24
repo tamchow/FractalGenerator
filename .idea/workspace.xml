@@ -10,21 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Conditionals, Miscellaneous improvements">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$BASE_COLORS.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$BASE_COLORS.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$MODE.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$MODE.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$PALETTE.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$PALETTE.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$RGBCOMPONENTS.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$RGBCOMPONENTS.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$1.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$Mode.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$Mode.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/impls/FixedStack.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/impls/FixedStack.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/impls/FixedStackOverflowException.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/impls/FixedStackOverflowException.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/CharBuffer.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/CharBuffer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/Complex.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/Complex.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/FunctionEvaluator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/FunctionEvaluator.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/matrix/Matrix.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/matrix/Matrix.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/BF2Java.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/BF2Java.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-frame.html" afterPath="$PROJECT_DIR$/docs/allclasses-frame.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-noframe.html" afterPath="$PROJECT_DIR$/docs/allclasses-noframe.html" />
@@ -410,9 +395,11 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-frame.html" afterPath="$PROJECT_DIR$/docs/overview-frame.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-summary.html" afterPath="$PROJECT_DIR$/docs/overview-summary.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-tree.html" afterPath="$PROJECT_DIR$/docs/overview-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/package-list" afterPath="$PROJECT_DIR$/docs/package-list" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/script.js" afterPath="$PROJECT_DIR$/docs/script.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/serialized-form.html" afterPath="$PROJECT_DIR$/docs/serialized-form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -441,18 +428,7 @@
     <favorites_list name="FractalGenerator" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.67671233">
-              <caret line="68" column="20" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -528,7 +504,6 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageConfig.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
@@ -536,17 +511,18 @@
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/Stack.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/impls/FixedStack.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexComparator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/Comparator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/.idea/description.html" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
       </list>
     </option>
   </component>
@@ -614,7 +590,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -665,24 +640,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FractalGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FractalGenerator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value=".idea" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1566,13 +1528,8 @@
       <workItem from="1461397880082" duration="5844000" />
       <workItem from="1461419910133" duration="1373000" />
       <workItem from="1461422416604" duration="1217000" />
-      <workItem from="1461479536173" duration="5200000" />
-    </task>
-    <task id="LOCAL-00185" summary="Panning improvements">
-      <created>1459442143629</created>
-      <option name="number" value="00185" />
-      <option name="project" value="LOCAL" />
-      <updated>1459442143629</updated>
+      <workItem from="1461479536173" duration="5417000" />
+      <workItem from="1461486010848" duration="1511000" />
     </task>
     <task id="LOCAL-00186" summary="Bugfixes and Performance Improvements">
       <created>1459590249251</created>
@@ -1862,11 +1819,17 @@
       <option name="project" value="LOCAL" />
       <updated>1461485465800</updated>
     </task>
-    <option name="localTasksCounter" value="234" />
+    <task id="LOCAL-00234" summary="Conditionals, Miscellaneous improvements">
+      <created>1461485652524</created>
+      <option name="number" value="00234" />
+      <option name="project" value="LOCAL" />
+      <updated>1461485652524</updated>
+    </task>
+    <option name="localTasksCounter" value="235" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1053684000" />
+    <option name="totallyTimeSpent" value="1055412000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1879,7 +1842,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1888,10 +1851,10 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.5128593" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32026145" sideWeight="0.4969743" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35679215" sideWeight="0.4871407" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.4871407" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.4969743" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1979,13 +1942,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05831904">
-          <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.064638786">
@@ -2251,7 +2207,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.02915952">
           <caret line="19" column="79" selection-start-line="19" selection-start-column="79" selection-end-line="19" selection-end-column="79" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2277,27 +2232,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17495711">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.69982845">
           <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1679" column="27" selection-start-line="1679" selection-start-column="27" selection-end-line="1679" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2305,16 +2243,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6123499">
           <caret line="21" column="40" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="40" />
-          <folding>
-            <element signature="e#1312#1313#0" expanded="true" />
-            <element signature="e#1366#1367#0" expanded="true" />
-            <element signature="e#1437#1438#0" expanded="true" />
-            <element signature="e#1475#1476#0" expanded="true" />
-            <element signature="e#1537#1538#0" expanded="true" />
-            <element signature="e#1586#1587#0" expanded="true" />
-            <element signature="e#1647#1648#0" expanded="true" />
-            <element signature="e#1684#1685#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2322,7 +2250,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.30017152">
           <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2330,7 +2257,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.444254">
           <caret line="280" column="22" selection-start-line="280" selection-start-column="22" selection-end-line="280" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2350,7 +2276,6 @@
         <state split_layout="FIRST">
           <first_editor vertical-scroll-proportion="0.06439394">
             <caret line="2" column="112" selection-start-line="2" selection-start-column="112" selection-end-line="2" selection-end-column="112" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
@@ -2360,14 +2285,40 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5693215">
           <caret line="155" column="113" selection-start-line="155" selection-start-column="113" selection-end-line="155" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="112" column="0" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.86027396">
+          <caret line="1837" column="32" selection-start-line="1837" selection-start-column="32" selection-end-line="1837" selection-end-column="32" />
+          <folding>
+            <element signature="e#104278#104279#0" expanded="true" />
+            <element signature="e#104344#104345#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5572917">
+          <caret line="24" column="51" selection-start-line="24" selection-start-column="51" selection-end-line="24" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67671233">
-          <caret line="68" column="20" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.25520834">
+          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
           <folding />
         </state>
       </provider>

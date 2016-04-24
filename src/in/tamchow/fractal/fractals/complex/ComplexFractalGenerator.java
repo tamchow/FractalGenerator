@@ -14,6 +14,7 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 import in.tamchow.fractal.helpers.strings.CharBuffer;
+import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
@@ -1809,8 +1810,12 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         return colortmp;
     }
     @NotNull
+    public String createASCIIArt() {
+        return createASCIIArt(params.runParams.iterations);
+    }
+    @NotNull
     public String createASCIIArt(int iterations) {
-        char[] lookup = new char[iterations];
+        /*char[] lookup = new char[iterations+1];
         for (int i = 0, c = 0; i < lookup.length - 1 && c < Character.MAX_VALUE; ++c) {
             if (!(Character.isWhitespace((char) c)) || Character.isISOControl((char) c)) {
                 lookup[i] = (char) c;
@@ -1821,9 +1826,16 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         CharBuffer buffer = new CharBuffer((getImageWidth() + 1) * getImageHeight());
         for (int[] anEscapedata : escapedata) {
             for (int anAnEscapedata : anEscapedata) {
-                buffer.append(lookup[anAnEscapedata]);
+                buffer.append(lookup[boundsProtected(anAnEscapedata,lookup.length)]);
             }
             buffer.append('\n');
+        }*/
+        CharBuffer buffer = new ResizableCharBuffer((getImageWidth() + 1) * getImageHeight());
+        for (int[] anEscapedata : escapedata) {
+            for (int anAnEscapedata : anEscapedata) {
+                buffer.append(String.valueOf(anAnEscapedata)).append(" ");
+            }
+            buffer.append("\n");
         }
         return buffer.toString().trim();
     }

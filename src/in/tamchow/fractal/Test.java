@@ -45,7 +45,7 @@ public class Test {
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = Complex.ONE;//new Complex(0.1);
         int x_t = 4, y_t = 2, xppp = 10, yppp = 10;
-        double skew = 0.5 * Math.PI;
+        double skew = 0 * Math.PI;
         func = func2;
         boolean def = (args.length == 0);
         @Nullable ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0);
@@ -74,7 +74,7 @@ public class Test {
             jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());
         }
         //jgen.zoom(98, 540, 1);
-        jgen.zoom(1255, 290, 1);
+        //jgen.zoom(1255, 290, 1);
         //jgen.zoom(910, 85, 1);
         //jgen.pan(10,0);
         //jgen.zoom(841, 540, 2);
@@ -99,8 +99,9 @@ public class Test {
         } else {
             jgen.generate();
         }
+        //String ascii=jgen.createASCIIArt();
         //System.out.println(cbgen.getDiscardedPointsCount()+" "+cbgen.getDiscardedPointsFraction());
-        //try {new BufferedWriter(new FileWriter("D:/log.txt",false)).write(MathUtils.intMDAtoString(cbgen.getBases()[0]));}catch (IOException ignored){}
+        //try {new BufferedWriter(new FileWriter("D:/output.txt",false)).write(ascii);}catch (IOException ignored){}
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         @NotNull File pic = new File("D:/Fractal.png");

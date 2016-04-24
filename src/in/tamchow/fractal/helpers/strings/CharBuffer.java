@@ -109,7 +109,7 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     public CharBuffer append(@NotNull CharSequence csq) {
         //size = calculateSize();
         int csq_length = csq.length(), end = size + csq_length;
-        if (end >= buffer.length) {
+        if (end > buffer.length) {
             throw new StringIndexOutOfBoundsException(end - buffer.length);
         }
         if (csq instanceof String) {
