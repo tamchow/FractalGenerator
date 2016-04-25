@@ -74,7 +74,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
     }
     @Override
     public void finalizeGeneration() {
-        @NotNull int[] histogram = new int[(int) iterations + 2];
+        @NotNull int[] histogram = new int[(int) iterations + 1];
         int total = 0;
         if (master.color.getMode() == Colors.MODE.HISTOGRAM_SPLINE || master.color.getMode() == Colors.MODE.HISTOGRAM_LINEAR || master.color.getMode() == Colors.MODE.RANK_ORDER_LINEAR || master.color.getMode() == Colors.MODE.RANK_ORDER_SPLINE) {
             for (@NotNull PartComplexFractalData partImage : buffer) {

@@ -624,7 +624,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             int c = 0;
             for (double i = Math.min(x_start.real(), x_end.real()); i < Math.max(x_end.real(), x_start.real()); i += incr_x) {
                 for (double j = Math.min(y_start.imaginary(), y_end.imaginary()); j < Math.max(y_end.imaginary(), y_start.imaginary()); j += incr_y) {
@@ -716,7 +716,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             int c = 0;
             for (double i = Math.min(x_start.real(), x_end.real()); i < Math.max(x_end.real(), x_start.real()); i += incr_x) {
                 for (double j = Math.min(y_start.imaginary(), y_end.imaginary()); j < Math.max(y_end.imaginary(), y_start.imaginary()); j += incr_y) {
@@ -782,7 +782,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             for (double i = Math.min(x_start.real(), x_end.real()); i < Math.max(x_end.real(), x_start.real()); i += incr_x) {
                 for (double j = Math.min(y_start.imaginary(), y_end.imaginary()); j < Math.max(y_end.imaginary(), y_start.imaginary()); j += incr_y) {
                     Complex point = new Complex(i, j);
@@ -870,7 +870,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             int c = 0;
             for (int j = start; j < end; ++j) {
                 @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
@@ -951,7 +951,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             int c = 0;
             for (int j = start; j < end; ++j) {
                 @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
@@ -1036,7 +1036,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             for (int j = start; j < end; ++j) {
                 @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
                 @NotNull Complex z = (mode == ComplexFractalGenerator.Mode.RUDYBROT) ? new Complex(points[j]) : Complex.ZERO, ztmp2 = Complex.ZERO;
@@ -1106,7 +1106,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             for (double i = Math.min(x_start.real(), x_end.real()); i < Math.max(x_end.real(), x_start.real()); i += incr_x) {
                 for (double j = Math.min(y_start.imaginary(), y_end.imaginary()); j < Math.max(y_end.imaginary(), y_start.imaginary()); j += incr_y) {
                     Complex point = new Complex(i, j);
@@ -1197,7 +1197,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
-            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 2);
+            @NotNull Stack<Complex> last = new FixedStack<>(iteration + 1);
             for (int j = start; j < end; ++j) {
                 @NotNull int[][] tmp = new int[getImageHeight()][getImageWidth()];
                 int c = 0;

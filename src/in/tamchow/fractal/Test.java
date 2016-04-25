@@ -28,9 +28,9 @@ public class Test {
                 poly2 = "{f:z:0};sin;{1:z:1}", poly3 = "{1:z:5};+;{e:z:0}", func2 = "z ^ 2 + f";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"},
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
-        int resx = 1920, resy = 1080, iter = 150, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
+        int resx = 1920, resy = 1080, iter = 16, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.MANDELBROT;
+        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
         @Nullable String linetrap = null;
         @NotNull Colorizer cfg = new Colorizer(Colors.MODE.STRIPE_AVERAGE_SPLINE, 4, 25000, 0, true, false);
@@ -41,7 +41,7 @@ public class Test {
         cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{0xff0000, 0x00ff00, 0x0000ff, 0xfff000}, false);
         //cfg.createSmoothPalette(new int[]{0xffff0000, 0xff00ff00, 0xff0000ff, 0xfffff000}, new double[]{0.2, 0.4, 0.6, 0.8});
-        //cfg.setColor_density(-1);//let there be the proper color_density!
+        cfg.setColor_density(-1);//let there be the proper color_density!
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = Complex.ONE;//new Complex(0.1);
         int x_t = 4, y_t = 2, xppp = 10, yppp = 10;
@@ -99,9 +99,9 @@ public class Test {
         } else {
             jgen.generate();
         }
+        //System.out.println(cbgen.getDiscardedPointsCount()+" "+cbgen.getDiscardedPointsFraction());
         /*String ascii=jgen.createASCIIArt();
         System.out.println(ascii);
-        //System.out.println(cbgen.getDiscardedPointsCount()+" "+cbgen.getDiscardedPointsFraction());
         try {
             BufferedWriter writer=new BufferedWriter(new FileWriter("D:/output.txt",false));
             writer.write(ascii);
