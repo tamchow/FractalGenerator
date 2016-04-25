@@ -34,6 +34,7 @@ import static java.lang.Double.*;
  * Various (21) Coloring modes
  */
 public final class ComplexFractalGenerator extends PixelFractalGenerator {
+    private static String asciiArtBase = "~`+-*/#@!%^&(){}[];'|:?><.,_=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     private static Complex[][] argand_map;
     private static ArrayList<Complex> roots;
     private static Complex[] boundary_elements;
@@ -438,7 +439,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     mindist = 0;
                     maxdist = mindist;
                 }
-                while (c <= iterations) {
+                while (c < iterations) {
                     if (stop) {
                         return;
                     }
@@ -782,7 +783,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 last.push(z);
                 lastd.push(zd);
                 boolean useJulia = false;
-                while (c <= iterations && z.cabs() <= bailout) {
+                while (c < iterations && z.cabs() <= bailout) {
                     if (stop) {
                         return;
                     }
@@ -1047,7 +1048,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 }
                 last.push(z);
                 lastd.push(zd);
-                while (c <= iterations) {
+                while (c < iterations) {
                     if (stop) {
                         return;
                     }
@@ -1360,7 +1361,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 last.push(z);
                 lastd.push(zd);
                 boolean useMandelBrot = false;
-                while (c <= iterations && z.cabs() <= bailout) {
+                while (c < iterations && z.cabs() <= bailout) {
                     if (stop) {
                         return;
                     }
@@ -1677,7 +1678,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             case HISTOGRAM_LINEAR:
             case RANK_ORDER_LINEAR:
             case RANK_ORDER_SPLINE:
-            case ASCII_ART:
+            case ASCII_ART_NUMERIC:
+            case ASCII_ART_CHARACTER:
                 colortmp = 0x000000;
                 break;//Don't need to deal with this here, it's post-calculated
             case NEWTON_NORMALIZED_2:
@@ -1815,27 +1817,26 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     @NotNull
     public String createASCIIArt(int iterations) {
-        /*char[] lookup = new char[iterations+1];
-        for (int i = 0, c = 0; i < lookup.length - 1 && c < Character.MAX_VALUE; ++c) {
-            if (!(Character.isWhitespace((char) c)) || Character.isISOControl((char) c)) {
-                lookup[i] = (char) c;
-                ++i;
-            }
-        }
-        lookup[lookup.length - 1] = ' ';
-        CharBuffer buffer = new CharBuffer((getImageWidth() + 1) * getImageHeight());
-        for (int[] anEscapedata : escapedata) {
-            for (int anAnEscapedata : anEscapedata) {
-                buffer.append(lookup[boundsProtected(anAnEscapedata,lookup.length)]);
-            }
-            buffer.append('\n');
-        }*/
         CharBuffer buffer = new ResizableCharBuffer((getImageWidth() + 1) * getImageHeight());
-        for (int[] anEscapedata : escapedata) {
-            for (int anAnEscapedata : anEscapedata) {
-                buffer.append(String.valueOf(anAnEscapedata)).append(" ");
+        if (color.getMode() == ASCII_ART_CHARACTER) {
+            char[] lookup = new char[iterations];
+            for (int i = 1; i < lookup.length; ++i) {
+                lookup[i] = asciiArtBase.charAt(boundsProtected(i - 1, asciiArtBase.length()));
             }
-            buffer.append("\n");
+            lookup[lookup.length - 1] = lookup[0] = ' ';
+            for (int[] anEscapedata : escapedata) {
+                for (int anAnEscapedata : anEscapedata) {
+                    buffer.append(lookup[boundsProtected(anAnEscapedata, lookup.length)]);
+                }
+                buffer.append('\n');
+            }
+        } else {
+            for (int[] anEscapedata : escapedata) {
+                for (int anAnEscapedata : anEscapedata) {
+                    buffer.append(String.valueOf(anAnEscapedata)).append(" ");
+                }
+                buffer.append("\n");
+            }
         }
         return buffer.toString().trim();
     }

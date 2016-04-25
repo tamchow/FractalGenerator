@@ -99,9 +99,17 @@ public class Test {
         } else {
             jgen.generate();
         }
-        //String ascii=jgen.createASCIIArt();
+        /*String ascii=jgen.createASCIIArt();
+        System.out.println(ascii);
         //System.out.println(cbgen.getDiscardedPointsCount()+" "+cbgen.getDiscardedPointsFraction());
-        //try {new BufferedWriter(new FileWriter("D:/output.txt",false)).write(ascii);}catch (IOException ignored){}
+        try {
+            BufferedWriter writer=new BufferedWriter(new FileWriter("D:/output.txt",false));
+            writer.write(ascii);
+            writer.flush();
+            writer.close();
+        }catch (IOException ignored){
+            ignored.printStackTrace();
+        }*/
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
         @NotNull File pic = new File("D:/Fractal.png");

@@ -639,7 +639,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         z = Complex.ZERO;
                     }
                     last.push(z);
-                    while (c <= iteration) {
+                    while (c < iteration) {
                         if (stop) {
                             return;
                         }
@@ -725,7 +725,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     Complex z = point, ztmp2 = Complex.ZERO, zold = Complex.ZERO;
                     fe.setZ_value(z.toString());
                     fe.setOldvalue(ztmp2.toString());
-                    while (c <= iteration) {
+                    while (c < iteration) {
                         if (stop) {
                             return;
                         }
@@ -793,7 +793,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     fe.setOldvalue(ztmp2.toString());
                     last.push(z);
                     boolean useMandelBrot = false;
-                    while (c <= iteration && z.cabs() <= bailout) {
+                    while (c < iteration && z.cabs() <= bailout) {
                         if (stop) {
                             return;
                         }
@@ -877,7 +877,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 Complex z = points[j], ztmp2 = Complex.ZERO, zold = Complex.ZERO;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
-                while (c <= iteration) {
+                while (c < iteration) {
                     if (stop) {
                         return;
                     }
@@ -964,7 +964,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     z = Complex.ZERO;
                 }
                 last.push(z);
-                while (c <= iteration) {
+                while (c < iteration) {
                     if (stop) {
                         return;
                     }
@@ -1048,7 +1048,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 last.push(z);
                 int c = 0;
                 boolean useJulia = false;
-                while (c <= iteration && z.cabs() <= bailout) {
+                while (c < iteration && z.cabs() <= bailout) {
                     if (stop) {
                         return;
                     }
@@ -1120,7 +1120,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                     last.push(z);
                     int c = 0;
                     boolean useJulia = false;
-                    while (c <= iteration && z.cabs() <= bailout) {
+                    while (c < iteration && z.cabs() <= bailout) {
                         if (stop) {
                             return;
                         }
@@ -1167,7 +1167,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     }
     private void updateBases(int c, int iteration, int level, int[][] tmp) {
         if (anti) {
-            if (c == iteration) {
+            if (c >= iteration) {
                 intDDAAdd(tmp, bases[level]);
             } else {
                 ++discardedPoints;
@@ -1206,7 +1206,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 fe.setOldvalue(ztmp2.toString());
                 last.push(z);
                 boolean useMandelBrot = false;
-                while (c <= iteration && z.cabs() <= bailout) {
+                while (c < iteration && z.cabs() <= bailout) {
                     if (stop) {
                         return;
                     }

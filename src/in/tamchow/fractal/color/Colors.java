@@ -22,7 +22,7 @@ public final class Colors {
         EPSILON_CROSS_SPLINE, EPSILON_CROSS_LINEAR,
         DOMAIN_COLORING, DOMAIN_COLORING_FAUX,
         RANK_ORDER_LINEAR, RANK_ORDER_SPLINE,
-        ASCII_ART
+        ASCII_ART_CHARACTER, ASCII_ART_NUMERIC
     }
     public enum PALETTE {RANDOM_PALETTE, CUSTOM_PALETTE, GRADIENT_PALETTE, SMOOTH_PALETTE_LINEAR, SMOOTH_PALETTE_SPLINE, SHADE_PALETTE}
     public static final class RGBCOMPONENTS {//not an enum because the constants are used for calculating stuff
