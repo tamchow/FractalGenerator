@@ -1823,7 +1823,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 colortmp = new HSL(
                         HSL.hueFromAngle(last[0].arg() + PI),
                         last[0].modulus() / (2 * modulusForPhase(last[0].arg())),
-                        (double) val / iterations
+                        (((double) val) / iterations)
                         /*Math.min(abs(last[0].imaginary()),
                                 abs(last[0].real())) / Math.max(abs(last[0].imaginary()),
                                 abs(last[0].real()))*/).toRGB();
@@ -1832,7 +1832,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 colortmp = new HSL(
                         HSL.hueFromAngle(last[0].arg() + PI),
                         last[0].modulus() / (2 * escape_radius),
-                        (double) val / iterations
+                        (((double) val) / iterations)
                         /*Math.min(abs(last[0].imaginary()),
                                 abs(last[0].real())) / Math.max(abs(last[0].imaginary()),
                                 abs(last[0].real()))*/).toRGB();
