@@ -33,7 +33,7 @@ public class Test {
         @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
         double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
         @Nullable String linetrap = null;
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.STRIPE_AVERAGE_SPLINE, 4, 25000, 0, true, false);
+        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.ASCII_ART_CHARACTER, 4, 25000, 0, true, false);
         //cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138),
         // rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255,
@@ -101,7 +101,7 @@ public class Test {
         }
         //System.out.println(cbgen.getDiscardedPointsCount()+" "+cbgen.getDiscardedPointsFraction());
         /*String ascii=jgen.createASCIIArt();
-        System.out.println(ascii);
+        //System.out.println(ascii);
         try {
             BufferedWriter writer=new BufferedWriter(new FileWriter("D:/output.txt",false));
             writer.write(ascii);
@@ -115,6 +115,7 @@ public class Test {
         @NotNull File pic = new File("D:/Fractal.png");
         try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(PixelContainer.PostProcessMode.NONE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
+            //ImageIO.write(ImageConverter.drawTextToImage(ascii,Font.MONOSPACED, Font.PLAIN, 0x000000, 0xffffff,10,0,0,jgen.getImageWidth(),jgen.getImageHeight()),"png",pic);
             //ImageIO.write(ImageConverter.toImage(cbgen.getPlane().getPostProcessed(PixelContainer.PostProcessMode.NONE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
         } catch (Exception e) {
             e.printStackTrace();

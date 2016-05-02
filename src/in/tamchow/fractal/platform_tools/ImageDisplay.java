@@ -247,7 +247,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                         k = 0;
                     }
                     @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition,
-                            ImageConverter.toImageData(img[i]), ImageConverter.toImageData(img[k]),
+                            ImageConverter.toPixelContainer(img[i]), ImageConverter.toPixelContainer(img[k]),
                             imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
                     transition.doTransition();
                     @NotNull Animation anim = transition.getFrames();
