@@ -25,15 +25,15 @@ import java.io.File;
 public class Test {
     public static void main(@NotNull String[] args) {
         @NotNull String func = "( z ^ 3 ) + ( ( d ) * ( z ) ) + e", variableCode = "z", poly = "{1:z:3};+;{d:z:1};+;{e:z:0}",
-                poly2 = "{f:z:0};sin;{1:z:1}", poly3 = "{1:z:5};+;{e:z:0}", func2 = "z ^ 2 + f";
+                poly2 = "{f:z:0};sin;{1:z:1}", poly3 = "{1:z:2};+;{e:z:0}", func2 = "z ^ 2 + f";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"},
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
-        int resx = 1920, resy = 1080, iter = 16, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
+        int resx = 1920, resy = 1080, iter = 128, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
-        double escrad = 2, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
+        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
+        double escrad = 1E10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
         @Nullable String linetrap = null;
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.ASCII_ART_CHARACTER, 4, 25000, 0, true, false);
+        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.EPSILON_CROSS_SPLINE, 4, 25000, 0, true, true);
         //cfg.setExponentialSmoothing(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138),
         // rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255,
@@ -44,9 +44,9 @@ public class Test {
         cfg.setColor_density(-1);//let there be the proper color_density!
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = Complex.ONE;//new Complex(0.1);
-        int x_t = 4, y_t = 2, xppp = 10, yppp = 10;
+        int x_t = 3, y_t = 2, xppp = 10, yppp = 10;
         double skew = 0 * Math.PI;
-        func = func2;
+        //func = func2;
         boolean def = (args.length == 0);
         @Nullable ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0);
         if (!def) {
@@ -78,6 +78,7 @@ public class Test {
         //jgen.zoom(910, 85, 1);
         //jgen.pan(10,0);
         //jgen.zoom(841, 540, 2);
+        //jgen.zoom(new Complex(0.27969303810093984,-0.00838423653868096),12);
         boolean anti = false, clamp = true;
         ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(resx, resy, x_t, y_t, switch_rate, xppp, yppp, max_hit_threshold, iterations, zoom, zoompow, baseprec, escrad, tolerance, skew, func, variableCode, consts, fracmode, anti, clamp);
         ComplexBrotFractalGenerator cbgen = new ComplexBrotFractalGenerator(cbparams, new DesktopProgressPublisher());
@@ -112,7 +113,7 @@ public class Test {
         }*/
         long gentime = System.currentTimeMillis();
         System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
-        @NotNull File pic = new File("D:/Fractal.png");
+        @NotNull File pic = new File(new File(".").getAbsoluteFile().getAbsolutePath() + "/Fractal.png");
         try {
             ImageIO.write(ImageConverter.toImage(jgen.getArgand().getPostProcessed(PixelContainer.PostProcessMode.NONE, jgen.getNormalized_escapes(), jgen.getColor().getByParts())), "png", pic);
             //ImageIO.write(ImageConverter.drawTextToImage(ascii,Font.MONOSPACED, Font.PLAIN, 0x000000, 0xffffff,10,0,0,jgen.getImageWidth(),jgen.getImageHeight()),"png",pic);
