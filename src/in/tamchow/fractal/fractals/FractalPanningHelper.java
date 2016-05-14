@@ -32,7 +32,6 @@ public class FractalPanningHelper {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
         return pan(toPan, (int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
     }
-    @SuppressWarnings("unchecked")
     @NotNull
     public static PixelContainer pan(Pannable toPanThis, int x_dist, int y_dist) {
         if (toPanThis instanceof PixelFractalGenerator) {
@@ -100,6 +99,8 @@ public class FractalPanningHelper {
                             (!((ComplexBrotFractalGenerator) toPan).isSequential())) {
                         panner = new ThreadedComplexBrotFractalGenerator((ComplexBrotFractalGenerator) toPan);
                     } else {
+                        //assert toPan instanceof IFSGenerator; //This has to be true.
+                        //noinspection ConstantConditions
                         panner = new ThreadedIFSGenerator((IFSGenerator) toPan);
                     }
                     panner.generate();

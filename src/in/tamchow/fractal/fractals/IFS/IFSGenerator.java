@@ -25,16 +25,16 @@ import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
  */
 public class IFSGenerator extends PixelFractalGenerator {
     private static final double TOLERANCE = 1E-15;
-    static Matrix[] points;
-    static Matrix initial;
-    PixelContainer plane;
-    IFSFractalParams params;
-    Matrix centre_offset, point;
-    int center_x, center_y;
-    double zoom, zoom_factor, base_precision, scale;
-    int depth;
-    boolean completion, silencer;
-    Publisher progressPublisher;
+    private static Matrix[] points;
+    private static Matrix initial;
+    protected Publisher progressPublisher;
+    private PixelContainer plane;
+    private IFSFractalParams params;
+    private Matrix centre_offset, point;
+    private int center_x, center_y;
+    private double zoom, zoom_factor, base_precision, scale;
+    private int depth;
+    private boolean completion, silencer;
     private Animation animation;
     private double[][] weightDistribution;
     public IFSGenerator(@NotNull IFSFractalParams params, Publisher progressPublisher) {
@@ -129,6 +129,7 @@ public class IFSGenerator extends PixelFractalGenerator {
                 zoom(zoom);
             }
         }
+        weightDistribution = new double[getImageHeight()][getImageWidth()];
         silencer = params.useThreadedGenerator();
     }
     public void zoom(@NotNull ZoomParams zoom) {
@@ -161,8 +162,8 @@ public class IFSGenerator extends PixelFractalGenerator {
         return point;
     }
     public void resetCentre() {
-        setCenter_x(plane.getWidth() / 2);
-        setCenter_y(plane.getHeight() / 2);
+        setCenter_x(getImageWidth() / 2);
+        setCenter_y(getImageHeight() / 2);
         setCentre_offset(new Matrix(new double[][]{{0}, {0}}));
     }
     public Publisher getProgressPublisher() {
@@ -181,7 +182,7 @@ public class IFSGenerator extends PixelFractalGenerator {
         return depth;
     }
     public void setDepth(int depth) {
-        this.depth = clamp(depth, 0, plane.getHeight() * plane.getWidth());
+        this.depth = clamp(depth, 0, getImageHeight() * plane.getWidth());
     }
     double getBase_precision() {
         return base_precision;
@@ -194,7 +195,7 @@ public class IFSGenerator extends PixelFractalGenerator {
         }
     }
     public double calculateBasePrecision() {
-        return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
+        return ((getImageHeight() >= plane.getWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
     }
     public double getZoom_factor() {
         return zoom_factor;
@@ -240,8 +241,7 @@ public class IFSGenerator extends PixelFractalGenerator {
     }
     public void generate(int index) {
         /*if (initial == null) {
-            Random random = new Random();
-            initial = fromCoordinates(random.nextInt(plane.getWidth()), random.nextInt(plane.getHeight()));
+            initial = fromCoordinates(new MersenneTwister().nextInt(plane.getWidth()), new MersenneTwister().nextInt(plane.getHeight()));
         }
         Matrix point = new Matrix(initial);
         for (long i = 0; i <= depth; i++) {
@@ -280,11 +280,11 @@ public class IFSGenerator extends PixelFractalGenerator {
         point = subtract(point, centre_offset);
         return point;
     }
-    public boolean isOutOfBounds(Matrix point) {
+    private boolean isOutOfBounds(Matrix point) {
         point = normalizePoint(point);
         int x = Math.round((float) (point.get(0, 0) * scale) + center_x),
                 y = Math.round(center_y - (float) (point.get(1, 0) * scale));
-        return x < 0 || y < 0 || x >= plane.getWidth() || y >= plane.getHeight();
+        return x < 0 || y < 0 || x >= getImageWidth() || y >= getImageHeight();
     }
     @NotNull
     public int[] toCoordinates(Matrix point) {
@@ -292,7 +292,7 @@ public class IFSGenerator extends PixelFractalGenerator {
         return new int[]{boundsProtected(Math.round((float) (point.get(0, 0) * scale) + center_x), getImageWidth()),
                 boundsProtected(Math.round(center_y - (float) (point.get(1, 0) * scale)), getImageHeight())};
     }
-    public synchronized void publishProgress(long val) {
+    private synchronized void publishProgress(long val) {
         if (!silencer) {
             float completion = (((float) val) / depth);
             progressPublisher.publish("% completion= " + (completion * 100.0f) + "%", completion, (int) val);

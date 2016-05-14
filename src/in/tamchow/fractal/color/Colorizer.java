@@ -13,15 +13,15 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
  * Holds colour configuration for  custom palettes
  */
 public class Colorizer implements Serializable {
-    public int basecolor, step, color_density, num_colors, byParts;
-    public Complex smoothing_base;
-    public double periodicity, phase_shift;
     public Colors.MODE mode;
-    public Colors.PALETTE palette_type;
     @Nullable
     public int[] palette;
-    public boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled;
-    boolean colors_corrected, already_cyclized;
+    private int basecolor, step, color_density, num_colors, byParts;
+    private Complex smoothing_base;
+    private double periodicity, phase_shift;
+    private Colors.PALETTE palette_type;
+    private boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled;
+    private boolean colors_corrected, already_cyclized;
     public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor) {
         initColorConfig(mode, color_density, num_colors, basecolor, 0, false, false);
     }
@@ -177,7 +177,7 @@ public class Colorizer implements Serializable {
         setMode(mode);
         setSmoothing_base(Complex.E);
     }
-    public void initRandomPalette(int num_colors, boolean preserve) {
+    private void initRandomPalette(int num_colors, boolean preserve) {
         if (!preserve) {
             palette = new int[num_colors];
             for (int pidx = 0; pidx < num_colors; pidx++) {
@@ -238,7 +238,7 @@ public class Colorizer implements Serializable {
     public void setPeriodicity(double periodicity) {
         this.periodicity = periodicity;
     }
-    public double transform(double index) {
+    private double transform(double index) {
         if (periodicity > 0) {
             double newIdx = index * periodicity + phase_shift;
             return newIdx - (long) newIdx;

@@ -31,22 +31,22 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.*;
  * @see ComplexBrotFractalParams
  */
 public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
-    static Complex[][] plane_map;
+    private static Complex[][] plane_map;
     private static volatile int discardedPoints;
     private static Complex[] points;
     private static long sumIterations;
-    ComplexBrotFractalParams params;
-    ComplexFractalGenerator.Mode mode;
-    Publisher progressPublisher;
-    PixelContainer plane;
-    double zoom, zoom_factor, base_precision, scale, tolerance, escape_radius;
-    Complex centre_offset, lastConstant;
-    String[][] constants;
-    String function;
-    int[][][] bases;
-    int[] iterations;
-    boolean silencer, anti, sequential, mandelbrotToJulia, juliaToMandelbrot;
-    String variableCode, oldVariableCode;
+    protected Publisher progressPublisher;
+    protected int[][][] bases;
+    private ComplexBrotFractalParams params;
+    private ComplexFractalGenerator.Mode mode;
+    private PixelContainer plane;
+    private double zoom, zoom_factor, base_precision, scale, tolerance, escape_radius;
+    private Complex centre_offset, lastConstant;
+    private String[][] constants;
+    private String function;
+    private int[] iterations;
+    private boolean silencer, anti, sequential, mandelbrotToJulia, juliaToMandelbrot;
+    private String variableCode, oldVariableCode;
     private boolean clamped;
     private int max_hit_threshold, center_x, center_y, lastConstantIdx, xPointsPerPixel, yPointsPerPixel, depth, switch_rate;
     private long maxiter;
@@ -191,7 +191,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             yPointsPerPixel = params.getyPointsPerPixel();
         } else {
             if (plane_map == null) {
-                plane_map = new Complex[plane.getHeight()][plane.getWidth()];
+                plane_map = new Complex[getImageHeight()][getImageWidth()];
                 populateMap();
             }
             if (points == null) {
@@ -218,7 +218,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         ComplexBrotFractalGenerator.discardedPoints = discardedPoints;
     }
     @NotNull
-    protected int[] start_end_coordinates(int idx, int maxIdx) {
+    int[] start_end_coordinates(int idx, int maxIdx) {
         int distance = depth / maxIdx;
         //{startIdx,endIdx}
         if (idx == maxIdx - 1) {
@@ -228,7 +228,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         }
     }
     private Complex getRandomPoint() {
-        int random_x = boundsProtected(Math.round((float) new MersenneTwister().nextDouble() * plane.getWidth()), plane.getWidth()),
+        int random_x = boundsProtected(Math.round((float) new MersenneTwister().nextDouble() * getImageWidth()), getImageWidth()),
                 random_y = boundsProtected(Math.round((float) new MersenneTwister().nextDouble() * plane.getHeight()), plane.getHeight());
         return plane_map[random_y][random_x];
     }
@@ -326,11 +326,11 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         resetCentre();
     }
     public void resetCentre() {
-        setCenter_x(plane.getWidth() / 2);
-        setCenter_y(plane.getHeight() / 2);
+        setCenter_x(getImageWidth() / 2);
+        setCenter_y(getImageHeight() / 2);
         resetCentre_Offset();
     }
-    public void resetCentre_Offset() {
+    private void resetCentre_Offset() {
         centre_offset = Complex.ZERO;
     }
     private void changeMode(@NotNull Complex lastConstant) {
@@ -360,9 +360,9 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         //setCenter_x(toCoordinates(centre_offset)[0]);setCenter_y(toCoordinates(centre_offset)[1]);
         populateMap();
     }
-    public void populateMap() {
-        for (int i = 0; i < plane.getHeight(); i++) {
-            for (int j = 0; j < plane.getWidth(); j++) {
+    private void populateMap() {
+        for (int i = 0; i < getImageHeight(); i++) {
+            for (int j = 0; j < getImageWidth(); j++) {
                 plane_map[i][j] = fromCoordinates(j, i);
             }
         }
@@ -389,7 +389,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         } else {
             params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
         }
-        cx = boundsProtected(cx, plane.getWidth());
+        cx = boundsProtected(cx, getImageWidth());
         cy = boundsProtected(cy, plane.getHeight());
         //setCenter_x(cx);setCenter_y(cy);
         setCentre_offset(fromCoordinates(cx, cy));
@@ -413,16 +413,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         changeMode(centre_offset);
         resetCentre();
     }
-    public int getCenter_x() {
-        return center_x;
-    }
-    public void setCenter_x(int center_x) {
+    private void setCenter_x(int center_x) {
         this.center_x = center_x;
     }
-    public int getCenter_y() {
-        return center_y;
-    }
-    public void setCenter_y(int center_y) {
+    private void setCenter_y(int center_y) {
         this.center_y = center_y;
     }
     public double getZoom() {
@@ -460,13 +454,13 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
     }
     public double calculateBasePrecision() {
-        return ((plane.getHeight() >= plane.getWidth()) ? plane.getWidth() / 2 : plane.getHeight() / 2);
+        return ((getImageHeight() >= getImageWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
     }
     public int getDepth() {
         return depth;
     }
     public void setDepth(int depth) {
-        this.depth = clamp(depth, 0, plane.getHeight() * plane.getWidth());
+        this.depth = clamp(depth, 0, getImageHeight() * getImageWidth());
     }
     public Complex getCentre_offset() {
         return centre_offset;
@@ -474,7 +468,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     public void setCentre_offset(Complex centre_offset) {
         this.centre_offset = centre_offset;
     }
-    public Complex getLastConstant() {
+    private Complex getLastConstant() {
         if (lastConstant.equals(new Complex(-1, 0))) {
             if (getLastConstantIndex() == -1) {
                 lastConstant = new Complex(constants[0][1]);
@@ -484,11 +478,11 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         }
         return lastConstant;
     }
-    public void setLastConstant(@NotNull Complex value) {
+    private void setLastConstant(@NotNull Complex value) {
         constants[getLastConstantIndex()][1] = value.toString();
         lastConstant = new Complex(value);
     }
-    public int getLastConstantIndex() {
+    private int getLastConstantIndex() {
         @NotNull String[] parts = split(function, " ");
         for (int i = parts.length - 1; i >= 0; i--) {
             if (getConstantIndex(parts[i]) != -1) {
@@ -498,7 +492,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         }
         return -1;
     }
-    public int getConstantIndex(String constant) {
+    private int getConstantIndex(String constant) {
         for (int i = 0; i < constants.length; i++) {
             if (constants[i][0].equals(constant)) {
                 return i;
@@ -506,7 +500,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         }
         return -1;
     }
-    public void setLastConstantIdx(int lastConstantIdx) {
+    private void setLastConstantIdx(int lastConstantIdx) {
         this.lastConstantIdx = lastConstantIdx;
     }
     @Override
@@ -525,11 +519,11 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             @NotNull PixelContainer tmp_plane = new LinearizedPixelContainer(plane);
             plane = new PixelContainer(tmp_plane.getWidth(), tmp_plane.getHeight());
             if (y_dist > 0) {
-                for (int i = 0, j = y_dist; i < plane.getHeight() - y_dist && j < plane.getHeight(); i++, j++) {
+                for (int i = 0, j = y_dist; i < getImageHeight() - y_dist && j < getImageHeight(); i++, j++) {
                     rangedCopyHelper(i, j, x_dist, tmp_plane);
                 }
             } else {
-                for (int i = (-y_dist), j = 0; i < plane.getHeight() && j < plane.getHeight() + y_dist; i++, j++) {
+                for (int i = (-y_dist), j = 0; i < getImageHeight() && j < getImageHeight() + y_dist; i++, j++) {
                     rangedCopyHelper(i, j, x_dist, tmp_plane);
                 }
             }

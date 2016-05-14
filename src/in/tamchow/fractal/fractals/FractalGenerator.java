@@ -5,6 +5,8 @@ import java.io.Serializable;
  */
 public abstract class FractalGenerator implements Serializable {
     protected volatile boolean stop, pause;
+    protected FractalGenerator() {
+    }
     public abstract void generate();
     public void stop() {
         stop = true;

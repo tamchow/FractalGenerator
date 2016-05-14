@@ -7,9 +7,9 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
  * Threaded IFS Fractal Generator
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
-    IFSGenerator master;
-    PartIFSData[] data;
-    int threads;
+    private IFSGenerator master;
+    private PartIFSData[] data;
+    private int threads;
     public ThreadedIFSGenerator(IFSGenerator generator) {
         master = generator;
         threads = master.getParams().getThreads();
@@ -82,7 +82,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         public void onCompletion() {
             data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
+            master.getProgressPublisher().publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

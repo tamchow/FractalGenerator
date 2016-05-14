@@ -39,7 +39,8 @@ import static java.lang.Math.sin;
  * Various (21) Coloring modes
  */
 public final class ComplexFractalGenerator extends PixelFractalGenerator {
-    private static String asciiArtBase = "~`+-*/#@!%^&(){}[];'|:?><.,_=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    private static final String asciiArtBase =
+            "~`+-*/#@!%^&(){}[];'|:?><.,_=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     private static Complex[][] argand_map;
     private static ArrayList<Complex> roots;
     private static Complex[] boundary_elements;
@@ -48,9 +49,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     protected Publisher progressPublisher;
     protected ComplexFractalParams params;
     protected double zoom, zoom_factor, base_precision, scale;
-    protected PixelContainer argand;
-    protected int[][] escapedata;
-    protected double[][] normalized_escapes;
+    int[][] escapedata;
+    double[][] normalized_escapes;
+    private PixelContainer argand;
     private int center_x, center_y, lastConstantIdx, stripe_density, switch_rate;
     private Mode mode;
     private double tolerance;
@@ -87,6 +88,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, Publisher progressPublisher, int switch_rate, @NotNull Complex trap_point, String linetrap) {
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, 0), null), progressPublisher);
+    }
+    public static String getAsciiArtBase() {
+        return asciiArtBase;
     }
     @NotNull
     public static int[] start_end_coordinates(int startx, int endx, int starty, int endy, int nx, int ix, int ny, int iy) {
@@ -127,9 +131,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         silencer = params.useThreadedGenerator();
         argand = new LinearizedPixelContainer(width, height);
         setMode(mode);
-        setMaxiter(argand.getHeight() * argand.getWidth());
-        escapedata = new int[argand.getHeight()][argand.getWidth()];
-        normalized_escapes = new double[argand.getHeight()][argand.getWidth()];
+        setMaxiter(getImageHeight() * argand.getWidth());
+        escapedata = new int[getImageHeight()][getImageWidth()];
+        normalized_escapes = new double[getImageHeight()][getImageWidth()];
         setVariableCode(variableCode);
         setZoom(zoom);
         setZoom_factor(zoom_factor);
@@ -177,7 +181,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             simpleSmoothing = true;
         }
         if (argand_map == null) {
-            argand_map = new Complex[argand.getHeight()][argand.getWidth()];
+            argand_map = new Complex[getImageHeight()][getImageWidth()];
             populateMap();
         }
     }
@@ -213,10 +217,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     public void setParams(ComplexFractalParams params) {
         this.params = params;
     }
-    public void setStripe_density(int stripe_density) {
+    private void setStripe_density(int stripe_density) {
         this.stripe_density = stripe_density;
     }
-    public void setMaxiter(long maxiter) {
+    private void setMaxiter(long maxiter) {
         this.maxiter = maxiter;
     }
     public void setVariableCode(String variableCode) {
@@ -263,7 +267,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     @Override
     public double calculateBasePrecision() {
-        return ((argand.getHeight() >= argand.getWidth()) ? argand.getWidth() / 2 : argand.getHeight() / 2);
+        return ((getImageHeight() >= argand.getWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
     }
     public PixelContainer getArgand() {
         return argand;
@@ -282,10 +286,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
     }
     public void generate(int iterations, double escape_radius, Complex constant) {
-        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, constant);
+        generate(0, getImageWidth(), 0, getImageHeight(), iterations, escape_radius, constant);
     }
     public void generate(int iterations, double escape_radius) {
-        generate(0, argand.getWidth(), 0, argand.getHeight(), iterations, escape_radius, null);
+        generate(0, getImageWidth(), 0, getImageHeight(), iterations, escape_radius, null);
     }
     public void generate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, Complex constant) {
         setMaxiter((end_x - start_x) * (end_y - start_y) * iterations);
@@ -392,7 +396,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             }
         }
     }
-    public void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
+    private void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
         @NotNull Stack<Complex> last = new FixedStack<>(iterations + 1);
         @NotNull Stack<Complex> lastd = new FixedStack<>(iterations + 1);
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
@@ -434,15 +438,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 last.push(z);
                 lastd.push(zd);
                 double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd, ubnd;
-                if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR ||
-                        color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE ||
-                        color.mode == STRIPE_AVERAGE_LINEAR ||
-                        color.mode == STRIPE_AVERAGE_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_ABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_ABS_SPLINE ||
-                        color.mode == DOMAIN_COLORING_FAUX) {
+                if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR ||
+                        color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE ||
+                        color.getMode() == STRIPE_AVERAGE_LINEAR ||
+                        color.getMode() == STRIPE_AVERAGE_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE ||
+                        color.getMode() == DOMAIN_COLORING_FAUX) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -490,10 +494,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= sqrt(this.a * this.a + this.b * this.b);
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == EPSILON_CROSS_LINEAR || color.mode == EPSILON_CROSS_SPLINE) {
+                    } else if (color.getMode() == EPSILON_CROSS_LINEAR || color.getMode() == EPSILON_CROSS_SPLINE) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == GAUSSIAN_INT_DISTANCE_LINEAR || color.mode == GAUSSIAN_INT_DISTANCE_SPLINE) {
+                    } else if (color.getMode() == GAUSSIAN_INT_DISTANCE_LINEAR || color.getMode() == GAUSSIAN_INT_DISTANCE_SPLINE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
                         distance = sqrt(pow(gx - ztmp.real(), 2) + pow(gy - ztmp.imaginary(), 2));
@@ -506,9 +510,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = isNaN(distance) ? 0 : (isInfinite(distance) ? 1 : distance);
                         mindist = (Math.min(distance, mindist));
                     }
-                    if (color.mode == STRIPE_AVERAGE_LINEAR || color.mode == STRIPE_AVERAGE_SPLINE) {
+                    if (color.getMode() == STRIPE_AVERAGE_LINEAR || color.getMode() == STRIPE_AVERAGE_SPLINE) {
                         mindist += 0.5 * sin(ztmp.arg() * stripe_density) + 0.5;
-                    } else if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR || color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE) {
+                    } else if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR || color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE) {
                         /*//Complex degree = divide(ztmp, z);
                         lbnd = abs(power(z, degree).modulus() - getLastConstant().modulus());
                         ubnd = power(z, degree).modulus() + getLastConstant().modulus();
@@ -534,13 +538,13 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.mode == CURVATURE_AVERAGE_NOABS_LINEAR || color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                            color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                            color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
                             mindist += divide(subtract(ztmp, ztmp2), subtract(ztmp2, z2)).arg();
-                            if (color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                            if (color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                                 mindist = abs(mindist);
                             }
                         }
@@ -661,7 +665,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
     }
     /**
-     * NOTE:Call after generating the fractal, as this uses data from {@code escapdedata}
+     * NOTE:Call after generating the fractal, as this uses data from {@link #escapedata}
      *
      * @param depth the iteration count to be considered as a boundary
      * @return The boundary points
@@ -670,12 +674,12 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     @NotNull
     @Deprecated
     public Complex[] getBoundaryPoints(int depth) {
-        @NotNull ArrayList<Complex> points = new ArrayList<>(2 * argand.getWidth());
-        for (int j = 0; j < argand_map[0].length; j++) {
+        @NotNull ArrayList<Complex> points = new ArrayList<>(2 * getImageWidth());
+        for (int j = 0; j < getImageWidth(); j++) {
             int imin = -1, imax = -1;
-            for (int i = 0; i < argand_map.length; i++) {
+            for (int i = 0; i < getImageHeight(); i++) {
                 int itmp = -1;
-                if (escapedata[i][j] == depth) {
+                if (getEscapedata()[i][j] == depth) {
                     itmp = i;
                 }
                 if (imin == -1) {
@@ -694,14 +698,14 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         return boundaryPoints;
     }
     private boolean isInBounds(@NotNull Complex val) {
-        if (val.imaginary() <= argand_map[0][center_x].imaginary() && val.imaginary() >= argand_map[argand_map.length - 1][center_x].imaginary()) {
-            if (val.real() <= argand_map[center_y][argand_map[0].length - 1].real() && val.real() >= argand_map[center_y][0].real()) {
+        if (val.imaginary() <= argand_map[0][center_x].imaginary() && val.imaginary() >= argand_map[getImageHeight() - 1][center_x].imaginary()) {
+            if (val.real() <= argand_map[center_y][getImageWidth() - 1].real() && val.real() >= argand_map[center_y][0].real()) {
                 return true;
             }
         }
         return false;
     }
-    public Complex getLastConstant() {
+    private Complex getLastConstant() {
         if (lastConstant.equals(new Complex(-1, 0))) {
             if (getLastConstantIndex() == -1) {
                 lastConstant = new Complex(consts[0][1]);
@@ -711,11 +715,11 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
         return lastConstant;
     }
-    public void setLastConstant(@NotNull Complex value) {
+    private void setLastConstant(@NotNull Complex value) {
         consts[getLastConstantIndex()][1] = value.toString();
         lastConstant = new Complex(value);
     }
-    public int getLastConstantIndex() {
+    private int getLastConstantIndex() {
         @NotNull String[] parts = split(function, " ");
         for (int i = parts.length - 1; i >= 0; i--) {
             if (getConstantIndex(parts[i]) != -1) {
@@ -725,7 +729,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
         return -1;
     }
-    public int getConstantIndex(String constant) {
+    private int getConstantIndex(String constant) {
         for (int i = 0; i < consts.length; i++) {
             if (consts[i][0].equals(constant)) {
                 return i;
@@ -733,10 +737,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
         return -1;
     }
-    public void setLastConstantIdx(int lastConstantIdx) {
+    private void setLastConstantIdx(int lastConstantIdx) {
         this.lastConstantIdx = lastConstantIdx;
     }
-    public void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
+    private void mandelbrotGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         double bailout = escape_radius * escape_radius + tolerance;
         @NotNull Stack<Complex> last = new FixedStack<>(iterations + 1);
         @NotNull Stack<Complex> lastd = new FixedStack<>(iterations + 1);
@@ -766,15 +770,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 double s = 0, mindist = escape_radius, maxdist = mindist, lbnd, ubnd;
-                if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR ||
-                        color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE ||
-                        color.mode == STRIPE_AVERAGE_LINEAR ||
-                        color.mode == STRIPE_AVERAGE_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_ABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_ABS_SPLINE ||
-                        color.mode == DOMAIN_COLORING_FAUX) {
+                if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR ||
+                        color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE ||
+                        color.getMode() == STRIPE_AVERAGE_LINEAR ||
+                        color.getMode() == STRIPE_AVERAGE_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE ||
+                        color.getMode() == DOMAIN_COLORING_FAUX) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -842,10 +846,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= sqrt(this.a * this.a + this.b * this.b);
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == EPSILON_CROSS_LINEAR || color.mode == EPSILON_CROSS_SPLINE) {
+                    } else if (color.getMode() == EPSILON_CROSS_LINEAR || color.getMode() == EPSILON_CROSS_SPLINE) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == GAUSSIAN_INT_DISTANCE_LINEAR || color.mode == GAUSSIAN_INT_DISTANCE_SPLINE) {
+                    } else if (color.getMode() == GAUSSIAN_INT_DISTANCE_LINEAR || color.getMode() == GAUSSIAN_INT_DISTANCE_SPLINE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
                         distance = sqrt(pow(gx - ztmp.real(), 2) + pow(gy - ztmp.imaginary(), 2));
@@ -858,9 +862,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = isNaN(distance) ? 0 : (isInfinite(distance) ? 1 : distance);
                         mindist = (Math.min(distance, mindist));
                     }
-                    if (color.mode == STRIPE_AVERAGE_LINEAR || color.mode == STRIPE_AVERAGE_SPLINE) {
+                    if (color.getMode() == STRIPE_AVERAGE_LINEAR || color.getMode() == STRIPE_AVERAGE_SPLINE) {
                         mindist += 0.5 * sin(ztmp.arg() * stripe_density) + 0.5;
-                    } else if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR || color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE) {
+                    } else if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR || color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE) {
                         /*@NotNull Complex degree = divide(ztmp, z);
                         lbnd = abs(power(z, degree).modulus() - getLastConstant().modulus());
                         ubnd = power(z, degree).modulus() + getLastConstant().modulus();
@@ -886,13 +890,13 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.mode == CURVATURE_AVERAGE_NOABS_LINEAR || color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                            color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                            color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
                             mindist += divide(subtract(ztmp, ztmp2), subtract(ztmp2, z2)).arg();
-                            if (color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                            if (color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                                 mindist = abs(mindist);
                             }
                         }
@@ -901,7 +905,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         mindist = (Math.min(distance, mindist));
                     }
                     maxdist = (Math.max(distance, maxdist));
-                    if (color.mode == DOMAIN_COLORING) {
+                    if (color.getMode() == DOMAIN_COLORING) {
                         maxdist = Math.max(ztmp.modulus(), maxdist);
                     }
                     if (distance_squared(z, ztmp) <= tolerance) {
@@ -1034,15 +1038,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd, ubnd;
-                if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR ||
-                        color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE ||
-                        color.mode == STRIPE_AVERAGE_LINEAR ||
-                        color.mode == STRIPE_AVERAGE_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_ABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_ABS_SPLINE ||
-                        color.mode == DOMAIN_COLORING_FAUX) {
+                if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR ||
+                        color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE ||
+                        color.getMode() == STRIPE_AVERAGE_LINEAR ||
+                        color.getMode() == STRIPE_AVERAGE_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE ||
+                        color.getMode() == DOMAIN_COLORING_FAUX) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -1130,10 +1134,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= sqrt(this.a * this.a + this.b * this.b);
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == EPSILON_CROSS_LINEAR || color.mode == EPSILON_CROSS_SPLINE) {
+                    } else if (color.getMode() == EPSILON_CROSS_LINEAR || color.getMode() == EPSILON_CROSS_SPLINE) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == GAUSSIAN_INT_DISTANCE_LINEAR || color.mode == GAUSSIAN_INT_DISTANCE_SPLINE) {
+                    } else if (color.getMode() == GAUSSIAN_INT_DISTANCE_LINEAR || color.getMode() == GAUSSIAN_INT_DISTANCE_SPLINE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
                         distance = sqrt(pow(gx - ztmp.real(), 2) + pow(gy - ztmp.imaginary(), 2));
@@ -1146,9 +1150,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = isNaN(distance) ? 0 : (isInfinite(distance) ? 1 : distance);
                         mindist = (Math.min(distance, mindist));
                     }
-                    if (color.mode == STRIPE_AVERAGE_LINEAR || color.mode == STRIPE_AVERAGE_SPLINE) {
+                    if (color.getMode() == STRIPE_AVERAGE_LINEAR || color.getMode() == STRIPE_AVERAGE_SPLINE) {
                         mindist += 0.5 * sin(ztmp.arg() * stripe_density) + 0.5;
-                    } else if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR || color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE) {
+                    } else if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR || color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE) {
                         /*lbnd = abs(power(z, degree).modulus() - getLastConstant().modulus());
                         ubnd = power(z, degree).modulus() + getLastConstant().modulus();
                         mindist += (ztmp.modulus() - lbnd) / (ubnd - lbnd);*/
@@ -1173,13 +1177,13 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.mode == CURVATURE_AVERAGE_NOABS_LINEAR || color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                            color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                            color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
                             mindist += divide(subtract(ztmp, ztmp2), subtract(ztmp2, z2)).arg();
-                            if (color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                            if (color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                                 mindist = abs(mindist);
                             }
                         }
@@ -1325,7 +1329,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
         return leastDistanceIdx;
     }
-    public void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
+    private void juliaGenerate(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
         double bailout = escape_radius * escape_radius + tolerance;
         @NotNull Stack<Complex> last = new FixedStack<>(iterations + 1);
         @NotNull Stack<Complex> lastd = new FixedStack<>(iterations + 1);
@@ -1357,15 +1361,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 Complex z = argand_map[i][j], zd = Complex.ONE, ztmp2 = Complex.ZERO, ztmpd2 = Complex.ZERO, z2 = Complex.ZERO;
                 double s = 0, mindist = escape_radius, maxdist = mindist, lbnd, ubnd;
                 int c = 0x0;
-                if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR ||
-                        color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE ||
-                        color.mode == STRIPE_AVERAGE_LINEAR ||
-                        color.mode == STRIPE_AVERAGE_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                        color.mode == CURVATURE_AVERAGE_ABS_LINEAR ||
-                        color.mode == CURVATURE_AVERAGE_ABS_SPLINE ||
-                        color.mode == DOMAIN_COLORING_FAUX) {
+                if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR ||
+                        color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE ||
+                        color.getMode() == STRIPE_AVERAGE_LINEAR ||
+                        color.getMode() == STRIPE_AVERAGE_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR ||
+                        color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE ||
+                        color.getMode() == DOMAIN_COLORING_FAUX) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -1427,10 +1431,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = abs(this.a * ztmp.real() + this.b * ztmp.imaginary() + this.c);
                         distance /= sqrt(this.a * this.a + this.b * this.b);
                         mindist = (Math.min(distance, mindist));
-                    } else if (color.mode == EPSILON_CROSS_LINEAR || color.mode == EPSILON_CROSS_SPLINE) {
+                    } else if (color.getMode() == EPSILON_CROSS_LINEAR || color.getMode() == EPSILON_CROSS_SPLINE) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = Math.min(distance, mindist);
-                    } else if (color.mode == GAUSSIAN_INT_DISTANCE_LINEAR || color.mode == GAUSSIAN_INT_DISTANCE_SPLINE) {
+                    } else if (color.getMode() == GAUSSIAN_INT_DISTANCE_LINEAR || color.getMode() == GAUSSIAN_INT_DISTANCE_SPLINE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
                         distance = sqrt(pow(gx - ztmp.real(), 2) + pow(gy - ztmp.imaginary(), 2));
@@ -1443,9 +1447,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         distance = isNaN(distance) ? 0 : (isInfinite(distance) ? 1 : distance);
                         mindist = (Math.min(distance, mindist));
                     }
-                    if (color.mode == STRIPE_AVERAGE_LINEAR || color.mode == STRIPE_AVERAGE_SPLINE) {
+                    if (color.getMode() == STRIPE_AVERAGE_LINEAR || color.getMode() == STRIPE_AVERAGE_SPLINE) {
                         mindist += 0.5 * sin(ztmp.arg() * stripe_density) + 0.5;
-                    } else if (color.mode == TRIANGLE_AREA_INEQUALITY_LINEAR || color.mode == TRIANGLE_AREA_INEQUALITY_SPLINE) {
+                    } else if (color.getMode() == TRIANGLE_AREA_INEQUALITY_LINEAR || color.getMode() == TRIANGLE_AREA_INEQUALITY_SPLINE) {
                         /*@NotNull Complex degree = divide(ztmp, z);
                         lbnd = abs(power(z, degree).modulus() - getLastConstant().modulus());
                         ubnd = power(z, degree).modulus() + getLastConstant().modulus();
@@ -1471,13 +1475,13 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.mode == CURVATURE_AVERAGE_NOABS_LINEAR || color.mode == CURVATURE_AVERAGE_NOABS_SPLINE ||
-                            color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_NOABS_SPLINE ||
+                            color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
                             mindist += divide(subtract(ztmp, ztmp2), subtract(ztmp2, z2)).arg();
-                            if (color.mode == CURVATURE_AVERAGE_ABS_LINEAR || color.mode == CURVATURE_AVERAGE_ABS_SPLINE) {
+                            if (color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_ABS_SPLINE) {
                                 mindist = abs(mindist);
                             }
                         }
@@ -1486,7 +1490,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         mindist = (Math.min(distance, mindist));
                     }
                     maxdist = (Math.max(distance, maxdist));
-                    if (color.mode == DOMAIN_COLORING) {
+                    if (color.getMode() == DOMAIN_COLORING) {
                         maxdist = Math.max(ztmp.modulus(), maxdist);
                     }
                     if (distance_squared(z, ztmp) <= tolerance) {
@@ -1576,7 +1580,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             }
         }
     }
-    public double getNormalized(int val, int iterations, Complex[] z_values, double escape) {
+    private double getNormalized(int val, int iterations, Complex[] z_values, double escape) {
         Complex z = z_values[0]; /*double degree = this.degree.modulus(); if (escape < zoom) {
             degree = log(z.modulus() * z.modulus()) / log(z_values[1].modulus() * z_values[1].modulus());
         }*/
@@ -1726,25 +1730,25 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 colortmp = 0x000000;
                 break;//Don't need to deal with this here, it's post-calculated
             case NEWTON_NORMALIZED_2:
-                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.num_colors, ((double) (val + 1) / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) abs(val - 1) / iterations));
+                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
+                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) (val + 1) / iterations));
+                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) abs(val - 1) / iterations));
                 colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
                 colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
                 break;
             case NEWTON_NORMALIZED_1:
-                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) (val + 1) / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.num_colors), ((double) abs(val - 1) / iterations));
+                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
+                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) (val + 1) / iterations));
+                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) abs(val - 1) / iterations));
                 colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
                 colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
                 break;
             case NEWTON_CLASSIC:
-                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) (val + 1) / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.color_density) % color.num_colors), ((double) abs(val - 1) / iterations));
+                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
+                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) (val + 1) / iterations));
+                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) abs(val - 1) / iterations));
                 colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
                 colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
@@ -1907,8 +1911,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         resetCentre();
     }
     public void resetCentre() {
-        setCenter_x(argand.getWidth() / 2);
-        setCenter_y(argand.getHeight() / 2);
+        setCenter_x(getImageWidth() / 2);
+        setCenter_y(getImageHeight() / 2);
         resetCentre_Offset();
     }
     @Override
@@ -1949,13 +1953,13 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         modified.initParams.setHeight(height);
         initFractal(modified);
     }
-    public void resetCentre_Offset() {
+    private void resetCentre_Offset() {
         centre_offset = Complex.ZERO;
     }
-    public void setCenter_x(int center_x) {
+    private void setCenter_x(int center_x) {
         this.center_x = center_x;
     }
-    public void setCenter_y(int center_y) {
+    private void setCenter_y(int center_y) {
         this.center_y = center_y;
     }
     private void changeMode(@NotNull Complex lastConstant) {
@@ -1982,22 +1986,22 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         //setCenter_x(toCoordinates(centre_offset)[0]);setCenter_y(toCoordinates(centre_offset)[1]);
         populateMap();
     }
-    public void populateMap() {
-        for (int i = 0; i < argand.getHeight(); i++) {
-            for (int j = 0; j < argand.getWidth(); j++) {
+    private void populateMap() {
+        for (int i = 0; i < getImageHeight(); i++) {
+            for (int j = 0; j < getImageWidth(); j++) {
                 argand_map[i][j] = fromCoordinates(j, i);
             }
         }
-        if (color.mode == DOMAIN_COLORING && boundary_elements == null) {
-            boundary_elements = new Complex[2 * (argand.getHeight() + argand.getWidth() - 2)];
+        if (color.getMode() == DOMAIN_COLORING && boundary_elements == null) {
+            boundary_elements = new Complex[2 * (getImageHeight() + getImageWidth() - 2)];
             int j = 0;
-            for (int i = 0; i < argand.getHeight(); i++, ++j) {
+            for (int i = 0; i < getImageHeight(); i++, ++j) {
                 boundary_elements[j] = argand_map[i][0];
-                boundary_elements[++j] = argand_map[i][argand_map[i].length - 1];
+                boundary_elements[++j] = argand_map[i][getImageWidth() - 1];
             }
-            for (int i = 1; i < argand.getWidth() - 1; i++, ++j) {
+            for (int i = 1; i < getImageWidth() - 1; i++, ++j) {
                 boundary_elements[j] = argand_map[0][i];
-                boundary_elements[++j] = argand_map[argand_map.length - 1][i];
+                boundary_elements[++j] = argand_map[getImageHeight() - 1][i];
             }
         }
     }
@@ -2073,11 +2077,11 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         escapedata = new int[tmp_escapes.length][tmp_escapes[0].length];
         normalized_escapes = new double[tmp_normalized_escapes.length][tmp_normalized_escapes[0].length];
         if (y_dist > 0) {
-            for (int i = 0, j = y_dist; i < argand.getHeight() - y_dist && j < argand.getHeight(); i++, j++) {
+            for (int i = 0, j = y_dist; i < getImageHeight() - y_dist && j < getImageHeight(); i++, j++) {
                 rangedCopyHelper(i, j, x_dist, tmp_escapes, tmp_normalized_escapes, tmp_argand);
             }
         } else {
-            for (int i = (-y_dist), j = 0; i < argand.getHeight() && j < argand.getHeight() + y_dist; i++, j++) {
+            for (int i = (-y_dist), j = 0; i < getImageHeight() && j < getImageHeight() + y_dist; i++, j++) {
                 rangedCopyHelper(i, j, x_dist, tmp_escapes, tmp_normalized_escapes, tmp_argand);
             }
         }

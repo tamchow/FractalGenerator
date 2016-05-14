@@ -24,11 +24,11 @@ import static in.tamchow.fractal.helpers.math.MathUtils.weightedRandom;
  */
 public class LSFractalGenerator extends FractalGenerator {
     private static final int BUFFER_MULTIPLIER = 2;
-    LSFractalParams params;
-    PixelContainer canvas;
-    Turtle turtle;
-    String[] generations;
-    Publisher publisher;
+    protected Publisher publisher;
+    private LSFractalParams params;
+    private PixelContainer canvas;
+    private Turtle turtle;
+    private String[] generations;
     public LSFractalGenerator(@NotNull LSFractalParams params, Publisher publisher) {
         this.params = params;
         canvas = new LinearizedPixelContainer(params.getWidth(), params.getHeight());

@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Holds information about an HSL color
  */
 public class HSL implements Serializable {
-    double hue, saturation, lightness;
+    private double hue, saturation, lightness;
     public HSL(double hue, double saturation, double lightness) {
         setHue(hue);
         setSaturation(saturation);

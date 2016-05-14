@@ -10,9 +10,9 @@ import java.io.Serializable;
  * Multithreaded Complex Brot Fractal generator
  */
 public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator implements Serializable {
-    ComplexBrotFractalGenerator master;
-    PartComplexBrotFractalData[] data;
-    int threads, nx, ny;
+    private ComplexBrotFractalGenerator master;
+    private PartComplexBrotFractalData[] data;
+    private int threads, nx, ny;
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
         if (master.isSequential()) {
@@ -121,7 +121,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         public void onCompletion() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases(), copyOfMaster.getDiscardedPointsCount());
             float completion = ((float) countCompletedThreads() / threads) * 100.0f;
-            master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
+            master.getProgressPublisher().publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }
 }

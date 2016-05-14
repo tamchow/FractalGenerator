@@ -6,6 +6,8 @@ import in.tamchow.fractal.graphicsutilities.containers.Zoomable;
  * Indicates that the fractal generator (the implementor) generates the fractal on a pixel-per-pixel basis
  */
 public abstract class PixelFractalGenerator extends FractalGenerator implements Zoomable, Pannable {
+    protected PixelFractalGenerator() {
+    }
     public abstract double calculateBasePrecision();
     public abstract void resetCentre();
     public abstract int getConfiguredHeight();

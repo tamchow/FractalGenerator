@@ -7,10 +7,10 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * @see Turtle
  */
 public class Turtle {
-    PixelContainer canvas;
-    double x, y, angle;
-    int back_color, fore_color;
-    double previous_x, previous_y, previous_angle;
+    private PixelContainer canvas;
+    private double x, y, angle;
+    private int back_color, fore_color;
+    private double previous_x, previous_y, previous_angle;
     public Turtle(PixelContainer canvas, int x, int y) {
         this(canvas, x, y, 0);
     }

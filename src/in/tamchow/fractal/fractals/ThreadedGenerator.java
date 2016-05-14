@@ -6,11 +6,13 @@ public abstract class ThreadedGenerator {
     protected final Object lock = new Lock();
     protected SlaveRunner[] threads;
     protected int currentlyCompletedThreads;
+    protected ThreadedGenerator() {
+    }
     public abstract int countCompletedThreads();
     public abstract boolean allComplete();
     public abstract void generate();
     public abstract void finalizeGeneration();
-    public void wrapUp() throws InterruptedException {
+    protected void wrapUp() throws InterruptedException {
         synchronized (lock) {
             while (!allComplete()) {
                 lock.wait(1000);
