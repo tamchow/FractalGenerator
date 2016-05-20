@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AlphaTab">
+    <option name="truncate" value="false" />
+    <option name="highlight" value="true" />
+    <option name="numChars" value="15" />
+    <option name="caseSensitive" value="false" />
+  </component>
   <component name="ClientPropertiesManager">
     <properties class="javax.swing.AbstractButton">
       <property name="hideActionText" class="java.lang.Boolean" />
@@ -65,6 +71,10 @@
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="Scrappy">
+    <scrapTab name="Scrap" />
+    <imports />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>

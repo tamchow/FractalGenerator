@@ -17,18 +17,19 @@ import static in.tamchow.fractal.config.Strings.DECLARATIONS.*;
  */
 public class ComplexBrotFractalParams implements Serializable, DataFromString {
     public ZoomConfig zoomConfig;
-    public PixelContainer.PostProcessMode postprocessMode;
-    public int width, height, num_threads, switch_rate, num_points, xThreads, yThreads, xPointsPerPixel, yPointsPerPixel;
     @Nullable
     public Complex newton_constant;
     public int[] iterations;
-    public double zoom, zoom_level, base_precision, skew, tolerance, escape_radius;
-    public String function, variableCode, oldVariableCode, path;
     public ComplexFractalGenerator.Mode mode;
     public String[][] constants;
-    public boolean anti, sequential;
+    private PixelContainer.PostProcessMode postprocessMode;
+    private int width, height, num_threads, switch_rate, num_points, xThreads, yThreads, xPointsPerPixel, yPointsPerPixel;
+    private double zoom, zoom_level, base_precision, skew, tolerance, escape_radius;
+    private String function, variableCode, oldVariableCode, path;
+    private boolean anti, sequential;
     private int maxHitThreshold;
     private boolean clamped;
+    private boolean skidColoring;
     public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
         this(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped);
     }
@@ -325,13 +326,14 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
         setConstants(consts);
         setAnti(Boolean.valueOf(data[15]));
         setClamped(Boolean.valueOf(data[16]));
+        setSkidColoring(Boolean.valueOf(data[17]));
         if (isSequential()) {
-            setxPointsPerPixel(Integer.valueOf(data[17]));
-            setyPointsPerPixel(Integer.valueOf(data[18]));
-            setxThreads(Integer.valueOf(data[19]));
-            setyThreads(Integer.valueOf(data[20]));
+            setxPointsPerPixel(Integer.valueOf(data[18]));
+            setyPointsPerPixel(Integer.valueOf(data[19]));
+            setxThreads(Integer.valueOf(data[20]));
+            setyThreads(Integer.valueOf(data[21]));
         } else {
-            setNum_points(Integer.valueOf(data[17]));
+            setNum_points(Integer.valueOf(data[18]));
         }
     }
     private String integersToString(@NotNull int[] ints) {
@@ -353,7 +355,7 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     @Override
     public String toString() {
         @Nullable String representation = POSTPROCESSING + postprocessMode + ((isSequential()) ? "\n" + THREADS + num_threads : "") + ((newton_constant != null) ? "\n" + NEWTON_CONSTANT + newton_constant : "") + "\n" + isSequential() + "\n" + SWITCH_RATE + switch_rate + "\n" + OLD_VARIABLE_CODE + oldVariableCode;
-        representation += width + "\n" + height + "\n" + integersToString(iterations) + "\n" + base_precision + "\n" + zoom + "\n" + zoom_level + "\n" + escape_radius + "\n" + tolerance + "\n" + skew + "\n" + maxHitThreshold + "\n" + function + "\n" + variableCode + "\n" + mode + "\n" + constantsToString() + "\n" + isAnti() + "\n" + isClamped() + "\n";
+        representation += width + "\n" + height + "\n" + integersToString(iterations) + "\n" + base_precision + "\n" + zoom + "\n" + zoom_level + "\n" + escape_radius + "\n" + tolerance + "\n" + skew + "\n" + maxHitThreshold + "\n" + function + "\n" + variableCode + "\n" + mode + "\n" + constantsToString() + "\n" + isAnti() + "\n" + isClamped() + "\n" + isSkidColoring() + "\n";
         if (isSequential()) {
             representation += xPointsPerPixel + "\n" + yPointsPerPixel + "\n" + xThreads + "\n" + yThreads;
         } else {
@@ -375,5 +377,11 @@ public class ComplexBrotFractalParams implements Serializable, DataFromString {
     }
     public void setClamped(boolean clamped) {
         this.clamped = clamped;
+    }
+    public boolean isSkidColoring() {
+        return skidColoring;
+    }
+    public void setSkidColoring(boolean skidColoring) {
+        this.skidColoring = skidColoring;
     }
 }

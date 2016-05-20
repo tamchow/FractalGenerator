@@ -31,6 +31,7 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.*;
  * @see ComplexBrotFractalParams
  */
 public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
+    private static final MersenneTwister RANDOM = new MersenneTwister();
     private static Complex[][] plane_map;
     private static volatile int discardedPoints;
     private static Complex[] points;
@@ -258,11 +259,18 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     }
     private int getColor(int i, int j, int level, int maximum) {
         //int channel = boundsProtected(Math.round((float) bases[level][i][j] / maximum) * 255, 256);
-        int channel = boundsProtected(Math.round((float) ((Math.sqrt(bases[level][i][j]) / Math.sqrt(maximum)) * 255)), 256);
-        /*if (bases[level][i][j] != 0) {
-            System.out.println(channel + " - " + bases[level][i][j] + " - " + maximum);
-        }*/
-        return Colorizer.toGray(channel);
+        //Use log-scaling for better results
+        double value = ((Math.log(bases[level][i][j]) / Math.log(maximum)));
+        if (params.isSkidColoring()) {
+            int[] channels = new int[3];//r,g,b
+            for (int k = 0; k < channels.length; k++) {
+                channels[k] = boundsProtected(Math.round((float) (RANDOM.nextInt(256) * value)), 256);
+            }
+            return Colorizer.packRGB(channels[0], channels[1], channels[2]);
+        } else {
+            int channel = boundsProtected(Math.round((float) value * 255), 256);
+            return Colorizer.toGray(channel);
+        }
     }
     private int getMaximum(@NotNull int[][] base) {
         int max = 0;
@@ -298,10 +306,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             point = new Complex(xPointsPerPixel * point.real(), yPointsPerPixel * point.imaginary());
             centre_offset = new Complex(xPointsPerPixel * centre_offset.real(), yPointsPerPixel * centre_offset.imaginary());
         }
-        if (Math.abs(params.skew) >= params.tolerance) {
-            /*Matrix rotor = Matrix.rotationMatrix2D(params.skew).inverse();
+        if (Math.abs(params.getSkew()) >= params.getTolerance()) {
+            /*Matrix rotor = Matrix.rotationMatrix2D(params.getSkew()).inverse();
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
-            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), -params.skew));
+            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), -params.getSkew()));
         }
         point = subtract(point, centre_offset);
         if (clamped) {
@@ -371,10 +379,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     public Complex fromCoordinates(int x, int y) {
         @NotNull Complex point = add(new Complex(((boundsProtected(x, getImageWidth()) - center_x) / scale),
                 ((center_y - boundsProtected(y, getImageWidth())) / scale)), centre_offset);
-        if (Math.abs(params.skew) > params.tolerance) {
-            /*Matrix rotor = Matrix.rotationMatrix2D(params.skew);
+        if (Math.abs(params.getSkew()) > params.getTolerance()) {
+            /*Matrix rotor = Matrix.rotationMatrix2D(params.getSkew());
             point = matrixToComplex(MatrixOperations.multiply(rotor, complexToMatrix(point)));*/
-            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), params.skew));
+            point = matrixToComplex(doRotate(complexToMatrix(point), complexToMatrix(centre_offset), params.getSkew()));
         }
         return point;
     }
