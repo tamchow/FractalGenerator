@@ -9,6 +9,9 @@ import static in.tamchow.fractal.helpers.math.MathUtils.boundsProtected;
 import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 import static in.tamchow.fractal.math.complex.ComplexOperations.divide;
 import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
+import static java.lang.Double.isInfinite;
+import static java.lang.Double.isNaN;
+import static java.lang.Math.abs;
 /**
  * Holds colour configuration for  custom palettes
  */
@@ -18,7 +21,7 @@ public class Colorizer implements Serializable {
     public int[] palette;
     private int basecolor, step, color_density, num_colors, byParts;
     private Complex smoothing_base;
-    private double periodicity, phase_shift;
+    private double periodicity, phase_shift, multiplier_threshold;
     private Colors.PALETTE palette_type;
     private boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled;
     private boolean colors_corrected, already_cyclized;
@@ -254,7 +257,7 @@ public class Colorizer implements Serializable {
                 fromColor = toColor;
                 toColor = tmpIndex;
             }
-            return getColor(fromColor + Math.round((float) (Math.abs(toColor - fromColor) * bias)));
+            return getColor(fromColor + Math.round((float) (abs(toColor - fromColor) * bias)));
         }
     }
     public int basicInterpolateIndex(int fromIndex, int toIndex, double bias) {
@@ -263,7 +266,7 @@ public class Colorizer implements Serializable {
             fromIndex = toIndex;
             toIndex = tmpIndex;
         }
-        return getColor(fromIndex + Math.round((float) (Math.abs(toIndex - fromIndex) * bias)));
+        return getColor(fromIndex + Math.round((float) (abs(toIndex - fromIndex) * bias)));
     }
     public int getColor(int index) {
         return palette[boundsProtected(index, palette.length)];
@@ -291,7 +294,7 @@ public class Colorizer implements Serializable {
         int baseidx = num_colors / 2;
         int increment = 0;
         for (int i = 0; i < baseidx; i++) {
-            palette[i] = Math.abs(basecolor - increment * step);
+            palette[i] = abs(basecolor - increment * step);
             increment++;
         }
         increment = 0;
@@ -306,10 +309,10 @@ public class Colorizer implements Serializable {
     private void initShadePalette() {
         int baseidx = num_colors / 2;
         for (int i = baseidx - 1; i >= 0; i--) {
-            palette[i] = getTint(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
+            palette[i] = getTint(basecolor, ((double) abs(baseidx - i) / baseidx));
         }
         for (int i = baseidx; i < num_colors; i++) {
-            palette[i] = getShade(basecolor, ((double) Math.abs(baseidx - i) / baseidx));
+            palette[i] = getShade(basecolor, ((double) abs(baseidx - i) / baseidx));
         }
         if (isCyclize()) {
             cyclizePalette();
@@ -445,9 +448,9 @@ public class Colorizer implements Serializable {
             }
             if (useSpline) {
                 int c_p = (c == 0) ? controls.length - 1 : c - 1, c_n = (cnext == controls.length - 1) ? 0 : cnext + 1;
-                palette[i] = splineInterpolated(controls[c], controls[cnext], controls[c_p], controls[c_n], ((double) Math.abs(i - controls[c])) / Math.abs(controls[cnext] - controls[c]));
+                palette[i] = splineInterpolated(controls[c], controls[cnext], controls[c_p], controls[c_n], ((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]));
             } else {
-                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], Math.abs(i - controls[c]), Math.abs(controls[cnext] - controls[c]), getByParts());
+                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], abs(i - controls[c]), abs(controls[cnext] - controls[c]), getByParts());
             }
         }
         if (isCyclize()) {
@@ -455,15 +458,24 @@ public class Colorizer implements Serializable {
         }
     }
     public int createIndex(double val, double min, double max, double zoom) {
-        val /= zoom;
-        max /= zoom;
-        min /= zoom;
+        /*
+        val *= zoom;
+        max *= zoom;
+        min *= zoom;
+        */
+        double resolution = 1.0 / num_colors, threshold = 1.0 / zoom;
+        if (multiplier_threshold > 0 && multiplier_threshold <= resolution) {
+            if (abs(max - min) >= resolution && abs(multiplier_threshold * resolution - val) <= threshold) {
+                val /= multiplier_threshold;
+            }
+        }
         if (((min == 0 || (max - min) == 1 || (max - min) == 0) && logIndex) || (!logIndex)) {
-            return (int) ((transform(Math.abs((val - min) / (max - min))) * color_density) % num_colors);
+            return (int) ((transform(abs((val - min) / (max - min))) * color_density) % num_colors);
         }
         @NotNull Complex exp = new Complex(val / min, 0);
         @NotNull Complex base = new Complex(max / min, 0);
         double idx = divide(principallog(exp), principallog(base)).modulus();
+        idx = isNaN(idx) ? 0 : (isInfinite(idx) ? 1 : idx);
         return (int) (transform(idx) * color_density) % num_colors;
     }
     public int indexOfColor(int color) {
@@ -533,12 +545,12 @@ public class Colorizer implements Serializable {
             b2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.BLUE);
             b3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.BLUE);
             b4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.BLUE);
-            int nr = Math.round((float) Math.abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
-            int ng = Math.round((float) Math.abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
-            int nb = Math.round((float) Math.abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4));
+            int nr = Math.round((float) abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
+            int ng = Math.round((float) abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
+            int nb = Math.round((float) abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4));
             return toRGB(nr, ng, nb);
         } else if (byParts > 0) {
-            double alpha = Math.abs((h0 + h1 + h2 + h3) * bias) * 255.0;
+            double alpha = abs((h0 + h1 + h2 + h3) * bias) * 255.0;
             //alpha=(alpha<0)?0:((alpha>255)?255:alpha);
             return alphaBlend(boundsProtected((int) alpha, 0xff), separateARGB(palette[index], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index], Colors.RGBCOMPONENTS.BLUE), separateARGB(palette[index1], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index1], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index1], Colors.RGBCOMPONENTS.BLUE));
         } else {
@@ -554,9 +566,9 @@ public class Colorizer implements Serializable {
     public void fromString(@NotNull String[] colors) {
         setSmoothing_base(Complex.E);
         setExponentialSmoothing(true);
-        palette_type = Colors.PALETTE.valueOf(colors[0]);
-        mode = Colors.MODE.valueOf(colors[1]);
-        byParts = Integer.valueOf(colors[2]);
+        setPalette_type(Colors.PALETTE.valueOf(colors[0]));
+        setMode(Colors.MODE.valueOf(colors[1]));
+        setByParts(Integer.valueOf(colors[2]));
         @NotNull String[] smoothingData = split(colors[3], ";");
         if (smoothingData.length > 0) {
             setExponentialSmoothing(Boolean.valueOf(smoothingData[0]));
@@ -564,50 +576,51 @@ public class Colorizer implements Serializable {
         if (smoothingData.length > 1) {
             setSmoothing_base(new Complex(smoothingData[1]));
         }
-        cyclizeAble = Boolean.valueOf(colors[4]);
+        setCyclize(Boolean.valueOf(colors[4]));
         String[] modifiers = split(colors[5], ";");
         if (modifiers.length >= 1) {
-            logIndex = Boolean.valueOf(modifiers[0]);
+            setLogIndex(Boolean.valueOf(modifiers[0]));
             if (modifiers.length > 1) {
                 modifierEnabled = Boolean.valueOf(modifiers[1]);
             } else {
                 modifierEnabled = false;
             }
         } else {
-            logIndex = false;
+            setLogIndex(false);
             modifierEnabled = false;
         }
-        periodicity = Double.valueOf(colors[6]);
-        phase_shift = Double.valueOf(colors[7]);
+        setPeriodicity(Double.valueOf(colors[6]));
+        setPhase_shift(Double.valueOf(colors[7]));
+        setMultiplier_threshold(Double.valueOf(colors[8]));
         switch (palette_type) {
             case RANDOM_PALETTE:
-                initColorConfig(mode, Integer.valueOf(colors[8]), byParts, logIndex, cyclizeAble);
-                setColor_density(Integer.valueOf(colors[9]));
+                initColorConfig(mode, Integer.valueOf(colors[9]), byParts, logIndex, cyclizeAble);
+                setColor_density(Integer.valueOf(colors[10]));
                 break;
             case CUSTOM_PALETTE:
-                @NotNull String[] parts = split(colors[8], ";");
+                @NotNull String[] parts = split(colors[9], ";");
+                setColor_density(Integer.valueOf(colors[10]));
                 @NotNull int[] colorset = new int[parts.length];
                 for (int i = 0; i < colorset.length; i++) {
-                    colorset[i] = Integer.valueOf(parts[i + 6], 16);
+                    colorset[i] = Integer.valueOf(parts[i], 16);
                 }
                 setPalette(colorset, false);
-                setColor_density(Integer.valueOf(parts[7]));
                 break;
             case GRADIENT_PALETTE:
-                if (colors.length == 10) {
-                    initColorConfig(mode, Integer.valueOf(colors[8]), Integer.valueOf(colors[9]), Integer.valueOf(colors[10], 16), Integer.valueOf(colors[11], 16), byParts, logIndex, cyclizeAble);
-                } else if (colors.length == 9) {
-                    initColorConfig(mode, Integer.valueOf(colors[8]), Integer.valueOf(colors[9]), Integer.valueOf(colors[10], 16), byParts, logIndex, cyclizeAble);
+                if (colors.length == 13) {
+                    initColorConfig(mode, Integer.valueOf(colors[9]), Integer.valueOf(colors[10]), Integer.valueOf(colors[11], 16), Integer.valueOf(colors[12], 16), byParts, logIndex, cyclizeAble);
+                } else if (colors.length == 12) {
+                    initColorConfig(mode, Integer.valueOf(colors[9]), Integer.valueOf(colors[10]), Integer.valueOf(colors[11], 16), byParts, logIndex, cyclizeAble);
                 }
                 break;
             case SHADE_PALETTE:
-                initColorConfig(mode, Integer.valueOf(colors[8]), Integer.valueOf(colors[9]), Integer.valueOf(colors[10], 16), 0x000000, byParts, logIndex, cyclizeAble);
+                initColorConfig(mode, Integer.valueOf(colors[9]), Integer.valueOf(colors[10]), Integer.valueOf(colors[11], 16), 0x000000, byParts, logIndex, cyclizeAble);
                 break;
             case SMOOTH_PALETTE_LINEAR:
             case SMOOTH_PALETTE_SPLINE:
-                initColorConfig(mode, Integer.valueOf(colors[8]), byParts, logIndex, cyclizeAble);
-                setColor_density(Integer.valueOf(colors[9]));
-                @NotNull String[] controls = split(colors[9], ";");
+                initColorConfig(mode, Integer.valueOf(colors[9]), byParts, logIndex, cyclizeAble);
+                setColor_density(Integer.valueOf(colors[10]));
+                @NotNull String[] controls = split(colors[11], ";");
                 @NotNull int[] control_colors = new int[controls.length];
                 @NotNull double[] control_points = new double[controls.length];
                 for (int i = 0; i < controls.length; i++) {
@@ -628,7 +641,7 @@ public class Colorizer implements Serializable {
     }
     @Override
     public String toString() {
-        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + "," + logIndex + ";" + modifierEnabled + "," + periodicity + "," + phase_shift;
+        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + "," + logIndex + ";" + modifierEnabled + "," + periodicity + "," + phase_shift + "," + multiplier_threshold;
         switch (palette_type) {
             case RANDOM_PALETTE:
                 representation += "," + num_colors + "," + color_density;
@@ -651,5 +664,11 @@ public class Colorizer implements Serializable {
     }
     public boolean isModifierEnabled() {
         return modifierEnabled;
+    }
+    public double getMultiplier_threshold() {
+        return multiplier_threshold;
+    }
+    public void setMultiplier_threshold(double multiplier_threshold) {
+        this.multiplier_threshold = multiplier_threshold;
     }
 }

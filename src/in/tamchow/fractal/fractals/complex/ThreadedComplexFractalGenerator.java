@@ -16,13 +16,13 @@ import static in.tamchow.fractal.helpers.math.MathUtils.rankListFromHistogram;
  * Multithreading for the fractal generator
  */
 public final class ThreadedComplexFractalGenerator extends ThreadedGenerator implements Serializable {
-    final ComplexFractalGenerator master;
-    PartComplexFractalData[] buffer;
-    long iterations;
-    double escape_radius;
+    private final ComplexFractalGenerator master;
+    private PartComplexFractalData[] buffer;
+    private long iterations;
+    private double escape_radius;
     @Nullable
-    Complex constant;
-    int nx, ny, threads;
+    private Complex constant;
+    private int nx, ny, threads;
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
         this.master = master;
         this.iterations = iterations;

@@ -9,11 +9,11 @@ import java.util.ArrayList;
  * Holds a transcendental function chain
  */
 public class Function implements Serializable, Comparable<Function> {
-    ArrayList<FunctionTerm> terms;
-    ArrayList<String> signs;
-    String[][] consts;
-    String z_value;
-    String variableCode, oldvariablecode;
+    private ArrayList<FunctionTerm> terms;
+    private ArrayList<String> signs;
+    private String[][] consts;
+    private String z_value;
+    private String variableCode, oldvariablecode;
     public Function(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
         setZ_value(variable);
         setConsts(varconst);
@@ -30,14 +30,14 @@ public class Function implements Serializable, Comparable<Function> {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
     @NotNull
-    public static Function fromString(@NotNull String function, String variableCode, String oldvariablecode) {
-        @NotNull Function poly = new Function();
+    public static Function fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts) {
+        @NotNull Function poly = new Function(null, variableCode, oldvariablecode, consts);
         @NotNull String[] tokens = StringManipulator.split(function, "|");
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
-                poly.terms.add(FunctionTerm.fromString(token.trim(), variableCode, oldvariablecode));
+                poly.terms.add(FunctionTerm.fromString(token.trim(), variableCode, consts, oldvariablecode));
             }
         }
         if (poly.signs.size() == poly.terms.size() - 1 || (!poly.signs.get(0).equals("-"))) {

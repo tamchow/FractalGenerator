@@ -5,11 +5,11 @@ import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
 /**
- * Implements an iterative evaluator for functions described in ComplexOperations,
+ * Implements an iterative evaluator for FUNCTION_DATA described in ComplexOperations,
  * making heavy use of string replacement;
  */
 public class FunctionEvaluator {
-    public static final String[] FUNCTIONS =
+    private static final String[] FUNCTIONS =
             {"exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth"};
     private String[][] constdec;
     private String z_value, oldvalue, variableCode, oldvariablecode;
@@ -63,7 +63,7 @@ public class FunctionEvaluator {
         fe.addConstant(new String[]{p_code, String.valueOf(Math.atan2(x, y))}/*phi*/);
         return fe;
     }
-    public void addConstant(@NotNull String[] constant) {
+    private void addConstant(@NotNull String[] constant) {
         @NotNull String[][] tmpconsts = new String[constdec.length][2];
         for (int i = 0; i < constdec.length; i++) {
             System.arraycopy(constdec[i], 0, tmpconsts[i], 0, tmpconsts.length);
@@ -89,7 +89,7 @@ public class FunctionEvaluator {
     public boolean isAdvancedDegree() {
         return advancedDegree;
     }
-    public void setAdvancedDegree(boolean advancedDegree) {
+    private void setAdvancedDegree(boolean advancedDegree) {
         this.advancedDegree = advancedDegree;
     }
     public String getVariableCode() {
@@ -156,10 +156,10 @@ public class FunctionEvaluator {
     public Complex getDegree(@NotNull Polynomial polynomial) {
         return getDegree(limitedEvaluate(polynomial.toString(), polynomial.countVariableTerms() * 2 + polynomial.countConstantTerms()));
     }
-    public boolean hasConditional(String function) {
+    private boolean hasConditional(String function) {
         return function.contains("?") || function.contains(":");//conditional syntax similar to Java's ternary operator
     }
-    public String processConditional(String function) {
+    private String processConditional(String function) {
         if (hasConditional(function)) {
             while (hasConditional(function)) {
                 String conditionalExpression = function.substring(function.lastIndexOf('['), function.indexOf(']') + 1),
@@ -445,7 +445,7 @@ public class FunctionEvaluator {
         return null;
     }
     @NotNull
-    protected String limitedEvaluate(@NotNull String expr, int depth) {
+    private String limitedEvaluate(@NotNull String expr, int depth) {
         @NotNull String subexpr = substitute(expr, true);
         Complex ztmp;
         int flag = 0, ctr = 0;

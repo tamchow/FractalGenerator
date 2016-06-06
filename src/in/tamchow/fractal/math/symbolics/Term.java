@@ -7,10 +7,10 @@ import java.io.Serializable;
  * Holds one term of a polynomial
  */
 public class Term implements Serializable, Comparable<Term> {
-    public String coefficient;
     public String exponent;
     public String variable;
-    public String constval;
+    private String coefficient;
+    private String constval;
     private boolean constant;
     public Term(String coefficient, String exponent, String variable) {
         setVariable(variable);

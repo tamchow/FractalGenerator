@@ -3,7 +3,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
 /**
- * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility functions.
+ * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility FUNCTION_DATA.
  */
 public final class Complex extends Number implements Serializable, Comparable<Complex>, Cloneable {
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);

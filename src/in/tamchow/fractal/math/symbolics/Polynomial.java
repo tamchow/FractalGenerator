@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * Represents a polynomial and provides standard methods
  */
 public class Polynomial implements Serializable, Comparable<Polynomial> {
-    ArrayList<Term> terms;
-    ArrayList<String> signs;
-    String[][] constdec;
-    String z_value;
-    String variableCode, oldvariablecode;
+    private ArrayList<Term> terms;
+    private ArrayList<String> signs;
+    private String[][] constdec;
+    private String z_value;
+    private String variableCode, oldvariablecode;
     public Polynomial(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
         setZ_value(variable);
         setConstdec(varconst);
@@ -71,7 +71,7 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     public ArrayList<String> getSigns() {
         return signs;
     }
-    public void setSigns(@NotNull ArrayList<String> signs) {
+    private void setSigns(@NotNull ArrayList<String> signs) {
         this.signs.clear();
         this.signs.addAll(signs);
     }

@@ -595,8 +595,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         Complex degree;
         @NotNull String functionderiv = "";
         if (Function.isSpecialFunction(function)) {
-            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode);
-            func.setConsts(constants);
+            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
             function = func.toString();
             degree = func.getDegree();
             functionderiv = func.derivative(1);
@@ -928,8 +927,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         Complex degree;
         @NotNull String functionderiv = "";
         if (Function.isSpecialFunction(function)) {
-            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode);
-            func.setConsts(constants);
+            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
             function = func.toString();
             degree = func.getDegree();
             functionderiv = func.derivative(1);
