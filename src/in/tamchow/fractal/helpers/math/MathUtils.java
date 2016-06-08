@@ -9,7 +9,7 @@ import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
  * Weighted Random Number generator and approximations,prime number calculator
  */
 public final class MathUtils {
-    private static final double ULP = 10E-15;
+    public static final double ULP = 10E-15;
     private MathUtils() {
     }
     public static String MDAtoString(Object[][] items) {

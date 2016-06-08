@@ -5,6 +5,7 @@ import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
 
+import static in.tamchow.fractal.helpers.math.MathUtils.ULP;
 import static in.tamchow.fractal.helpers.math.MathUtils.boundsProtected;
 import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 import static in.tamchow.fractal.math.complex.ComplexOperations.divide;
@@ -21,7 +22,7 @@ public class Colorizer implements Serializable {
     public int[] palette;
     private int basecolor, step, color_density, num_colors, byParts;
     private Complex smoothing_base;
-    private double periodicity, phase_shift, multiplier_threshold;
+    private double periodicity, phase_shift, multiplier_threshold = 1.0;
     private Colors.PALETTE palette_type;
     private boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled;
     private boolean colors_corrected, already_cyclized;
@@ -426,7 +427,7 @@ public class Colorizer implements Serializable {
         int color_density_backup = color_density;
         color_density = num_colors;
         for (int i = 0; i < controls.length && i < control_points.length; i++) {
-            controls[i] = createIndex(control_points[i], 0, 1, 1);
+            controls[i] = createIndex(control_points[i], 0, 1);
         }
         color_density = color_density_backup;
         int c = 0;
@@ -457,26 +458,21 @@ public class Colorizer implements Serializable {
             cyclizePalette();
         }
     }
-    public int createIndex(double val, double min, double max, double zoom) {
-        /*
-        val *= zoom;
-        max *= zoom;
-        min *= zoom;
-        */
-        double resolution = 1.0 / num_colors, threshold = 1.0 / zoom;
-        if (multiplier_threshold > 0 && multiplier_threshold <= resolution) {
-            if (abs(max - min) >= resolution && abs(multiplier_threshold * resolution - val) <= threshold) {
-                val /= multiplier_threshold;
-            }
+    public int createIndex(double val, double min, double max) {
+        double resolution = 1.0 / num_colors, adjustedResolution = multiplier_threshold * resolution, idx;
+        if (((min <= ULP || abs(max - 1 - min) <= ULP || abs(max - min) <= ULP) && logIndex) || (!logIndex)) {
+            idx = transform(abs((val - min) / (max - min)));
+        } else {
+            @NotNull Complex exp = new Complex(val / min);
+            @NotNull Complex base = new Complex(max / min);
+            idx = transform(divide(principallog(exp), principallog(base)).modulus());
         }
-        if (((min == 0 || (max - min) == 1 || (max - min) == 0) && logIndex) || (!logIndex)) {
-            return (int) ((transform(abs((val - min) / (max - min))) * color_density) % num_colors);
+        idx = isNaN(idx) ? 0.0 : (isInfinite(idx) ? 1.0 : idx);
+        idx *= color_density;
+        if (idx < adjustedResolution) {
+            idx /= multiplier_threshold;
         }
-        @NotNull Complex exp = new Complex(val / min, 0);
-        @NotNull Complex base = new Complex(max / min, 0);
-        double idx = divide(principallog(exp), principallog(base)).modulus();
-        idx = isNaN(idx) ? 0 : (isInfinite(idx) ? 1 : idx);
-        return (int) (transform(idx) * color_density) % num_colors;
+        return ((int) idx) % num_colors;
     }
     public int indexOfColor(int color) {
         for (int i = 0; i < palette.length; ++i) {
