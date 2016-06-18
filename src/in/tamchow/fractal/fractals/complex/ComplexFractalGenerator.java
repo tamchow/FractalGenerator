@@ -5,7 +5,6 @@ import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalInitParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
-import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
@@ -112,14 +111,6 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             end_y = (iy + 1) * y_dist;
         }
         return new int[]{start_x, end_x, start_y, end_y};
-    }
-    @Override
-    public void doZooms(@NotNull ZoomConfig zoomConfig) {
-        if (zoomConfig.zooms != null) {
-            for (@NotNull ZoomParams zoom : zoomConfig.zooms) {
-                zoom(zoom);
-            }
-        }
     }
     public PixelContainer getPlane() {
         return getArgand();
@@ -1886,19 +1877,11 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         setMode((mode == Mode.BUDDHABROT || mode == Mode.RUDYBROT) ? Mode.JULIABROT : ((mode == Mode.MANDELBROT || mode == Mode.RUDY) ? Mode.JULIA : mode));
     }
     public void zoom(@NotNull Matrix centre_offset, double level) {
-        if (params.zoomConfig.zooms == null) {
-            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(centre_offset, level)});
-        } else {
-            params.zoomConfig.addZoom(new ZoomParams(centre_offset, level));
-        }
+        params.zoomConfig.addZoom(new ZoomParams(centre_offset, level));
         zoom(new Complex(centre_offset.get(0, 0), centre_offset.get(1, 0)), level);
     }
     public void zoom(@NotNull Complex centre_offset, double level) {
-        if (params.zoomConfig.zooms == null) {
-            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(complexToMatrix(centre_offset), level)});
-        } else {
-            params.zoomConfig.addZoom(new ZoomParams(complexToMatrix(centre_offset), level));
-        }
+        params.zoomConfig.addZoom(new ZoomParams(complexToMatrix(centre_offset), level));
         setCentre_offset(centre_offset);
         setZoom_factor(level);
         setScale(base_precision * pow(zoom, zoom_factor));
@@ -1950,11 +1933,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         resetCentre();
     }
     public void zoom(int cx, int cy, double level) {
-        if (params.zoomConfig.zooms == null) {
-            params.zoomConfig.setZooms(new ZoomParams[]{new ZoomParams(cx, cy, level)});
-        } else {
-            params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
-        }
+        params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
         cx = boundsProtected(cx, argand.getWidth());
         cy = boundsProtected(cy, argand.getHeight());
         //setCenter_x(cx);setCenter_y(cy);

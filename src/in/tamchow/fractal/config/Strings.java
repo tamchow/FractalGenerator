@@ -3,7 +3,7 @@ package in.tamchow.fractal.config;
  * Holds commonly-used strings in configuration files
  */
 public class Strings {
-    public static final String COMMENT = "#";
+    public static final String COMMENT = "#", CONFIG_SEPARATOR = " ";
     private Strings() {
     }
     public static class DECLARATIONS {
@@ -14,12 +14,9 @@ public class Strings {
         }
     }
     public static class BLOCKS {
-        public static final String GLOBALS = "[Globals]", FRACTALS = "[Fractals]", IMAGE = "[ImageConfig]", COMPLEX = "[ComplexFractalConfig]",
+        public static final String IMAGE = "[ImageConfig]", COMPLEX = "[ComplexFractalConfig]",
                 INIT = "[InitConfig]", RUN = "[RunConfig]", COMPLEXBROT = "[ComplexBrotFractalConfig]", IFS = "[IFSFractalConfig]",
-                LS = "[LSFractalConfig]", ZOOMS = "[Zooms]",
-                ENDGLOBALS = "[EndGlobals]", ENDFRACTALS = "[EndFractals]", ENDIMAGE = "[EndImageConfig]", ENDCOMPLEX = "[EndComplexFractalConfig]",
-                ENDINIT = "[EndInitConfig]", ENDRUN = "[EndRunConfig]", ENDCOMPLEXBROT = "[EndComplexBrotFractalConfig]",
-                ENDIFS = "[EndIFSFractalConfig]", ENDLS = "[EndLSFractalConfig]", ENDZOOMS = "[EndZooms]";
+                LS = "[LSFractalConfig]", ZOOMS = "[Zooms]", ENDINIT = "[EndInitConfig]", ENDRUN = "[EndRunConfig]", ENDZOOMS = "[EndZooms]";
         private BLOCKS() {
         }
     }

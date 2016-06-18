@@ -2,7 +2,6 @@ package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
-import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
@@ -63,14 +62,6 @@ public class IFSGenerator extends PixelFractalGenerator {
         }
     }
     @Override
-    public void doZooms(@NotNull ZoomConfig zoomConfig) {
-        if (zoomConfig.zooms != null) {
-            for (@NotNull ZoomParams zoom : zoomConfig.zooms) {
-                zoom(zoom);
-            }
-        }
-    }
-    @Override
     public int getConfiguredHeight() {
         return params.getHeight();
     }
@@ -124,11 +115,6 @@ public class IFSGenerator extends PixelFractalGenerator {
             populatePoints();
         }
         animation = new Animation(params.getFps());
-        if (params.zoomConfig.zooms != null) {
-            for (@NotNull ZoomParams zoom : params.zoomConfig.zooms) {
-                zoom(zoom);
-            }
-        }
         weightDistribution = new double[getImageHeight()][getImageWidth()];
         silencer = params.useThreadedGenerator();
     }

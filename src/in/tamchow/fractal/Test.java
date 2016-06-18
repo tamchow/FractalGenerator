@@ -1,8 +1,8 @@
 package in.tamchow.fractal;
 import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.config.BatchContainer;
 import in.tamchow.fractal.config.ConfigReader;
-import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalInitParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalRunParams;
@@ -48,7 +48,7 @@ public class Test {
         double skew = 0 * Math.PI;
         //func = func2;
         boolean def = (args.length == 0);
-        @Nullable ComplexFractalConfig fccfg = new ComplexFractalConfig(0, 0, 0);
+        @Nullable BatchContainer<ComplexFractalParams> fccfg = new BatchContainer<>();
         if (!def) {
             try {
                 fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
@@ -71,7 +71,7 @@ public class Test {
             }
             jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
         } else {
-            jgen = new ComplexFractalGenerator(fccfg.getParams()[0], new DesktopProgressPublisher());
+            jgen = new ComplexFractalGenerator(fccfg.firstItem(), new DesktopProgressPublisher());
         }
         //jgen.zoom(new Complex(0.27969303810093984, -0.00838423653868096), 12);
         boolean anti = false, clamp = true;

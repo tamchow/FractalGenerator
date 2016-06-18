@@ -1,8 +1,10 @@
 package in.tamchow.fractal.platform_tools;
+import in.tamchow.fractal.config.BatchContainer;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.Publisher;
-import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalConfig;
-import in.tamchow.fractal.config.imageconfig.ImageConfig;
+import in.tamchow.fractal.config.Strings;
+import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
+import in.tamchow.fractal.config.imageconfig.ImageParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
 import in.tamchow.fractal.graphicsutilities.containers.Animation;
@@ -23,41 +25,39 @@ import java.io.File;
  * Swing app to display images &amp; complex number fractals
  */
 public class ImageDisplay extends JPanel implements Runnable, KeyListener, MouseListener, Publisher {
-    BufferedImage[] img;
-    BufferedImage todraw;
-    JFrame parent;
-    int width, height, ctr, subctr;
-    ImageConfig imgconf;
-    ComplexFractalConfig fracconf;
-    ComplexFractalGenerator current;
+    private BufferedImage[] img;
+    private BufferedImage todraw;
+    private JFrame parent;
+    private int width, height, ctr, subctr;
+    private ComplexFractalGenerator current;
     private boolean running, fractal_mode, zoomedin;
     private double zoomin;
-    public ImageDisplay(Config config, int width, int height) {
+    private BatchContainer<? extends Config> workConfig;
+    public ImageDisplay(BatchContainer<? extends Config> config, int width, int height) {
         initDisplay(config, width, height);
     }
-    public ImageDisplay(Config config) {
-        if (config instanceof ImageConfig) {
+    public ImageDisplay(BatchContainer<? extends Config> config) {
+        if (config.getContainedType().equals(Strings.BLOCKS.IMAGE)) {
             int width, height;
-            if (((ImageConfig) config).customDimensions()) {
-                width = ((ImageConfig) config).getWidth();
-                height = ((ImageConfig) config).getHeight();
+            if (((ImageParams) config.firstItem()).customDimensions()) {
+                width = config.firstItem().getWidth();
+                height = config.firstItem().getHeight();
             } else {
-                if (((ImageConfig) config).getParams()[0].image.getPath() == null) {
-                    width = ((ImageConfig) config).getParams()[0].image.getWidth();
-                    height = ((ImageConfig) config).getParams()[0].image.getHeight();
+                if (config.firstItem().getPath() == null || config.firstItem().getPath().isEmpty()) {
+                    width = config.firstItem().getWidth();
+                    height = config.firstItem().getHeight();
                 } else {
                     width = -1;
                     height = -1;
                 }
             }
             initDisplay(config, width, height);
-        } else if (config instanceof ComplexFractalConfig) {
-            initDisplay(config,
-                    ((ComplexFractalConfig) config).getParams()[0].initParams.width,
-                    ((ComplexFractalConfig) config).getParams()[0].initParams.height);
+        } else if (config.getContainedType().equals(Strings.BLOCKS.COMPLEX)) {
+            initDisplay(config, config.firstItem().getWidth(), config.firstItem().getHeight());
         }
+        workConfig = config;
     }
-    public static void show(final Config config, final String title) {
+    public static void show(final BatchContainer<? extends Config> config, final String title) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -81,11 +81,10 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             }
         });
     }
-    private void initDisplay(Config config, int width, int height) {
-        if (config instanceof ImageConfig) {
+    private void initDisplay(BatchContainer<? extends Config> config, int width, int height) {
+        if (config.getContainedType().equals(Strings.BLOCKS.IMAGE)) {
             try {
-                @NotNull ImageConfig imageConfig = (ImageConfig) config;
-                BufferedImage first = ImageIO.read(new File(imageConfig.getParams()[0].image.getPath()));
+                BufferedImage first = ImageIO.read(new File(config.firstItem().getPath()));
                 if (width == -1) {
                     width = first.getWidth();
                 }
@@ -94,15 +93,14 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 }
                 this.width = width;
                 this.height = height;
-                imgconf = imageConfig;
-                img = new BufferedImage[imageConfig.getParams().length];
+                img = new BufferedImage[config.size()];
                 ctr = 0;
                 subctr = 0;
                 for (int i = 1; i < img.length; ++i) {
-                    if (imageConfig.getParams()[i].image.getPixdata() == null) {
-                        img[i] = ImageIO.read(new File(imageConfig.getParams()[i].image.getPath()));
+                    if (((ImageParams) config.getItem(i)).getImage().getPixdata() == null) {
+                        img[i] = ImageIO.read(new File(config.getItem(i).getPath()));
                     } else {
-                        img[i] = ImageConverter.toImage(imageConfig.getParams()[i].image);
+                        img[i] = ImageConverter.toImage(((ImageParams) config.getItem(i)).getImage());
                     }
                     BufferedImage tmp = getGraphicsConfiguration().createCompatibleImage(
                             img[i].getWidth(), img[i].getHeight(), img[i].getTransparency());
@@ -118,22 +116,21 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
             } catch (Exception e) {
                 System.err.print("Image read error: " + e.getMessage());
             }
-        } else if (config instanceof ComplexFractalConfig) {
+        } else if (config.getContainedType().equals(Strings.BLOCKS.COMPLEX)) {
             try {
-                @NotNull ComplexFractalConfig complexFractalConfig = (ComplexFractalConfig) config;
-                this.width = complexFractalConfig.getParams()[0].initParams.width;
-                this.height = complexFractalConfig.getParams()[0].initParams.height;
+                this.width = config.firstItem().getWidth();
+                this.height = config.firstItem().getHeight();
                 todraw = getGraphicsConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-                fracconf = complexFractalConfig;
-                img = new BufferedImage[complexFractalConfig.getParams().length];
+                img = new BufferedImage[config.size()];
                 ctr = 0;
                 subctr = 0;
                 zoomin = 1.0;
                 fractal_mode = true;
             } catch (Exception e) {
-                System.err.print("Complex Fractal Configuration read error: " + e.getMessage());
+                System.err.print("Configuration read error: " + e.getMessage());
             }
         }
+        workConfig = config;
     }
     private BufferedImage scale(BufferedImage bufferedImage, int width, int height) {
         /*Graphics2D graphics2d=bufferedImage.createGraphics();
@@ -234,7 +231,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public void run() {
         for (int i = ctr; i < img.length; ) {
             if (!fractal_mode) {
-                if (imgconf.getParams()[i].transition == TransitionTypes.NONE) {
+                if (((ImageParams) workConfig.getItem(i)).getTransition() == TransitionTypes.NONE) {
                     todraw = img[i];
                     paint(this.getGraphics());
                     if (!running) {
@@ -246,9 +243,9 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                     if (i == img.length - 1) {
                         k = 0;
                     }
-                    @NotNull Transition transition = new Transition(imgconf.getParams()[i].transition,
+                    @NotNull Transition transition = new Transition(((ImageParams) workConfig.getItem(i)).getTransition(),
                             ImageConverter.toPixelContainer(img[i]), ImageConverter.toPixelContainer(img[k]),
-                            imgconf.getParams()[i].getFps(), imgconf.getParams()[i].getTranstime());
+                            workConfig.getItem(i).getFps(), ((ImageParams) workConfig.getItem(i)).getTranstime());
                     transition.doTransition();
                     @NotNull Animation anim = transition.getFrames();
                     for (int j = subctr; j < anim.getNumFrames(); j++) {
@@ -262,22 +259,22 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                             break;
                         }
                         try {
-                            Thread.sleep(1000 / imgconf.getParams()[i].getFps());
+                            Thread.sleep(1000 / workConfig.getItem(i).getFps());
                         } catch (InterruptedException ignored) {
                         }
                     }
                 }
                 try {
-                    Thread.sleep(1000 * imgconf.getParams()[i].getWait());
+                    Thread.sleep(1000 * workConfig.getItem(i).getWait());
                 } catch (InterruptedException ignored) {
                 }
             } else {
                 if (!zoomedin) {
-                    current = new ComplexFractalGenerator(fracconf.getParams()[i], this);
+                    current = new ComplexFractalGenerator(((ComplexFractalParams) workConfig.getItem(i)), this);
                 }
-                if (fracconf.getParams()[i].useThreadedGenerator()) {
+                if (((ComplexFractalParams) workConfig.getItem(i)).useThreadedGenerator()) {
                     @NotNull ThreadedComplexFractalGenerator threaded =
-                            new ThreadedComplexFractalGenerator(current, fracconf.getParams()[0]);
+                            new ThreadedComplexFractalGenerator(current, ((ComplexFractalParams) workConfig.getItem(i)));
                     threaded.generate();
                 } else {
                     current.generate();
@@ -288,7 +285,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
                 repaint(getGraphics().getClipBounds());
                 //paint(getGraphics());
                 try {
-                    Thread.sleep(1000 * fracconf.getWait());
+                    Thread.sleep(1000 * workConfig.getItem(i).getWait());
                 } catch (InterruptedException ignored) {
                 }
             }

@@ -1,4 +1,6 @@
 package in.tamchow.fractal.config.fractalconfig.IFS;
+import in.tamchow.fractal.config.Config;
+import in.tamchow.fractal.config.Strings;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
@@ -6,34 +8,27 @@ import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.matrix.Matrix;
 
-import java.io.Serializable;
-
 import static in.tamchow.fractal.config.Strings.DECLARATIONS.*;
 /**
  * Holds Parameters for an IFS fractal
  */
-public class IFSFractalParams implements Serializable {
-    public static final String VARIABLE_CODES = "x:y:r:t:p";
+public class IFSFractalParams extends Config {
+    private static final String VARIABLE_CODES = "x:y:r:t:p";
     public ZoomConfig zoomConfig;
     public PixelContainer.PostProcessMode postProcessMode;
-    public String path;
-    Matrix[] transforms, translators;
-    boolean ifsMode;
-    String x_code, y_code, r_code, t_code, p_code;
-    String[] yfunctions, xfunctions;
-    double[] weights;
-    int[] colors;
-    int depth;
-    int width;
-    int height;
-    int fps;
-    int frameskip;
-    int threads;
-    double zoom;
-    double zoomlevel;
-    double base_precision;
-    double skew;
-    private IFSFractalParams() {
+    private Matrix[] transforms, translators;
+    private boolean ifsMode;
+    private String x_code, r_code, y_code, t_code, p_code;
+    private String[] yfunctions, xfunctions;
+    private double[] weights;
+    private int[] colors;
+    private int depth, fps, frameskip, threads;
+    private double zoom, zoomlevel, base_precision, skew;
+    {
+        setName(Strings.BLOCKS.IFS);
+    }
+    public IFSFractalParams() {
+        super();
         setDepth(1);
         setThreads(1);
         @NotNull String[] variableCodes = StringManipulator.split(VARIABLE_CODES, ":");
@@ -47,6 +42,7 @@ public class IFSFractalParams implements Serializable {
         setPostProcessMode(PixelContainer.PostProcessMode.NONE);
     }
     public IFSFractalParams(@NotNull IFSFractalParams config) {
+        super(config.height, config.width, config.path);
         if (!(config.getColors().length == config.getWeights().length && config.getTransforms().length == config.getTranslators().length)) {
             throw new IllegalArgumentException("Configuration object is not properly defined");
         }
@@ -66,60 +62,58 @@ public class IFSFractalParams implements Serializable {
         setR_code(config.getR_code());
         setT_code(config.getT_code());
         setP_code(config.getP_code());
-        if (config.zoomConfig.zooms != null) {
+        if (config.zoomConfig.hasZooms()) {
             this.zoomConfig = new ZoomConfig(config.zoomConfig);
         }
         setPath(config.getPath());
         setPostProcessMode(config.getPostProcessMode());
     }
-    @NotNull
-    public static IFSFractalParams fromString(@NotNull String[] input) {
-        @NotNull IFSFractalParams params = new IFSFractalParams(); //params.setIfsMode(Boolean.valueOf(input[0]));
+    @Override
+    public void fromString(@NotNull String[] input) {
         @NotNull String[] ifsData = StringManipulator.split(input[0], ":");
         if (ifsData.length == 1) {
-            params.setIfsMode(Boolean.valueOf(input[0]));
+            setIfsMode(Boolean.valueOf(ifsData[0]));
         } else {
-            params.setIfsMode(Boolean.valueOf(ifsData[0]));
-            params.setX_code(ifsData[1]);
-            params.setY_code(ifsData[2]);
-            params.setR_code(ifsData[3]);
-            params.setT_code(ifsData[4]);
-            params.setP_code(ifsData[5]);
+            setIfsMode(Boolean.valueOf(ifsData[0]));
+            setX_code(ifsData[1]);
+            setY_code(ifsData[2]);
+            setR_code(ifsData[3]);
+            setT_code(ifsData[4]);
+            setP_code(ifsData[5]);
         }
-        params.setWidth(Integer.valueOf(input[1]));
-        params.setHeight(Integer.valueOf(input[2]));
-        params.setBase_precision(Double.valueOf(input[3]));
-        params.setZoom(Double.valueOf(input[4]));
-        params.setZoomlevel(Double.valueOf(input[5]));
-        params.setDepth(Integer.valueOf(input[6]));
-        params.setFps(Integer.valueOf(input[7]));
-        params.setSkew(Double.valueOf(input[8]));
-        if (params.isIfsMode()) {
-            params.xfunctions = new String[input.length - 9];
-            params.yfunctions = new String[input.length - 9];
-            params.colors = new int[input.length - 9];
-            params.weights = new double[input.length - 9];
+        setWidth(Integer.valueOf(input[1]));
+        setHeight(Integer.valueOf(input[2]));
+        setBase_precision(Double.valueOf(input[3]));
+        setZoom(Double.valueOf(input[4]));
+        setZoomlevel(Double.valueOf(input[5]));
+        setDepth(Integer.valueOf(input[6]));
+        setFps(Integer.valueOf(input[7]));
+        setSkew(Double.valueOf(input[8]));
+        if (isIfsMode()) {
+            xfunctions = new String[input.length - 9];
+            yfunctions = new String[input.length - 9];
+            colors = new int[input.length - 9];
+            weights = new double[input.length - 9];
             for (int i = 9; i < input.length; i++) {
                 @NotNull String[] parts = StringManipulator.split(input[i], " ");
-                params.xfunctions[i] = parts[0];
-                params.yfunctions[i] = parts[1];
-                params.weights[i] = Double.valueOf(parts[2]);
-                params.colors[i] = Integer.valueOf(parts[3], 16);
+                xfunctions[i] = parts[0];
+                yfunctions[i] = parts[1];
+                weights[i] = Double.valueOf(parts[2]);
+                colors[i] = Integer.valueOf(parts[3], 16);
             }
         } else {
-            params.transforms = new Matrix[input.length - 9];
-            params.translators = new Matrix[input.length - 9];
-            params.colors = new int[input.length - 9];
-            params.weights = new double[input.length - 9];
+            transforms = new Matrix[input.length - 9];
+            translators = new Matrix[input.length - 9];
+            colors = new int[input.length - 9];
+            weights = new double[input.length - 9];
             for (int i = 9; i < input.length; i++) {
                 @NotNull String[] parts = StringManipulator.split(input[i], " ");
-                params.transforms[i] = new Matrix(parts[0]);
-                params.translators[i] = new Matrix(parts[1]);
-                params.weights[i] = Double.valueOf(parts[2]);
-                params.colors[i] = Integer.valueOf(parts[3], 16);
+                transforms[i] = new Matrix(parts[0]);
+                translators[i] = new Matrix(parts[1]);
+                weights[i] = Double.valueOf(parts[2]);
+                colors[i] = Integer.valueOf(parts[3], 16);
             }
         }
-        return params;
     }
     public String getX_code() {
         return x_code;
@@ -156,12 +150,6 @@ public class IFSFractalParams implements Serializable {
     }
     public void setSkew(double skew) {
         this.skew = skew;
-    }
-    public String getPath() {
-        return path;
-    }
-    public void setPath(String path) {
-        this.path = path;
     }
     public int getFrameskip() {
         return frameskip;
@@ -206,12 +194,6 @@ public class IFSFractalParams implements Serializable {
     public void setColors(@NotNull int[] colors) {
         this.colors = new int[colors.length];
         System.arraycopy(colors, 0, this.colors, 0, this.colors.length);
-    }
-    public int getFps() {
-        return fps;
-    }
-    public void setFps(int fps) {
-        this.fps = fps;
     }
     public int getThreads() {
         return threads;
@@ -269,18 +251,6 @@ public class IFSFractalParams implements Serializable {
     }
     public void setZoomConfig(@NotNull ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);
-    }
-    public int getHeight() {
-        return height;
-    }
-    public void setHeight(int height) {
-        this.height = height;
-    }
-    public int getWidth() {
-        return width;
-    }
-    public void setWidth(int width) {
-        this.width = width;
     }
     public double getZoom() {
         return zoom;

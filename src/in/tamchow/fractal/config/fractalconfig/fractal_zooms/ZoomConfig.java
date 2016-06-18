@@ -2,53 +2,65 @@ package in.tamchow.fractal.config.fractalconfig.fractal_zooms;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import static in.tamchow.fractal.config.Strings.BLOCKS.ENDZOOMS;
 import static in.tamchow.fractal.config.Strings.BLOCKS.ZOOMS;
 /**
  * Holds a set of fractal zooms
  */
-public class ZoomConfig implements Serializable {
-    public ZoomParams[] zooms;
+public class ZoomConfig implements Serializable, Iterable<ZoomParams> {
+    private List<ZoomParams> zooms;
     public ZoomConfig() {
+        zooms = new ArrayList<>();
     }
     public ZoomConfig(@NotNull ZoomConfig old) {
+        this();
         setZooms(old.zooms);
     }
     @NotNull
-    public static ZoomConfig fromString(@NotNull String[] params) {
+    public static ZoomConfig fromString(@NotNull List<String> params) {
         @NotNull ZoomConfig zoom = new ZoomConfig();
-        zoom.zooms = new ZoomParams[params.length];
-        for (int i = 0; i < zoom.zooms.length; i++) {
-            zoom.zooms[i] = ZoomParams.fromString(params[i]);
+        for (String param : params) {
+            zoom.zooms.add(ZoomParams.fromString(param));
         }
         return zoom;
     }
+    public boolean hasZooms() {
+        return zooms != null && zooms.size() > 0;
+    }
     public void setZooms(@NotNull ZoomParams[] zooms) {
-        this.zooms = new ZoomParams[zooms.length];
-        for (int i = 0; i < zooms.length; i++) {
-            this.zooms[i] = new ZoomParams(zooms[i]);
-        }
+        setZooms(new ArrayList<>(Arrays.asList(zooms)));
     }
     @NotNull
     @Override
     public String toString() {
-        @NotNull String representation = ZOOMS;
+        @NotNull String representation = ZOOMS + "\n";
         for (ZoomParams zoom : zooms) {
-            representation += "\n" + zoom;
+            representation += zoom + "\n";
         }
-        representation += "\n" + ENDZOOMS;
-        return representation;
+        return representation + ENDZOOMS;
     }
     public void addZoom(ZoomParams zoom) {
-        @NotNull ZoomParams[] tmp = new ZoomParams[this.zooms.length];
-        for (int i = 0; i < tmp.length; i++) {
-            tmp[i] = new ZoomParams(this.zooms[i]);
+        if (this.zooms == null) {
+            this.zooms = new ArrayList<>();
         }
-        this.zooms = new ZoomParams[tmp.length + 1];
-        for (int i = 0; i < tmp.length; i++) {
-            this.zooms[i] = new ZoomParams(tmp[i]);
+        zooms.add(zoom);
+    }
+    @Override
+    public Iterator<ZoomParams> iterator() {
+        return zooms.listIterator();
+    }
+    public List<ZoomParams> getZooms() {
+        return zooms;
+    }
+    public void setZooms(@NotNull List<ZoomParams> zooms) {
+        if (this.zooms == null) {
+            this.zooms = new ArrayList<>(zooms.size());
         }
-        this.zooms[tmp.length] = zoom;
+        this.zooms.addAll(zooms);
     }
 }
