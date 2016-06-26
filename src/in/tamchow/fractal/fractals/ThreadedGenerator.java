@@ -20,6 +20,12 @@ public abstract class ThreadedGenerator {
             lock.notifyAll();
             finalizeGeneration();
         }
+        joinAll();
+    }
+    public void joinAll() throws InterruptedException {
+        for (SlaveRunner runner : threads) {
+            runner.join();
+        }
     }
     public void resume() throws InterruptedException {
         synchronized (lock) {
@@ -55,6 +61,9 @@ public abstract class ThreadedGenerator {
                 executor = new Thread(this);
             }
             executor.start();
+        }
+        public void join() throws InterruptedException {
+            executor.join();
         }
         public abstract void pause() throws InterruptedException;
         public abstract void resume() throws InterruptedException;

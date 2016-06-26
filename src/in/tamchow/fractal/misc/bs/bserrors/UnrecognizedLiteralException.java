@@ -5,30 +5,27 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
  * BS Unrecognized Literal Exception
  */
 public class UnrecognizedLiteralException extends RuntimeException {
-    String message;
-    @Nullable
-    Throwable cause;
+    private static final String DEFAULT_MESSAGE = "Error: Unrecognized Literal";
+    public UnrecognizedLiteralException() {
+        this(DEFAULT_MESSAGE);
+    }
     public UnrecognizedLiteralException(String message) {
-        this.message = message;
-        cause = null;
+        this(null, message);
     }
-    public UnrecognizedLiteralException(String message, Throwable cause) {
-        this.message = message;
-        this.cause = cause;
+    public UnrecognizedLiteralException(@Nullable Throwable cause) {
+        this(cause, DEFAULT_MESSAGE);
     }
-    @NotNull
-    @Override
-    public String toString() {
-        return getMessage();
+    public UnrecognizedLiteralException(@Nullable Throwable cause, String message) {
+        super(message, cause);
     }
     @NotNull
     @Override
     public String getMessage() {
-        return message + ((cause == null) ? "" : cause.getMessage());
+        return super.getMessage() + ((getCause() == null) ? "" : getCause().getMessage());
     }
     @NotNull
     @Override
     public String getLocalizedMessage() {
-        return message + ((cause == null) ? "" : cause.getLocalizedMessage());
+        return super.getLocalizedMessage() + ((getCause() == null) ? "" : getCause().getLocalizedMessage());
     }
 }

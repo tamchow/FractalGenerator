@@ -5,30 +5,27 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
  * BS interpreter's error on "HALT" signal by code ('\' in BS code)
  */
 public class HaltError extends Error {
-    String message;
-    @Nullable
-    Throwable cause;
+    private static final String DEFAULT_MESSAGE = "Error: Halt Signalled";
+    public HaltError() {
+        this(DEFAULT_MESSAGE);
+    }
     public HaltError(String message) {
-        this.message = message;
-        cause = null;
+        this(null, message);
     }
-    public HaltError(String message, Throwable cause) {
-        this.message = message;
-        this.cause = cause;
+    public HaltError(@Nullable Throwable cause) {
+        this(cause, DEFAULT_MESSAGE);
     }
-    @NotNull
-    @Override
-    public String toString() {
-        return getMessage();
+    public HaltError(@Nullable Throwable cause, String message) {
+        super(message, cause);
     }
     @NotNull
     @Override
     public String getMessage() {
-        return message + ((cause == null) ? "" : cause.getMessage());
+        return super.getMessage() + ((getCause() == null) ? "" : getCause().getMessage());
     }
     @NotNull
     @Override
     public String getLocalizedMessage() {
-        return message + ((cause == null) ? "" : cause.getLocalizedMessage());
+        return super.getLocalizedMessage() + ((getCause() == null) ? "" : getCause().getLocalizedMessage());
     }
 }

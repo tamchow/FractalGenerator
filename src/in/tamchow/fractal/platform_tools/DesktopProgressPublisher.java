@@ -10,7 +10,7 @@ public class DesktopProgressPublisher implements Publisher {
         System.out.println(message);
     }
     @Override
-    public void publish(@NotNull String message, double progress, int data, Object... args) {
+    public synchronized void publish(@NotNull String message, double progress, int data, Object... args) {
         System.out.format(message, args);
     }
 }

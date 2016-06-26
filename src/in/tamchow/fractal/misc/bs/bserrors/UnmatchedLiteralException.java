@@ -5,30 +5,27 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
  * BS unmatched literal exception
  */
 public class UnmatchedLiteralException extends RuntimeException {
-    String message;
-    @Nullable
-    Throwable cause;
+    private static final String DEFAULT_MESSAGE = "Error: Unmatched Literal";
+    public UnmatchedLiteralException() {
+        this(DEFAULT_MESSAGE);
+    }
     public UnmatchedLiteralException(String message) {
-        this.message = message;
-        cause = null;
+        this(null, message);
     }
-    public UnmatchedLiteralException(String message, Throwable cause) {
-        this.message = message;
-        this.cause = cause;
+    public UnmatchedLiteralException(@Nullable Throwable cause) {
+        this(cause, DEFAULT_MESSAGE);
     }
-    @NotNull
-    @Override
-    public String toString() {
-        return getMessage();
+    public UnmatchedLiteralException(@Nullable Throwable cause, String message) {
+        super(message, cause);
     }
     @NotNull
     @Override
     public String getMessage() {
-        return message + ((cause == null) ? "" : cause.getMessage());
+        return super.getMessage() + ((getCause() == null) ? "" : getCause().getMessage());
     }
     @NotNull
     @Override
     public String getLocalizedMessage() {
-        return message + ((cause == null) ? "" : cause.getLocalizedMessage());
+        return super.getLocalizedMessage() + ((getCause() == null) ? "" : getCause().getLocalizedMessage());
     }
 }
