@@ -23,8 +23,10 @@ public abstract class ThreadedGenerator {
         joinAll();
     }
     public void joinAll() throws InterruptedException {
-        for (SlaveRunner runner : threads) {
-            runner.join();
+        if (threads != null) {
+            for (SlaveRunner runner : threads) {
+                runner.join();
+            }
         }
     }
     public void resume() throws InterruptedException {

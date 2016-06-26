@@ -46,7 +46,7 @@ public class Test {
         @NotNull Complex trap = new Complex(1E-13);
         int x_t = 4, y_t = 2, xppp = 10, yppp = 10;
         double skew = 0 * Math.PI;
-        //func = func2;
+        func = func2;
         boolean def = (args.length == 0);
         @Nullable BatchContainer<ComplexFractalParams> fccfg = new BatchContainer<>();
         if (!def) {
