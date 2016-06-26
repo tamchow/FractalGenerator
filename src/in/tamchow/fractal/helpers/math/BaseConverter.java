@@ -8,14 +8,16 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * @version 1.2
  */
 public final class BaseConverter {
-    public static final int RESTRICTED_CHARS_COUNT = 84, MAX_LOOKUP_LENGTH = Character.MAX_VALUE - RESTRICTED_CHARS_COUNT;
-    protected static final String negativeBaseErrorMessage = "Negative or zero base values are illegal - supplied bases were %d & %d.", invalidInputNumberErrorMessage = "The supplied number (%s) for base conversion is invalid.", tooLargeBaseForLookupErrorMessage = "Not enough available characters for substitution. Number of available characters is %d , minimum required number is %d";
+    private static final int RESTRICTED_CHARS_COUNT = 84, MAX_LOOKUP_LENGTH = Character.MAX_VALUE - RESTRICTED_CHARS_COUNT;
+    private static final String negativeBaseErrorMessage = "Negative or zero base values are illegal - supplied bases were %d & %d.", invalidInputNumberErrorMessage = "The supplied number (%s) for base conversion is invalid.", tooLargeBaseForLookupErrorMessage = "Not enough available characters for substitution. Number of available characters is %d , minimum required number is %d";
     @NotNull
     private static String lookup = "0123456789ABCDEFGHIJKLMNOPQRSTWXYZabcdefghijklmnopqrstwxyz+/=,?!;:\"'^`~|\\@#$%&*_<>(){}";
     private BaseConverter() {
     }
     private static void updateLookup(int base) {
-        if (base > MAX_LOOKUP_LENGTH) {//Substitution and digit lookup may be impossible, so we we throw an exception here
+        if (base < lookup.length()) {
+            return;
+        } else if (base > MAX_LOOKUP_LENGTH) {//Substitution and digit lookup may be impossible, so we we throw an exception here
             throw new IllegalArgumentException(String.format(tooLargeBaseForLookupErrorMessage, lookup.length(), base));
         }
         int charsToAdd = base - lookup.length();
