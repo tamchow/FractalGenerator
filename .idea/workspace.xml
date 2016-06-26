@@ -10,7 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Added new misc package for maths stuff">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/mathstuff/MathStuff.java" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/BatchContainer.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Config.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/ConfigWriter.class" afterPath="" />
@@ -22,7 +21,6 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$2.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1480,14 +1478,7 @@
       <workItem from="1466321465668" duration="3221000" />
       <workItem from="1466424870937" duration="205000" />
       <workItem from="1466690154443" duration="399000" />
-      <workItem from="1466930089089" duration="365000" />
-    </task>
-    <task id="LOCAL-00199" summary="Code Restructuring&#10;">
-      <created>1460272921887</created>
-      <option name="number" value="00199" />
-      <option name="presentableId" value="LOCAL-00199" />
-      <option name="project" value="LOCAL" />
-      <updated>1460272921887</updated>
+      <workItem from="1466930089089" duration="555000" />
     </task>
     <task id="LOCAL-00200" summary="Inspections enabled">
       <created>1460273359061</created>
@@ -1825,11 +1816,18 @@
       <option name="project" value="LOCAL" />
       <updated>1466253679067</updated>
     </task>
-    <option name="localTasksCounter" value="248" />
+    <task id="LOCAL-00248" summary="Added new misc package for maths stuff">
+      <created>1466930511876</created>
+      <option name="number" value="00248" />
+      <option name="presentableId" value="LOCAL-00248" />
+      <option name="project" value="LOCAL" />
+      <updated>1466930511877</updated>
+    </task>
+    <option name="localTasksCounter" value="249" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1143978000" />
+    <option name="totallyTimeSpent" value="1144168000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
