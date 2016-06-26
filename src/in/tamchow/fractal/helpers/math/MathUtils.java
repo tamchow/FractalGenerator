@@ -105,28 +105,6 @@ public final class MathUtils {
             }
         }
     }
-    @NotNull
-    public static String numberLineRepresentation(float number, int precision) {
-        int g = (int) number, d = Math.round((number - g) * precision), a = ("" + g + 1).length(), b = ("" + g).length(), i = 0;
-        @NotNull String h = "", q = "" + g;
-        int c = q.length();
-        for (; i < b; i++) h += " ";
-        for (++i; i <= b + precision; i++) h += "-";
-        for (i = c; i < c + d; i++) q += "|";
-        for (; i < precision + b; i++) q += " ";
-        return q + (g + 1) + "\n" + h;
-    }
-    public static int[] diamondPuzzleSolver(int sum, int product, int low, int high) {
-        for (int a = low; a <= high; a++) {
-            for (int b = low; b <= high; b++) if (a + b == sum && a * b == product) return new int[]{a, b};
-        }
-        return null;
-    }
-    @NotNull
-    public static int[] diamondPuzzleSolverQuadratic(int sum, int product) {
-        int x = sum + (int) Math.sqrt(sum * sum - 4 * product);
-        return new int[]{x / 2, sum - x / 2};
-    }
     public static boolean approxEquals(@NotNull Complex a, @NotNull Complex b, double tolerance) {
         return Math.abs(a.real() - b.real()) <= tolerance && Math.abs(a.imaginary() - b.imaginary()) <= tolerance;
     }
