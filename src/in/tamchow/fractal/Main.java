@@ -20,6 +20,7 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
 import in.tamchow.fractal.misc.bs.BF2Java;
 import in.tamchow.fractal.misc.bs.BrainSext;
+import in.tamchow.fractal.misc.mathstuff.DoughNut;
 import in.tamchow.fractal.misc.primes.PrimeCounter;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
@@ -35,35 +36,32 @@ import java.io.IOException;
  * Max. of 2 required arguments, not including switches or flags
  */
 public class Main {
+    private static String[] modArgs(String[] args) {
+        @NotNull String[] modArgs = new String[args.length - 1];
+        System.arraycopy(args, 1, modArgs, 0, modArgs.length);
+        return modArgs;
+    }
     public static void main(@NotNull String[] args) {
         if (args.length == 0) {
             System.err.println("Nothing to do.");
             System.exit(1);
         }
         if (args[0].equalsIgnoreCase("/BS")) {
-            @NotNull String[] modArgs = new String[args.length - 1];
-            System.arraycopy(args, 1, modArgs, 0, modArgs.length);
-            BrainSext.main(modArgs);
+            BrainSext.main(modArgs(args));
         } else if (args[0].equalsIgnoreCase("/BF2J")) {
-            @NotNull String[] modArgs = new String[args.length - 1];
-            System.arraycopy(args, 1, modArgs, 0, modArgs.length);
-            BF2Java.main(modArgs);
+            BF2Java.main(modArgs(args));
         } else if (args[0].equalsIgnoreCase("/primecount") || args[0].equalsIgnoreCase("/pc")) {
-            @NotNull String[] modArgs = new String[args.length - 1];
-            System.arraycopy(args, 1, modArgs, 0, modArgs.length);
-            PrimeCounter.main(modArgs);
+            PrimeCounter.main(modArgs(args));
         } else if (args[0].equalsIgnoreCase("/encrypt") || args[0].equalsIgnoreCase("/decrypt")) {
-            @NotNull String[] modArgs = new String[args.length - 1];
-            System.arraycopy(args, 1, modArgs, 0, modArgs.length);
             try {
-                EncryptDecryptFile.main(modArgs);
+                EncryptDecryptFile.main(modArgs(args));
             } catch (IOException ioe) {
                 System.err.println("I/O Error: " + ioe.getMessage());
             }
         } else if (args[0].equalsIgnoreCase("-t") || args[0].equalsIgnoreCase("-test")) {
-            @NotNull String[] modArgs = new String[args.length - 1];
-            System.arraycopy(args, 1, modArgs, 0, modArgs.length);
-            Test.main(modArgs);
+            Test.main(modArgs(args));
+        } else if (args[0].equalsIgnoreCase("/dn") || args[0].equalsIgnoreCase("/doughnut")) {
+            DoughNut.main(modArgs(args));
         } else {
             @NotNull File input = new File(args[0]);
             if (!input.exists()) {

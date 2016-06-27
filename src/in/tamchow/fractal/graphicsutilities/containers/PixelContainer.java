@@ -12,24 +12,24 @@ import java.io.Serializable;
  * Encapsulates an image or animation frame, for platform independence, takes int32 packed ARGB in hex values as pixels.
  */
 public class PixelContainer implements Serializable, Pannable, Comparable<PixelContainer> {
+    private static final int DEFAULT_WIDTH = 640, DFAULT_HEIGHT = 480;
     private String path;
     @Nullable
     private int[][] pixdata;
     public PixelContainer() {
-        path = "";
-        pixdata = new int[640][480];
+        this(DEFAULT_WIDTH, DFAULT_HEIGHT);
     }
     public PixelContainer(int w, int h) {
-        path = "";
+        this("");
         pixdata = new int[h][w];
     }
     public PixelContainer(@NotNull int[][] pixdata) {
-        path = "";
+        this("");
         setPixdata(pixdata);
     }
     public PixelContainer(@NotNull PixelContainer img) {
+        this(img.getPath());
         setPixdata(img.getPixdata());
-        path = img.getPath();
     }
     public PixelContainer(String path) {
         this.path = path;
@@ -63,16 +63,10 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     }
     @NotNull
     protected int[] imageBounds(int y, int x) {
-        y += MathUtils.boundsProtected(x / getWidth(), getHeight());
-        x = MathUtils.boundsProtected(x, getWidth());
-        y = MathUtils.boundsProtected(y, getHeight());
-        return new int[]{y, x};
+        return MathUtils.imageBounds(y, x, getWidth(), getHeight());
     }
     protected int normalized(int y, int x) {
-        y += MathUtils.boundsProtected(x / getWidth(), getHeight());
-        x = MathUtils.boundsProtected(x, getWidth());
-        y = MathUtils.boundsProtected(y, getHeight());
-        return y * getWidth() + x;
+        return MathUtils.normalized(y, x, getWidth(), getHeight());
     }
     /*public void setPixel(int y, int x, int val) {
         @NotNull int[] yx = imageBounds(y, x);

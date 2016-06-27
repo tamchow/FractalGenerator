@@ -30,4 +30,8 @@ public abstract class PixelFractalGenerator extends FractalGenerator implements 
             }
         }
     }
+    @Override
+    public String toString() {
+        return super.toString() + ":width=" + getWidth() + ",height=" + getHeight();
+    }
 }

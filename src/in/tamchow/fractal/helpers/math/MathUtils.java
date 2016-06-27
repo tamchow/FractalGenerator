@@ -95,6 +95,17 @@ public final class MathUtils {
         return (ptr < min) ? min : ((ptr > max) ? max : ptr);
     }
     @NotNull
+    public static int[] imageBounds(int y, int x, int width, int height) {
+        y += boundsProtected(x / width, height);
+        x = boundsProtected(x, width);
+        y = boundsProtected(y, height);
+        return new int[]{y, x};
+    }
+    public static int normalized(int y, int x, int width, int height) {
+        @NotNull int[] yx = imageBounds(y, x, width, height);
+        return yx[0] * width + yx[1];
+    }
+    @NotNull
     public static void intDDAAdd(@NotNull int[][] from, int[][] to) {
         if ((from.length != to.length) || (from[0].length != to[0].length)) {
             throw new IllegalArgumentException("Dimensions of both arguments must be the same.");
@@ -213,6 +224,7 @@ public final class MathUtils {
     /**
      * Uses the 3-shears rotation technique over conventional rotation techniques for
      * improved image quality.
+     *
      * @param angle the angle by which to rotate {@code point} about the global origin (0,0)
      * @param point the {@link Matrix} indicating the point to be rotated
      * @return the rotated point

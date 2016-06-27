@@ -3,9 +3,19 @@ import java.io.Serializable;
 /**
  * Interface which indicates that an implementor can generate a fractal
  */
-public abstract class FractalGenerator implements Serializable {
+public abstract class FractalGenerator implements Serializable, Cloneable {
+    private static final int WAIT_PERIOD = 100;
     protected volatile boolean stop, pause;
     protected FractalGenerator() {
+    }
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException useless) {
+            //Should never happen, as we implement Cloneable
+            return null;
+        }
     }
     public abstract void generate();
     public void stop() {
@@ -29,13 +39,13 @@ public abstract class FractalGenerator implements Serializable {
                 // wait while we are interrupted or have been asked to pause execution
                 do {
                     // we wait after this thread has been interrupted
-                    wait();
+                    wait(WAIT_PERIOD);
                 } while ((pause || Thread.currentThread().isInterrupted()) &&
                         // we should be on the correct thread
                         // and that thread should be alive
                         Thread.currentThread().isAlive());
             }
-        } catch (InterruptedException interrupt) {
+        } catch (InterruptedException interrupted) {
             // set the interrupted flag of the current thread
             Thread.currentThread().interrupt();
             // this was unexpected,

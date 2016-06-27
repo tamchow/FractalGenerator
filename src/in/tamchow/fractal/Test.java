@@ -30,7 +30,7 @@ public class Test {
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
         int resx = 1920, resy = 1080, iter = 128, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
+        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
         double escrad = 1E10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
         @Nullable String linetrap = null;
         @NotNull Colorizer cfg = new Colorizer(Colors.MODE.EPSILON_CROSS_SPLINE, 4, 25000, 0, true, false);
@@ -45,7 +45,7 @@ public class Test {
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = new Complex(1E-13);
         int x_t = 4, y_t = 2, xppp = 10, yppp = 10;
-        double skew = 0 * Math.PI;
+        double skew = 0.5 * Math.PI;
         func = func2;
         boolean def = (args.length == 0);
         @Nullable BatchContainer<ComplexFractalParams> fccfg = new BatchContainer<>();
