@@ -17,6 +17,8 @@ import static java.lang.Math.abs;
  * Holds colour configuration for  custom palettes
  */
 public class Colorizer implements Serializable {
+    private static int tintCount = 0;
+    private static double tints = 0;
     public Colors.MODE mode;
     @Nullable
     public int[] palette;
@@ -320,22 +322,35 @@ public class Colorizer implements Serializable {
         }
     }
     public int getTint(int color, double tint) {
+        if (tint < 0.0 || tint > 1.0) {
+            throw new IllegalArgumentException("Blending quantity out of range: " + tint);
+        }
+        tints += tint;
+        tintCount++;
         int r = separateARGB(color, Colors.RGBCOMPONENTS.RED);
         int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
         int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE);
-        int nr = (int) (r + (255 - r) * tint);
-        int ng = (int) (g + (255 - g) * tint);
-        int nb = (int) (b + (255 - b) * tint);
-        return packRGB(nr, ng, nb);
+        int nr = boundsProtected(Math.round((float) (r + ((0xff - r) * tint))), 256);
+        int ng = boundsProtected(Math.round((float) (g + ((0xff - g) * tint))), 256);
+        int nb = boundsProtected(Math.round((float) (b + ((0xff - b) * tint))), 256);
+        return packARGB(separateARGB(color, Colors.RGBCOMPONENTS.ALPHA), nr, ng, nb);
+    }
+    public double averageTint() {
+        return tints / tintCount;
     }
     public int getShade(int color, double shade) {
+        if (shade < 0.0 || shade > 1.0) {
+            throw new IllegalArgumentException("Blending quantity out of range: " + shade);
+        }
+        tints += shade;
+        tintCount++;
         int r = separateARGB(color, Colors.RGBCOMPONENTS.RED);
         int g = separateARGB(color, Colors.RGBCOMPONENTS.GREEN);
         int b = separateARGB(color, Colors.RGBCOMPONENTS.BLUE);
-        int nr = (int) (r * (1 - shade));
-        int ng = (int) (g * (1 - shade));
-        int nb = (int) (b * (1 - shade));
-        return packRGB(nr, ng, nb);
+        int nr = boundsProtected(Math.round((float) (r * (1.0 - shade))), 256);
+        int ng = boundsProtected(Math.round((float) (g * (1.0 - shade))), 256);
+        int nb = boundsProtected(Math.round((float) (b * (1.0 - shade))), 256);
+        return packARGB(separateARGB(color, Colors.RGBCOMPONENTS.ALPHA), nr, ng, nb);
     }
     private void calcStep() {
         setStep((basecolor / num_colors) * color_density);

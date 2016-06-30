@@ -574,7 +574,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
         function = func.toString();
         degree = func.getDegree();
-        @NotNull String functionderiv = func.derivative(1);
+        @NotNull String functionderiv = func.firstDerivativeEx();
         if (constant != null && constant.equals(Complex.ZERO)) {
             constant = divide(Complex.ONE, degree);
         }
@@ -649,12 +649,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                             ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
                         }
                         fe.setZ_value(ztmp.toString());
-                        if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
-                            c = iteration;
-                            break;
-                        }
-                        if (distance_squared(z, ztmp) <= tolerance) {
-                            c = iteration;
+                        if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
+                            //c = iteration;
                             break;
                         }
                         z = new Complex(ztmp);
@@ -712,12 +708,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                                                 subtract(z, zold)),
                                         subtract(a, b)));
                         fe.setZ_value(ztmp.toString());
-                        if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
-                            c = iteration;
-                            break;
-                        }
-                        if (distance_squared(z, ztmp) <= tolerance) {
-                            c = iteration;
+                        if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
+                            //c = iteration;
                             break;
                         }
                         z = new Complex(ztmp);
@@ -864,12 +856,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                                             subtract(z, zold)),
                                     subtract(a, b)));
                     fe.setZ_value(ztmp.toString());
-                    if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
-                        c = iteration;
-                        break;
-                    }
-                    if (distance_squared(z, ztmp) <= tolerance) {
-                        c = iteration;
+                    if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
+                        //c = iteration;
                         break;
                     }
                     z = new Complex(ztmp);
@@ -895,7 +883,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
         function = func.toString();
         degree = func.getDegree();
-        @NotNull String functionderiv = func.derivative(1);
+        @NotNull String functionderiv = func.firstDerivativeEx();
         if (constant != null && constant.equals(Complex.ZERO)) {
             constant = divide(Complex.ONE, degree);
         }
@@ -962,12 +950,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                         ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
                     }
                     fe.setZ_value(ztmp.toString());
-                    if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
-                        c = iteration;
-                        break;
-                    }
-                    if (distance_squared(z, ztmp) <= tolerance) {
-                        c = iteration;
+                    if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
+                        //c = iteration;
                         break;
                     }
                     z = new Complex(ztmp);

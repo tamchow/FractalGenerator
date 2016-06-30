@@ -52,6 +52,9 @@ public class ComplexOperations {
     public static double distance_squared(@NotNull Complex z1, @NotNull Complex z2) {
         return (Math.pow(z1.real() - z2.real(), 2) + Math.pow(z1.imaginary() - z2.imaginary(), 2));
     }
+    public static double distance(@NotNull Complex z1, @NotNull Complex z2) {
+        return Math.sqrt(distance_squared(z1, z2));
+    }
     @NotNull
     public static Complex cot(@NotNull Complex z) {
         return divide(Complex.ONE, tan(z));

@@ -25,6 +25,8 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
     public static Polynomial fromString(@NotNull String polynomial) {
         @NotNull Polynomial poly = new Polynomial();
         @NotNull String[] tokens = split(polynomial, ",");
+        poly.terms.ensureCapacity(tokens.length);
+        poly.signs.ensureCapacity(tokens.length + 1);
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
@@ -39,16 +41,23 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         }
         return poly;
     }
+    public static Polynomial fromString(String poly, String variableCode, String oldVariableCode, String[][] consts) {
+        Polynomial polynomial = fromString(poly);
+        polynomial.setVariableCode(variableCode);
+        polynomial.setVariableCode(oldVariableCode);
+        polynomial.setConstdec(consts);
+        return polynomial;
+    }
     @Override
     public String derivative(int order) {
-        switch (order) {
-            case 1:
-                return derivative().toString();
-            case 2:
-                return derivative().derivative().toString();
-            default:
-                throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
+        if (order < 0) {
+            throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
+        Polynomial derived = this;
+        for (int i = 0; i < order; ++i) {
+            derived = derived.derivative();
+        }
+        return derived.toString();
     }
     public String getOldvariablecode() {
         return oldvariablecode;
@@ -77,7 +86,6 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-
     @NotNull
     public Polynomial derivative() {
         @NotNull Polynomial deriv = new Polynomial();
@@ -157,14 +165,14 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         }
         @Override
         public String derivative(int order) {
-            switch (order) {
-                case 1:
-                    return derivative().toString();
-                case 2:
-                    return derivative().derivative().toString();
-                default:
-                    throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
+            if (order < 0) {
+                throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
             }
+            Term derived = this;
+            for (int i = 0; i < order; ++i) {
+                derived = derived.derivative();
+            }
+            return derived.toString();
         }
         @NotNull
         public void fromString(String term) {
@@ -233,7 +241,7 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         private Term derivative() {
             @NotNull Term deriv = new Term(ZERO);
             if (!isConstant()) {
-                deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - " + ONE, this.variable);
+                deriv = new Term(this.coefficient + " * ( " + this.exponent + " )", "( " + this.exponent + " - " + ONE + " )", this.variable);
             }
             return deriv;
         }
@@ -248,7 +256,7 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
             if (constant) {
                 return constval;
             }
-            return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
+            return "( ( " + coefficient + " ) * " + "( ( " + variable + " ) ^ ( " + exponent + " ) ) )";
         }
     }
 }

@@ -28,6 +28,8 @@ public class Function extends Operable<Function, FunctionTerm> {
     public static Function fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts) {
         @NotNull Function poly = new Function(null, variableCode, oldvariablecode, consts);
         @NotNull String[] tokens = StringManipulator.split(function, "|");
+        poly.terms.ensureCapacity(tokens.length);
+        poly.signs.ensureCapacity(tokens.length + 1);
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
@@ -85,8 +87,10 @@ public class Function extends Operable<Function, FunctionTerm> {
     @NotNull
     public String derivative(int order) {
         @NotNull String deriv = "";
-        if (order != 1 && order != 2) {
-            throw new IllegalArgumentException();
+        if (order < 0) {
+            throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
+        } else if (order == 0) {
+            return toString();
         }
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             deriv += " " + signs.get(j) + " " + terms.get(i).derivative(order);

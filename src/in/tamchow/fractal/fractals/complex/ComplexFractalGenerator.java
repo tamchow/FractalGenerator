@@ -41,6 +41,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             "~`+-*/#@!%^&(){}[];'|:?><.,_=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     private static Complex[][] argand_map;
     private static ArrayList<Complex> roots;
+    private static int valCount = 0;
+    private static double vals = 0;
     private static Complex[] boundary_elements;
     protected Colorizer color;
     protected int[] histogram;
@@ -111,6 +113,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             end_y = (iy + 1) * y_dist;
         }
         return new int[]{start_x, end_x, start_y, end_y};
+    }
+    public ArrayList<Complex> getRoots() {
+        return roots;
     }
     public PixelContainer getPlane() {
         return getArgand();
@@ -401,7 +406,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
             @NotNull Function func = Function.fromString(function, variableCode, oldvariablecode, consts);
             function = func.toString();
-            functionderiv = func.derivative(1);
+            functionderiv = func.firstDerivativeEx();
             degree = func.getDegree();
             /*if (Function.isSpecialFunction(function)) {
                 @NotNull Function func = Function.fromString(function, variableCode, oldvariablecode, consts);
@@ -552,22 +557,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         mindist = (Math.min(distance, mindist));
                     }
                     maxdist = (Math.max(distance, maxdist));
-                    if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
-                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_2 || color.getMode() == NEWTON_NORMALIZED_1) {
-                            if (indexOfRoot(ztmp) == -1) {
-                                roots.add(ztmp);
+                    if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
+                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
+                            synchronized (roots) {
+                                if (indexOfRoot(ztmp) == -1) {
+                                    roots.add(ztmp);
+                                    c = iterations;
+                                }
                             }
                         }
-                        c = iterations;
-                        break;
-                    }
-                    if (distance_squared(z, ztmp) <= tolerance) {
-                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_2 || color.getMode() == NEWTON_NORMALIZED_1) {
-                            if (indexOfRoot(ztmp) == -1) {
-                                roots.add(ztmp);
-                            }
-                        }
-                        c = iterations;
                         break;
                     }
                     zold = z;
@@ -593,7 +591,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 if (color.getMode() == HISTOGRAM_SPLINE || color.getMode() == HISTOGRAM_LINEAR) {
                     histogram[c]++;
                 }
-                if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_2 || color.getMode() == NEWTON_NORMALIZED_1) && roots.size() == 0) {
+                if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = divide(principallog(argand_map[i][j]), principallog(z)).modulus();
@@ -709,7 +707,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
             @NotNull Function func = Function.fromString(function, variableCode, oldvariablecode, consts);
             function = func.toString();
-            functionderiv = func.derivative(1);
+            functionderiv = func.firstDerivativeEx();
             distance_estimate_multiplier = func.getDegree();
             /*if (Function.isSpecialFunction(function)) {
                 @NotNull Function func = Function.fromString(function, variableCode, oldvariablecode, consts);
@@ -942,9 +940,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         @NotNull Function func = Function.fromString(function, variableCode, oldvariablecode, consts);
         function = func.toString();
         degree = func.getDegree();
-        functionderiv = func.derivative(1);
+        functionderiv = func.firstDerivativeEx();
         if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
-            functionderiv2 = func.derivative(2);
+            functionderiv2 = func.secondDerivativeEx();
         }
         /*if (Function.isSpecialFunction(function)) {
             @NotNull Function func = Function.fromString(function, variableCode, oldvariablecode, consts);
@@ -1063,7 +1061,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
                         ztmpd = null;
                         if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
-                            ztmpd = add(subtract(zd, divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false))), toadd);
+                            ztmpd = add(subtract(zd, divide(fed.evaluate(functionderiv, false),
+                                    fed.evaluate(functionderiv2, false))), toadd);
                         }
                     }
                     fe.setZ_value(ztmp.toString());
@@ -1139,22 +1138,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         mindist = (Math.min(distance, mindist));
                     }
                     maxdist = (Math.max(distance, maxdist));
-                    if (fe.evaluate(function, ztmp).cabs() <= tolerance) {
-                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_2 || color.getMode() == NEWTON_NORMALIZED_1) {
-                            if (indexOfRoot(ztmp) == -1) {
-                                roots.add(ztmp);
+                    if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
+                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
+                            synchronized (roots) {
+                                if (indexOfRoot(ztmp) == -1) {
+                                    roots.add(ztmp);
+                                    c = iterations;
+                                }
                             }
                         }
-                        c = iterations;
-                        break;
-                    }
-                    if (distance_squared(z, ztmp) <= tolerance) {
-                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_2 || color.getMode() == NEWTON_NORMALIZED_1) {
-                            if (indexOfRoot(ztmp) == -1) {
-                                roots.add(ztmp);
-                            }
-                        }
-                        c = iterations;
                         break;
                     }
                     z = new Complex(ztmp);
@@ -1179,7 +1171,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         color.getMode() == RANK_ORDER_LINEAR || color.getMode() == RANK_ORDER_SPLINE) {
                     histogram[c]++;
                 }
-                if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_2 || color.getMode() == NEWTON_NORMALIZED_1) && roots.size() == 0) {
+                if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = divide(principallog(argand_map[i][j]), principallog(z)).modulus();
@@ -1507,6 +1499,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     public double[][] getNormalized_escapes() {
         return normalized_escapes;
     }
+    public double averageIterations() {
+        return vals / valCount;
+    }
     public int getColor(int i, int j, int val, Complex[] last, double escape_radius, int iterations) {
         if (iterations <= 0) {
             throw new IllegalArgumentException("Illegal maximum iteration count : " + iterations);
@@ -1530,6 +1525,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int c = 0; c < last.length; ++c) {
             last[c] = (isNaN(last[c].cabs()) ? Complex.ZERO : (isInfinite(last[c].cabs()) ? Complex.ONE : last[c]));
         }
+        int nextVal = (val == iterations) ? iterations : val, previousVal = (val == 0) ? 0 : val - 1;
+        vals += val;
+        valCount++;
         switch (color.getMode()) {
             case SIMPLE:
                 colortmp = color.getColor(color.createIndex(val, 0, iterations));
@@ -1634,26 +1632,47 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             case ASCII_ART_CHARACTER:
                 colortmp = 0x000000;
                 break;//Don't need to deal with this here, it's post-calculated
-            case NEWTON_NORMALIZED_2:
+            /*case NEWTON_NORMALIZED_MODULUS:
+            case NEWTON_NORMALIZED_ITERATIONS:
+            case NEWTON_CLASSIC:
+                int color_density_backup = color.getColor_density();
+                if (color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
+                    color.setColor_density(Math.round(((float) val / iterations) * color_density_backup));
+                } else if (color.getMode() == NEWTON_NORMALIZED_MODULUS) {
+                    color.setColor_density(Math.round((float) escape_radius));
+                }
+                index = color.createIndex(closestRootIndex(last[0]), 0, roots.size());
+                //vals-=val;
+                //vals+=index;
+                int preTintColor=color.getColor(index);
+                color1 = color.getTint(preTintColor, ((double) val / iterations));
+                color2 = color.getTint(preTintColor,((double) nextVal / iterations));
+                color3 = color.getTint(preTintColor, ((double) previousVal / iterations));
+                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
+                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
+                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+                color.setColor_density(color_density_backup);
+                break;*/
+            case NEWTON_NORMALIZED_MODULUS:
                 color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) (val + 1) / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) abs(val - 1) / iterations));
+                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
+                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
                 colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
                 colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
                 break;
-            case NEWTON_NORMALIZED_1:
+            case NEWTON_NORMALIZED_ITERATIONS:
                 color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) (val + 1) / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) abs(val - 1) / iterations));
+                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) nextVal / iterations));
+                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
                 colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
                 colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
                 break;
             case NEWTON_CLASSIC:
                 color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) (val + 1) / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) abs(val - 1) / iterations));
+                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) nextVal / iterations));
+                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
                 colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
                 colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());

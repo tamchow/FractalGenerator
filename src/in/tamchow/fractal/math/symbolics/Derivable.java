@@ -7,10 +7,10 @@ public abstract class Derivable implements Serializable, Comparable<Derivable> {
     protected static final String UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE = "Only 1st and 2nd order derivatives are supported";
     public abstract String derivative(int order);
     public String firstDerivative() {
-        return derivative(1);
+        return derivative(1).trim();
     }
     public String secondDerivative() {
-        return derivative(2);
+        return derivative(2).trim();
     }
     //public abstract void fromString(String input);
     //public abstract Complex getDegree();

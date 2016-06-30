@@ -191,9 +191,9 @@ public final class StringManipulator {
     }
     @NotNull
     public static String format(@NotNull String toFormat, @NotNull String[][] details) {
-        @NotNull String formatted = "";
+        @NotNull String formatted = toFormat;
         for (String[] detail : details) {
-            formatted = replace(toFormat, detail[0], detail[1]);
+            formatted = replace(formatted, detail[0], detail[1]);
         }
         return formatted;
     }
@@ -209,7 +209,15 @@ public final class StringManipulator {
         return indexes;
     }
     public static int countOccurrencesOf(@NotNull String in, @NotNull String what) {
-        return indexesOf(in, what).length;
+        //return indexesOf(in, what).length;
+        int index = in.indexOf(what);
+        int occurrences = 0;
+        while (index != -1) {
+            ++occurrences;
+            in = in.substring(index + 1);
+            index = in.indexOf(what);
+        }
+        return occurrences;
     }
     @NotNull
     public static String delete(@NotNull String value, @NotNull String what) {
@@ -240,10 +248,10 @@ public final class StringManipulator {
     }
     @NotNull
     public static String[] split(@NotNull String what, @NotNull String at) {
-        /*if (what.isEmpty() || at.isEmpty()) {
+        if (what.isEmpty() || at.isEmpty()) {
             //the length checks will throw the necessary NullPointerExceptions
             throw new IllegalArgumentException("Empty String");
-        }*/
+        }
         if (what.isEmpty()) {
             return new String[]{""};
         }

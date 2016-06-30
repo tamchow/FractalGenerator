@@ -10,10 +10,6 @@ import java.util.List;
  *
  * <h3>Note:</h3>
  * <p>
- * It is the user's responsibility to check {@link Operable#useEx()}
- * and call the {@code *Ex()} instead of the normal variant if it returns {@code true}
- * </p>
- * <p>
  * Also, the {@link Operable#add(Operable)}, {@link Operable#subtract(Operable)}, {@link Operable#multiply(Operable)} and {@link Operable#divide(Operable)}
  * only work with {@link Operable}s of the same type.
  *
@@ -93,7 +89,7 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             function.append(" " + signs.get(j) + " " + terms.get(i));
         }
-        return process(function.toString());
+        return process(function.toString()).trim();
     }
     public abstract Complex getDegree();
     public boolean useEx() {
@@ -101,6 +97,8 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
     }
     public String derivativeEx(int order) {
         switch (order) {
+            case 0:
+                return toString();
             case 1:
                 //TODO:Implement
                 return derivative(1);
@@ -112,31 +110,21 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
         }
     }
     public String firstDerivativeEx() {
-        if (useEx()) {
-            return derivativeEx(1);
-        }
-        return firstDerivative();
+        return useEx() ? derivativeEx(1).trim() : firstDerivative();
     }
     public String secondDerivativeEx() {
-        if (useEx()) {
-            return derivativeEx(2);
-        }
-        return secondDerivative();
+        return useEx() ? derivativeEx(2).trim() : secondDerivative();
     }
     public String toStringEx() {
-        if (useEx()) {
-            String repr = "( " + toString();
-            repr += multiplyTerms(multipliers);
-            repr += " / ";
-            repr += multiplyTerms(denominators);
-            return repr + " )";
-        }
-        return toString();
+        return useEx() ? "( " + toString() + multiplyTerms(multipliers, true) + " ) / ( " + multiplyTerms(denominators, false) + " )" : toString();
     }
-    private String multiplyTerms(List<Operable<T, E>> terms) {
+    private String multiplyTerms(List<Operable<T, E>> terms, boolean hasPreceding) {
         ResizableCharBuffer repr = new ResizableCharBuffer(terms.size() * STRING_PREFIX_SIZE * terms.get(0).toString().length());
         for (Operable<T, E> term : terms) {
             repr.append(" * " + term);
+        }
+        if (!hasPreceding) {
+            return repr.toString().substring(3, repr.length());//trim leading multiply
         }
         return repr.toString();
     }

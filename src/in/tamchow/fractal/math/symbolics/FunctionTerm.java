@@ -6,7 +6,8 @@ import in.tamchow.fractal.math.complex.Complex;
  * Support for transcendental {@link FunctionTerm#FUNCTION_DATA} for derivative-requiring fractal modes
  */
 public class FunctionTerm extends Derivable {
-    private final FunctionTermData[] FUNCTION_DATA = {new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * cos $ )"),
+    private final FunctionTermData[] FUNCTION_DATA = {
+            new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * ( cos $ ) )"),
             new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"),
             new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"),
             new FunctionTermData("exp", "$v * ( exp $ )", "exp $ * ( $v + $vv )"),
@@ -36,10 +37,7 @@ public class FunctionTerm extends Derivable {
     public static FunctionTerm fromString(@NotNull String function, String variableCode, @NotNull String[][] consts, String oldvariablecode) {
         @NotNull FunctionTerm f = new FunctionTerm(null, variableCode, oldvariablecode, consts);
         @NotNull String[] parts = StringManipulator.split(function, ";");
-        f.coefficient = Polynomial.fromString(parts[0]);
-        f.coefficient.setVariableCode(variableCode);
-        f.coefficient.setOldvariablecode(oldvariablecode);
-        f.coefficient.setConstdec(consts);
+        f.coefficient = Polynomial.fromString(parts[0], variableCode, oldvariablecode, consts);
         if (parts.length > 1) {
             if (parts.length == 4) {
                 f.constant = parts[3];
@@ -47,10 +45,7 @@ public class FunctionTerm extends Derivable {
                 f.constant = "0";
             }
             f.function = parts[1];
-            f.argument = Polynomial.fromString(parts[2]);
-            f.argument.setVariableCode(variableCode);
-            f.argument.setOldvariablecode(oldvariablecode);
-            f.argument.setConstdec(consts);
+            f.argument = Polynomial.fromString(parts[2], variableCode, oldvariablecode, consts);
             f.polynomial = false;
         } else {
             f.polynomial = true;
@@ -84,9 +79,9 @@ public class FunctionTerm extends Derivable {
     @Override
     public String toString() {
         if (isPolynomial()) {
-            return coefficient.toString();
+            return coefficient.toStringEx();
         }
-        return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant.trim() + " )";
+        return coefficient.toStringEx() + " * ( " + function.trim() + " ( " + argument.toStringEx() + " ) ) + ( " + constant.trim() + " )";
     }
     @NotNull
     public String derivative(int order) {
@@ -95,18 +90,29 @@ public class FunctionTerm extends Derivable {
         }
         coefficient.setConstdec(consts);
         argument.setConstdec(consts);
-        @NotNull String deriv = "";
+        @NotNull String deriv;
         switch (order) {
+            case 0:
+                return toString();
             case 1:
-                deriv += "( # * fv ) + ( #v * f)";
+                deriv = "( # * fv ) + ( #v * f )";
                 break;
             case 2:
-                deriv += "( # * fvv ) + ( 2 * ( #v * fv ) ) + ( #vv * f )";
+                deriv = "( # * fvv ) + ( 2 * ( #v * fv ) ) + ( #vv * f )";
                 break;
             default:
                 throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
-        @NotNull final String[][] REPLACEMENTS = {{"fvv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"}, {"fv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"}, {"f", "( " + function.trim() + " $ )"}, {"#vv", "( " + coefficient.derivative().derivative().toString().trim() + " )"}, {"#v", "( " + coefficient.derivative().toString().trim() + " )"}, {"#", "( " + coefficient.toString().trim() + " )"}, {"$vv", "( " + argument.derivative().derivative().toString().trim() + " )"}, {"$v", "( " + argument.derivative().toString().trim() + " )"}, {"$", "( " + argument.toString().trim() + " )"}};
+        @NotNull final String[][] REPLACEMENTS = {
+                {"fvv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"},
+                {"fv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"},
+                {"f", "( " + function.trim() + " $ )"},
+                {"#vv", "( " + coefficient.secondDerivativeEx() + " )"},
+                {"#v", "( " + coefficient.firstDerivativeEx() + " )"},
+                {"#", "( " + coefficient.toString().trim() + " )"},
+                {"$vv", "( " + argument.secondDerivativeEx() + " )"},
+                {"$v", "( " + argument.firstDerivativeEx() + " )"},
+                {"$", "( " + argument.toString().trim() + " )"}};
         return StringManipulator.format(deriv, REPLACEMENTS);
     }
     @NotNull
