@@ -562,10 +562,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                             synchronized (roots) {
                                 if (indexOfRoot(ztmp) == -1) {
                                     roots.add(ztmp);
-                                    c = iterations;
                                 }
                             }
                         }
+                        //c = iterations;
                         break;
                     }
                     zold = z;
@@ -1143,10 +1143,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                             synchronized (roots) {
                                 if (indexOfRoot(ztmp) == -1) {
                                     roots.add(ztmp);
-                                    c = iterations;
                                 }
                             }
                         }
+                        //c = iterations;
                         break;
                     }
                     z = new Complex(ztmp);
@@ -1526,6 +1526,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             last[c] = (isNaN(last[c].cabs()) ? Complex.ZERO : (isInfinite(last[c].cabs()) ? Complex.ONE : last[c]));
         }
         int nextVal = (val == iterations) ? iterations : val, previousVal = (val == 0) ? 0 : val - 1;
+        double interpolation = smoothcount - (long) smoothcount;
         vals += val;
         valCount++;
         switch (color.getMode()) {
@@ -1533,27 +1534,27 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 colortmp = color.getColor(color.createIndex(val, 0, iterations));
                 break;
             case SIMPLE_SMOOTH_LINEAR:
-                colortmp = getInterpolated(color.createIndex(val, 0, iterations), smoothcount);
+                colortmp = getInterpolated(color.createIndex(val, 0, iterations), interpolation);
                 break;
             case SIMPLE_SMOOTH_SPLINE:
-                colortmp = color.splineInterpolated(color.createIndex(val, 0, iterations), smoothcount);
+                colortmp = color.splineInterpolated(color.createIndex(val, 0, iterations), interpolation);
                 break;
             case DIVIDE:
                 val = (val == 0) ? iterations + 1 : (val - 1 == 0) ? iterations + 1 : val;
                 color1 = (0xffffff / val);
                 color2 = (0xffffff / (val + 1));
                 color3 = (0xffffff / (val - 1));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+                colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
+                colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
+                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
                 break;
             case DIVIDE_NORMALIZED:
                 color1 = (int) (0xffffff / renormalized);
                 color2 = (int) (0xffffff / (renormalized + 1));
                 color3 = (int) (0xffffff / (renormalized - 1));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+                colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
+                colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
+                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
                 break;
             case GRAYSCALE_HIGH_CONTRAST:
                 colortmp = Colorizer.toGray(val * iterations);
@@ -1574,17 +1575,17 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 color1 = Colorizer.toGray(val);
                 color2 = Colorizer.toGray(val + 1);
                 color3 = Colorizer.toGray(abs((val - 1)));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+                colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
+                colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
+                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
                 break;
             case MULTIPLY_NORMALIZED:
                 color1 = Colorizer.toGray((int) abs(renormalized));
                 color2 = Colorizer.toGray((int) abs(renormalized + 1));
                 color3 = Colorizer.toGray((int) abs(renormalized - 1));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+                colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
+                colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
+                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
                 break;
             case GRAYSCALE_LOW_CONTRAST:
                 colortmp = Colorizer.toGray(val);
@@ -1618,9 +1619,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     index = color.createIndex((distance - (long) distance), lbnd, ubnd);
                     //colortmp = color.splineInterpolated(index, distance - (long) distance);
                     if (color.isModifierEnabled()) {
-                        colortmp = getInterpolated(index, smoothcount);
+                        colortmp = getInterpolated(index, interpolation);
                     } else {
-                        colortmp = color.splineInterpolated(index, smoothcount - (long) smoothcount);
+                        colortmp = color.splineInterpolated(index, interpolation);
                     }
                 }
                 break;
@@ -1630,52 +1631,53 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             case RANK_ORDER_SPLINE:
             case ASCII_ART_NUMERIC:
             case ASCII_ART_CHARACTER:
-                colortmp = 0x000000;
-                break;//Don't need to deal with this here, it's post-calculated
-            /*case NEWTON_NORMALIZED_MODULUS:
-            case NEWTON_NORMALIZED_ITERATIONS:
-            case NEWTON_CLASSIC:
-                int color_density_backup = color.getColor_density();
-                if (color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
-                    color.setColor_density(Math.round(((float) val / iterations) * color_density_backup));
-                } else if (color.getMode() == NEWTON_NORMALIZED_MODULUS) {
-                    color.setColor_density(Math.round((float) escape_radius));
-                }
-                index = color.createIndex(closestRootIndex(last[0]), 0, roots.size());
-                //vals-=val;
-                //vals+=index;
-                int preTintColor=color.getColor(index);
-                color1 = color.getTint(preTintColor, ((double) val / iterations));
-                color2 = color.getTint(preTintColor,((double) nextVal / iterations));
-                color3 = color.getTint(preTintColor, ((double) previousVal / iterations));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
-                color.setColor_density(color_density_backup);
-                break;*/
+                colortmp = 0xff000000;//Don't need to deal with this here, it's post-calculated
+                break;
             case NEWTON_NORMALIZED_MODULUS:
-                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
-                break;
             case NEWTON_NORMALIZED_ITERATIONS:
-                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) nextVal / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
-                break;
             case NEWTON_CLASSIC:
-                color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
-                color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) nextVal / iterations));
-                color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
-                colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
-                colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
-                colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
+                if (color.isModifierEnabled()) {
+                    int color_density_backup = color.getColor_density();
+                    if (color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
+                        color.changeColorDensity(Math.round(((float) val / iterations) * color_density_backup));
+                    } else if (color.getMode() == NEWTON_NORMALIZED_MODULUS) {
+                        color.changeColorDensity(Math.round((float) escape_radius));
+                    }
+                    index = color.createIndexSimple(closestRootIndex(last[0]), 0, roots.size());
+                    int preTintColor = color.getColor(index);
+                    color1 = color.getTint(preTintColor, ((double) val / iterations));
+                    color2 = color.getTint(preTintColor, ((double) nextVal / iterations));
+                    color3 = color.getTint(preTintColor, ((double) previousVal / iterations));
+                    colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
+                    colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
+                    colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
+                    color.setColor_density(color_density_backup);
+                } else {
+                    if (color.getMode() == Colors.MODE.NEWTON_NORMALIZED_MODULUS) {
+                        color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
+                        color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
+                        color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
+                        colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
+                        colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
+                        colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
+                    } else if (color.getMode() == Colors.MODE.NEWTON_NORMALIZED_ITERATIONS) {
+                        color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
+                        color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) nextVal / iterations));
+                        color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
+                        colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
+                        colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
+                        colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
+                    } else if (color.getMode() == Colors.MODE.NEWTON_CLASSIC) {
+                        color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
+                        color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) nextVal / iterations));
+                        color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
+                        colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
+                        colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
+                        colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
+                    } else {
+                        colortmp = 0xff000000;
+                    }
+                }
                 break;
             case CURVATURE_AVERAGE_NOABS_LINEAR:
             case CURVATURE_AVERAGE_NOABS_SPLINE:
@@ -1689,9 +1691,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 ubnd = PI;
                 index = color.createIndex(escape_radius, lbnd, ubnd);
                 if (color.getMode() == CURVATURE_AVERAGE_ABS_LINEAR || color.getMode() == CURVATURE_AVERAGE_NOABS_LINEAR) {
-                    colortmp = getInterpolated(index, smoothcount);
+                    colortmp = getInterpolated(index, interpolation);
                 } else {
-                    colortmp = color.splineInterpolated(index, smoothcount - ((long) smoothcount));
+                    colortmp = color.splineInterpolated(index, interpolation);
                 }
                 break;
             case STRIPE_AVERAGE_LINEAR:
@@ -1699,16 +1701,16 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 //min value of 0.5*sin(x)+0.5=0, min value of sin(x)=-1,max value of 0.5*sin(x)+0.5=1, max value of sin(x)=1
                 index = color.createIndex(escape_radius, lbnd, ubnd);
                 if (color.getMode() == STRIPE_AVERAGE_LINEAR) {
-                    colortmp = getInterpolated(index, smoothcount);
+                    colortmp = getInterpolated(index, interpolation);
                 } else {
-                    colortmp = color.splineInterpolated(index, smoothcount - ((long) smoothcount));
+                    colortmp = color.splineInterpolated(index, interpolation);
                 }
                 break;
             case TRIANGLE_AREA_INEQUALITY_LINEAR:
-                colortmp = getInterpolated(color.createIndex(escape_radius, lbnd, ubnd), smoothcount);
+                colortmp = getInterpolated(color.createIndex(escape_radius, lbnd, ubnd), interpolation);
                 break;
             case TRIANGLE_AREA_INEQUALITY_SPLINE:
-                colortmp = color.splineInterpolated(color.createIndex(escape_radius, lbnd, ubnd), smoothcount - ((long) smoothcount));
+                colortmp = color.splineInterpolated(color.createIndex(escape_radius, lbnd, ubnd), interpolation);
                 break;
             case EPSILON_CROSS_LINEAR:
             case EPSILON_CROSS_SPLINE:
@@ -1735,21 +1737,22 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     smoothcount = principallog(new Complex(escape_radius / ubnd)).modulus();
                     smoothcount = isNaN(smoothcount) ? 0.0 : (isInfinite(smoothcount) ? 1.0 : smoothcount);
                 }
+                interpolation = smoothcount - (long) smoothcount;
                 if (color.getMode() == EPSILON_CROSS_LINEAR) {
-                    colortmp = getInterpolated(color.createIndex(escape_radius, lbnd, ubnd), smoothcount);
+                    colortmp = getInterpolated(color.createIndex(escape_radius, lbnd, ubnd), interpolation);
                 } else {
-                    colortmp = color.splineInterpolated(color.createIndex(escape_radius, lbnd, ubnd), smoothcount - (long) smoothcount);
+                    colortmp = color.splineInterpolated(color.createIndex(escape_radius, lbnd, ubnd), interpolation);
                 }
                 break;
             case GAUSSIAN_INT_DISTANCE_LINEAR:
                 lbnd = 0;
                 ubnd = argand_map[0][0].modulus() - centre_offset.modulus();
-                colortmp = getInterpolated(color.createIndex(abs(escape_radius), lbnd, ubnd), smoothcount);
+                colortmp = getInterpolated(color.createIndex(abs(escape_radius), lbnd, ubnd), interpolation);
                 break;
             case GAUSSIAN_INT_DISTANCE_SPLINE:
                 lbnd = 0;
                 ubnd = argand_map[0][0].modulus() - centre_offset.modulus();
-                colortmp = color.splineInterpolated(color.createIndex(abs(escape_radius), lbnd, ubnd), smoothcount - (long) smoothcount);
+                colortmp = color.splineInterpolated(color.createIndex(abs(escape_radius), lbnd, ubnd), interpolation);
                 break;
             case ORBIT_TRAP_AVG:
             case ORBIT_TRAP_MAX:
@@ -1761,10 +1764,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 double origin_modulus = (trap_point == null) ? centre_offset.modulus() : trap_point.modulus();
                 ubnd = abs(argand_map[0][0].modulus() - origin_modulus);
                 index = color.createIndex(abs(escape_radius), lbnd, ubnd);
-                if (!color.isModifierEnabled()) {
-                    colortmp = color.splineInterpolated(index, smoothcount - (long) smoothcount);
+                if (color.isModifierEnabled()) {
+                    colortmp = getInterpolated(index, interpolation);
                 } else {
-                    colortmp = getInterpolated(index, smoothcount - (long) smoothcount);
+                    colortmp = color.splineInterpolated(index, interpolation);
                 }
                 break;
             case DOMAIN_COLORING:
@@ -1797,9 +1800,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         color1 = color.getColor(index);
         color2 = color.getColor(index2);
         color3 = color.getColor(index3);
-        colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount - ((long) smoothcount), color.getByParts());
-        colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount - ((long) smoothcount), color.getByParts());
-        colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount - ((long) smoothcount), color.getByParts());
+        colortmp1 = Colorizer.linearInterpolated(color1, color2, smoothcount, color.getByParts());
+        colortmp2 = Colorizer.linearInterpolated(color3, color1, smoothcount, color.getByParts());
+        colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, smoothcount, color.getByParts());
         return colortmp;
     }
     @NotNull

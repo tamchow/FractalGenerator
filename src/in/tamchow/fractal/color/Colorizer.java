@@ -13,6 +13,7 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.abs;
+import static java.lang.Math.round;
 /**
  * Holds colour configuration for  custom palettes
  */
@@ -407,6 +408,12 @@ public class Colorizer implements Serializable {
             this.color_density = color_density;
         }
     }
+    public void changeColorDensity(int color_density) {
+        setColor_density(boundsProtected(color_density, num_colors));
+    }
+    public int createIndexSimple(double val, double min, double max) {
+        return boundsProtected(round((float) ((val - min) / (max - min)) * color_density), num_colors);
+    }
     public int calculateColorDensity() {
         return num_colors - 1;
     }
@@ -483,11 +490,12 @@ public class Colorizer implements Serializable {
             idx = transform(divide(principallog(exp), principallog(base)).modulus());
         }
         idx = isNaN(idx) ? 0.0 : (isInfinite(idx) ? 1.0 : idx);
-        idx *= color_density;
+        idx *= boundsProtected(color_density, num_colors);
         if (idx < adjustedResolution) {
             idx /= multiplier_threshold;
         }
-        return ((int) idx) % num_colors;
+        //return ((int) idx) % num_colors;
+        return boundsProtected(round((float) idx), num_colors);
     }
     public int indexOfColor(int color) {
         for (int i = 0; i < palette.length; ++i) {
