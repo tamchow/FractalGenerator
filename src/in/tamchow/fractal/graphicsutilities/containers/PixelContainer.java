@@ -137,7 +137,11 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
                         break;
                     case NEGATIVE:
-                        processed.setPixel(i, j, Colorizer.toRGB(0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED), 0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), 0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                        processed.setPixel(i, j, Colorizer.packARGB(
+                                Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA),
+                                0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED),
+                                0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN),
+                                0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
                         break;
                     case NONE:
                         break;

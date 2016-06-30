@@ -16,7 +16,6 @@ import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.symbolics.Function;
-import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import static in.tamchow.fractal.helpers.math.MathUtils.*;
 import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
@@ -572,21 +571,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         Complex degree;
-        @NotNull String functionderiv = "";
-        if (Function.isSpecialFunction(function)) {
-            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
-            function = func.toString();
-            degree = func.getDegree();
-            functionderiv = func.derivative(1);
-        } else {
-            @NotNull Polynomial polynomial = Polynomial.fromString(function);
-            polynomial.setConstdec(constants);
-            polynomial.setVariableCode(variableCode);
-            polynomial.setOldvariablecode(oldVariableCode);
-            function = polynomial.toString();
-            degree = polynomial.getDegree();
-            functionderiv = polynomial.derivative().toString();
-        }
+        @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
+        function = func.toString();
+        degree = func.getDegree();
+        @NotNull String functionderiv = func.derivative(1);
         if (constant != null && constant.equals(Complex.ZERO)) {
             constant = divide(Complex.ONE, degree);
         }
@@ -904,21 +892,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         Complex degree;
-        @NotNull String functionderiv = "";
-        if (Function.isSpecialFunction(function)) {
-            @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
-            function = func.toString();
-            degree = func.getDegree();
-            functionderiv = func.derivative(1);
-        } else {
-            @NotNull Polynomial polynomial = Polynomial.fromString(function);
-            polynomial.setConstdec(constants);
-            polynomial.setVariableCode(variableCode);
-            polynomial.setOldvariablecode(oldVariableCode);
-            function = polynomial.toString();
-            degree = polynomial.getDegree();
-            functionderiv = polynomial.derivative().toString();
-        }
+        @NotNull Function func = Function.fromString(function, variableCode, oldVariableCode, constants);
+        function = func.toString();
+        degree = func.getDegree();
+        @NotNull String functionderiv = func.derivative(1);
         if (constant != null && constant.equals(Complex.ZERO)) {
             constant = divide(Complex.ONE, degree);
         }

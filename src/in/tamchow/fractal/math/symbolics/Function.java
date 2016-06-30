@@ -3,28 +3,23 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Holds a transcendental function chain
  */
-public class Function implements Serializable, Comparable<Function> {
-    private ArrayList<FunctionTerm> terms;
-    private ArrayList<String> signs;
+public class Function extends Operable<Function, FunctionTerm> {
     private String[][] consts;
     private String z_value;
     private String variableCode, oldvariablecode;
     public Function(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
+        super();
         setZ_value(variable);
         setConsts(varconst);
         setVariableCode(variableCode);
         setOldvariablecode(oldvariablecode);
-        terms = new ArrayList<>();
-        signs = new ArrayList<>();
     }
     public Function() {
-        terms = new ArrayList<>();
-        signs = new ArrayList<>();
+        super();
     }
     public static boolean isSpecialFunction(@NotNull String function) {
         return FunctionTerm.isSpecialFunctionTerm(function);
@@ -40,7 +35,7 @@ public class Function implements Serializable, Comparable<Function> {
                 poly.terms.add(FunctionTerm.fromString(token.trim(), variableCode, consts, oldvariablecode));
             }
         }
-        if (poly.signs.size() == poly.terms.size() - 1 || (!poly.signs.get(0).equals("-"))) {
+        if (poly.signs.size() == poly.terms.size() - 1) {
             poly.signs.add(0, "+");
         }
         return poly;
@@ -86,32 +81,20 @@ public class Function implements Serializable, Comparable<Function> {
         this.terms.clear();
         this.terms.addAll(terms);
     }
+    @Override
     @NotNull
     public String derivative(int order) {
         @NotNull String deriv = "";
-        switch (order) {
-            case 1:
-                for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-                    deriv += " " + signs.get(j) + " " + terms.get(i).derivative(1);
-                }
-                if (deriv.trim().charAt(0) == '+') {
-                    return deriv.trim().substring(1, deriv.trim().length());
-                }
-                break;
-            case 2:
-                for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-                    deriv += " " + signs.get(j) + " " + terms.get(i).derivative(2);
-                }
-                if (deriv.trim().charAt(0) == '+') {
-                    return deriv.trim().substring(1, deriv.trim().length());
-                }
-                break;
-            default:
-                throw new IllegalArgumentException("Only 1st and 2nd order derivatives are supported");
+        if (order != 1 && order != 2) {
+            throw new IllegalArgumentException();
         }
-        return deriv;
+        for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
+            deriv += " " + signs.get(j) + " " + terms.get(i).derivative(order);
+        }
+        return process(deriv);
     }
     @NotNull
+    @Override
     public Complex getDegree() {
         @NotNull Complex degree = new Complex(Complex.ZERO);
         for (@NotNull FunctionTerm term : terms) {
@@ -121,29 +104,5 @@ public class Function implements Serializable, Comparable<Function> {
             }
         }
         return degree;
-    }
-    @NotNull
-    @Override
-    public String toString() {
-        @NotNull String function = "";
-        for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-            function += " " + signs.get(j) + " " + terms.get(i);
-        }
-        if (function.trim().charAt(0) == '+') {
-            return function.trim().substring(1, function.trim().length());
-        }
-        return function.trim();
-    }
-    @Override
-    public int compareTo(@NotNull Function o) {
-        return toString().compareTo(o.toString());
-    }
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof Function && toString().equals(o.toString());
     }
 }

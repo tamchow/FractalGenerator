@@ -1,45 +1,54 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
-import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 /**
  * Represents a polynomial and provides standard methods
  */
-public class Polynomial implements Serializable, Comparable<Polynomial> {
-    private ArrayList<Term> terms;
-    private ArrayList<String> signs;
+public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
     private String[][] constdec;
     private String z_value;
     private String variableCode, oldvariablecode;
     public Polynomial(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
+        super();
         setZ_value(variable);
         setConstdec(varconst);
         setVariableCode(variableCode);
         setOldvariablecode(oldvariablecode);
     }
     public Polynomial() {
-        terms = new ArrayList<>();
-        signs = new ArrayList<>();
+        super();
     }
     @NotNull
     public static Polynomial fromString(@NotNull String polynomial) {
         @NotNull Polynomial poly = new Polynomial();
-        @NotNull String[] tokens = StringManipulator.split(polynomial, ";");
+        @NotNull String[] tokens = split(polynomial, ",");
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
                 poly.signs.add(token.trim());
             } else {
-                poly.terms.add(Term.fromString(token.trim()));
+                Term term = new Term();
+                term.fromString(token.trim());
+                poly.terms.add(term);
             }
         }
-        if (poly.signs.size() == poly.terms.size() - 1 || (!poly.signs.get(0).equals("-"))) {
+        if (poly.signs.size() == poly.terms.size() - 1) {
             poly.signs.add(0, "+");
         }
         return poly;
+    }
+    @Override
+    public String derivative(int order) {
+        switch (order) {
+            case 1:
+                return derivative().toString();
+            case 2:
+                return derivative().derivative().toString();
+            default:
+                throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
+        }
     }
     public String getOldvariablecode() {
         return oldvariablecode;
@@ -68,20 +77,7 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
     public void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-    public ArrayList<String> getSigns() {
-        return signs;
-    }
-    private void setSigns(@NotNull ArrayList<String> signs) {
-        this.signs.clear();
-        this.signs.addAll(signs);
-    }
-    public ArrayList<Term> getTerms() {
-        return terms;
-    }
-    public void setTerms(@NotNull ArrayList<Term> terms) {
-        this.terms.clear();
-        this.terms.addAll(terms);
-    }
+
     @NotNull
     public Polynomial derivative() {
         @NotNull Polynomial deriv = new Polynomial();
@@ -104,6 +100,7 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
         return ctr;
     }
     @NotNull
+    @Override
     public Complex getDegree() {
         @NotNull Complex degree = new Complex(Complex.ZERO);
         for (@NotNull Term term : terms) {
@@ -133,29 +130,125 @@ public class Polynomial implements Serializable, Comparable<Polynomial> {
         }
         return ctr;
     }
-    @NotNull
-    @Override
-    public String toString() {
-        @NotNull String polynomial = "";
-        for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-            polynomial += " " + signs.get(j) + " " + terms.get(i);
+    protected static class Term extends Derivable {
+        private static final String ZERO = String.valueOf(0), ONE = String.valueOf(1);
+        private String exponent;
+        private String variable;
+        private String coefficient;
+        private String constval;
+        private boolean constant;
+        public Term(String coefficient, String exponent, String variable) {
+            initTerm(coefficient, exponent, variable);
         }
-        polynomial = polynomial.trim();
-        if (polynomial.trim().charAt(0) == '+') {
-            return polynomial.substring(1, polynomial.length());
+        public Term(String constval) {
+            initTerm(constval);
         }
-        return polynomial;
-    }
-    @Override
-    public int compareTo(@NotNull Polynomial o) {
-        return toString().compareTo(o.toString());
-    }
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof Polynomial && toString().equals(o.toString());
+        public Term() {
+            initTerm(ZERO);
+        }
+        private void initTerm(String constval) {
+            setCoefficient(constval);
+            makeConstant();
+        }
+        private void initTerm(String coefficient, String exponent, String variable) {
+            setVariable(variable);
+            setCoefficient(coefficient);
+            setExponent(exponent);
+        }
+        @Override
+        public String derivative(int order) {
+            switch (order) {
+                case 1:
+                    return derivative().toString();
+                case 2:
+                    return derivative().derivative().toString();
+                default:
+                    throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
+            }
+        }
+        @NotNull
+        public void fromString(String term) {
+            //term = term.substring(1, term.length() - 1).trim();//remove leading and trailing braces
+            /*replace(term,":^:",":");
+            replace(term,":*:",":");*/
+            @NotNull String[] parts = split(term, ":");
+            switch (parts.length) {
+                case 0:
+                    initTerm(ZERO);
+                    break;
+                case 1:
+                    initTerm(term.trim());
+                    break;
+                case 2:
+                    throw new IllegalArgumentException("Malformed Polynomial String");
+                default:
+                    initTerm(parts[0].trim(), parts[2].trim(), parts[1].trim());
+            }
+        }
+        private String getConstval() {
+            return constval;
+        }
+        private void setConstval(String constval) {
+            this.constval = constval;
+        }
+        private String getVariable() {
+            return variable;
+        }
+        private void setVariable(String variable) {
+            this.variable = variable;
+        }
+        private String getCoefficient() {
+            return coefficient;
+        }
+        private void setCoefficient(String coefficient) {
+            this.coefficient = coefficient;
+            if (this.coefficient == null || this.coefficient.isEmpty()) {
+                setCoefficient(String.valueOf(1));
+            }
+        }
+        private String getExponent() {
+            return exponent;
+        }
+        private void setExponent(String exponent) {
+            this.exponent = exponent;
+            if (this.exponent == null) {
+                makeConstant();
+            } else {
+                setConstant(false);
+                try {
+                    if (Double.valueOf(this.exponent).equals(0.0)) {
+                        makeConstant();
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+        private void makeConstant() {
+            setConstant(true);
+            setConstval(this.coefficient);
+            setVariable(ONE);
+            this.exponent = ZERO;
+        }
+        @NotNull
+        private Term derivative() {
+            @NotNull Term deriv = new Term(ZERO);
+            if (!isConstant()) {
+                deriv = new Term(this.coefficient + " * " + this.exponent, this.exponent + " - " + ONE, this.variable);
+            }
+            return deriv;
+        }
+        public boolean isConstant() {
+            return constant;
+        }
+        public void setConstant(boolean constant) {
+            this.constant = constant;
+        }
+        @Override
+        public String toString() {
+            if (constant) {
+                return constval;
+            }
+            return "( ( " + coefficient + " ) * " + "( " + variable + " ^ " + "( " + exponent + " ) ) )";
+        }
     }
 }

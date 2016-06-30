@@ -2,12 +2,10 @@ package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-
-import java.io.Serializable;
 /**
- * Support for transcendental FUNCTION_DATA for derivative-requiring fractal modes
+ * Support for transcendental {@link FunctionTerm#FUNCTION_DATA} for derivative-requiring fractal modes
  */
-public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
+public class FunctionTerm extends Derivable {
     private final FunctionTermData[] FUNCTION_DATA = {new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * cos $ )"),
             new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"),
             new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"),
@@ -25,6 +23,7 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     private String function, constant, variableCode, oldvariablecode, z_value;
     private Polynomial coefficient, argument;
     private String[][] consts;
+    private boolean polynomial;
     public FunctionTerm() {
     }
     public FunctionTerm(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
@@ -41,16 +40,21 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
         f.coefficient.setVariableCode(variableCode);
         f.coefficient.setOldvariablecode(oldvariablecode);
         f.coefficient.setConstdec(consts);
-        if (parts.length == 4) {
-            f.constant = parts[3];
+        if (parts.length > 1) {
+            if (parts.length == 4) {
+                f.constant = parts[3];
+            } else {
+                f.constant = "0";
+            }
+            f.function = parts[1];
+            f.argument = Polynomial.fromString(parts[2]);
+            f.argument.setVariableCode(variableCode);
+            f.argument.setOldvariablecode(oldvariablecode);
+            f.argument.setConstdec(consts);
+            f.polynomial = false;
         } else {
-            f.constant = "0";
+            f.polynomial = true;
         }
-        f.function = parts[1];
-        f.argument = Polynomial.fromString(parts[2]);
-        f.argument.setVariableCode(variableCode);
-        f.argument.setOldvariablecode(oldvariablecode);
-        f.argument.setConstdec(consts);
         return f;
     }
     static boolean isSpecialFunctionTerm(@NotNull String function) {
@@ -73,13 +77,22 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
             System.arraycopy(constdec[i], 0, this.consts[i], 0, this.consts[i].length);
         }
     }
+    private boolean isPolynomial() {
+        return polynomial || ((function == null || function.isEmpty() || argument == null) && (coefficient != null));
+    }
     @NotNull
     @Override
     public String toString() {
+        if (isPolynomial()) {
+            return coefficient.toString();
+        }
         return coefficient + " * ( " + function.trim() + " ( " + argument + " ) ) + ( " + constant.trim() + " )";
     }
     @NotNull
     public String derivative(int order) {
+        if (isPolynomial()) {
+            return coefficient.derivative(order);
+        }
         coefficient.setConstdec(consts);
         argument.setConstdec(consts);
         @NotNull String deriv = "";
@@ -91,7 +104,7 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
                 deriv += "( # * fvv ) + ( 2 * ( #v * fv ) ) + ( #vv * f )";
                 break;
             default:
-                throw new IllegalArgumentException("Only 1st and 2nd order derivatives are supported");
+                throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
         @NotNull final String[][] REPLACEMENTS = {{"fvv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"}, {"fv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"}, {"f", "( " + function.trim() + " $ )"}, {"#vv", "( " + coefficient.derivative().derivative().toString().trim() + " )"}, {"#v", "( " + coefficient.derivative().toString().trim() + " )"}, {"#", "( " + coefficient.toString().trim() + " )"}, {"$vv", "( " + argument.derivative().derivative().toString().trim() + " )"}, {"$v", "( " + argument.derivative().toString().trim() + " )"}, {"$", "( " + argument.toString().trim() + " )"}};
         return StringManipulator.format(deriv, REPLACEMENTS);
@@ -99,18 +112,6 @@ public class FunctionTerm implements Serializable, Comparable<FunctionTerm> {
     @NotNull
     public Complex getDegree() {
         return coefficient.getDegree();
-    }
-    @Override
-    public int compareTo(@NotNull FunctionTerm o) {
-        return toString().compareTo(o.toString());
-    }
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof FunctionTerm && toString().equals(o.toString());
     }
     public String getVariableCode() {
         return variableCode;
