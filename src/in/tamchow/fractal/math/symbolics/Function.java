@@ -85,7 +85,7 @@ public class Function extends Operable<Function, FunctionTerm> {
     }
     @Override
     @NotNull
-    public String derivative(int order) {
+    public String derivativeBase(int order) {
         @NotNull String deriv = "";
         if (order < 0) {
             throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
@@ -93,7 +93,7 @@ public class Function extends Operable<Function, FunctionTerm> {
             return toString();
         }
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-            deriv += " " + signs.get(j) + " " + terms.get(i).derivative(order);
+            deriv += " " + signs.get(j) + " " + terms.get(i).derivativeBase(order);
         }
         return process(deriv);
     }

@@ -43,14 +43,16 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
         this.signs.clear();
         this.signs.addAll(signs);
     }
-    public void add(Operable<T, E> other) {
+    public Operable<T, E> add(Operable<T, E> other) {
         terms.addAll(other.terms);
         signs.addAll(other.signs);
+        return this;
     }
-    public void multiply(Operable<T, E> other) {
+    public Operable<T, E> multiply(Operable<T, E> other) {
         multipliers.add(other);
+        return this;
     }
-    public void divide(Operable<T, E> other) {
+    public Operable<T, E> divide(Operable<T, E> other) {
         ++timesDivided;
         if (timesDivided % 2 == 0) {
             multipliers.add(other);
@@ -61,12 +63,14 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
             multipliers.addAll(other.denominators);
             denominators.addAll(other.multipliers);
         }
+        return this;
     }
-    public void subtract(Operable<T, E> other) {
+    public Operable<T, E> subtract(Operable<T, E> other) {
         other.negate();
         add(other);
+        return this;
     }
-    public void negate() {
+    public Operable<T, E> negate() {
         for (int i = 0; i < signs.size(); ++i) {
             if (signs.get(i).equals("+")) {
                 signs.set(i, "-");
@@ -74,6 +78,7 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
                 signs.set(i, "+");
             }
         }
+        return this;
     }
     protected String process(String repr) {
         repr = repr.trim();
@@ -83,8 +88,7 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
         return "( " + repr + " )";
     }
     @NotNull
-    @Override
-    public String toString() {
+    public String toStringBase() {
         @NotNull ResizableCharBuffer function = new ResizableCharBuffer(terms.size() * STRING_PREFIX_SIZE * terms.get(0).toString().length());
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
             function.append(" " + signs.get(j) + " " + terms.get(i));
@@ -95,28 +99,30 @@ public abstract class Operable<T extends Operable, E extends Derivable> extends 
     public boolean useEx() {
         return !(multipliers.isEmpty() || denominators.isEmpty());
     }
-    public String derivativeEx(int order) {
+    public String derivative(int order) {
         switch (order) {
             case 0:
                 return toString();
             case 1:
                 //TODO:Implement
-                return derivative(1);
+                return derivativeBase(1);
             case 2:
                 //TODO:Implement
-                return derivative(2);
+                return derivativeBase(2);
             default:
                 throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
     }
-    public String firstDerivativeEx() {
-        return useEx() ? derivativeEx(1).trim() : firstDerivative();
+    public String firstDerivative() {
+        return useEx() ? derivative(1).trim() : firstDerivativeBase();
     }
-    public String secondDerivativeEx() {
-        return useEx() ? derivativeEx(2).trim() : secondDerivative();
+    public String secondDerivative() {
+        return useEx() ? derivative(2).trim() : secondDerivativeBase();
     }
-    public String toStringEx() {
-        return useEx() ? "( " + toString() + multiplyTerms(multipliers, true) + " ) / ( " + multiplyTerms(denominators, false) + " )" : toString();
+    @NotNull
+    @Override
+    public String toString() {
+        return useEx() ? "( " + toStringBase() + multiplyTerms(multipliers, true) + " ) / ( " + multiplyTerms(denominators, false) + " )" : toStringBase();
     }
     private String multiplyTerms(List<Operable<T, E>> terms, boolean hasPreceding) {
         ResizableCharBuffer repr = new ResizableCharBuffer(terms.size() * STRING_PREFIX_SIZE * terms.get(0).toString().length());

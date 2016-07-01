@@ -49,7 +49,7 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         return polynomial;
     }
     @Override
-    public String derivative(int order) {
+    public String derivativeBase(int order) {
         if (order < 0) {
             throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
@@ -164,7 +164,7 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
             setExponent(exponent);
         }
         @Override
-        public String derivative(int order) {
+        public String derivativeBase(int order) {
             if (order < 0) {
                 throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
             }

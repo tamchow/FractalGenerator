@@ -5,12 +5,12 @@ import java.io.Serializable;
  */
 public abstract class Derivable implements Serializable, Comparable<Derivable> {
     protected static final String UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE = "Only 1st and 2nd order derivatives are supported";
-    public abstract String derivative(int order);
-    public String firstDerivative() {
-        return derivative(1).trim();
+    public abstract String derivativeBase(int order);
+    public String firstDerivativeBase() {
+        return derivativeBase(1).trim();
     }
-    public String secondDerivative() {
-        return derivative(2).trim();
+    public String secondDerivativeBase() {
+        return derivativeBase(2).trim();
     }
     //public abstract void fromString(String input);
     //public abstract Complex getDegree();

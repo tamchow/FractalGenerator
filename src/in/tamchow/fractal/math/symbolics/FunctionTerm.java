@@ -79,12 +79,12 @@ public class FunctionTerm extends Derivable {
     @Override
     public String toString() {
         if (isPolynomial()) {
-            return coefficient.toStringEx();
+            return coefficient.toString();
         }
-        return coefficient.toStringEx() + " * ( " + function.trim() + " ( " + argument.toStringEx() + " ) ) + ( " + constant.trim() + " )";
+        return coefficient.toString() + " * ( " + function.trim() + " ( " + argument.toString() + " ) ) + ( " + constant.trim() + " )";
     }
     @NotNull
-    public String derivative(int order) {
+    public String derivativeBase(int order) {
         if (isPolynomial()) {
             return coefficient.derivative(order);
         }
@@ -107,11 +107,11 @@ public class FunctionTerm extends Derivable {
                 {"fvv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"},
                 {"fv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"},
                 {"f", "( " + function.trim() + " $ )"},
-                {"#vv", "( " + coefficient.secondDerivativeEx() + " )"},
-                {"#v", "( " + coefficient.firstDerivativeEx() + " )"},
+                {"#vv", "( " + coefficient.secondDerivative() + " )"},
+                {"#v", "( " + coefficient.firstDerivative() + " )"},
                 {"#", "( " + coefficient.toString().trim() + " )"},
-                {"$vv", "( " + argument.secondDerivativeEx() + " )"},
-                {"$v", "( " + argument.firstDerivativeEx() + " )"},
+                {"$vv", "( " + argument.secondDerivative() + " )"},
+                {"$v", "( " + argument.firstDerivative() + " )"},
                 {"$", "( " + argument.toString().trim() + " )"}};
         return StringManipulator.format(deriv, REPLACEMENTS);
     }
