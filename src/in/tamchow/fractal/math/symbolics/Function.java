@@ -2,21 +2,12 @@ package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
-
-import java.util.ArrayList;
 /**
  * Holds a transcendental function chain
  */
 public class Function extends Operable<Function, FunctionTerm> {
-    private String[][] consts;
-    private String z_value;
-    private String variableCode, oldvariablecode;
     public Function(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
-        super();
-        setZ_value(variable);
-        setConsts(varconst);
-        setVariableCode(variableCode);
-        setOldvariablecode(oldvariablecode);
+        super(variable, variableCode, oldvariablecode, varconst);
     }
     public Function() {
         super();
@@ -41,47 +32,6 @@ public class Function extends Operable<Function, FunctionTerm> {
             poly.signs.add(0, "+");
         }
         return poly;
-    }
-    public String getOldvariablecode() {
-        return oldvariablecode;
-    }
-    public void setOldvariablecode(String oldvariablecode) {
-        this.oldvariablecode = oldvariablecode;
-    }
-    public String getZ_value() {
-        return z_value;
-    }
-    public void setZ_value(String z_value) {
-        this.z_value = z_value;
-    }
-    public String[][] getConsts() {
-        return consts;
-    }
-    public void setConsts(@NotNull String[][] constdec) {
-        consts = new String[constdec.length][constdec[0].length];
-        for (int i = 0; i < this.consts.length; i++) {
-            System.arraycopy(constdec[i], 0, consts[i], 0, consts[i].length);
-        }
-    }
-    public String getVariableCode() {
-        return variableCode;
-    }
-    public void setVariableCode(String variableCode) {
-        this.variableCode = variableCode;
-    }
-    public ArrayList<String> getSigns() {
-        return signs;
-    }
-    public void setSigns(@NotNull ArrayList<String> signs) {
-        this.signs.clear();
-        this.signs.addAll(signs);
-    }
-    public ArrayList<FunctionTerm> getTerms() {
-        return terms;
-    }
-    public void setTerms(@NotNull ArrayList<FunctionTerm> terms) {
-        this.terms.clear();
-        this.terms.addAll(terms);
     }
     @Override
     @NotNull

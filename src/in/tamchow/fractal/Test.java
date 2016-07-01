@@ -33,7 +33,7 @@ public class Test {
         @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.NEWTON;
         double escrad = 1E10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = 120;
         @Nullable String linetrap = null;
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.NEWTON_CLASSIC, 4, 25, 1, true, false);
+        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.NEWTON_CLASSIC, 4, 25, 0, true, false);
         //cfg.setMultiplier_threshold(1E-6);
         //cfg.setExponentialSmoothing(false);
         cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);

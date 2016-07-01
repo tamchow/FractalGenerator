@@ -5,7 +5,7 @@ import in.tamchow.fractal.math.complex.Complex;
 /**
  * Support for transcendental {@link FunctionTerm#FUNCTION_DATA} for derivative-requiring fractal modes
  */
-public class FunctionTerm extends Derivable {
+class FunctionTerm extends Derivable {
     private final FunctionTermData[] FUNCTION_DATA = {
             new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * ( cos $ ) )"),
             new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"),
@@ -88,8 +88,8 @@ public class FunctionTerm extends Derivable {
         if (isPolynomial()) {
             return coefficient.derivative(order);
         }
-        coefficient.setConstdec(consts);
-        argument.setConstdec(consts);
+        coefficient.setConsts(consts);
+        argument.setConsts(consts);
         @NotNull String deriv;
         switch (order) {
             case 0:

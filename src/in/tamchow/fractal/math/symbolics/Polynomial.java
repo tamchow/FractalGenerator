@@ -8,15 +8,8 @@ import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
  * Represents a polynomial and provides standard methods
  */
 public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
-    private String[][] constdec;
-    private String z_value;
-    private String variableCode, oldvariablecode;
     public Polynomial(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
-        super();
-        setZ_value(variable);
-        setConstdec(varconst);
-        setVariableCode(variableCode);
-        setOldvariablecode(oldvariablecode);
+        super(variable, variableCode, oldvariablecode, varconst);
     }
     public Polynomial() {
         super();
@@ -45,7 +38,7 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         Polynomial polynomial = fromString(poly);
         polynomial.setVariableCode(variableCode);
         polynomial.setVariableCode(oldVariableCode);
-        polynomial.setConstdec(consts);
+        polynomial.setConsts(consts);
         return polynomial;
     }
     @Override
@@ -59,43 +52,13 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         }
         return derived.toString();
     }
-    public String getOldvariablecode() {
-        return oldvariablecode;
-    }
-    public void setOldvariablecode(String oldvariablecode) {
-        this.oldvariablecode = oldvariablecode;
-    }
-    public String getZ_value() {
-        return z_value;
-    }
-    public void setZ_value(String z_value) {
-        this.z_value = z_value;
-    }
-    public String[][] getConstdec() {
-        return constdec;
-    }
-    public void setConstdec(@NotNull String[][] constdec) {
-        this.constdec = new String[constdec.length][constdec[0].length];
-        for (int i = 0; i < this.constdec.length; i++) {
-            System.arraycopy(constdec[i], 0, this.constdec[i], 0, this.constdec[i].length);
-        }
-    }
-    public String getVariableCode() {
-        return variableCode;
-    }
-    public void setVariableCode(String variableCode) {
-        this.variableCode = variableCode;
-    }
     @NotNull
     public Polynomial derivative() {
-        @NotNull Polynomial deriv = new Polynomial();
+        @NotNull Polynomial deriv = new Polynomial(z_value, variableCode, oldvariablecode, consts);
         deriv.setSigns(this.signs);
         for (int i = 0; i < terms.size(); i++) {
             deriv.terms.add(terms.get(i).derivative());
         }
-        deriv.setConstdec(constdec);
-        deriv.setVariableCode(variableCode);
-        deriv.setZ_value(z_value);
         return deriv;
     }
     public int countVariableTerms() {
@@ -117,7 +80,7 @@ public class Polynomial extends Operable<Polynomial, Polynomial.Term> {
                 vardeg = new Complex(term.exponent);
             } catch (IllegalArgumentException iae) {
                 if (!term.isConstant()) {
-                    @NotNull FunctionEvaluator fe = new FunctionEvaluator(variableCode, oldvariablecode, constdec, false);
+                    @NotNull FunctionEvaluator fe = new FunctionEvaluator(variableCode, oldvariablecode, consts, false);
                     vardeg = fe.evaluate(term.exponent, true);
                 } else {
                     vardeg = new Complex(Complex.ZERO);

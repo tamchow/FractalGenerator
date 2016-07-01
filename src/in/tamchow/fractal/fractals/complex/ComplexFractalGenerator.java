@@ -60,7 +60,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     private String[][] consts;
     private Complex distance_estimate_multiplier;
     private Complex centre_offset, lastConstant, trap_point;
-    private boolean mandelbrotToJulia, juliaToMandelbrot, useLineTrap, silencer, simpleSmoothing;
+    private boolean mandelbrotToJulia, juliaToMandelbrot, useLineTrap, silencer, simpleSmoothing, newtonTinting;
     private double a, b, c;
     private String variableCode, oldvariablecode;
     private int colorIfMore = Colors.BASE_COLORS.WHITE, colorIfLess = Colors.BASE_COLORS.BLACK;
@@ -177,9 +177,13 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         if (color.getSmoothing_base().equals(Complex.E)) {
             simpleSmoothing = true;
         }
-        if (color.getPalette().length == 2) {
+        if (color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW && color.getPalette().length == 2) {
             colorIfMore = color.getPalette()[0];
             colorIfLess = color.getPalette()[1];
+        }
+        if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_ITERATIONS || color.getMode() == NEWTON_NORMALIZED_MODULUS) && (color.getByParts() > 0)) {
+            newtonTinting = true;
+            color.setByParts(0);
         }
         if (argand_map == null) {
             argand_map = new Complex[getImageHeight()][getImageWidth()];
@@ -1525,7 +1529,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int c = 0; c < last.length; ++c) {
             last[c] = (isNaN(last[c].cabs()) ? Complex.ZERO : (isInfinite(last[c].cabs()) ? Complex.ONE : last[c]));
         }
-        int nextVal = (val == iterations) ? iterations : val, previousVal = (val == 0) ? 0 : val - 1, backup = 0;
+        int nextVal = (val == iterations) ? iterations : val, previousVal = (val == 0) ? 0 : val - 1;
         double interpolation = smoothcount - (long) smoothcount;
         vals += val;
         valCount++;
@@ -1654,53 +1658,44 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     color.setColor_density(color_density_backup);
                 } else {
                     if (color.getMode() == Colors.MODE.NEWTON_NORMALIZED_MODULUS) {
-                        if (color.getByParts() > 0) {
-                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
-                            backup = color.getByParts();
-                            color.setByParts(0);
-                        } else {
+                        if (newtonTinting) {
                             color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
                             color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
                             color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
+                        } else {
+                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
+                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
+                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
                         }
                         colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
                         colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
                         colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
-                        color.setByParts(backup);
                     } else if (color.getMode() == Colors.MODE.NEWTON_NORMALIZED_ITERATIONS) {
-                        if (color.getByParts() > 0) {
-                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
-                            backup = color.getByParts();
-                            color.setByParts(0);
-                        } else {
+                        if (newtonTinting) {
                             color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
                             color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
                             color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
+                        } else {
+                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) val / iterations));
+                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius)) % color.getNum_colors(), ((double) nextVal / iterations));
+                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) escape_radius) % color.getNum_colors()), ((double) previousVal / iterations));
                         }
                         colortmp1 = Colorizer.linearInterpolated(color1, color2, val, iterations, color.getByParts());
                         colortmp2 = Colorizer.linearInterpolated(color3, color1, val, iterations, color.getByParts());
                         colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, val, iterations, color.getByParts());
-                        color.setByParts(backup);
                     } else if (color.getMode() == Colors.MODE.NEWTON_CLASSIC) {
-                        if (color.getByParts() > 0) {
-                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) nextVal / iterations));
-                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
-                            backup = color.getByParts();
-                            color.setByParts(0);
-                        } else {
+                        if (newtonTinting) {
                             color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
                             color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density())) % color.getNum_colors(), ((double) nextVal / iterations));
                             color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
+                        } else {
+                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
+                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) nextVal / iterations));
+                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
                         }
                         colortmp1 = Colorizer.linearInterpolated(color1, color2, interpolation, color.getByParts());
                         colortmp2 = Colorizer.linearInterpolated(color3, color1, interpolation, color.getByParts());
                         colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, interpolation, color.getByParts());
-                        color.setByParts(backup);
                     } else {
                         colortmp = 0xff000000;
                     }
