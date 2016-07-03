@@ -1,10 +1,13 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.strings.CharBuffer;
 import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
 /**
  * Denotes a symbolic mathematical entity which supports certain operations.
  *
@@ -18,7 +21,10 @@ import java.util.List;
  * </p>
  */
 public abstract class Operable<T extends Operable<T, E>, E extends Derivable> extends Derivable {
-    private static final int STRING_PREFIX_SIZE = 3;
+    protected static final int STRING_PREFIX_SIZE = 3;
+    private static final int OPTIONAL_PREFIX_SIZE = 2;
+    private static final String DIVISION_DERIVATIVE_1 = "((v*$u)-(u*$v))/(v^" + _2 + ")",
+            DIVISION_DERIVATIVE_2 = "(((v^" + _2 + ")*$$u)-(v*((" + _2 + "*$u*$v)+(u*$$v)))+(" + _2 + "*u*($v^" + _2 + ")))/(v^" + _3 + ")";
     private static int timesDivided = 0;
     protected ArrayList<T> multipliers, denominators;
     protected ArrayList<E> terms;
@@ -126,7 +132,8 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
         add(other);
         return (T) this;
     }
-    public Operable<T, E> negate() {
+    @SuppressWarnings("unchecked")
+    public T negate() {
         for (int i = 0; i < signs.size(); ++i) {
             if (signs.get(i).equals("+")) {
                 signs.set(i, "-");
@@ -134,14 +141,14 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
                 signs.set(i, "+");
             }
         }
-        return this;
+        return (T) this;
     }
     protected String process(String repr) {
         repr = repr.trim();
         if (repr.charAt(0) == '+') {
             return repr.substring(1, repr.length());
         }
-        return "( " + repr + " )";
+        return "(" + repr + ")";
     }
     @NotNull
     protected String toStringBase() {
@@ -151,7 +158,16 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
         }
         return process(function.toString()).trim();
     }
-    public abstract Complex getDegree();
+    public Complex getDegree() {
+        @NotNull Complex degree = new Complex(Complex.ZERO);
+        for (@NotNull E term : terms) {
+            Complex vardeg = term.getDegree();
+            if (vardeg.modulus() > degree.modulus()) {
+                degree = new Complex(vardeg);
+            }
+        }
+        return degree;
+    }
     protected boolean useEx() {
         return !(multipliers.isEmpty() || denominators.isEmpty());
     }
@@ -160,17 +176,153 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
             switch (order) {
                 case 0:
                     return toString();
-                case 1:
-                    //TODO:Implement
-                    break;
-                case 2:
-                    //TODO:Implement
-                    break;
+                case 1: {
+                    List<List<String>> mDerivative = multiplyListDerivative(createTerms(multipliers.size()));
+                    CharBuffer repr = new ResizableCharBuffer();
+                    repr.append("(");
+                    for (int i = 0; i < mDerivative.size(); ++i) {
+                        repr.append("(").append(joinTerms(mDerivative.get(i), "*", true)).append(")");
+                        if (i < mDerivative.size() - 1) {
+                            repr.append("+");
+                        }
+                    }
+                    repr.append(")");
+                    String mDerived = replaceDerivatives(repr.toString(), multipliers, order);
+                    if (denominators.isEmpty()) {
+                        return mDerived;
+                    } else {
+                        List<List<String>> dDerivative = multiplyListDerivative(createTerms(multipliers.size()));
+                        CharBuffer dRepr = new ResizableCharBuffer();
+                        dRepr.append("(");
+                        for (int i = 0; i < dDerivative.size(); ++i) {
+                            dRepr.append("(").append(joinTerms(dDerivative.get(i), "*", true)).append(")");
+                            if (i < dDerivative.size() - 1) {
+                                dRepr.append("+");
+                            }
+                        }
+                        dRepr.append(")");
+                        String dDerived = replaceDerivatives(dRepr.toString(), multipliers, order);
+                        final String[][] items = {
+                                {"$u", mDerived},
+                                {"u", itemString(multipliers)},
+                                {"$v", dDerived},
+                                {"v", itemString(denominators)}
+                        };
+                        return format(DIVISION_DERIVATIVE_1, items);
+                    }
+                }
+                case 2: {
+                    List<List<String>> mDerivative = multiplyListDerivative(createTerms(multipliers.size()));
+                    CharBuffer repr = new ResizableCharBuffer();
+                    repr.append("(");
+                    for (int i = 0; i < mDerivative.size(); ++i) {
+                        repr.append("(").append(joinTerms(mDerivative.get(i), "*", true)).append(")");
+                        if (i < mDerivative.size() - 1) {
+                            repr.append("+");
+                        }
+                    }
+                    repr.append(")");
+                    String mDerived = replaceDerivatives(repr.toString(), multipliers, 1);
+                    List<List<List<String>>> mDerivative2 = new ArrayList<>();
+                    for (List<String> unit : mDerivative) {
+                        mDerivative2.add(multiplyListDerivative(unit));
+                    }
+                    CharBuffer repr2 = new ResizableCharBuffer();
+                    repr2.append("(");
+                    for (int i = 0; i < mDerivative2.size(); ++i) {
+                        repr2.append("(");
+                        for (int j = 0; j < mDerivative2.get(i).size(); ++j) {
+                            repr2.append("(").append(joinTerms(mDerivative2.get(i).get(j), "*", true)).append(")");
+                            if (j < mDerivative2.get(i).size() - 1) {
+                                repr2.append("+");
+                            }
+                        }
+                        repr2.append(")");
+                        if (i < mDerivative2.size() - 1) {
+                            repr2.append("+");
+                        }
+                    }
+                    repr2.append(")");
+                    String mDerived2 = replaceDerivatives(repr2.toString(), multipliers, 2);
+                    if (denominators.isEmpty()) {
+                        return mDerived2;
+                    } else {
+                        List<List<String>> dDerivative = multiplyListDerivative(createTerms(multipliers.size()));
+                        CharBuffer dRepr = new ResizableCharBuffer();
+                        dRepr.append("(");
+                        for (int i = 0; i < dDerivative.size(); ++i) {
+                            dRepr.append("(").append(joinTerms(dDerivative.get(i), "*", true)).append(")");
+                            if (i < dDerivative.size() - 1) {
+                                dRepr.append("+");
+                            }
+                        }
+                        dRepr.append(")");
+                        String dDerived = replaceDerivatives(dRepr.toString(), multipliers, 1);
+                        List<List<List<String>>> dDerivative2 = new ArrayList<>();
+                        for (List<String> unit : dDerivative) {
+                            dDerivative2.add(multiplyListDerivative(unit));
+                        }
+                        CharBuffer dRepr2 = new ResizableCharBuffer();
+                        dRepr2.append("(");
+                        for (int i = 0; i < dDerivative2.size(); ++i) {
+                            dRepr2.append("(");
+                            for (int j = 0; j < dDerivative2.get(i).size(); ++j) {
+                                dRepr2.append("(").append(joinTerms(dDerivative2.get(i).get(j), "*", true)).append(")");
+                                if (j < dDerivative2.get(i).size() - 1) {
+                                    dRepr2.append("+");
+                                }
+                            }
+                            dRepr2.append(")");
+                            if (i < dDerivative2.size() - 1) {
+                                dRepr2.append("+");
+                            }
+                        }
+                        dRepr2.append(")");
+                        String dDerived2 = replaceDerivatives(dRepr2.toString(), multipliers, 2);
+                        final String[][] items = {
+                                {"$$u", mDerived2},
+                                {"$u", mDerived},
+                                {"u", itemString(multipliers)},
+                                {"$$v", dDerived2},
+                                {"$v", dDerived},
+                                {"v", itemString(denominators)}
+                        };
+                        return format(DIVISION_DERIVATIVE_2, items);
+                    }
+                }
                 default:
                     throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
             }
         }
         return derivativeBase(order);
+    }
+    private String replaceDerivatives(String toReplace, List<T> items, int order) {
+        for (int i = 0; i < items.size(); ++i) {
+            for (int j = order; j >= 0; --j) {
+                toReplace = replace(toReplace, createDerivativeSymbol(j) + i, items.get(i).derivative(j));
+            }
+        }
+        return toReplace;
+    }
+    private String createDerivativeSymbol(int order) {
+        return createRepeat(DERIVATIVE_SYMBOL, order);
+    }
+    private List<String> createTerms(int size) {
+        List<String> terms = new ArrayList<>(size);
+        for (int i = 0; i < terms.size(); ++i) {
+            terms.set(i, "" + i);
+        }
+        return terms;
+    }
+    private List<List<String>> multiplyListDerivative(List<String> terms) {
+        List<List<String>> derivative = new ArrayList<>(terms.size());
+        for (int i = 0; i < terms.size(); ++i) {
+            List<String> termsBak = new ArrayList<>(terms.size());
+            termsBak.addAll(terms);
+            termsBak.set(i, DERIVATIVE_SYMBOL + termsBak.get(i));
+            derivative.set(i, termsBak);
+        }
+        return derivative;
     }
     public String firstDerivative() {
         return derivative(1).trim();
@@ -181,15 +333,18 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
     @NotNull
     @Override
     public String toString() {
-        return useEx() ? "( ( " + toStringBase() + multiplyTerms(multipliers, false) + " ) / ( " + multiplyTerms(denominators, true) + " )" : toStringBase();
+        return useEx() ? new ResizableCharBuffer().append("((").append(toStringBase()).append(joinTerms(multipliers, "*", false)).append(")/").append(itemString(denominators)).toString() : toStringBase();
     }
-    private String multiplyTerms(List<T> terms, boolean hasNoPreceding) {
-        ResizableCharBuffer repr = new ResizableCharBuffer(terms.size() * STRING_PREFIX_SIZE * terms.get(0).toString().length());
-        for (T term : terms) {
-            repr.append(" ) * ( " + term + " )");
+    public String itemString(List<T> items) {
+        return "(" + joinTerms(items, "*", true) + ")";
+    }
+    private <V> String joinTerms(List<V> terms, String joiner, boolean hasNoPreceding) {
+        ResizableCharBuffer repr = new ResizableCharBuffer(terms.size() * joiner.length() * (STRING_PREFIX_SIZE - 1) * terms.get(0).toString().length());
+        for (V term : terms) {
+            repr.append(")" + joiner + "(" + term + ")");
         }
         if (hasNoPreceding) {
-            return repr.toString().substring(5, repr.length());//trim leading multiply
+            return repr.toString().substring(joiner.length() + (OPTIONAL_PREFIX_SIZE - 1), repr.length());//trim leading joiner
         }
         return repr.toString();
     }

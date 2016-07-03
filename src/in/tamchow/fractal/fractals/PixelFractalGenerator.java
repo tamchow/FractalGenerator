@@ -5,13 +5,21 @@ import in.tamchow.fractal.graphicsutilities.containers.Pannable;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.Zoomable;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 /**
  * Indicates that the fractal generator (the implementor) generates the fractal on a pixel-per-pixel basis
  */
 public abstract class PixelFractalGenerator extends FractalGenerator implements Zoomable, Pannable {
     protected PixelFractalGenerator() {
     }
-    public abstract double calculateBasePrecision();
+    public double calculateBasePrecision() {
+        return ((getImageHeight() >= getImageWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
+    }
+    public double calculateBasePrecision(double xstart, double xend, double ystart, double yend) {
+        return min(getImageWidth() / (abs(abs(xend) + abs(xstart))), getImageHeight() / (abs(abs(yend) + abs(ystart))));
+    }
     public abstract void resetCentre();
     public abstract int getConfiguredHeight();
     public abstract int getImageHeight();

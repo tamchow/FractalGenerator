@@ -9,6 +9,9 @@ import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
  * making heavy use of string replacement;
  */
 public class FunctionEvaluator {
+    public static final String[] OPERATIONS = {
+            "(", ")", "+", "-", "*", "/", "^", "exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth", "inv", "conj", "re", "im", "flip", "mod", "arg"
+    };
     private static final String[] FUNCTIONS =
             {"exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth"};
     private String[][] constdec;
@@ -394,6 +397,18 @@ public class FunctionEvaluator {
                         break;
                     case "flip":
                         ztmp = ComplexOperations.flip(ztmp);
+                        if (i < (processed.length - 1)) {
+                            ++i;
+                        }
+                        break;
+                    case "mod":
+                        ztmp = new Complex(ztmp.modulus());
+                        if (i < (processed.length - 1)) {
+                            ++i;
+                        }
+                        break;
+                    case "arg":
+                        ztmp = new Complex(ztmp.arg());
                         if (i < (processed.length - 1)) {
                             ++i;
                         }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import static in.tamchow.fractal.color.Colors.MODE.*;
 import static in.tamchow.fractal.helpers.math.MathUtils.*;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.correctPadding;
 import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 import static in.tamchow.fractal.math.complex.ComplexOperations.*;
 import static java.lang.Double.*;
@@ -39,8 +40,8 @@ import static java.lang.Math.sin;
 public final class ComplexFractalGenerator extends PixelFractalGenerator {
     private static final String asciiArtBase =
             "~`+-*/#@!%^&(){}[];'|:?><.,_=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    private static final ArrayList<Complex> roots = new ArrayList<>();
     private static Complex[][] argand_map;
-    private static ArrayList<Complex> roots;
     private static int valCount = 0;
     private static double vals = 0;
     private static Complex[] boundary_elements;
@@ -72,10 +73,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     @Deprecated
     public ComplexFractalGenerator(int width, int height, double zoom, double zoom_factor, double base_precision, Mode mode, String function, @NotNull String[][] consts, String variableCode, String oldvariablecode, double tolerance, @NotNull Colorizer color, Publisher progressPublisher) {
-        //initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1, 0), color, 0, Complex.ZERO, null);
+        //initFractal(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, new Complex(-1, 0), color, 0, Complex._0, null);
         //this.progressPublisher = progressPublisher;
         //ComplexFractalParams params=new ComplexFractalParams();
-        //params.initParams=new ComplexFractalInitParams(width,height,zoom,zoom_factor,base_precision,mode,function,consts,variableCode,oldvariablecode,tolerance,color,0,Complex.ZERO,null,0);
+        //params.initParams=new ComplexFractalInitParams(width,height,zoom,zoom_factor,base_precision,mode,function,consts,variableCode,oldvariablecode,tolerance,color,0,Complex._0,null,0);
         this(new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, zoom_factor, base_precision, mode, function, consts, variableCode, oldvariablecode, tolerance, color, 0, Complex.ZERO, null, 0), null), progressPublisher);
     }
     @Deprecated
@@ -140,9 +141,6 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         resetCentre();
         setOldvariablecode(oldvariablecode);
         setTolerance(tolerance);
-        if (roots == null) {
-            roots = new ArrayList<>();
-        }
         setColor(color);
         lastConstant = new Complex(-1, 0);
         if ((this.color.getMode() == STRIPE_AVERAGE_SPLINE || this.color.getMode() == STRIPE_AVERAGE_LINEAR)
@@ -269,10 +267,6 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         } else {
             this.base_precision = base_precision;
         }
-    }
-    @Override
-    public double calculateBasePrecision() {
-        return ((getImageHeight() >= argand.getWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
     }
     public PixelContainer getArgand() {
         return argand;
@@ -432,6 +426,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         roots.ensureCapacity(round((float) degree.modulus()));
         @NotNull FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         long ctr = 0;
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
+        functionderiv = correctPadding(functionderiv, FunctionEvaluator.OPERATIONS);
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -742,6 +738,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         long ctr = 0;
         Complex lastConstantBackup = getLastConstant();
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
+        functionderiv = correctPadding(functionderiv, FunctionEvaluator.OPERATIONS);
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -983,6 +981,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         if (mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT) {
             toadd = new Complex(getLastConstant());
         }
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
+        functionderiv = correctPadding(functionderiv, FunctionEvaluator.OPERATIONS);
+        functionderiv2 = correctPadding(functionderiv2, FunctionEvaluator.OPERATIONS);
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
@@ -1062,7 +1063,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                             ztmpd = add(subtract(zd, multiply(constant, divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false)))), toadd);
                         }
                     } else {
-                        ztmp = add(subtract(z, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false))), toadd);
+                        ztmp = add(subtract(z, divide(fe.evaluate(function, false),
+                                fe.evaluate(functionderiv, false))), toadd);
                         ztmpd = null;
                         if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
                             ztmpd = add(subtract(zd, divide(fed.evaluate(functionderiv, false),
@@ -1286,6 +1288,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fed = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         long ctr = 0;
         Complex lastConstantBackup = getLastConstant();
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
+        functionderiv = correctPadding(functionderiv, FunctionEvaluator.OPERATIONS);
         outer:
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {

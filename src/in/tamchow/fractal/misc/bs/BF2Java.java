@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static in.tamchow.fractal.helpers.strings.StringManipulator.createCharRepeats;
-import static in.tamchow.fractal.helpers.strings.StringManipulator.getCharRepeats;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.createRepeat;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.getRepeats;
 /**
  * Compiles pure Brainfuck to Java
  * <br>
@@ -107,56 +107,56 @@ public class BF2Java {
             int count = 0;
             switch (current) {
                 case '+':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     if (count == 1) {
                         builder.append(bf2j.addVal);
                     } else {
                         builder.append(String.format(bf2j.addValOp, count));
                     }
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
                     i += count;
                     continue outer;
                 case '-':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     if (count == 1) {
                         builder.append(bf2j.subVal);
                     } else {
                         builder.append(String.format(bf2j.subValOp, count));
                     }
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
                     i += count;
                     continue outer;
                 case '>':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     if (count == 1) {
                         builder.append(bf2j.addPtr);
                     } else {
                         builder.append(String.format(bf2j.addPtrOp, count));
                     }
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
                     i += count;
                     continue outer;
                 case '<':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     if (count == 1) {
                         builder.append(bf2j.subPtr);
                     } else {
                         builder.append(String.format(bf2j.subPtrOp, count));
                     }
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
@@ -212,48 +212,48 @@ public class BF2Java {
             int count = 0;
             switch (current) {
                 case '+':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     builder.append(String.format(bf2j.addValW, memoryType, count));
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
                     i += count;
                     continue outer;
                 case '-':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     builder.append(String.format(bf2j.subValW, memoryType, count));
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
                     i += count;
                     continue outer;
                 case '>':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     if (count == 1) {
                         builder.append(bf2j.addPtr);
                     } else {
                         builder.append(String.format(bf2j.addPtrOp, count));
                     }
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }
                     i += count;
                     continue outer;
                 case '<':
-                    count = getCharRepeats(BFProgram, i);
+                    count = getRepeats(BFProgram, i);
                     if (count == 1) {
                         builder.append(bf2j.subPtr);
                     } else {
                         builder.append(String.format(bf2j.subPtrOp, count));
                     }
                     if (addComments) {
-                        builder.append("//").append(createCharRepeats(current, count)).append("\n");
+                        builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
                         builder.append("\n");
                     }

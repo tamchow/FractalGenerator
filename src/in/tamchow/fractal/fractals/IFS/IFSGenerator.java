@@ -180,9 +180,6 @@ public class IFSGenerator extends PixelFractalGenerator {
             this.base_precision = base_precision;
         }
     }
-    public double calculateBasePrecision() {
-        return ((getImageHeight() >= plane.getWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
-    }
     public double getZoom_factor() {
         return zoom_factor;
     }

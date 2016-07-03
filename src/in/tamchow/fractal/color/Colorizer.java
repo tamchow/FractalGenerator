@@ -5,8 +5,7 @@ import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
 
-import static in.tamchow.fractal.helpers.math.MathUtils.ULP;
-import static in.tamchow.fractal.helpers.math.MathUtils.boundsProtected;
+import static in.tamchow.fractal.helpers.math.MathUtils.*;
 import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 import static in.tamchow.fractal.math.complex.ComplexOperations.divide;
 import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
@@ -409,7 +408,7 @@ public class Colorizer implements Serializable {
         }
     }
     public void changeColorDensity(int color_density) {
-        setColor_density(boundsProtected(color_density, num_colors));
+        setColor_density(clamp(color_density, num_colors));
     }
     public int createIndexSimple(double val, double min, double max) {
         return boundsProtected(round((float) ((val - min) / (max - min)) * color_density), num_colors);
@@ -490,7 +489,8 @@ public class Colorizer implements Serializable {
             idx = transform(divide(principallog(exp), principallog(base)).modulus());
         }
         idx = isNaN(idx) ? 0.0 : (isInfinite(idx) ? 1.0 : idx);
-        idx *= boundsProtected(color_density, num_colors);
+        //idx *= color_density;
+        idx *= clamp(color_density, num_colors);
         if (idx < adjustedResolution) {
             idx /= multiplier_threshold;
         }

@@ -8,14 +8,17 @@ public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';
     private StringManipulator() {
     }
-    public static String createCharRepeats(char c, int repeats) {
-        CharBuffer buffer = new CharBuffer(repeats);
+    public static String createRepeat(char item, int repeats) {
+        return createRepeat("" + item, repeats);
+    }
+    public static String createRepeat(String item, int repeats) {
+        CharBuffer buffer = new CharBuffer(repeats * item.length());
         for (int i = 0; i < repeats; ++i) {
-            buffer.append(c);
+            buffer.append(item);
         }
         return buffer.toString();
     }
-    public static int getCharRepeats(String str, int idx) {
+    public static int getRepeats(String str, int idx) {
         int ctr = 1;
         char current = str.charAt(idx++);
         while (idx < str.length() && current == str.charAt(idx)) {
@@ -198,6 +201,14 @@ public final class StringManipulator {
         return formatted;
     }
     @NotNull
+    public static String correctPadding(String in, String[] operations) {
+        for (String operation : operations) {
+            in = replace(in, operation, " " + operation + " ");
+        }
+        in = replace(in, "  ", " ");
+        return in.trim();
+    }
+    @NotNull
     public static int[] indexesOf(@NotNull String in, @NotNull String what) {
         @NotNull int[] backup = new int[in.length()], indexes;
         int idx = 0, count = 0;
@@ -235,7 +246,7 @@ public final class StringManipulator {
         @NotNull String result = value;
         int lastIndex = 0, index = value.indexOf(from), fl = from.length(), replaceCount = countOccurrencesOf(value, from);
         if (index != -1) {
-            @NotNull CharBuffer buffer = new CharBuffer(result.length() - replaceCount * (fl - to.length()));
+            @NotNull CharBuffer buffer = new ResizableCharBuffer(result.length() - replaceCount * (fl - to.length()));
             while (index != -1) {
                 buffer.append(value.substring(lastIndex, index)).append(to);
                 lastIndex = index + fl;

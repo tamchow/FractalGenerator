@@ -18,6 +18,7 @@ import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.math.symbolics.Function;
 
 import static in.tamchow.fractal.helpers.math.MathUtils.*;
+import static in.tamchow.fractal.helpers.strings.StringManipulator.correctPadding;
 import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 import static in.tamchow.fractal.math.complex.ComplexOperations.*;
 /**
@@ -439,9 +440,6 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         float completion = ((float) current * iteration) / total;
         progressPublisher.publish(ctr + " iterations of " + maxiter + ",completion = " + (completion * 100.0f) + "%", completion, current);
     }
-    public double calculateBasePrecision() {
-        return ((getImageHeight() >= getImageWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
-    }
     public int getDepth() {
         return depth;
     }
@@ -589,6 +587,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 y_end = fromCoordinates(getImageWidth() / 2, endy - 1);
         double incr_x = Math.abs((x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth())),
                 incr_y = Math.abs((y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight()));
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
+        functionderiv = correctPadding(functionderiv, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -677,6 +677,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 y_end = fromCoordinates(getImageWidth() / 2, endy - 1);
         double incr_x = Math.abs((x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth())),
                 incr_y = Math.abs((y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight()));
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -739,6 +740,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 y_end = fromCoordinates(getImageWidth() / 2, endy - 1);
         double incr_x = Math.abs((x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth())),
                 incr_y = Math.abs((y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight()));
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -827,6 +829,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
     private void secantGenerate(int start, int end) {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -892,6 +895,8 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         if (mode == ComplexFractalGenerator.Mode.JULIA_NOVABROT) {
             toadd = new Complex(getLastConstant());
         }
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
+        functionderiv = correctPadding(functionderiv, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -973,6 +978,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         Complex lastConstantBackup = getLastConstant();
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -1043,6 +1049,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
                 y_end = fromCoordinates(getImageWidth() / 2, endy - 1);
         double incr_x = Math.abs((x_end.real() - x_start.real()) / (xPointsPerPixel * getImageWidth())),
                 incr_y = Math.abs((y_end.imaginary() - y_start.imaginary()) / (yPointsPerPixel * getImageHeight()));
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];
@@ -1134,6 +1141,7 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, constants, oldVariableCode);
         long ctr = 0;
         Complex lastConstantBackup = getLastConstant();
+        function = correctPadding(function, FunctionEvaluator.OPERATIONS);
         outer:
         for (int level = 0; level < iterations.length; ++level) {
             int iteration = iterations[level];

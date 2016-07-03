@@ -62,7 +62,8 @@
     The Newton/Nova fractal generator can handle simple polynomials with coefficients and exponents which are
     expressions in themselves, but it uses a different input format:
     <br/>
-    <i>coefficient</i>: (optional)<i>variable (optional)</i>: (optional)<i>exponent (optional)</i>,<i>+ or -</i>,<i>coefficient</i>:<i>variable</i>:<i>exponent</i>...
+    <i>coefficient</i>: (optional)<i>variable (optional)</i>: (optional)<i>exponent (optional)</i>,<i>+
+    or - or * or /</i>,<i>coefficient</i>:<i>variable</i>:<i>exponent</i>...
     <br/>
     <br/>
     Example: <i>1:z:3,-,c:z:2,+,1</i> (equivalent to <i>(z<sup>3</sup>)-(c*z<sup>2</sup>)+1</i>)
@@ -71,10 +72,12 @@
     <br/>
     This is the input format:
     <br/>
-    <i>polynomial</i>; (optional)<i>function (optional)</i>;<i>polynomial (optional)</i>;<i>constant (optional)</i>|<i>+
-    or -</i>|<i>polynomial</i>;<i>function</i>;<i>polynomial</i>;<i>constant</i>...
+    <i>polynomial</i>; (optional)<i>function (optional)</i>;<i>polynomial (optional)</i>;<i>exponent</i>;<i>constant (optional)</i>|<i>+
+    or - or * or /</i>|<i>polynomial</i>;<i>function</i>;<i>polynomial</i>;<i>exponent</i>;<i>constant</i>...
     <br/>
     The 1<sup>st</sup> polynomial is the coefficient,the 2<sup>nd</sup> is the function argument.
+    <br/>
+    Only the coefficient is required, but if the function is supplied then everything except the constant is required.
     <br/>
     Example: <i>1;sin;1:z:2;f</i> (equivalent to <i>sin(z<sup>2</sup>)+f</i>)
     <br/>
@@ -119,10 +122,12 @@ Colorings currently available are based on:
 The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as
 Newton mode as it uses the same mathematics (symbolic differentiation) backend.
 <br/>
-<br/>
 Support for IFS Affine Transform or function-based fractals or L-System ones such as the fern are in place.
-<p>Multithreading -- Available for complex number fractals and IFS fractals
-    (not including L-System ones and animations)! Use is encouraged, but memory requirements are a bit high.</p>
+<p>
+    Multithreading -- Available for complex number fractals and IFS fractals (not including L-System ones and animations)!
+
+    Use is encouraged, but memory requirements are a bit high.
+</p>
 
 More standard coloring methods are there, such as:
 <ol>
@@ -136,22 +141,19 @@ More standard coloring methods are there, such as:
 Also, these modes support Catmull-Rom Spline and linear interpolation.
 <br/>
 These coloring methods will affect only the palette-based methods of colouring.
-
-
 <p>
     <b>NOTES:</b>
-    The fractal generator has the basic framework for being extensible and being multithreaded, and multithreading
-    works,
-    albeit being extremely resource intensive, requiring about a 20x increase in memory requirements for about a 10x
-    speedup during generation (12 threads). Also, there might be OOM errors in very intensive cases.
-    I still encourage people to use multithreading, with up to 14 threads (7*2).
+    The fractal generator is extensible and multithreaded, and multithreading works well,
+    albeit being quite resource intensive, requiring about a 20x increase in memory requirements for about a 10x
+    speedup during generation (12 threads). Also, there might be OOM errors in very intensive cases
+    (20+ threads at 640x480).
 </p>
-<br/>
 <p>
-    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb
-    rule, for quadrupling total resolution, double base precision for best results.
+    Also, there is full support for zoom, but renders after zoom are slow for higher base precision values.
+    There is also support for panning, but pure complex function fractals are the only ones which
+    support on-demand panning, others require regenerating the fractal.
+    As a thumb rule, for quadrupling total resolution, double base precision for best results.
 </p>
-<br/>
 <p>
     <b>OUTPUT:</b>
     Default debug and progress is output to console, and the final image(s) are saved serially as
@@ -161,12 +163,9 @@ These coloring methods will affect only the palette-based methods of colouring.
     <br/>
     For test launches, the result is saved as <code>Fractal.png</code> in the current working directory.
 </p>
-<br/>
 <p>
-    There is also an included image viewer, which can also generate and display standard complex number fractals. Enable
-    it with the
-    <code>-v</code>
-    command-line switch.
+    There is also an included image viewer, which can also generate and display standard complex number fractals.
+    Enable it with the <code>-v</code> command-line switch.
     <br/>
     There is support for elementary image transitions from top, bottom, left and right in the viewer, again
     configurable.
@@ -177,11 +176,9 @@ These coloring methods will affect only the palette-based methods of colouring.
     <li>Through a configuration file, whose path has to be specified as an argument while running the application</li>
     <li>Or use the pre-configured test shell script</li>
 </ol>
-<br/>
-Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in
-.ini files.
+Image and Fractal configuration files are a stickler for format, but do support inline comments with <code>"#"</code>,
+as in <code>.ini</code> files.
 </p>
-<br/>
 <p>
     I do not have much time for putting in documenting comments.
     I'll put them in and update files as and when possible.

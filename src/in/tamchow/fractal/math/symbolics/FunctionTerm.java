@@ -1,27 +1,30 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 /**
- * Support for transcendental {@link FunctionTerm#FUNCTION_DATA} for derivative-requiring fractal modes
+ * Support for transcendental {@link FunctionTerm#FUNCTION_DATA}s for derivative-requiring fractal modes
  */
 class FunctionTerm extends Derivable {
-    private final FunctionTermData[] FUNCTION_DATA = {
-            new FunctionTermData("sin", "$v * ( cos $ )", "( ( - ( sin $ ) ) * $v ) + ( $vv * ( cos $ ) )"),
-            new FunctionTermData("cos", "( - ( sin $ ) ) * $v", "( ( - ( cos $ ) ) * $v ) + ( $vv * ( - ( sin $ ) ) )"),
-            new FunctionTermData("log", " $v / $", "( ( - ( $v * $v ) ) / ( $ * $ ) ) + ( ( $vv * $v ) / $ )"),
-            new FunctionTermData("exp", "$v * ( exp $ )", "exp $ * ( $v + $vv )"),
-            new FunctionTermData("sinh", "$v * ( cosh $ )", "( $v * ( sinh $ ) ) + ( $vv * ( cosh $ ) )"),
-            new FunctionTermData("cosh", "$v * ( sinh $ )", "( $v * ( cosh $ ) ) + ( $vv * ( sinh $ ) )"),
-            new FunctionTermData("tan", "$v * ( ( sec $ ) ^ 2 )", "( ( sec $ ) ^ 2 ) * ( ( 2 * ( $v ^ 2 ) * tan $ ) + $vv )"),
-            new FunctionTermData("tanh", "$v * ( ( sech $ ) ^ 2 )", "( ( sech $ ) ^ 2 ) * ( $vv - ( 2 * ( $v ^ 2 ) * tanh $ ) )"),
-            new FunctionTermData("cot", "- ( $v * ( ( cosec $ ) ^ 2 ) )", "( ( cosec $ ) ^ 2 ) * ( ( 2 * ( $v ^ 2 ) * cot $ ) - $vv )"),
-            new FunctionTermData("coth", "- ( $v * ( ( cosech $ ) ^ 2 ) )", "( ( cosech $ ) ^ 2 ) * ( ( 2 * ( $v ^ 2 ) * coth $ ) - $vv )"),
-            new FunctionTermData("sec", "$v * ( ( sec $ ) * ( tan $ ) )", "$vv * tan $ * sec $ + ( $v  ^ 2 ) * ( ( sec $ ) ^ 3 ) + ( $v  ^ 2 ) * ( ( tan $ ) ^ 2 ) * ( sec $ ) - ( ( $v  ^ 2 ) * ( ( sec $ ) ^ 3 ) )"),
-            new FunctionTermData("sech", "$v * ( - ( tanh $ ) * ( sech $ ) )", "( $v  ^ 2 ) * ( ( tan $ ) ^ 2 ) * ( sec $ ) - ( $vv * tan $ * sec $ )"),
-            new FunctionTermData("cosec", "$v * ( - ( cosec $ ) * ( cot $ ) )", "( $v ^ 2 ) * ( ( cosec $ ) ^ 3 ) + ( $v ^ 2 ) * ( ( cot $ ) ^ 2 ) * ( cosec $ ) - ( $vv * cot $ * cosec $ )"),
-            new FunctionTermData("cosech", "$v * ( - ( cosech $ ) * ( coth $ ) )", "( $v ^ 2 ) * ( ( cosech $ ) ^ 3 ) + ( $v ^ 2 ) * ( ( coth $ ) ^ 2 ) * ( cosech $ ) - ( $vv * coth $ * cosech $ )")};
-    private String function, constant, variableCode, oldvariablecode, z_value;
+    private static final FunctionTermData[] FUNCTION_DATA = {
+            new FunctionTermData("sin", "$v*(cos$)", "((-(sin$))*$v)+($vv*(cos$))"),
+            new FunctionTermData("cos", "(-(sin$))*$v", "((-(cos$))*$v)+($vv*(-(sin$)))"),
+            new FunctionTermData("log", "$v/$", "((-($v*$v))/($*$))+(($vv*$v)/$)"),
+            new FunctionTermData("exp", "$v*(exp$)", "exp$*($v+$vv)"),
+            new FunctionTermData("sinh", "$v*(cosh$)", "($v*(sinh$))+($vv*(cosh$))"),
+            new FunctionTermData("cosh", "$v*(sinh$)", "($v*(cosh$))+($vv*(sinh$))"),
+            new FunctionTermData("tan", "$v*((sec$)^" + _2 + ")", "((sec$)^" + _2 + ")*((" + _2 + "*($v^" + _2 + ")*(tan$))+$vv)"),
+            new FunctionTermData("tanh", "$v*((sech$)^" + _2 + ")", "((sech$)^" + _2 + ")*($vv-(" + _2 + "*($v^" + _2 + ")*(tanh$)))"),
+            new FunctionTermData("cot", "-($v*((cosec$)^" + _2 + "))", "((cosec$)^" + _2 + ")*((" + _2 + "*($v^" + _2 + ")*(cot$))-$vv)"),
+            new FunctionTermData("coth", "-($v*((cosech$)^" + _2 + "))", "((cosech$)^" + _2 + ")*((" + _2 + "*($v^" + _2 + ")*coth$)-$vv)"),
+            new FunctionTermData("sec", "$v*((sec$)*(tan$))", "$vv*(tan$)*(sec$)+($v^" + _2 + ")*((sec$)^" + _3 + ")+($v^" + _2 + ")*((tan$)^" + _2 + ")*(sec$)-(($v^" + _2 + ")*((sec$)^" + _3 + "))"),
+            new FunctionTermData("sech", "$v*(-(tanh$)*(sech$))", "($v^" + _2 + ")*((tan$)^" + _2 + ")*(sec$)-($vv*(tan$)*(sec$))"),
+            new FunctionTermData("cosec", "$v*(-(cosec$)*(cot$))", "($v^" + _2 + ")*((cosec$)^" + _3 + ")+($v^" + _2 + ")*((cot$)^" + _2 + ")*(cosec$)-($vv*(cot$)*(cosec$))"),
+            new FunctionTermData("cosech", "$v*(-(cosech$)*(coth$))", "($v^" + _2 + ")*((cosech$)^" + _3 + ")+($v^" + _2 + ")*((coth$)^" + _2 + ")*(cosech$)-($vv*(coth$)*(cosech$))")};
+    private static final String FUNCTION_DERIVATIVE_1 = "(#*e*(f^ev)*fv)+(#v*(f^e))",
+            FUNCTION_DERIVATIVE_2 = "(" + _2 + "*e*#v*fv*(f^ev))+(#vv*(f^e))+(e*#*((ev*(f^evv)*(fv^" + _2 + "))+(fvv*(f^ev))))";
+    private String function, constant, exponent, variableCode, oldvariablecode, z_value;
     private Polynomial coefficient, argument;
     private String[][] consts;
     private boolean polynomial;
@@ -39,13 +42,14 @@ class FunctionTerm extends Derivable {
         @NotNull String[] parts = StringManipulator.split(function, ";");
         f.coefficient = Polynomial.fromString(parts[0], variableCode, oldvariablecode, consts);
         if (parts.length > 1) {
-            if (parts.length == 4) {
-                f.constant = parts[3];
-            } else {
-                f.constant = "0";
-            }
             f.function = parts[1];
             f.argument = Polynomial.fromString(parts[2], variableCode, oldvariablecode, consts);
+            f.exponent = parts[3];
+            if (parts.length >= 5) {
+                f.constant = parts[4];
+            } else {
+                f.constant = _0;
+            }
             f.polynomial = false;
         } else {
             f.polynomial = true;
@@ -56,8 +60,8 @@ class FunctionTerm extends Derivable {
         return getUsedFunctionTermIndex(function) != -1;
     }
     private static int getUsedFunctionTermIndex(@NotNull String function) {
-        for (int i = 0; i < new FunctionTerm().FUNCTION_DATA.length; i++) {
-            if (function.contains(new FunctionTerm().FUNCTION_DATA[i].function)) {
+        for (int i = 0; i < FUNCTION_DATA.length; i++) {
+            if (function.contains(FUNCTION_DATA[i].function)) {
                 return i;
             }
         }
@@ -81,7 +85,7 @@ class FunctionTerm extends Derivable {
         if (isPolynomial()) {
             return coefficient.toString();
         }
-        return coefficient.toString() + " * ( " + function.trim() + " ( " + argument.toString() + " ) ) + ( " + constant.trim() + " )";
+        return new ResizableCharBuffer().append(coefficient.toString()).append("*((").append(function.trim()).append("(").append(argument.toString()).append("))^(").append(exponent.trim()).append("))+(").append(constant.trim()).append(")").toString();
     }
     @NotNull
     public String derivativeBase(int order) {
@@ -95,24 +99,27 @@ class FunctionTerm extends Derivable {
             case 0:
                 return toString();
             case 1:
-                deriv = "( # * fv ) + ( #v * f )";
+                deriv = FUNCTION_DERIVATIVE_1;
                 break;
             case 2:
-                deriv = "( # * fvv ) + ( 2 * ( #v * fv ) ) + ( #vv * f )";
+                deriv = FUNCTION_DERIVATIVE_2;
                 break;
             default:
                 throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
         @NotNull final String[][] REPLACEMENTS = {
-                {"fvv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + " )"},
-                {"fv", "( " + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + " )"},
-                {"f", "( " + function.trim() + " $ )"},
-                {"#vv", "( " + coefficient.secondDerivative() + " )"},
-                {"#v", "( " + coefficient.firstDerivative() + " )"},
-                {"#", "( " + coefficient.toString().trim() + " )"},
-                {"$vv", "( " + argument.secondDerivative() + " )"},
-                {"$v", "( " + argument.firstDerivative() + " )"},
-                {"$", "( " + argument.toString().trim() + " )"}};
+                {"evv", "(e- " + _2 + ")"},
+                {"ev", "(e- " + _1 + ")"},
+                {"e", "(" + exponent + ")"},
+                {"fvv", "(" + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + ")"},
+                {"fv", "(" + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + ")"},
+                {"f", "(" + function.trim() + "$)"},
+                {"#vv", "(" + coefficient.secondDerivative() + ")"},
+                {"#v", "(" + coefficient.firstDerivative() + ")"},
+                {"#", "(" + coefficient.toString().trim() + ")"},
+                {"$vv", "(" + argument.secondDerivative() + ")"},
+                {"$v", "(" + argument.firstDerivative() + ")"},
+                {"$", "(" + argument.toString().trim() + ")"}};
         return StringManipulator.format(deriv, REPLACEMENTS);
     }
     @NotNull
@@ -137,7 +144,7 @@ class FunctionTerm extends Derivable {
     public void setZ_value(String z_value) {
         this.z_value = z_value;
     }
-    private class FunctionTermData {
+    private static class FunctionTermData {
         String function, derivative1, derivative2;
         public FunctionTermData(String function, String derivative1, String derivative2) {
             this.function = function;

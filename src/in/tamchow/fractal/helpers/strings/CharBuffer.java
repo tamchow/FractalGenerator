@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Does not cache String representation for performance reasons.
  */
 public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Serializable, Cloneable {
-    public static final int DEFAULT_CAPACITY = 10;
+    public static final int DEFAULT_CAPACITY = 250;
     @NotNull
     protected char[] buffer;
     protected int size;
