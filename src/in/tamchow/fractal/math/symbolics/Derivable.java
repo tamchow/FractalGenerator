@@ -6,8 +6,11 @@ import java.io.Serializable;
  * Represents a mathematical entity that can be differentiated
  */
 public abstract class Derivable implements Serializable, Comparable<Derivable> {
+    public static final String _0 = String.valueOf(0);
     protected static final String UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE = "Only 1st and 2nd order derivatives are supported";
-    protected static final String _0 = String.valueOf(0), _1 = String.valueOf(1), _2 = String.valueOf(2), _3 = String.valueOf(3);
+    protected static final String _1 = String.valueOf(1);
+    protected static final String _2 = String.valueOf(2);
+    protected static final String _3 = String.valueOf(3);
     protected static final String DERIVATIVE_SYMBOL = "$";
     protected abstract String derivativeBase(int order);
     public abstract Complex getDegree();

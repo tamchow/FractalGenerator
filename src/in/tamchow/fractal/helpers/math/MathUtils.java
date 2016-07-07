@@ -164,7 +164,7 @@ public final class MathUtils {
         }
         return -1;
     }
-    static void quickSort(@Nullable int[][] arr, int low, int high) {
+    private static void quickSort(@Nullable int[][] arr, int low, int high) {
         if (arr == null || arr.length == 0) return;
         if (low >= high) return;
         // pick the pivot
@@ -248,8 +248,62 @@ public final class MathUtils {
     public static Matrix doRotate(@NotNull Matrix point, @NotNull Matrix origin, double angle) {
         return add(doRotate(subtract(point, origin), angle), origin);
     }
+    public static int[] linearize(int[][] data) {
+        int[] linearized = new int[data.length * data[0].length];
+        for (int i = 0; i < data.length; ++i) {
+            System.arraycopy(data[i], 0, linearized, i * data[i].length, data[i].length);
+        }
+        return linearized;
+    }
+    public static int percentileValue(int[] data, double percentile) {
+        int[] tmp = new int[data.length];
+        System.arraycopy(data, 0, tmp, 0, data.length);
+        quickSort(tmp);
+        int idx = clamp(Math.round((float) (data.length * percentile)), data.length);
+        return tmp[idx];
+    }
+    public static double percentileOf(int value, int[] data) {
+        int less = 0, equal = 0;
+        for (int item : data) {
+            if (item == value) ++equal;
+            else if (item < value) ++less;
+        }
+        return (less + 0.5 * equal) / data.length;
+    }
+    public static int median(int[] data) {
+        return percentileValue(data, 0.5);
+    }
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+    private static void quickSort(int[] arr, int low, int high) {
+        if (arr == null || arr.length == 0) return;
+        if (low >= high) return;
+        // pick the pivot
+        int middle = low + (high - low) / 2;
+        int pivot = arr[middle];
+        // make left < pivot and right > pivot
+        int i = low, j = high;
+        while (i <= j) {
+            while (arr[i] < pivot) {
+                i++;
+            }
+            while (arr[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                i++;
+                j--;
+            }
+        }// recursively sort the 2 subparts
+        if (low < j) quickSort(arr, low, j);
+        if (high > i) quickSort(arr, i, high);
+    }
     @NotNull
-    public int[] mostEfficientfactor(int a) {
+    public static int[] mostEfficientfactor(int a) {
         int num_factors = 0;
         for (int i = 1; i <= a; i++) {
             if (a % i == 0) num_factors++;
@@ -271,7 +325,7 @@ public final class MathUtils {
         quickSort(data, 0, data.length - 1);
         return new int[]{data[0].a, data[0].b};
     }
-    void quickSort(@Nullable FactorData[] arr, int low, int high) {
+    private static void quickSort(@Nullable FactorData[] arr, int low, int high) {
         if (arr == null || arr.length == 0) return;
         if (low >= high) return;
         // pick the pivot
@@ -297,7 +351,7 @@ public final class MathUtils {
         if (low < j) quickSort(arr, low, j);
         if (high > i) quickSort(arr, i, high);
     }
-    private class FactorData {
+    private static class FactorData {
         int a, b, sum;
         public FactorData(int a, int b) {
             this.a = a;

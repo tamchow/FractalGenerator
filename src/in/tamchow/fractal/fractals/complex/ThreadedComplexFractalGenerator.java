@@ -8,16 +8,13 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
 
-import java.io.Serializable;
-
-import static in.tamchow.fractal.helpers.math.MathUtils.indexOf;
-import static in.tamchow.fractal.helpers.math.MathUtils.rankListFromHistogram;
+import static in.tamchow.fractal.helpers.math.MathUtils.*;
 /**
  * Multithreading for the fractal generator
  */
-public final class ThreadedComplexFractalGenerator extends ThreadedGenerator implements Serializable {
+public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
     private final ComplexFractalGenerator master;
-    private PartComplexFractalData[] buffer;
+    private volatile PartComplexFractalData[] buffer;
     private long iterations;
     private double escape_radius;
     @Nullable
@@ -55,7 +52,11 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
         return ctr;
     }
     public void generate() {
-        generate(0, master.getImageWidth(), 0, master.getImageHeight());
+        if (master.getParams().useThreadedGenerator()) {
+            generate(0, master.getImageWidth(), 0, master.getImageHeight());
+        } else {
+            master.generate();
+        }
     }
     public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
@@ -111,8 +112,17 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                     int ep = master.escapedata[pi][pj], en = master.escapedata[ni][nj], e = master.escapedata[i][j];
                     if (master.color.getMode() == Colors.MODE.HISTOGRAM_SPLINE || master.color.getMode() == Colors.MODE.HISTOGRAM_LINEAR || master.color.getMode() == Colors.MODE.RANK_ORDER_LINEAR || master.color.getMode() == Colors.MODE.RANK_ORDER_SPLINE) {
                         if (master.color.getMode() == Colors.MODE.RANK_ORDER_LINEAR || master.color.getMode() == Colors.MODE.RANK_ORDER_SPLINE) {
+                            int idxp = master.color.createIndex(percentileOf(ep, histogram), 0, 1);
+                            int idx = master.color.createIndex(percentileOf(e, histogram), 0, 1);
+                            int idxn = master.color.createIndex(percentileOf(en, histogram), 0, 1);
+                            if (master.isNonPercentileBasedRankOrder()) {
+                                idxp = master.color.createIndex(((double) indexOf(histogram, ep)) / iterations, 0, 1);
+                                idx = master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1);
+                                idxn = master.color.createIndex(((double) indexOf(histogram, en)) / iterations, 0, 1);
+                            }
+                            int idxMin = (idxp < idxn) ? idxp : idxn, idxMax = (idxp > idxn) ? idxp : idxn;
                             if (master.color.getMode() == Colors.MODE.RANK_ORDER_LINEAR) {
-                                int color1 = master.color.getColor(master.color.createIndex(((double) indexOf(histogram, ep)) / iterations, 0, 1)), color2 = master.color.getColor(master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1)), color3 = master.color.getColor(master.color.createIndex(((double) indexOf(histogram, en)) / iterations, 0, 1));
+                                int color1 = master.color.getColor(idxp), color2 = master.color.getColor(idx), color3 = master.color.getColor(idxn);
                                 int colortmp1 = Colorizer.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, master.color.getByParts());
                                 int colortmp2 = Colorizer.linearInterpolated(color2, color3, normalized_count - (long) normalized_count, master.color.getByParts());
                                 if (master.color.isLogIndex()) {
@@ -121,8 +131,6 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator imp
                                     colortmp = color2;
                                 }
                             } else {
-                                int idxp = master.color.createIndex(((double) indexOf(histogram, ep)) / iterations, 0, 1),
-                                        idxn = master.color.createIndex(((double) indexOf(histogram, en)) / iterations, 0, 1), idxMin = (idxp < idxn) ? idxp : idxn, idxMax = (idxp > idxn) ? idxp : idxn;
                                 if (master.color.isModifierEnabled()) {
                                     colortmp = master.color.splineInterpolated(master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), normalized_count - (long) normalized_count);
                                 } else {

@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * Holds an image as an SDA, extends PixelContainer
  */
-public class LinearizedPixelContainer extends PixelContainer implements Serializable {
+public final class LinearizedPixelContainer extends PixelContainer implements Serializable {
     private int[] pixdata;
     private int width;
     public LinearizedPixelContainer(PixelContainer source) {

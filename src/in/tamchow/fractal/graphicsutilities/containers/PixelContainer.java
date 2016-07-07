@@ -123,15 +123,25 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 int left = getPixel(i, j - 1), right = getPixel(i, j + 1), top = getPixel(i - 1, j), bottom = getPixel(i + 1, j);
                 int top_left = getPixel(i - 1, j - 1), top_right = getPixel(i - 1, j + 1), bottom_left = getPixel(i + 1, j - 1), bottom_right = getPixel(i + 1, j + 1);
                 double average = (top_left + top + top_right + left + right + bottom_left + bottom + bottom_right) / 8;
+                int median = MathUtils.median(new int[]{top_left, top, top_right, left, right, bottom_left, bottom, bottom_right});
                 switch (mode) {
-                    case AVERAGE:
+                    case MEAN:
                         processed.setPixel(i, j, Math.round((float) average));
                         break;
-                    case WEIGHTED_AVERAGE:
+                    case WEIGHTED_MEAN:
                         processed.setPixel(i, j, Math.round((float) ((average + getPixel(i, j)) / 2)));
                         break;
-                    case INTERPOLATED_AVERAGE:
+                    case INTERPOLATED_MEAN:
                         processed.setPixel(i, j, Colorizer.linearInterpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
+                        break;
+                    case MEDIAN:
+                        processed.setPixel(i, j, median);
+                        break;
+                    case WEIGHTED_MEDIAN:
+                        processed.setPixel(i, j, Math.round((float) ((median + getPixel(i, j)) / 2)));
+                        break;
+                    case INTERPOLATED_MEDIAN:
+                        processed.setPixel(i, j, Colorizer.linearInterpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
                         break;
                     case INTERPOLATED:
                         processed.setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
@@ -371,5 +381,5 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     public int hashCode() {
         return toString().hashCode();
     }
-    public enum PostProcessMode {AVERAGE, WEIGHTED_AVERAGE, INTERPOLATED_AVERAGE, INTERPOLATED, NEGATIVE, NONE}
+    public enum PostProcessMode {MEAN, MEDIAN, WEIGHTED_MEAN, WEIGHTED_MEDIAN, INTERPOLATED_MEAN, INTERPOLATED_MEDIAN, INTERPOLATED, NEGATIVE, NONE}
 }

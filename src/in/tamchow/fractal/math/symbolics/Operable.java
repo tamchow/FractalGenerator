@@ -1,5 +1,6 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.CharBuffer;
 import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 import in.tamchow.fractal.math.complex.Complex;
@@ -34,13 +35,16 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
     protected String variableCode;
     protected String oldvariablecode;
     protected Operable() {
+        init(null, null, null, null);
+    }
+    protected Operable(@Nullable String variable, @Nullable String variableCode, @Nullable String oldvariablecode, @Nullable String[][] varconst) {
+        init(variable, variableCode, oldvariablecode, varconst);
+    }
+    protected void init(@Nullable String variable, @Nullable String variableCode, @Nullable String oldvariablecode, @Nullable String[][] varconst) {
         multipliers = new ArrayList<>();
         denominators = new ArrayList<>();
         terms = new ArrayList<>();
         signs = new ArrayList<>();
-    }
-    protected Operable(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
-        this();
         setZ_value(variable);
         setConsts(varconst);
         setVariableCode(variableCode);
@@ -86,6 +90,21 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
     protected void setSigns(@NotNull List<String> signs) {
         this.signs.clear();
         this.signs.addAll(signs);
+    }
+    protected void init(T other) {
+        init(other.z_value, other.variableCode, other.oldvariablecode, other.consts);
+        setTerms(other.terms);
+        setSigns(other.signs);
+        setMultipliers(other.multipliers);
+        setDenominators(other.denominators);
+    }
+    protected void setMultipliers(@NotNull List<T> multipliers) {
+        this.multipliers.clear();
+        this.multipliers.addAll(multipliers);
+    }
+    protected void setDenominators(@NotNull List<T> denominators) {
+        this.denominators.clear();
+        this.denominators.addAll(denominators);
     }
     @SuppressWarnings("unchecked")
     public T add(T other) {

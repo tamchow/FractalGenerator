@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 /**
  * Elementary matrix operations: Addition, subtraction, scalar multiplication, matrix multiplication
  */
-public class MatrixOperations {
+public final class MatrixOperations {
     @NotNull
     public static Matrix add(@NotNull Matrix m1, @NotNull Matrix m2) {
         if (m1.getNumRows() != m2.getNumRows() || m1.getNumColumns() != m2.getNumColumns()) {

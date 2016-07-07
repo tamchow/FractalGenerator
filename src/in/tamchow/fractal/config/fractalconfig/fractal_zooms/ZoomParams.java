@@ -45,4 +45,8 @@ public class ZoomParams implements Serializable {
         }
         return centre + " " + level;
     }
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof ZoomParams && other.toString().equals(toString());
+    }
 }

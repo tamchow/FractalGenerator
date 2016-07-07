@@ -10,7 +10,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * @see Colorizer#linearInterpolated(int, int, double, int)
  * @see in.tamchow.fractal.color.Colors.BASE_COLORS
  */
-public class DrawingUtilities {
+public final class DrawingUtilities {
     /**
      * Uses Xiaolin Wu's Anti-Aliased line drawing algorithm
      *

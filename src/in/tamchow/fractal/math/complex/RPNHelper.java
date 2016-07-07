@@ -1,10 +1,11 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.stack.Stack;
 import in.tamchow.fractal.helpers.stack.impls.FixedStack;
 /**
  * Supports dyadic operations on complex numbers as expressions in RPN format
  */
-public class RPNHelper {
+public final class RPNHelper {
     // Supported operators
     private static final Operator[] OPERATORS = {
             new Operator("+", 0, Associativity.LEFT),
@@ -28,7 +29,7 @@ public class RPNHelper {
     public static Complex evaluateInfix(@NotNull String[] infix) {
         return evaluateRPN(infixToRPN(infix));
     }
-    public static Complex evaluateRPN(@NotNull FixedStack<String> tkstack) {
+    public static Complex evaluateRPN(@NotNull Stack<String> tkstack) {
         String tk = tkstack.pop();
         Complex x, y;
         try {
@@ -89,7 +90,8 @@ public class RPNHelper {
         if (!isOperator(token)) {
             throw new IllegalArgumentException("Invalid token: " + token);
         }
-        return getByToken(token).associativity == type;
+        Operator got = getByToken(token);
+        return got != null && got.associativity == type;
     }
     /**
      * Compare precendece of two operators.
@@ -105,7 +107,11 @@ public class RPNHelper {
             throw new IllegalArgumentException("Invalid tokens: " + token1
                     + " " + token2);
         }
-        return getByToken(token1).precedence - getByToken(token2).precedence;
+        Operator got1 = getByToken(token1), got2 = getByToken(token2);
+        if (got1 == null || got2 == null) {
+            return Integer.MIN_VALUE;
+        }
+        return got1.precedence - got2.precedence;
     }
     private static int countOccurrencesOfParentheses(@NotNull String[] inputTokens) {
         int ctr = 0;
@@ -120,7 +126,7 @@ public class RPNHelper {
     public static String[] infixToRPN(@NotNull String[] inputTokens) {
         @NotNull String[] out = new String[inputTokens.length - countOccurrencesOfParentheses(inputTokens)];
         int outCtr = 0;
-        @NotNull FixedStack<String> stack = new FixedStack<>(inputTokens.length);
+        @NotNull Stack<String> stack = new FixedStack<>(inputTokens.length);
         // For all the input tokens [S1] read the next token [S2]
         for (@NotNull String token : inputTokens) {
             if (isOperator(token)) {

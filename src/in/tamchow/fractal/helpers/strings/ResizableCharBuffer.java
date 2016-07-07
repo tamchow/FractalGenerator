@@ -3,7 +3,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * A resizeable version of {@link CharBuffer}
  */
-public class ResizableCharBuffer extends CharBuffer {
+public final class ResizableCharBuffer extends CharBuffer {
     public static final int RESIZE_FACTOR = 2;
     public ResizableCharBuffer() {
         super();

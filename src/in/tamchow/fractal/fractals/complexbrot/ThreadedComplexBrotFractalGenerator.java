@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator implements Serializable {
     private ComplexBrotFractalGenerator master;
-    private PartComplexBrotFractalData[] data;
+    private volatile PartComplexBrotFractalData[] data;
     private int threads, nx, ny;
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
@@ -52,22 +52,26 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         }
     }
     public void generate() {
-        if (master.isSequential()) {
-            generate(0, master.getImageWidth(), 0, master.getImageHeight());
+        if (master.getParams().useThreadedGenerator()) {
+            if (master.isSequential()) {
+                generate(0, master.getImageWidth(), 0, master.getImageHeight());
+            } else {
+                int idx = 0;
+                for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
+                    @NotNull int[] coords = master.start_end_coordinates(i, threads);
+                    @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
+                    master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
+                    idx++;
+                    runner.start();
+                }
+                try {
+                    wrapUp();
+                } catch (InterruptedException interrupted) {
+                    interrupted.printStackTrace();
+                }
+            }
         } else {
-            int idx = 0;
-            for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
-                @NotNull int[] coords = master.start_end_coordinates(i, threads);
-                @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
-                master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
-                idx++;
-                runner.start();
-            }
-            try {
-                wrapUp();
-            } catch (InterruptedException interrupted) {
-                interrupted.printStackTrace();
-            }
+            master.generate();
         }
     }
     @Override

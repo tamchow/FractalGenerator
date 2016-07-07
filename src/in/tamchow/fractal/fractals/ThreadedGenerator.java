@@ -1,11 +1,12 @@
 package in.tamchow.fractal.fractals;
+import java.io.Serializable;
 /**
  * Abstract superclass for threaded fractal generator
  */
-public abstract class ThreadedGenerator {
+public abstract class ThreadedGenerator implements Serializable {
     protected final Object lock = new Lock();
-    protected SlaveRunner[] threads;
-    protected int currentlyCompletedThreads;
+    protected volatile SlaveRunner[] threads;
+    protected volatile int currentlyCompletedThreads;
     protected ThreadedGenerator() {
     }
     public abstract int countCompletedThreads();

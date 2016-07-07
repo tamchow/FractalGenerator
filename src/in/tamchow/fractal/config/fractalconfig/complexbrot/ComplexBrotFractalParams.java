@@ -29,22 +29,23 @@ public class ComplexBrotFractalParams extends Config {
     private int maxHitThreshold;
     private boolean clamped;
     private boolean skidColoring;
+    private double[] percentiles;
     {
         setName(Strings.BLOCKS.COMPLEXBROT);
     }
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
-        this(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped);
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
+        this(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped, percentiles);
     }
-    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+    public ComplexBrotFractalParams(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
         this();
-        init(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped);
+        init(width, height, num_threads, switch_rate, num_points, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped, percentiles);
     }
-    public ComplexBrotFractalParams(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
-        this(width, height, xThreads, yThreads, switch_rate, xPointsPerPixel, yPointsPerPixel, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped);
+    public ComplexBrotFractalParams(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
+        this(width, height, xThreads, yThreads, switch_rate, xPointsPerPixel, yPointsPerPixel, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, variableCode + "_p", constants, mode, anti, clamped, percentiles);
     }
-    public ComplexBrotFractalParams(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+    public ComplexBrotFractalParams(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
         this();
-        init(width, height, xThreads, yThreads, switch_rate, xPointsPerPixel, yPointsPerPixel, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped);
+        init(width, height, xThreads, yThreads, switch_rate, xPointsPerPixel, yPointsPerPixel, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped, percentiles);
     }
     public ComplexBrotFractalParams() {
         super();
@@ -56,9 +57,9 @@ public class ComplexBrotFractalParams extends Config {
     }
     public ComplexBrotFractalParams(@NotNull ComplexBrotFractalParams old) {
         if (old.isSequential()) {
-            init(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getMaxHitThreshold(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti(), old.isClamped());
+            init(old.getWidth(), old.getHeight(), old.getNum_threads(), old.getSwitch_rate(), old.getNum_points(), old.getMaxHitThreshold(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti(), old.isClamped(), old.getPercentiles());
         } else {
-            init(old.getWidth(), old.getHeight(), old.getxThreads(), old.getyThreads(), old.getSwitch_rate(), old.getxPointsPerPixel(), old.getyPointsPerPixel(), old.getMaxHitThreshold(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti(), old.isClamped());
+            init(old.getWidth(), old.getHeight(), old.getxThreads(), old.getyThreads(), old.getSwitch_rate(), old.getxPointsPerPixel(), old.getyPointsPerPixel(), old.getMaxHitThreshold(), old.getIterations(), old.getZoom(), old.getZoom_level(), old.getBase_precision(), old.getEscape_radius(), old.getTolerance(), old.getSkew(), old.getFunction(), old.getVariableCode(), old.getOldVariableCode(), old.getConstants(), old.getMode(), old.isAnti(), old.isClamped(), old.getPercentiles());
         }
         setPath(old.getPath());
         setPostProcessMode(old.getPostProcessMode());
@@ -97,21 +98,21 @@ public class ComplexBrotFractalParams extends Config {
     public void setSequential(boolean sequential) {
         this.sequential = sequential;
     }
-    private void init(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+    private void init(int width, int height, int num_threads, int switch_rate, int num_points, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
         setNum_points(num_points);
         setNum_threads(num_threads);
-        commonInit(width, height, switch_rate, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped);
+        commonInit(width, height, switch_rate, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped, percentiles);
         setSequential(false);
     }
-    private void init(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+    private void init(int width, int height, int xThreads, int yThreads, int switch_rate, int xPointsPerPixel, int yPointsPerPixel, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
         setxPointsPerPixel(xPointsPerPixel);
         setyPointsPerPixel(yPointsPerPixel);
         setxThreads(xThreads);
         setyThreads(yThreads);
-        commonInit(width, height, switch_rate, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped);
+        commonInit(width, height, switch_rate, maxHitThreshold, iterations, zoom, zoom_level, base_precision, escape_radius, tolerance, skew, function, variableCode, oldVariableCode, constants, mode, anti, clamped, percentiles);
         setSequential(true);
     }
-    private void commonInit(int width, int height, int switch_rate, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped) {
+    private void commonInit(int width, int height, int switch_rate, int maxHitThreshold, @NotNull int[] iterations, double zoom, double zoom_level, double base_precision, double escape_radius, double tolerance, double skew, String function, String variableCode, String oldVariableCode, @NotNull String[][] constants, ComplexFractalGenerator.Mode mode, boolean anti, boolean clamped, @Nullable double[] percentiles) {
         setWidth(width);
         setHeight(height);
         setSwitch_rate(switch_rate);
@@ -130,6 +131,7 @@ public class ComplexBrotFractalParams extends Config {
         setConstants(constants);
         setAnti(anti);
         setClamped(clamped);
+        setPercentiles(percentiles);
     }
     public double getEscape_radius() {
         return escape_radius;
@@ -297,19 +299,34 @@ public class ComplexBrotFractalParams extends Config {
         setAnti(Boolean.valueOf(data[15]));
         setClamped(Boolean.valueOf(data[16]));
         setSkidColoring(Boolean.valueOf(data[17]));
+        setPercentiles(doublesFromStrings(StringManipulator.split(data[18], ",")));
         if (isSequential()) {
-            setxPointsPerPixel(Integer.valueOf(data[18]));
-            setyPointsPerPixel(Integer.valueOf(data[19]));
-            setxThreads(Integer.valueOf(data[20]));
-            setyThreads(Integer.valueOf(data[21]));
+            setxPointsPerPixel(Integer.valueOf(data[19]));
+            setyPointsPerPixel(Integer.valueOf(data[20]));
+            setxThreads(Integer.valueOf(data[21]));
+            setyThreads(Integer.valueOf(data[22]));
         } else {
-            setNum_points(Integer.valueOf(data[18]));
+            setNum_points(Integer.valueOf(data[19]));
         }
     }
-    private String integersToString(@NotNull int[] ints) {
+    private double[] doublesFromStrings(@NotNull String[] strings) {
+        @NotNull double[] doubles = new double[strings.length];
+        for (int i = 0; i < doubles.length; ++i) {
+            doubles[i] = Double.valueOf(strings[i]);
+        }
+        return doubles;
+    }
+    private String arrayToString(@NotNull int[] ints) {
         @NotNull String string = "";
         for (int anInt : ints) {
             string += anInt + ",";
+        }
+        return string.substring(0, string.length() - 1);//trim trailing ','
+    }
+    private String arrayToString(@NotNull double[] doubles) {
+        @NotNull String string = "";
+        for (double aDouble : doubles) {
+            string += aDouble + ",";
         }
         return string.substring(0, string.length() - 1);//trim trailing ','
     }
@@ -325,7 +342,7 @@ public class ComplexBrotFractalParams extends Config {
     @Override
     public String toString() {
         @Nullable String representation = POSTPROCESSING + postprocessMode + ((isSequential()) ? "\n" + THREADS + num_threads : "") + ((newton_constant != null) ? "\n" + NEWTON_CONSTANT + newton_constant : "") + "\n" + isSequential() + "\n" + SWITCH_RATE + switch_rate + "\n" + OLD_VARIABLE_CODE + oldVariableCode;
-        representation += width + "\n" + height + "\n" + integersToString(iterations) + "\n" + base_precision + "\n" + zoom + "\n" + zoom_level + "\n" + escape_radius + "\n" + tolerance + "\n" + skew + "\n" + maxHitThreshold + "\n" + function + "\n" + variableCode + "\n" + mode + "\n" + constantsToString() + "\n" + isAnti() + "\n" + isClamped() + "\n" + isSkidColoring() + "\n";
+        representation += width + "\n" + height + "\n" + arrayToString(iterations) + "\n" + base_precision + "\n" + zoom + "\n" + zoom_level + "\n" + escape_radius + "\n" + tolerance + "\n" + skew + "\n" + maxHitThreshold + "\n" + function + "\n" + variableCode + "\n" + mode + "\n" + constantsToString() + "\n" + isAnti() + "\n" + isClamped() + "\n" + isSkidColoring() + "\n" + arrayToString(percentiles) + "\n";
         if (isSequential()) {
             representation += xPointsPerPixel + "\n" + yPointsPerPixel + "\n" + xThreads + "\n" + yThreads;
         } else {
@@ -353,5 +370,24 @@ public class ComplexBrotFractalParams extends Config {
     }
     public void setSkidColoring(boolean skidColoring) {
         this.skidColoring = skidColoring;
+    }
+    public double[] getPercentiles() {
+        return percentiles;
+    }
+    public void setPercentiles(@Nullable double[] percentiles) {
+        this.percentiles = new double[getIterations().length];
+        if (percentiles == null) {
+            for (int i = 0; i < this.percentiles.length; ++i) {
+                this.percentiles[i] = 1.0;
+            }
+        } else {
+            int i = 0;
+            for (; i < this.percentiles.length && i < percentiles.length; ++i) {
+                this.percentiles[i] = percentiles[i];
+            }
+            for (; i < this.percentiles.length; ++i) {
+                this.percentiles[i] = 1.0;
+            }
+        }
     }
 }

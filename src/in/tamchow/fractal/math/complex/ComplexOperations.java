@@ -3,7 +3,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Provides Utility methods for handling complex numbers
  */
-public class ComplexOperations {
+public final class ComplexOperations {
     @NotNull
     public static Complex subtract(@NotNull Complex z1, @NotNull Complex z2) {
         return new Complex(z1.real() - z2.real(), z1.imaginary() - z2.imaginary());

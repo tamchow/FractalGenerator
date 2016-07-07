@@ -29,6 +29,9 @@ public class ZoomConfig implements Serializable, Iterable<ZoomParams> {
         }
         return zoom;
     }
+    public boolean hasZoom(ZoomParams zoom) {
+        return zooms.contains(zoom);
+    }
     public boolean hasZooms() {
         return zooms != null && zooms.size() > 0;
     }
@@ -48,7 +51,13 @@ public class ZoomConfig implements Serializable, Iterable<ZoomParams> {
         if (this.zooms == null) {
             this.zooms = new ArrayList<>();
         }
+        /*if (!hasZoom(zoom)) {
+            zooms.add(zoom);
+        }*/
         zooms.add(zoom);
+    }
+    public ZoomParams getZoom(int i) {
+        return zooms.get(i);
     }
     @Override
     public Iterator<ZoomParams> iterator() {

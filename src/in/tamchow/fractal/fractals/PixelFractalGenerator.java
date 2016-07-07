@@ -1,6 +1,5 @@
 package in.tamchow.fractal.fractals;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
-import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.graphicsutilities.containers.Pannable;
 import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
 import in.tamchow.fractal.graphicsutilities.containers.Zoomable;
@@ -33,8 +32,8 @@ public abstract class PixelFractalGenerator extends FractalGenerator implements 
     @Override
     public void doZooms(@NotNull ZoomConfig zoomConfig) {
         if (zoomConfig.hasZooms()) {
-            for (@NotNull ZoomParams zoom : zoomConfig) {
-                zoom(zoom);
+            for (int i = 0; i < zoomConfig.getZooms().size(); ++i) {
+                zoom(zoomConfig.getZoom(i));
             }
         }
     }

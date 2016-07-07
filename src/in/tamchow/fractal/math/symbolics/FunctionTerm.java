@@ -6,7 +6,7 @@ import in.tamchow.fractal.math.complex.Complex;
 /**
  * Support for transcendental {@link FunctionTerm#FUNCTION_DATA}s for derivative-requiring fractal modes
  */
-class FunctionTerm extends Derivable {
+final class FunctionTerm extends Derivable {
     private static final FunctionTermData[] FUNCTION_DATA = {
             new FunctionTermData("sin", "$v*(cos$)", "((-(sin$))*$v)+($vv*(cos$))"),
             new FunctionTermData("cos", "(-(sin$))*$v", "((-(cos$))*$v)+($vv*(-(sin$)))"),
@@ -28,33 +28,10 @@ class FunctionTerm extends Derivable {
     private Polynomial coefficient, argument;
     private String[][] consts;
     private boolean polynomial;
-    public FunctionTerm() {
+    FunctionTerm() {
     }
-    public FunctionTerm(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
-        setZ_value(variable);
-        setConsts(varconst);
-        setVariableCode(variableCode);
-        setOldvariablecode(oldvariablecode);
-    }
-    @NotNull
-    public static FunctionTerm fromString(@NotNull String function, String variableCode, @NotNull String[][] consts, String oldvariablecode) {
-        @NotNull FunctionTerm f = new FunctionTerm(null, variableCode, oldvariablecode, consts);
-        @NotNull String[] parts = StringManipulator.split(function, ";");
-        f.coefficient = Polynomial.fromString(parts[0], variableCode, oldvariablecode, consts);
-        if (parts.length > 1) {
-            f.function = parts[1];
-            f.argument = Polynomial.fromString(parts[2], variableCode, oldvariablecode, consts);
-            f.exponent = parts[3];
-            if (parts.length >= 5) {
-                f.constant = parts[4];
-            } else {
-                f.constant = _0;
-            }
-            f.polynomial = false;
-        } else {
-            f.polynomial = true;
-        }
-        return f;
+    FunctionTerm(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
+        init(variable, variableCode, oldvariablecode, varconst);
     }
     static boolean isSpecialFunctionTerm(@NotNull String function) {
         return getUsedFunctionTermIndex(function) != -1;
@@ -67,10 +44,40 @@ class FunctionTerm extends Derivable {
         }
         return -1;
     }
-    public String[][] getConsts() {
+    private void init(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
+        setZ_value(variable);
+        setConsts(varconst);
+        setVariableCode(variableCode);
+        setOldvariablecode(oldvariablecode);
+    }
+    @NotNull
+    FunctionTerm fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts) {
+        init(null, variableCode, oldvariablecode, consts);
+        return fromString(function);
+    }
+    @NotNull
+    FunctionTerm fromString(@NotNull String function) {
+        @NotNull String[] parts = StringManipulator.split(function, ";");
+        coefficient = new Polynomial(null, variableCode, oldvariablecode, consts).fromString(parts[0]);
+        if (parts.length > 1) {
+            this.function = parts[1];
+            argument = new Polynomial(null, variableCode, oldvariablecode, consts).fromString(parts[2]);
+            exponent = parts[3];
+            if (parts.length >= 5) {
+                constant = parts[4];
+            } else {
+                constant = _0;
+            }
+            polynomial = false;
+        } else {
+            polynomial = true;
+        }
+        return this;
+    }
+    String[][] getConsts() {
         return consts;
     }
-    public void setConsts(@NotNull String[][] constdec) {
+    void setConsts(@NotNull String[][] constdec) {
         this.consts = new String[constdec.length][constdec[0].length];
         for (int i = 0; i < this.consts.length; i++) {
             System.arraycopy(constdec[i], 0, this.consts[i], 0, this.consts[i].length);
@@ -88,7 +95,7 @@ class FunctionTerm extends Derivable {
         return new ResizableCharBuffer().append(coefficient.toString()).append("*((").append(function.trim()).append("(").append(argument.toString()).append("))^(").append(exponent.trim()).append("))+(").append(constant.trim()).append(")").toString();
     }
     @NotNull
-    public String derivativeBase(int order) {
+    protected String derivativeBase(int order) {
         if (isPolynomial()) {
             return coefficient.derivative(order);
         }
@@ -126,32 +133,32 @@ class FunctionTerm extends Derivable {
     public Complex getDegree() {
         return coefficient.getDegree();
     }
-    public String getVariableCode() {
+    String getVariableCode() {
         return variableCode;
     }
-    public void setVariableCode(String variableCode) {
+    void setVariableCode(String variableCode) {
         this.variableCode = variableCode;
     }
-    public String getOldvariablecode() {
+    String getOldvariablecode() {
         return oldvariablecode;
     }
-    public void setOldvariablecode(String oldvariablecode) {
+    void setOldvariablecode(String oldvariablecode) {
         this.oldvariablecode = oldvariablecode;
     }
-    public String getZ_value() {
+    String getZ_value() {
         return z_value;
     }
-    public void setZ_value(String z_value) {
+    void setZ_value(String z_value) {
         this.z_value = z_value;
     }
     private static class FunctionTermData {
         String function, derivative1, derivative2;
-        public FunctionTermData(String function, String derivative1, String derivative2) {
+        FunctionTermData(String function, String derivative1, String derivative2) {
             this.function = function;
             this.derivative1 = derivative1;
             this.derivative2 = derivative2;
         }
-        public FunctionTermData(@NotNull FunctionTermData old) {
+        FunctionTermData(@NotNull FunctionTermData old) {
             function = old.function;
             derivative1 = old.derivative1;
             derivative2 = old.derivative2;

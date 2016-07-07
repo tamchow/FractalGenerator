@@ -8,7 +8,7 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
  */
 public class ThreadedIFSGenerator extends ThreadedGenerator {
     private IFSGenerator master;
-    private PartIFSData[] data;
+    private volatile PartIFSData[] data;
     private int threads;
     public ThreadedIFSGenerator(IFSGenerator generator) {
         master = generator;
@@ -28,17 +28,21 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         return (countCompletedThreads() == threads);
     }
     public void generate() {
-        int idx = 0;
-        for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
-            @NotNull SlaveRunner runner = new SlaveRunner(idx);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
-            idx++;
-            runner.start();
-        }
-        try {
-            wrapUp();
-        } catch (InterruptedException interrupted) {
-            interrupted.printStackTrace();
+        if (master.getParams().useThreadedGenerator()) {
+            int idx = 0;
+            for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
+                @NotNull SlaveRunner runner = new SlaveRunner(idx);
+                master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
+                idx++;
+                runner.start();
+            }
+            try {
+                wrapUp();
+            } catch (InterruptedException interrupted) {
+                interrupted.printStackTrace();
+            }
+        } else {
+            master.generate();
         }
     }
     @Override

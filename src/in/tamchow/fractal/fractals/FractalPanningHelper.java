@@ -22,7 +22,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * @see ThreadedComplexBrotFractalGenerator
  * @see ThreadedIFSGenerator
  */
-public class FractalPanningHelper {
+public final class FractalPanningHelper {
     @NotNull
     public static PixelContainer pan(Pannable toPan, int distance, double angle) {
         return pan(toPan, distance, angle, false);

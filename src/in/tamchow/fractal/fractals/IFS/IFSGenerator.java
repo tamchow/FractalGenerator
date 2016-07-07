@@ -22,7 +22,7 @@ import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
  * 1 in single threaded initialization phase without rendering to get starting points for threads (fast)
  * &amp; 1 in multithreaded mode for rendering/animation (slow)
  */
-public class IFSGenerator extends PixelFractalGenerator {
+public final class IFSGenerator extends PixelFractalGenerator {
     private static final double TOLERANCE = 1E-15;
     private static Matrix[] points;
     private static Matrix initial;
@@ -118,23 +118,36 @@ public class IFSGenerator extends PixelFractalGenerator {
         weightDistribution = new double[getImageHeight()][getImageWidth()];
         silencer = params.useThreadedGenerator();
     }
+    @Override
     public void zoom(@NotNull ZoomParams zoom) {
         if (zoom.centre == null) {
-            zoom(zoom.centre_x, zoom.centre_y, zoom.level);
+            zoom(zoom.centre_x, zoom.centre_y, zoom.level, false, true);
         } else {
-            zoom(zoom.centre, zoom.level);
+            zoom(zoom.centre, zoom.level, false, true);
         }
     }
     public void zoom(@NotNull Matrix centre_offset, double level) {
+        zoom(centre_offset, level, true, true);
+    }
+    public void zoom(@NotNull Matrix centre_offset, double level, boolean write, boolean additive) {
+        if (write) {
+            params.zoomConfig.addZoom(new ZoomParams(centre_offset, level));
+        }
         setCentre_offset(centre_offset);
-        setZoom_factor(level);
+        setZoom_factor((additive) ? zoom_factor + level : level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
-    public void zoom(int cx, int cy, double level) {
+    public void zoom(int cx, int cy, int level) {
+        zoom(cx, cy, level, true, true);
+    }
+    public void zoom(int cx, int cy, double level, boolean write, boolean additive) {
+        if (write) {
+            params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
+        }
         cx = boundsProtected(cx, plane.getWidth());
         cy = boundsProtected(cy, plane.getHeight());
         setCentre_offset(fromCoordinates(cx, cy));
-        setZoom_factor(level);
+        setZoom_factor((additive) ? zoom_factor + level : level);
         setScale(base_precision * Math.pow(zoom, zoom_factor));
     }
     @NotNull
@@ -326,11 +339,11 @@ public class IFSGenerator extends PixelFractalGenerator {
     @Override
     public void pan(int distance, double angle, boolean flip_axes) {
         angle = (flip_axes) ? (Math.PI / 2) - angle : angle;
-        pan((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)));
+        pan(Math.round(distance * (float) Math.cos(angle)), Math.round(distance * (float) Math.sin(angle)));
     }
     @Override
     public void pan(int x_dist, int y_dist) {
-        zoom(center_x + x_dist, center_y + y_dist, zoom_factor);
+        zoom(center_x + x_dist, center_y + y_dist, zoom_factor, false, false);
     }
     public double[][] getWeightDistribution() {
         return weightDistribution;

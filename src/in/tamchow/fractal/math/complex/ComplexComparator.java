@@ -3,7 +3,7 @@ import in.tamchow.fractal.math.Comparator;
 /**
  * Compares 2 {@link Complex} objects using lexicographical ordering.
  */
-public class ComplexComparator {
+public final class ComplexComparator {
     private ComplexComparator() {
     }
     public static boolean compare(Complex a, Complex b, Comparator type) {
@@ -24,22 +24,22 @@ public class ComplexComparator {
                 throw new UnsupportedOperationException("Invalid " + type.getClass() + ": with alias " + type.getAlias());
         }
     }
-    public static boolean lessThan(Complex a, Complex b) {
+    private static boolean lessThan(Complex a, Complex b) {
         return (a.real() == b.real() ? a.imaginary() < b.imaginary() : a.real() < b.real());
     }
-    public static boolean equalTo(Complex a, Complex b) {
+    private static boolean equalTo(Complex a, Complex b) {
         return a.real() == b.real() && a.imaginary() == b.imaginary();
     }
-    public static boolean lessThanOrEqualTo(Complex a, Complex b) {
+    private static boolean lessThanOrEqualTo(Complex a, Complex b) {
         return lessThan(a, b) || equalTo(a, b);
     }
-    public static boolean greaterThanOrEqualTo(Complex a, Complex b) {
+    private static boolean greaterThanOrEqualTo(Complex a, Complex b) {
         return !lessThan(a, b);
     }
-    public static boolean greaterThan(Complex a, Complex b) {
+    private static boolean greaterThan(Complex a, Complex b) {
         return !(lessThanOrEqualTo(a, b));
     }
-    public static boolean notEqualTo(Complex a, Complex b) {
+    private static boolean notEqualTo(Complex a, Complex b) {
         return !equalTo(a, b);
     }
 }

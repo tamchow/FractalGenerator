@@ -11,7 +11,7 @@ import java.util.EmptyStackException;
  *
  * @see Stack
  */
-public class FixedStack<E> extends Stack<E> {
+public final class FixedStack<E> extends Stack<E> {
     /**
      * Array of elements
      */
@@ -277,7 +277,7 @@ public class FixedStack<E> extends Stack<E> {
 /**
  * Custom Stack Overflow Exception class
  */
-class FixedStackOverflowException extends StackOverflowException {
+final class FixedStackOverflowException extends StackOverflowException {
     /**
      * Constructs the exception with a default message
      */

@@ -52,7 +52,7 @@ import java.io.Serializable;
  * @author Sean Luke, Tamoghna Chowdhury
  * @version 23
  */
-public strictfp class MersenneTwister implements Serializable, Cloneable {
+public final class MersenneTwister implements Serializable, Cloneable {
     /**
      * Serialization identifier constant
      */

@@ -5,7 +5,7 @@ import in.tamchow.fractal.helpers.strings.StringManipulator;
 /**
  * Holds a transcendental function chain
  */
-public class Function extends Operable<Function, FunctionTerm> {
+public final class Function extends Operable<Function, FunctionTerm> {
     public Function(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
         super(variable, variableCode, oldvariablecode, varconst);
     }
@@ -16,12 +16,20 @@ public class Function extends Operable<Function, FunctionTerm> {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }
     @NotNull
-    public static Function fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts) {
+    public Function fromString(@NotNull String function) {
+        return fromString(function, true);
+    }
+    @NotNull
+    public Function fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts) {
         return fromString(function, variableCode, oldvariablecode, consts, true);
     }
     @NotNull
-    public static Function fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts, boolean deepEvaluate) {
-        @NotNull Function poly = new Function(null, variableCode, oldvariablecode, consts);
+    public Function fromString(@NotNull String function, String variableCode, String oldvariablecode, String[][] consts, boolean deepEvaluate) {
+        init(null, variableCode, oldvariablecode, consts);
+        return fromString(function, deepEvaluate);
+    }
+    @NotNull
+    public Function fromString(@NotNull String function, boolean deepEvaluate) {
         if (deepEvaluate) {
             String[] divisors = StringManipulator.split(function, "|/|");
             Function[] dividing = new Function[divisors.length];
@@ -29,7 +37,7 @@ public class Function extends Operable<Function, FunctionTerm> {
                 String[] multipliers = StringManipulator.split(divisors[i], "|*|");
                 Function[] multiplying = new Function[multipliers.length];
                 for (int j = 0; j < multipliers.length; ++j) {
-                    multiplying[j] = fromString(multipliers[j], variableCode, oldvariablecode, consts, false);
+                    multiplying[j] = new Function(null, variableCode, oldvariablecode, consts).fromString(multipliers[j], false);
                 }
                 Function multiplied = multiplying[0];
                 for (int j = 1; j < multiplying.length; ++j) {
@@ -41,23 +49,23 @@ public class Function extends Operable<Function, FunctionTerm> {
             for (int i = 1; i < dividing.length; ++i) {
                 divided.divide(dividing[i]);
             }
-            poly = divided;
-            return poly;
+            init(divided);
+            return this;
         }
         @NotNull String[] tokens = StringManipulator.split(function, "|");
-        poly.terms.ensureCapacity(tokens.length);
-        poly.signs.ensureCapacity(tokens.length + 1);
+        terms.ensureCapacity(tokens.length);
+        signs.ensureCapacity(tokens.length + 1);
         for (@NotNull String token : tokens) {
             if (token.equals("+") || token.equals("-")) {
-                poly.signs.add(token.trim());
+                signs.add(token.trim());
             } else {
-                poly.terms.add(FunctionTerm.fromString(token.trim(), variableCode, consts, oldvariablecode));
+                terms.add(new FunctionTerm(null, variableCode, oldvariablecode, consts).fromString(token.trim()));
             }
         }
-        if (poly.signs.size() == poly.terms.size() - 1) {
-            poly.signs.add(0, "+");
+        if (signs.size() == terms.size() - 1) {
+            signs.add(0, "+");
         }
-        return poly;
+        return this;
     }
     @Override
     @NotNull

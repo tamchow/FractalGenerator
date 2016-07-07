@@ -16,7 +16,7 @@ import static java.lang.Math.round;
 /**
  * Holds colour configuration for  custom palettes
  */
-public class Colorizer implements Serializable {
+public final class Colorizer implements Serializable {
     private static int tintCount = 0;
     private static double tints = 0;
     public Colors.MODE mode;
@@ -24,7 +24,7 @@ public class Colorizer implements Serializable {
     public int[] palette;
     private int basecolor, step, color_density, num_colors, byParts;
     private Complex smoothing_base;
-    private double periodicity, phase_shift, multiplier_threshold = 1.0;
+    private double periodicity, phase_shift, multiplier_threshold = 1.0, scale = 10, weight = 1.0;
     private Colors.PALETTE palette_type;
     private boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled;
     private boolean colors_corrected, already_cyclized;
@@ -150,6 +150,21 @@ public class Colorizer implements Serializable {
             throw new IllegalArgumentException("Basic index-based interpolation needs to be done on an instance.");
             //return Math.round((float)tocolor+fromcolor/2);
         }
+    }
+    public double getFractionalCount(int count, double fraction) {
+        return scale * (count + weight * fraction);
+    }
+    public double getScale() {
+        return scale;
+    }
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+    public double getWeight() {
+        return weight;
+    }
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
     public Complex getSmoothing_base() {
         return smoothing_base;
@@ -611,14 +626,16 @@ public class Colorizer implements Serializable {
         setPeriodicity(Double.valueOf(colors[6]));
         setPhase_shift(Double.valueOf(colors[7]));
         setMultiplier_threshold(Double.valueOf(colors[8]));
+        setScale(Double.valueOf(colors[9]));
+        setWeight(Double.valueOf(colors[10]));
         switch (palette_type) {
             case RANDOM_PALETTE:
-                initColorConfig(mode, Integer.valueOf(colors[9]), byParts, logIndex, cyclizeAble);
-                setColor_density(Integer.valueOf(colors[10]));
+                initColorConfig(mode, Integer.valueOf(colors[11]), byParts, logIndex, cyclizeAble);
+                setColor_density(Integer.valueOf(colors[12]));
                 break;
             case CUSTOM_PALETTE:
-                @NotNull String[] parts = split(colors[9], ";");
-                setColor_density(Integer.valueOf(colors[10]));
+                @NotNull String[] parts = split(colors[11], ";");
+                setColor_density(Integer.valueOf(colors[12]));
                 @NotNull int[] colorset = new int[parts.length];
                 for (int i = 0; i < colorset.length; i++) {
                     colorset[i] = Integer.valueOf(parts[i], 16);
@@ -626,20 +643,20 @@ public class Colorizer implements Serializable {
                 setPalette(colorset, false);
                 break;
             case GRADIENT_PALETTE:
-                if (colors.length == 13) {
-                    initColorConfig(mode, Integer.valueOf(colors[9]), Integer.valueOf(colors[10]), Integer.valueOf(colors[11], 16), Integer.valueOf(colors[12], 16), byParts, logIndex, cyclizeAble);
-                } else if (colors.length == 12) {
-                    initColorConfig(mode, Integer.valueOf(colors[9]), Integer.valueOf(colors[10]), Integer.valueOf(colors[11], 16), byParts, logIndex, cyclizeAble);
+                if (colors.length == 15) {
+                    initColorConfig(mode, Integer.valueOf(colors[11]), Integer.valueOf(colors[12]), Integer.valueOf(colors[13], 16), Integer.valueOf(colors[14], 16), byParts, logIndex, cyclizeAble);
+                } else if (colors.length == 14) {
+                    initColorConfig(mode, Integer.valueOf(colors[11]), Integer.valueOf(colors[12]), Integer.valueOf(colors[13], 16), byParts, logIndex, cyclizeAble);
                 }
                 break;
             case SHADE_PALETTE:
-                initColorConfig(mode, Integer.valueOf(colors[9]), Integer.valueOf(colors[10]), Integer.valueOf(colors[11], 16), 0x000000, byParts, logIndex, cyclizeAble);
+                initColorConfig(mode, Integer.valueOf(colors[11]), Integer.valueOf(colors[12]), Integer.valueOf(colors[13], 16), 0xff000000, byParts, logIndex, cyclizeAble);
                 break;
             case SMOOTH_PALETTE_LINEAR:
             case SMOOTH_PALETTE_SPLINE:
-                initColorConfig(mode, Integer.valueOf(colors[9]), byParts, logIndex, cyclizeAble);
-                setColor_density(Integer.valueOf(colors[10]));
-                @NotNull String[] controls = split(colors[11], ";");
+                initColorConfig(mode, Integer.valueOf(colors[11]), byParts, logIndex, cyclizeAble);
+                setColor_density(Integer.valueOf(colors[12]));
+                @NotNull String[] controls = split(colors[13], ";");
                 @NotNull int[] control_colors = new int[controls.length];
                 @NotNull double[] control_points = new double[controls.length];
                 for (int i = 0; i < controls.length; i++) {
@@ -660,7 +677,7 @@ public class Colorizer implements Serializable {
     }
     @Override
     public String toString() {
-        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + "," + logIndex + ";" + modifierEnabled + "," + periodicity + "," + phase_shift + "," + multiplier_threshold;
+        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + "," + logIndex + ";" + modifierEnabled + "," + periodicity + "," + phase_shift + "," + multiplier_threshold + "," + scale + "," + weight;
         switch (palette_type) {
             case RANDOM_PALETTE:
                 representation += "," + num_colors + "," + color_density;

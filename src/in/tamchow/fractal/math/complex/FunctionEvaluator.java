@@ -1,6 +1,7 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.math.Comparator;
+import in.tamchow.fractal.math.symbolics.Derivable;
 import in.tamchow.fractal.math.symbolics.Polynomial;
 
 import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
@@ -8,7 +9,7 @@ import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
  * Implements an iterative evaluator for FUNCTION_DATA described in ComplexOperations,
  * making heavy use of string replacement;
  */
-public class FunctionEvaluator {
+public final class FunctionEvaluator {
     public static final String[] OPERATIONS = {
             "(", ")", "+", "-", "*", "/", "^", "exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth", "inv", "conj", "re", "im", "flip", "mod", "arg"
     };
@@ -59,7 +60,7 @@ public class FunctionEvaluator {
     }
     @NotNull
     public static FunctionEvaluator prepareIFS(String variableCode, String r_code, String t_code, String p_code, double x, double y) {
-        @NotNull String[][] varconst = {{"0", "0"}};
+        @NotNull String[][] varconst = {{Derivable._0, Derivable._0}};
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(variableCode, String.valueOf(x), varconst);
         fe.addConstant(new String[]{r_code, String.valueOf(Math.sqrt(x * x + y * y))}/*rho*/);
         fe.addConstant(new String[]{t_code, String.valueOf(Math.atan2(y, x))}/*theta*/);

@@ -9,7 +9,7 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
  * Creates transitions between images.
  * Note: Images to be transitioned between must be of the same resolution. No scaling is implemented here.
  */
-public class Transition {
+public final class Transition {
     private PixelContainer img1, img2;
     private Animation frames;
     private TransitionTypes transtype;
@@ -30,11 +30,11 @@ public class Transition {
     public Animation getFrames() {
         return frames;
     }
-    public void setFrames(@NotNull PixelContainer[] frames) {
-        this.frames.setFrames(frames);
-    }
     public void setFrames(Animation frames) {
         this.frames = frames;
+    }
+    public void setFrames(@NotNull PixelContainer[] frames) {
+        this.frames.setFrames(frames);
     }
     public PixelContainer getImg2() {
         return img2;
