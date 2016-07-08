@@ -83,12 +83,8 @@ public class Main {
                         for (int i = 0; i < cfg.size(); i++) {
                             ComplexFractalParams params = cfg.getItem(i);
                             @NotNull ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
-                            if (params.useThreadedGenerator()) {
-                                @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator);
-                                threaded.generate();
-                            } else {
-                                generator.generate();
-                            }
+                            @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator);
+                            threaded.generate();
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
                                 ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostProcessMode(), generator.getNormalized_escapes(), generator.getColor().getByParts())), "png", outputFile);
@@ -106,12 +102,8 @@ public class Main {
                         for (int i = 0; i < cfg.size(); i++) {
                             ComplexBrotFractalParams params = cfg.getItem(i);
                             @NotNull ComplexBrotFractalGenerator generator = new ComplexBrotFractalGenerator(params, new DesktopProgressPublisher());
-                            if (params.useThreadedGenerator()) {
-                                @NotNull ThreadedComplexBrotFractalGenerator threaded = new ThreadedComplexBrotFractalGenerator(generator);
-                                threaded.generate();
-                            } else {
-                                generator.generate();
-                            }
+                            @NotNull ThreadedComplexBrotFractalGenerator threaded = new ThreadedComplexBrotFractalGenerator(generator);
+                            threaded.generate();
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0)), "png", outputFile);
@@ -129,12 +121,8 @@ public class Main {
                     for (int i = 0; i < cfg.size(); i++) {
                         IFSFractalParams params = cfg.getItem(i);
                         @NotNull IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
-                        if (params.useThreadedGenerator()) {
-                            @NotNull ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
-                            threaded.generate();
-                        } else {
-                            generator.generate();
-                        }
+                        @NotNull ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
+                        threaded.generate();
                         if (params.isAnimated()) {
                             Animation frames = generator.getAnimation();
                             @NotNull File animationMetaData = new File(args[1] + "/Fractal_" + i + "/animation.cfg");

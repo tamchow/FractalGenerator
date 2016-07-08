@@ -120,7 +120,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                                 idx = master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1);
                                 idxn = master.color.createIndex(((double) indexOf(histogram, en)) / iterations, 0, 1);
                             }
-                            int idxMin = (idxp < idxn) ? idxp : idxn, idxMax = (idxp > idxn) ? idxp : idxn;
+                            int idxMin = Math.min(idxn, idxp), idxMax = Math.max(idxn, idxp);
                             if (master.color.getMode() == Colors.MODE.RANK_ORDER_LINEAR) {
                                 int color1 = master.color.getColor(idxp), color2 = master.color.getColor(idx), color3 = master.color.getColor(idxn);
                                 int colortmp1 = Colorizer.linearInterpolated(color1, color2, normalized_count - (long) normalized_count, master.color.getByParts());
@@ -132,12 +132,12 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                                 }
                             } else {
                                 if (master.color.isModifierEnabled()) {
-                                    colortmp = master.color.splineInterpolated(master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), normalized_count - (long) normalized_count);
+                                    colortmp = master.color.splineInterpolated(idx, idxMin, idxMax, normalized_count - (long) normalized_count);
                                 } else {
                                     if (master.color.isLogIndex()) {
-                                        colortmp = master.color.splineInterpolated(idxMin, master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), normalized_count - (long) normalized_count);
+                                        colortmp = master.color.splineInterpolated(idxMin, idx, normalized_count - (long) normalized_count);
                                     } else {
-                                        colortmp = master.color.splineInterpolated(master.color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), idxMax, normalized_count - (long) normalized_count);
+                                        colortmp = master.color.splineInterpolated(idx, idxMax, normalized_count - (long) normalized_count);
                                     }
                                 }
                             }
@@ -157,9 +157,12 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                                 int colortmp2 = Colorizer.linearInterpolated(master.color.getColor(master.color.createIndex(hue3, 0, 1)), master.color.getColor(master.color.createIndex(hue, 0, 1)), normalized_count - (long) normalized_count, master.color.getByParts());
                                 colortmp = Colorizer.linearInterpolated(colortmp2, colortmp1, normalized_count - (long) normalized_count, master.color.getByParts());
                             } else {
-                                int idxp = master.color.createIndex(hue3, 0, 1),
-                                        idxn = master.color.createIndex(hue2, 0, 1), idxt = Math.min(idxp, idxn);
-                                colortmp = master.color.splineInterpolated(master.color.createIndex(hue, 0, 1), idxt, normalized_count - (long) normalized_count);
+                                int idxp = master.color.createIndex(hue3, 0, 1), idxn = master.color.createIndex(hue2, 0, 1);
+                                if (master.color.isModifierEnabled()) {
+                                    colortmp = master.color.splineInterpolated(master.color.createIndex(hue, 0, 1), Math.max(idxp, idxn), normalized_count - (long) normalized_count);
+                                } else {
+                                    colortmp = master.color.splineInterpolated(Math.min(idxp, idxn), master.color.createIndex(hue, 0, 1), normalized_count - (long) normalized_count);
+                                }
                             }
                         }
                         master.getArgand().setPixel(i, j, colortmp);

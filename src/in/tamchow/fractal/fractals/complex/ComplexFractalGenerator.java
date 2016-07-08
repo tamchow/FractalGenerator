@@ -181,11 +181,11 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             colorIfMore = color.getPalette()[0];
             colorIfLess = color.getPalette()[1];
         }
-        if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_ITERATIONS || color.getMode() == NEWTON_NORMALIZED_MODULUS) && (color.getByParts() > 0)) {
+        if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_ITERATIONS || color.getMode() == NEWTON_NORMALIZED_MODULUS) && (color.getByParts() < 0)) {
             newtonTinting = true;
             color.setByParts(0);
         }
-        if ((color.getMode() == RANK_ORDER_LINEAR || color.getMode() == RANK_ORDER_SPLINE) && (color.getByParts() > 0)) {
+        if ((color.getMode() == RANK_ORDER_LINEAR || color.getMode() == RANK_ORDER_SPLINE) && (color.getByParts() < 0)) {
             nonPercentileBasedRankOrder = true;
             color.setByParts(0);
         }
@@ -373,12 +373,12 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                             }
                         } else {
                             if (color.isModifierEnabled()) {
-                                colortmp = color.splineInterpolated(color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), normalized_count - (long) normalized_count);
+                                colortmp = color.splineInterpolated(idx, idxMin, idxMax, normalized_count - (long) normalized_count);
                             } else {
                                 if (color.isLogIndex()) {
-                                    colortmp = color.splineInterpolated(idxMin, color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), normalized_count - (long) normalized_count);
+                                    colortmp = color.splineInterpolated(idxMin, idx, normalized_count - (long) normalized_count);
                                 } else {
-                                    colortmp = color.splineInterpolated(color.createIndex(((double) indexOf(histogram, e)) / iterations, 0, 1), idxMax, normalized_count - (long) normalized_count);
+                                    colortmp = color.splineInterpolated(idx, idxMax, normalized_count - (long) normalized_count);
                                 }
                             }
                         }

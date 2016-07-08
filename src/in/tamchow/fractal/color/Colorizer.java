@@ -151,6 +151,46 @@ public final class Colorizer implements Serializable {
             //return Math.round((float)tocolor+fromcolor/2);
         }
     }
+    public static int splineInterpolated(int color1, int color2, int color3, int color4, double bias, int byParts) {
+        bias = (bias < 0) ? -bias : bias;
+        bias = (bias > 1) ? bias - (long) bias : bias;
+        double h0 = 0.5 * ((bias * bias) * (bias - 1)),
+                h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
+                h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
+                h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
+        if (byParts == 0) {
+            int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
+            r1 = separateARGB(color1, Colors.RGBCOMPONENTS.RED);
+            r2 = separateARGB(color2, Colors.RGBCOMPONENTS.RED);
+            r3 = separateARGB(color3, Colors.RGBCOMPONENTS.RED);
+            r4 = separateARGB(color4, Colors.RGBCOMPONENTS.RED);
+            g1 = separateARGB(color1, Colors.RGBCOMPONENTS.GREEN);
+            g2 = separateARGB(color2, Colors.RGBCOMPONENTS.GREEN);
+            g3 = separateARGB(color3, Colors.RGBCOMPONENTS.GREEN);
+            g4 = separateARGB(color4, Colors.RGBCOMPONENTS.GREEN);
+            b1 = separateARGB(color1, Colors.RGBCOMPONENTS.BLUE);
+            b2 = separateARGB(color2, Colors.RGBCOMPONENTS.BLUE);
+            b3 = separateARGB(color3, Colors.RGBCOMPONENTS.BLUE);
+            b4 = separateARGB(color4, Colors.RGBCOMPONENTS.BLUE);
+            int nr = Math.round((float) abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
+            int ng = Math.round((float) abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
+            int nb = Math.round((float) abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4));
+            return toRGB(nr, ng, nb);
+        } else if (byParts > 0) {
+            double alpha = abs((h0 + h1 + h2 + h3) * bias) * 255.0;
+            //alpha=(alpha<0)?0:((alpha>255)?255:alpha);
+            return alphaBlend(boundsProtected((int) alpha, 0xff),
+                    separateARGB(color1, Colors.RGBCOMPONENTS.RED),
+                    separateARGB(color1, Colors.RGBCOMPONENTS.GREEN),
+                    separateARGB(color1, Colors.RGBCOMPONENTS.BLUE),
+                    separateARGB(color2, Colors.RGBCOMPONENTS.RED),
+                    separateARGB(color2, Colors.RGBCOMPONENTS.GREEN),
+                    separateARGB(color2, Colors.RGBCOMPONENTS.BLUE));
+        } else {
+            throw new IllegalArgumentException("Basic index-based interpolation needs to be done on an instance.");
+            //return Math.round((float)tocolor+fromcolor/2);
+        }
+    }
     public double getFractionalCount(int count, double fraction) {
         return scale * (count + weight * fraction);
     }
@@ -450,7 +490,7 @@ public final class Colorizer implements Serializable {
         this.exponentialSmoothing = exponentialSmoothing;
     }
     public void createSmoothPalette(int[] control_colors, @NotNull double[] control_points) {
-        createSmoothPalette(control_colors, control_points, false);
+        createSmoothPalette(control_colors, control_points, !modifierEnabled);
     }
     public void createSmoothPalette(int[] control_colors, @NotNull double[] control_points, boolean useSpline) {
         if (already_cyclized) {
@@ -523,18 +563,22 @@ public final class Colorizer implements Serializable {
     public int splineInterpolated(int index, double bias) {
         return splineInterpolated(index, index + 1, bias);
     }
-    public int splineInterpolated(int index, int index1, double bias) {
-        int i2, i3;
-        if (index > index1) {
-            i2 = index + 1;
-            i3 = index1 - 1;
+    public int splineInterpolated(int index1, int index2, double bias) {
+        int index3, index4;
+        if (index1 > index2) {
+            index3 = index1 + 1;
+            index4 = index2 - 1;
         } else {
-            i2 = index1 + 1;
-            i3 = index - 1;
+            index3 = index2 + 1;
+            index4 = index1 - 1;
         }
-        return splineInterpolated(index, index1, i2, i3, bias);
+        return splineInterpolated(index1, index1, index3, index4, bias);
     }
-    public int splineInterpolated(int index, int index1, int i2, int i3, double bias) {
+    public int splineInterpolated(int index, int indexMin, int indexMax, double bias) {
+        int otherIdx = round((float) (bias - (long) bias) * (indexMax + indexMin));
+        return splineInterpolated(index, otherIdx, indexMax, indexMin, bias);
+    }
+    public int splineInterpolated(int index1, int index2, int index3, int index4, double bias) {
         if ((!colors_corrected) && num_colors < 4) {
             @NotNull int[] tmppalette = new int[num_colors];
             if (palette != null) System.arraycopy(palette, 0, tmppalette, 0, palette.length);
@@ -555,40 +599,14 @@ public final class Colorizer implements Serializable {
             }
             colors_corrected = true;
         }
-        bias = (bias < 0) ? -bias : bias;
-        bias = (bias > 1) ? bias - (long) bias : bias;
-        double h0 = 0.5 * ((bias * bias) * (bias - 1)),
-                h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
-                h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
-                h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
-        index = boundsProtected(index, palette.length);
         index1 = boundsProtected(index1, palette.length);
-        i2 = boundsProtected(i2, palette.length);
-        i3 = boundsProtected(i3, palette.length);
-        if (byParts == 0) {
-            int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
-            r1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.RED);
-            r2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.RED);
-            r3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.RED);
-            r4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.RED);
-            g1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.GREEN);
-            g2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.GREEN);
-            g3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.GREEN);
-            g4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.GREEN);
-            b1 = separateARGB(getColor(index), Colors.RGBCOMPONENTS.BLUE);
-            b2 = separateARGB(getColor(index1), Colors.RGBCOMPONENTS.BLUE);
-            b3 = separateARGB(getColor(i2), Colors.RGBCOMPONENTS.BLUE);
-            b4 = separateARGB(getColor(i3), Colors.RGBCOMPONENTS.BLUE);
-            int nr = Math.round((float) abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
-            int ng = Math.round((float) abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
-            int nb = Math.round((float) abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4));
-            return toRGB(nr, ng, nb);
-        } else if (byParts > 0) {
-            double alpha = abs((h0 + h1 + h2 + h3) * bias) * 255.0;
-            //alpha=(alpha<0)?0:((alpha>255)?255:alpha);
-            return alphaBlend(boundsProtected((int) alpha, 0xff), separateARGB(palette[index], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index], Colors.RGBCOMPONENTS.BLUE), separateARGB(palette[index1], Colors.RGBCOMPONENTS.RED), separateARGB(palette[index1], Colors.RGBCOMPONENTS.GREEN), separateARGB(palette[index1], Colors.RGBCOMPONENTS.BLUE));
+        index2 = boundsProtected(index2, palette.length);
+        index3 = boundsProtected(index3, palette.length);
+        index4 = boundsProtected(index4, palette.length);
+        if (byParts >= 0) {
+            return splineInterpolated(getColor(index1), getColor(index2), getColor(index3), getColor(index4), bias, byParts);
         } else {
-            return basicInterpolateIndex(index, index1, bias);
+            return basicInterpolateIndex(index1, index2, bias);
         }
     }
     public Colors.PALETTE getPalette_type() {
@@ -700,6 +718,9 @@ public final class Colorizer implements Serializable {
     }
     public boolean isModifierEnabled() {
         return modifierEnabled;
+    }
+    public void setModifierEnabled(boolean modifierEnabled) {
+        this.modifierEnabled = modifierEnabled;
     }
     public double getMultiplier_threshold() {
         return multiplier_threshold;
