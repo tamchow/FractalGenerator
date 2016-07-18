@@ -113,7 +113,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return pixdata[row];
     }
     @NotNull
-    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts) {
+    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean gammaCorrection) {
         @NotNull PixelContainer processed = new PixelContainer(this);
         if (mode == PostProcessMode.NONE) {
             return processed;
@@ -132,7 +132,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((average + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEAN:
-                        processed.setPixel(i, j, Colorizer.linearInterpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
+                        processed.setPixel(i, j, Colorizer.linearInterpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, gammaCorrection));
                         break;
                     case MEDIAN:
                         processed.setPixel(i, j, median);
@@ -141,10 +141,10 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((median + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEDIAN:
-                        processed.setPixel(i, j, Colorizer.linearInterpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
+                        processed.setPixel(i, j, Colorizer.linearInterpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, gammaCorrection));
                         break;
                     case INTERPOLATED:
-                        processed.setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts));
+                        processed.setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, gammaCorrection));
                         break;
                     case NEGATIVE:
                         processed.setPixel(i, j, Colorizer.packARGB(
@@ -232,7 +232,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0));
+                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0, true, false));
                     }
                 }
             } else {
@@ -242,7 +242,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0));
+                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0, true, false));
                     }
                 }
             }
@@ -381,5 +381,5 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
     public int hashCode() {
         return toString().hashCode();
     }
-    public enum PostProcessMode {MEAN, MEDIAN, WEIGHTED_MEAN, WEIGHTED_MEDIAN, INTERPOLATED_MEAN, INTERPOLATED_MEDIAN, INTERPOLATED, NEGATIVE, NONE}
+    public enum PostProcessMode {MEAN, MEDIAN, WEIGHTED_MEAN, WEIGHTED_MEDIAN, INTERPOLATED_MEAN, INTERPOLATED_MEDIAN, INTERPOLATED, NEGATIVE, NONE, TEXT_TO_IMAGE}
 }

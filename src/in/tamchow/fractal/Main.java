@@ -1,4 +1,5 @@
 package in.tamchow.fractal;
+import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.BatchContainer;
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
@@ -27,6 +28,7 @@ import in.tamchow.fractal.platform_tools.ImageConverter;
 import in.tamchow.fractal.platform_tools.ImageDisplay;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -80,16 +82,35 @@ public class Main {
                         ImageDisplay.show(ConfigReader.getComplexFractalConfigFromFile(input), "Fractal");
                     } else {
                         @Nullable BatchContainer<ComplexFractalParams> cfg = ConfigReader.getComplexFractalConfigFromFile(input);
-                        for (int i = 0; i < cfg.size(); i++) {
+                        for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
                             ComplexFractalParams params = cfg.getItem(i);
                             @NotNull ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
                             @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator);
                             threaded.generate();
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
-                            if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(params.getPostProcessMode(), generator.getNormalized_escapes(), generator.getColor().getByParts())), "png", outputFile);
+                            if (generator.getColor().getMode() == Colors.MODE.ASCII_ART_CHARACTER || generator.getColor().getMode() == Colors.MODE.ASCII_ART_NUMERIC) {
+                                String ascii = generator.createASCIIArt();
+                                try {
+                                    BufferedWriter writer = new BufferedWriter(new FileWriter(args[1] + "/Fractal_" + i + ".txt", false));
+                                    writer.write(ascii);
+                                    writer.flush();
+                                    writer.close();
+                                } catch (IOException ignored) {
+                                    ignored.printStackTrace();
+                                }
+                                if (params.postprocessMode == PixelContainer.PostProcessMode.TEXT_TO_IMAGE) {
+                                    ImageIO.write(ImageConverter.drawTextToImage(ascii, Font.MONOSPACED, Font.PLAIN, 0xff000000, 0xffffffff, 10, 0, 0), "png", outputFile);
+                                }
                             } else {
-                                ImageIO.write(ImageConverter.toImage(generator.getArgand()), "png", outputFile);
+                                if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
+                                    ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(
+                                            params.getPostProcessMode(),
+                                            generator.getNormalized_escapes(),
+                                            generator.getColor().getByParts(),
+                                            generator.getColor().isGammaCorrection())), "png", outputFile);
+                                } else {
+                                    ImageIO.write(ImageConverter.toImage(generator.getArgand()), "png", outputFile);
+                                }
                             }
                         }
                     }
@@ -99,14 +120,14 @@ public class Main {
                         System.exit(3);
                     } else {
                         @Nullable BatchContainer<ComplexBrotFractalParams> cfg = ConfigReader.getComplexBrotFractalConfigFromFile(input);
-                        for (int i = 0; i < cfg.size(); i++) {
+                        for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
                             ComplexBrotFractalParams params = cfg.getItem(i);
                             @NotNull ComplexBrotFractalGenerator generator = new ComplexBrotFractalGenerator(params, new DesktopProgressPublisher());
                             @NotNull ThreadedComplexBrotFractalGenerator threaded = new ThreadedComplexBrotFractalGenerator(generator);
                             threaded.generate();
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0)), "png", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                             }
@@ -118,7 +139,7 @@ public class Main {
                         System.exit(3);
                     }
                     @Nullable BatchContainer<IFSFractalParams> cfg = ConfigReader.getIFSFractalConfigFromFile(input);
-                    for (int i = 0; i < cfg.size(); i++) {
+                    for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
                         IFSFractalParams params = cfg.getItem(i);
                         @NotNull IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
                         @NotNull ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
@@ -133,7 +154,7 @@ public class Main {
                             for (int j = 0; j < frames.getNumFrames(); j++) {
                                 @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + "/Frame_" + j + ".png");
                                 if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                    ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0)), "png", outputFile);
+                                    ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
                                 } else {
                                     ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                                 }
@@ -141,7 +162,7 @@ public class Main {
                         } else {
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0)), "png", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                             }
@@ -153,7 +174,7 @@ public class Main {
                         System.exit(3);
                     }
                     @Nullable BatchContainer<LSFractalParams> cfg = ConfigReader.getLSFractalConfigFromFile(input);
-                    for (int i = 0; i < cfg.size(); i++) {
+                    for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
                         LSFractalParams params = cfg.getItem(i);
                         @NotNull LSFractalGenerator generator = new LSFractalGenerator(params, new DesktopProgressPublisher());
                         if (params.getFps() > 0) {
@@ -166,7 +187,7 @@ public class Main {
                             for (int j = 0; j < frames.getNumFrames(); j++) {
                                 @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + "/Frame_" + j + ".png");
                                 if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                    ImageIO.write(ImageConverter.toImage(frames.getFrame(j).getPostProcessed(params.getPostProcessMode(), null, 0)), "png", outputFile);
+                                    ImageIO.write(ImageConverter.toImage(frames.getFrame(j).getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
                                 } else {
                                     ImageIO.write(ImageConverter.toImage(frames.getFrame(j)), "png", outputFile);
                                 }
@@ -176,7 +197,7 @@ public class Main {
                             generator.drawState(generator.getParams().getDepth() - 1);
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getCanvas().getPostProcessed(params.getPostProcessMode(), null, 0)), "png", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getCanvas().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getCanvas()), "png", outputFile);
                             }

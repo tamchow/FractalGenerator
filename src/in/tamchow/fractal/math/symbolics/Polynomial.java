@@ -16,7 +16,7 @@ public final class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         super();
     }
     Polynomial(Polynomial other) {
-        init(other);
+        super(other);
     }
     @NotNull
     Polynomial fromString(@NotNull String function) {
@@ -115,6 +115,11 @@ public final class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         }
         Term() {
             initTerm(_0);
+        }
+        Term(Term other) {
+            this(other.variableCode, other.oldvariablecode, other.consts);
+            initTerm(other.coefficient, other.exponent, other.variable);
+            constant = other.constant;
         }
         private void init(String variableCode, String oldVariableCode, String[][] consts) {
             setVariableCode(variableCode);

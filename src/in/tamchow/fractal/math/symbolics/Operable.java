@@ -40,6 +40,9 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
     protected Operable(@Nullable String variable, @Nullable String variableCode, @Nullable String oldvariablecode, @Nullable String[][] varconst) {
         init(variable, variableCode, oldvariablecode, varconst);
     }
+    protected Operable(T other) {
+        init(other);
+    }
     protected void init(@Nullable String variable, @Nullable String variableCode, @Nullable String oldvariablecode, @Nullable String[][] varconst) {
         multipliers = new ArrayList<>();
         denominators = new ArrayList<>();

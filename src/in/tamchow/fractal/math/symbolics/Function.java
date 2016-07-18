@@ -12,6 +12,9 @@ public final class Function extends Operable<Function, FunctionTerm> {
     public Function() {
         super();
     }
+    public Function(Function other) {
+        super(other);
+    }
     public static boolean isSpecialFunction(@NotNull String function) {
         return FunctionTerm.isSpecialFunctionTerm(function);
     }

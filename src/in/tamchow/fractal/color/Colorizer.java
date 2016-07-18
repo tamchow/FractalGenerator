@@ -1,6 +1,7 @@
 package in.tamchow.fractal.color;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
+import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -11,8 +12,7 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.divide;
 import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
-import static java.lang.Math.abs;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 /**
  * Holds colour configuration for  custom palettes
  */
@@ -22,48 +22,54 @@ public final class Colorizer implements Serializable {
     public Colors.MODE mode;
     @Nullable
     public int[] palette;
-    private int basecolor, step, color_density, num_colors, byParts;
+    private int basecolor, step, color_density, num_colors, byParts, interpolationType;
     private Complex smoothing_base;
-    private double periodicity, phase_shift, multiplier_threshold = 1.0, scale = 10, weight = 1.0;
+    private double periodicity, phase_shift, multiplier_threshold = 1.0, scale = 1.0, weight = 1.0;
     private Colors.PALETTE palette_type;
-    private boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled;
-    private boolean colors_corrected, already_cyclized;
-    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor) {
-        initColorConfig(mode, color_density, num_colors, basecolor, 0, false, false);
+    private boolean logIndex, exponentialSmoothing, cyclizeAble, modifierEnabled, linearInterpolation, colors_corrected, already_cyclized, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode;
+    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        initColorConfig(mode, color_density, num_colors, basecolor, 0, false, false, linearInterpolation, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
     }
-    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
-        initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex, cyclize);
+    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        initColorConfig(mode, color_density, num_colors, basecolor, byParts, logIndex, cyclize, linearInterpolation, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
     }
-    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
-        initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize);
+    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclize, linearInterpolation, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
     }
     public Colorizer(Colors.MODE mode, @NotNull int[] palette) {
         setPalette(palette, false);
         setMode(mode);
         setByParts(0);
     }
-    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
-        this(mode, color_density, num_colors, byParts, logIndex, cyclize, 0);
+    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        this(mode, color_density, num_colors, byParts, logIndex, cyclize, linearInterpolation, 0.0, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
     }
-    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, double periodicity) {
-        this(mode, color_density, num_colors, byParts, logIndex, cyclize, periodicity, 0.0);
+    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, double periodicity, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        this(mode, color_density, num_colors, byParts, logIndex, cyclize, linearInterpolation, periodicity, 0.0, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
     }
-    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, double periodicity, double phase_shift) {
-        initColorConfig(mode, num_colors, byParts, logIndex, cyclize);
+    public Colorizer(Colors.MODE mode, int color_density, int num_colors, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, double periodicity, double phase_shift, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        initColorConfig(mode, num_colors, byParts, logIndex, cyclize, linearInterpolation, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
         setColor_density(color_density);
         setPeriodicity(periodicity);
         setPhase_shift(phase_shift);
     }
-    public Colorizer(Colors.MODE mode, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
-        initColorConfig(mode, num_colors, byParts, logIndex, cyclize);
+    public Colorizer(Colors.MODE mode, int num_colors, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
+        initColorConfig(mode, num_colors, byParts, logIndex, cyclize, linearInterpolation, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
         setColor_density(-1);
     }
     public Colorizer() {
         palette = null;
-        initColorConfig(Colors.MODE.SIMPLE, 0, 0x0, 0, 0, false, false);
+        initColorConfig(Colors.MODE.SIMPLE, 0, 0x0, 0, 0, false, false, false, false, false, false, 0);
     }
     public Colorizer(@NotNull Colorizer old) {
-        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.getByParts(), old.isLogIndex(), old.isCyclize());
+        initColorConfig(old.getMode(), old.getColor_density(), old.getNum_colors(), old.getBasecolor(), old.getStep(), old.getByParts(), old.isLogIndex(), old.isCyclize(), old.isLinearInterpolation(), old.isGammaCorrection(), old.isSplineInterpolationCalcMode(), old.isSplineInterpolationResultMode(), old.getInterpolationType());
+        setScale(old.getScale());
+        setWeight(old.getWeight());
+        setPeriodicity(old.getPeriodicity());
+        setMultiplier_threshold(old.getMultiplier_threshold());
+        setPhase_shift(old.getPhase_shift());
+        setPalette_type(old.getPalette_type());
+        setModifierEnabled(old.isModifierEnabled());
         setExponentialSmoothing(old.isExponentialSmoothing());
         setPalette(old.getPalette(), false);
         colors_corrected = old.colors_corrected;
@@ -84,28 +90,36 @@ public final class Colorizer implements Serializable {
     public static int separateARGB(int color, int component) {
         return (color >> (component * 8)) & 0xFF;
     }
-    public static int alphaBlend(int fore, int back) {
-        return alphaBlend(separateARGB(fore, Colors.RGBCOMPONENTS.ALPHA), fore, back);
+    public static int alphaBlend(int fore, int back, boolean gammaCorrection) {
+        return alphaBlend(separateARGB(fore, Colors.RGBCOMPONENTS.ALPHA), fore, back, gammaCorrection);
     }
-    public static int alphaBlend(int alpha, int fore, int back) {
-        return alphaBlend(alpha, 0xff, fore, back);
+    public static int alphaBlend(int alpha, int fore, int back, boolean gammaCorrection) {
+        return alphaBlend(alpha, 0xff, fore, back, gammaCorrection);
     }
-    public static int alphaBlend(int alpha, int amax, int fore, int back) {
-        return alphaBlend(alpha, amax, separateARGB(fore, Colors.RGBCOMPONENTS.RED), separateARGB(fore, Colors.RGBCOMPONENTS.GREEN), separateARGB(fore, Colors.RGBCOMPONENTS.BLUE), back);
+    public static int alphaBlend(int alpha, int amax, int fore, int back, boolean gammaCorrection) {
+        return alphaBlend(alpha, amax, separateARGB(fore, Colors.RGBCOMPONENTS.RED), separateARGB(fore, Colors.RGBCOMPONENTS.GREEN), separateARGB(fore, Colors.RGBCOMPONENTS.BLUE), back, gammaCorrection);
     }
-    public static int alphaBlend(int a, int amax, int r, int g, int b, int back) {
-        return alphaBlend(a, amax, r, g, b, separateARGB(back, Colors.RGBCOMPONENTS.RED), separateARGB(back, Colors.RGBCOMPONENTS.GREEN), separateARGB(back, Colors.RGBCOMPONENTS.BLUE));
+    public static int alphaBlend(int a, int amax, int r, int g, int b, int back, boolean gammaCorrection) {
+        return alphaBlend(a, amax, r, g, b, separateARGB(back, Colors.RGBCOMPONENTS.RED), separateARGB(back, Colors.RGBCOMPONENTS.GREEN), separateARGB(back, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
     }
-    public static int alphaBlend(int a, int amax, int r, int g, int b, int br, int bg, int bb) {
+    public static int alphaBlend(int a, int amax, int r, int g, int b, int br, int bg, int bb, boolean gammaCorrection) {
+        r = Colors.rgbToLinear(r, gammaCorrection);
+        g = Colors.rgbToLinear(g, gammaCorrection);
+        b = Colors.rgbToLinear(b, gammaCorrection);
+        br = Colors.rgbToLinear(br, gammaCorrection);
+        bg = Colors.rgbToLinear(bg, gammaCorrection);
+        bb = Colors.rgbToLinear(bb, gammaCorrection);
         float alpha = ((float) a) / amax;
-        int nr = Math.round((1 - alpha) * br + alpha * r), ng = Math.round((1 - alpha) * bg + alpha * g), nb = Math.round((1 - alpha) * bb + alpha * b);
-        return packARGB(a, nr, ng, nb);
+        int nr = Math.round((1 - alpha) * br + alpha * r),
+                ng = Math.round((1 - alpha) * bg + alpha * g),
+                nb = Math.round((1 - alpha) * bb + alpha * b);
+        return packARGB(Colors.linearToRgb(a, gammaCorrection), Colors.linearToRgb(nr, gammaCorrection), Colors.linearToRgb(ng, gammaCorrection), Colors.linearToRgb(nb, gammaCorrection));
     }
-    public static int alphaBlend(int a, int r, int g, int b, int back) {
-        return alphaBlend(a, 0xff, r, g, b, back);
+    public static int alphaBlend(int a, int r, int g, int b, int back, boolean gammaCorrection) {
+        return alphaBlend(a, 0xff, r, g, b, back, gammaCorrection);
     }
-    public static int alphaBlend(int a, int r, int g, int b, int br, int bg, int bb) {
-        return alphaBlend(a, 0xff, r, g, b, br, bg, bb);
+    public static int alphaBlend(int a, int r, int g, int b, int br, int bg, int bb, boolean gammaCorrection) {
+        return alphaBlend(a, 0xff, r, g, b, br, bg, bb, gammaCorrection);
     }
     public static int toGray(int common) {
         return toRGB(common, common, common);
@@ -119,25 +133,47 @@ public final class Colorizer implements Serializable {
         }
         return packRGB(r, g, b);
     }
-    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, int byParts) {
-        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts);
+    public static int linearInterpolated(int fromcolor, int tocolor, int value, int maxvalue, int byParts, boolean gammaCorrection) {
+        return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts, gammaCorrection);
     }
-    public static int linearInterpolated(int fromcolor, int tocolor, double bias, int byParts) {
-        bias = (bias < 0) ? -bias : bias;
-        bias = (bias > 1) ? bias - (long) bias : bias;
+    private static int lerpInt(int val1, int val2, double bias) {
+        bias = correctBias(bias);
+        return Math.round((float) (val2 * bias + val1 * (1 - bias)));
+    }
+    public static int linearInterpolated(int color1, int color2, int color3, int value, int maxValue, int byparts, boolean gammaCorrection) {
+        return interpolated(color1, color2, color3, (double) value / maxValue, byparts, true, gammaCorrection);
+    }
+    public static int interpolated(int color1, int color2, int color3, double bias, int byparts, boolean linearInterpolation, boolean gammaCorrection) {
+        if (linearInterpolation) {
+            int colortmp1 = linearInterpolated(color1, color2, bias, byparts, gammaCorrection);
+            int colortmp2 = linearInterpolated(color2, color3, bias, byparts, gammaCorrection);
+            return linearInterpolated(colortmp1, colortmp2, bias, byparts, gammaCorrection);
+        } else {
+            int colortmp1 = splineInterpolated(color1, color2, bias, byparts, gammaCorrection);
+            int colortmp2 = splineInterpolated(color2, color3, bias, byparts, gammaCorrection);
+            return splineInterpolated(colortmp1, colortmp2, bias, byparts, gammaCorrection);
+        }
+    }
+    private static double correctBias(double bias) {
+        bias = isNaN(bias) ? 0.0 : (isInfinite(bias) ? 1.0 : bias);
+        bias = (bias < 0.0) ? -bias : bias;
+        return (abs(bias - 1) <= MathUtils.ULP) ? bias - (long) bias : bias;
+    }
+    public static int linearInterpolated(int fromcolor, int tocolor, double bias, int byParts, boolean gammaCorrection) {
+        bias = correctBias(bias);
         if (tocolor < fromcolor) {
             bias = 1 - bias;
         }
         if (byParts == 0) {
-            int fr = separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED);
-            int fg = separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN);
-            int fb = separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE);
-            int tr = separateARGB(tocolor, Colors.RGBCOMPONENTS.RED);
-            int tg = separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN);
-            int tb = separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE);
-            int nr = Math.round((float) (tr * bias + fr * (1 - bias)));
-            int ng = Math.round((float) (tg * bias + fg * (1 - bias)));
-            int nb = Math.round((float) (tb * bias + fb * (1 - bias)));
+            int fr = Colors.rgbToLinear(separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), gammaCorrection);
+            int fg = Colors.rgbToLinear(separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
+            int fb = Colors.rgbToLinear(separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
+            int tr = Colors.rgbToLinear(separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), gammaCorrection);
+            int tg = Colors.rgbToLinear(separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
+            int tb = Colors.rgbToLinear(separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
+            int nr = Colors.linearToRgb(lerpInt(fr, tr, bias), gammaCorrection);
+            int ng = Colors.linearToRgb(lerpInt(fg, tg, bias), gammaCorrection);
+            int nb = Colors.linearToRgb(lerpInt(fb, tb, bias), gammaCorrection);
             return toRGB(nr, ng, nb);
         } else if (byParts > 0) {
             /*int fa= separateARGB(fromcolor, Colors.RGBCOMPONENTS.ALPHA);
@@ -145,36 +181,40 @@ public final class Colorizer implements Serializable {
             int na= Math.round((float) (ta * bias + fa * (1 - bias)));*/
             int na = boundsProtected((int) (bias * 255.0), 0xff);
             //na=(int)(bias*255.0);na=(na<0)?0:((na>255)?255:na);
-            return alphaBlend(na, separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE));
+            return alphaBlend(na, separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(fromcolor, Colors.RGBCOMPONENTS.BLUE), separateARGB(tocolor, Colors.RGBCOMPONENTS.RED), separateARGB(tocolor, Colors.RGBCOMPONENTS.GREEN), separateARGB(tocolor, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
         } else {
             throw new IllegalArgumentException("Basic index-based interpolation needs to be done on an instance.");
             //return Math.round((float)tocolor+fromcolor/2);
         }
     }
-    public static int splineInterpolated(int color1, int color2, int color3, int color4, double bias, int byParts) {
-        bias = (bias < 0) ? -bias : bias;
-        bias = (bias > 1) ? bias - (long) bias : bias;
+    public static int splineInterpolated(int fromColor, int toColor, double bias, int byParts, boolean gammaCorrection) {
+        bias = correctBias(bias);
+        int nextColor = lerpInt(toColor, fromColor, bias), prevColor = lerpInt(toColor, fromColor, 1 - bias);
+        return splineInterpolated(fromColor, toColor, max(prevColor, nextColor), min(prevColor, nextColor), bias, byParts, gammaCorrection);
+    }
+    public static int splineInterpolated(int color1, int color2, int color3, int color4, double bias, int byParts, boolean gammaCorrection) {
+        bias = correctBias(bias);
         double h0 = 0.5 * ((bias * bias) * (bias - 1)),
                 h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
                 h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
         if (byParts == 0) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
-            r1 = separateARGB(color1, Colors.RGBCOMPONENTS.RED);
-            r2 = separateARGB(color2, Colors.RGBCOMPONENTS.RED);
-            r3 = separateARGB(color3, Colors.RGBCOMPONENTS.RED);
-            r4 = separateARGB(color4, Colors.RGBCOMPONENTS.RED);
-            g1 = separateARGB(color1, Colors.RGBCOMPONENTS.GREEN);
-            g2 = separateARGB(color2, Colors.RGBCOMPONENTS.GREEN);
-            g3 = separateARGB(color3, Colors.RGBCOMPONENTS.GREEN);
-            g4 = separateARGB(color4, Colors.RGBCOMPONENTS.GREEN);
-            b1 = separateARGB(color1, Colors.RGBCOMPONENTS.BLUE);
-            b2 = separateARGB(color2, Colors.RGBCOMPONENTS.BLUE);
-            b3 = separateARGB(color3, Colors.RGBCOMPONENTS.BLUE);
-            b4 = separateARGB(color4, Colors.RGBCOMPONENTS.BLUE);
-            int nr = Math.round((float) abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4));
-            int ng = Math.round((float) abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4));
-            int nb = Math.round((float) abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4));
+            r1 = Colors.rgbToLinear(separateARGB(color1, Colors.RGBCOMPONENTS.RED), gammaCorrection);
+            r2 = Colors.rgbToLinear(separateARGB(color2, Colors.RGBCOMPONENTS.RED), gammaCorrection);
+            r3 = Colors.rgbToLinear(separateARGB(color3, Colors.RGBCOMPONENTS.RED), gammaCorrection);
+            r4 = Colors.rgbToLinear(separateARGB(color4, Colors.RGBCOMPONENTS.RED), gammaCorrection);
+            g1 = Colors.rgbToLinear(separateARGB(color1, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
+            g2 = Colors.rgbToLinear(separateARGB(color2, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
+            g3 = Colors.rgbToLinear(separateARGB(color3, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
+            g4 = Colors.rgbToLinear(separateARGB(color4, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
+            b1 = Colors.rgbToLinear(separateARGB(color1, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
+            b2 = Colors.rgbToLinear(separateARGB(color2, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
+            b3 = Colors.rgbToLinear(separateARGB(color3, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
+            b4 = Colors.rgbToLinear(separateARGB(color4, Colors.RGBCOMPONENTS.BLUE), gammaCorrection);
+            int nr = Colors.linearToRgb(Math.round((float) abs(h0 * r1 + h1 * r2 + h2 * r3 + h3 * r4)), gammaCorrection);
+            int ng = Colors.linearToRgb(Math.round((float) abs(h0 * g1 + h1 * g2 + h2 * g3 + h3 * g4)), gammaCorrection);
+            int nb = Colors.linearToRgb(Math.round((float) abs(h0 * b1 + h1 * b2 + h2 * b3 + h3 * b4)), gammaCorrection);
             return toRGB(nr, ng, nb);
         } else if (byParts > 0) {
             double alpha = abs((h0 + h1 + h2 + h3) * bias) * 255.0;
@@ -185,11 +225,66 @@ public final class Colorizer implements Serializable {
                     separateARGB(color1, Colors.RGBCOMPONENTS.BLUE),
                     separateARGB(color2, Colors.RGBCOMPONENTS.RED),
                     separateARGB(color2, Colors.RGBCOMPONENTS.GREEN),
-                    separateARGB(color2, Colors.RGBCOMPONENTS.BLUE));
+                    separateARGB(color2, Colors.RGBCOMPONENTS.BLUE),
+                    gammaCorrection);
         } else {
             throw new IllegalArgumentException("Basic index-based interpolation needs to be done on an instance.");
             //return Math.round((float)tocolor+fromcolor/2);
         }
+    }
+    public static int interpolated(int fromColor, int toColor, double bias, int byParts, boolean linearInterpolation, boolean gammaCorrection) {
+        if (linearInterpolation) {
+            return linearInterpolated(fromColor, toColor, bias, byParts, gammaCorrection);
+        }
+        return splineInterpolated(fromColor, toColor, bias, byParts, gammaCorrection);
+    }
+    public int getInterpolationType() {
+        return interpolationType;
+    }
+    public void setInterpolationType(int interpolationType) {
+        this.interpolationType = interpolationType;
+    }
+    public boolean isGammaCorrection() {
+        return gammaCorrection;
+    }
+    public void setGammaCorrection(boolean gammaCorrection) {
+        this.gammaCorrection = gammaCorrection;
+    }
+    public boolean isSplineInterpolationCalcMode() {
+        return splineInterpolationCalcMode;
+    }
+    public void setSplineInterpolationCalcMode(boolean splineInterpolationCalcMode) {
+        this.splineInterpolationCalcMode = splineInterpolationCalcMode;
+    }
+    public boolean isSplineInterpolationResultMode() {
+        return splineInterpolationResultMode;
+    }
+    public void setSplineInterpolationResultMode(boolean splineInterpolationResultMode) {
+        this.splineInterpolationResultMode = splineInterpolationResultMode;
+    }
+    public boolean isLinearInterpolation() {
+        return linearInterpolation;
+    }
+    public void setLinearInterpolation(boolean linearInterpolation) {
+        this.linearInterpolation = linearInterpolation;
+    }
+    public int interpolated(int index1, int index2, int index3, double bias) {
+        if (linearInterpolation) {
+            if (byParts < 0) {
+                return basicInterpolateIndex(index1, index2, bias);
+            }
+            return interpolated(getColor(index1), getColor(index2), getColor(index3), bias, byParts, true, gammaCorrection);
+        }
+        return splineInterpolated(index1, index2, index3, bias);
+    }
+    public int interpolated(int fromIndex, int toIndex, double bias) {
+        if (linearInterpolation) {
+            if (byParts < 0) {
+                return basicInterpolateIndex(fromIndex, toIndex, bias);
+            }
+            return interpolated(getColor(fromIndex), getColor(toIndex), bias, byParts, true, gammaCorrection);
+        }
+        return splineInterpolated(fromIndex, toIndex, bias);
     }
     public double getFractionalCount(int count, double fraction) {
         return scale * (count + weight * fraction);
@@ -226,7 +321,7 @@ public final class Colorizer implements Serializable {
             System.arraycopy(palette, 0, this.palette, tmpPalette.length, this.palette.length - tmpPalette.length);
         }
     }
-    private void initColorConfig(Colors.MODE mode, int num_colors, int byParts, boolean logIndex, boolean cyclize) {
+    private void initColorConfig(Colors.MODE mode, int num_colors, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
         colors_corrected = false;
         setByParts(byParts);
         setLogIndex(logIndex);
@@ -237,6 +332,11 @@ public final class Colorizer implements Serializable {
         initRandomPalette(num_colors, false);
         setMode(mode);
         setSmoothing_base(Complex.E);
+        setLinearInterpolation(linearInterpolation);
+        setGammaCorrection(gammaCorrection);
+        setSplineInterpolationCalcMode(splineInterpolationCalcMode);
+        setSplineInterpolationResultMode(splineInterpolationResultMode);
+        setInterpolationType(interpolationType);
     }
     private void initRandomPalette(int num_colors, boolean preserve) {
         if (!preserve) {
@@ -329,7 +429,7 @@ public final class Colorizer implements Serializable {
     public int getColor(int index) {
         return palette[boundsProtected(index, palette.length)];
     }
-    private void initColorConfig(Colors.MODE mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize) {
+    private void initColorConfig(Colors.MODE mode, int color_density, int num_colors, int basecolor, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
         colors_corrected = false;
         setByParts(byParts);
         setLogIndex(logIndex);
@@ -342,6 +442,11 @@ public final class Colorizer implements Serializable {
         setMode(mode);
         setExponentialSmoothing(true);
         setSmoothing_base(Complex.E);
+        setLinearInterpolation(linearInterpolation);
+        setGammaCorrection(gammaCorrection);
+        setSplineInterpolationCalcMode(splineInterpolationCalcMode);
+        setSplineInterpolationResultMode(splineInterpolationResultMode);
+        setInterpolationType(interpolationType);
     }
     public void initGradientPalette() {
         palette = new int[num_colors];
@@ -410,7 +515,7 @@ public final class Colorizer implements Serializable {
     private void calcStep() {
         setStep((basecolor / num_colors) * color_density);
     }
-    private void initColorConfig(Colors.MODE mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize) {
+    private void initColorConfig(Colors.MODE mode, int color_density, int num_colors, int basecolor, int step, int byParts, boolean logIndex, boolean cyclize, boolean linearInterpolation, boolean gammaCorrection, boolean splineInterpolationCalcMode, boolean splineInterpolationResultMode, int interpolationType) {
         colors_corrected = false;
         setByParts(byParts);
         setLogIndex(logIndex);
@@ -423,6 +528,11 @@ public final class Colorizer implements Serializable {
         initGradientPalette();
         setMode(mode);
         setSmoothing_base(Complex.E);
+        setLinearInterpolation(linearInterpolation);
+        setGammaCorrection(gammaCorrection);
+        setSplineInterpolationCalcMode(splineInterpolationCalcMode);
+        setSplineInterpolationResultMode(splineInterpolationResultMode);
+        setInterpolationType(interpolationType);
     }
     public boolean isLogIndex() {
         return logIndex;
@@ -490,9 +600,6 @@ public final class Colorizer implements Serializable {
         this.exponentialSmoothing = exponentialSmoothing;
     }
     public void createSmoothPalette(int[] control_colors, @NotNull double[] control_points) {
-        createSmoothPalette(control_colors, control_points, !modifierEnabled);
-    }
-    public void createSmoothPalette(int[] control_colors, @NotNull double[] control_points, boolean useSpline) {
         if (already_cyclized) {
             num_colors /= 2;
             num_colors++;
@@ -523,11 +630,11 @@ public final class Colorizer implements Serializable {
                 cnext++;
                 continue;
             }
-            if (useSpline) {
+            if (modifierEnabled) {
                 int c_p = (c == 0) ? controls.length - 1 : c - 1, c_n = (cnext == controls.length - 1) ? 0 : cnext + 1;
                 palette[i] = splineInterpolated(controls[c], controls[cnext], controls[c_p], controls[c_n], ((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]));
             } else {
-                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], abs(i - controls[c]), abs(controls[cnext] - controls[c]), getByParts());
+                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], ((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]), getByParts(), gammaCorrection);
             }
         }
         if (isCyclize()) {
@@ -560,30 +667,51 @@ public final class Colorizer implements Serializable {
         }
         return -1;
     }
-    public int splineInterpolated(int index, double bias) {
-        return splineInterpolated(index, index + 1, bias);
+    public int interpolated(int index, double bias) {
+        if (interpolationType == 0) {
+            return interpolated(index, lerpInt(index, palette.length - 1, bias), bias);
+        } else if (interpolationType > 0) {
+            return interpolated(index, index > palette.length / 2 ? index - 1 : index + 1, bias);
+        }
+        return interpolated(index, index + 1, bias);
     }
     public int splineInterpolated(int index1, int index2, double bias) {
         int index3, index4;
         if (index1 > index2) {
-            index3 = index1 + 1;
-            index4 = index2 - 1;
+            if (splineInterpolationCalcMode) {
+                index3 = lerpInt(index1, palette.length - 1, bias);
+                index4 = lerpInt(0, index2, bias);
+            } else {
+                index3 = index1 + 1;
+                index4 = index2 - 1;
+            }
+            if (splineInterpolationResultMode) {
+                return splineInterpolated(index4, index2, index1, index3, bias);
+            }
         } else {
-            index3 = index2 + 1;
-            index4 = index1 - 1;
+            if (splineInterpolationCalcMode) {
+                index3 = lerpInt(index2, palette.length - 1, bias);
+                index4 = lerpInt(0, index1, bias);
+            } else {
+                index3 = index1 - 1;
+                index4 = index2 + 1;
+            }
+            if (splineInterpolationResultMode) {
+                return splineInterpolated(index4, index1, index2, index3, bias);
+            }
         }
         return splineInterpolated(index1, index1, index3, index4, bias);
     }
     public int splineInterpolated(int index, int indexMin, int indexMax, double bias) {
         int otherIdx = round((float) (bias - (long) bias) * (indexMax + indexMin));
-        return splineInterpolated(index, otherIdx, indexMax, indexMin, bias);
+        return splineInterpolated(indexMin, index, otherIdx, indexMax, bias);
     }
     public int splineInterpolated(int index1, int index2, int index3, int index4, double bias) {
         if ((!colors_corrected) && num_colors < 4) {
             @NotNull int[] tmppalette = new int[num_colors];
             if (palette != null) System.arraycopy(palette, 0, tmppalette, 0, palette.length);
             num_colors = 4;
-            initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclizeAble);
+            initColorConfig(mode, color_density, num_colors, basecolor, step, byParts, logIndex, cyclizeAble, linearInterpolation, gammaCorrection, splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
             if (palette != null && palette.length > 0) {
                 int j = 0;
                 for (int i = 0; i < num_colors; i++) {
@@ -604,7 +732,7 @@ public final class Colorizer implements Serializable {
         index3 = boundsProtected(index3, palette.length);
         index4 = boundsProtected(index4, palette.length);
         if (byParts >= 0) {
-            return splineInterpolated(getColor(index1), getColor(index2), getColor(index3), getColor(index4), bias, byParts);
+            return splineInterpolated(getColor(index1), getColor(index2), getColor(index3), getColor(index4), bias, byParts, gammaCorrection);
         } else {
             return basicInterpolateIndex(index1, index2, bias);
         }
@@ -618,6 +746,7 @@ public final class Colorizer implements Serializable {
     public void fromString(@NotNull String[] colors) {
         setSmoothing_base(Complex.E);
         setExponentialSmoothing(true);
+        setLinearInterpolation(false);
         setPalette_type(Colors.PALETTE.valueOf(colors[0]));
         setMode(Colors.MODE.valueOf(colors[1]));
         setByParts(Integer.valueOf(colors[2]));
@@ -626,7 +755,10 @@ public final class Colorizer implements Serializable {
             setExponentialSmoothing(Boolean.valueOf(smoothingData[0]));
         }
         if (smoothingData.length > 1) {
-            setSmoothing_base(new Complex(smoothingData[1]));
+            setLinearInterpolation(Boolean.valueOf(smoothingData[1]));
+        }
+        if (smoothingData.length > 2) {
+            setSmoothing_base(new Complex(smoothingData[2]));
         }
         setCyclize(Boolean.valueOf(colors[4]));
         String[] modifiers = split(colors[5], ";");
@@ -646,14 +778,21 @@ public final class Colorizer implements Serializable {
         setMultiplier_threshold(Double.valueOf(colors[8]));
         setScale(Double.valueOf(colors[9]));
         setWeight(Double.valueOf(colors[10]));
+        @NotNull String[] interpolationConfig = split(colors[11], ";");
+        setGammaCorrection(Boolean.valueOf(interpolationConfig[0]));
+        setSplineInterpolationCalcMode(Boolean.valueOf(interpolationConfig[1]));
+        setSplineInterpolationResultMode(Boolean.valueOf(interpolationConfig[2]));
+        setInterpolationType(Integer.valueOf(interpolationConfig[3]));
         switch (palette_type) {
             case RANDOM_PALETTE:
-                initColorConfig(mode, Integer.valueOf(colors[11]), byParts, logIndex, cyclizeAble);
-                setColor_density(Integer.valueOf(colors[12]));
+                initColorConfig(mode, Integer.valueOf(colors[12]), byParts, logIndex, cyclizeAble,
+                        linearInterpolation, gammaCorrection, splineInterpolationCalcMode,
+                        splineInterpolationResultMode, interpolationType);
+                setColor_density(Integer.valueOf(colors[13]));
                 break;
             case CUSTOM_PALETTE:
-                @NotNull String[] parts = split(colors[11], ";");
-                setColor_density(Integer.valueOf(colors[12]));
+                @NotNull String[] parts = split(colors[12], ";");
+                setColor_density(Integer.valueOf(colors[13]));
                 @NotNull int[] colorset = new int[parts.length];
                 for (int i = 0; i < colorset.length; i++) {
                     colorset[i] = Integer.valueOf(parts[i], 16);
@@ -661,20 +800,35 @@ public final class Colorizer implements Serializable {
                 setPalette(colorset, false);
                 break;
             case GRADIENT_PALETTE:
-                if (colors.length == 15) {
-                    initColorConfig(mode, Integer.valueOf(colors[11]), Integer.valueOf(colors[12]), Integer.valueOf(colors[13], 16), Integer.valueOf(colors[14], 16), byParts, logIndex, cyclizeAble);
-                } else if (colors.length == 14) {
-                    initColorConfig(mode, Integer.valueOf(colors[11]), Integer.valueOf(colors[12]), Integer.valueOf(colors[13], 16), byParts, logIndex, cyclizeAble);
+                switch (colors.length) {
+                    case 16:
+                        initColorConfig(mode, Integer.valueOf(colors[12]), Integer.valueOf(colors[13]),
+                                Integer.valueOf(colors[14], 16), Integer.valueOf(colors[15], 16),
+                                byParts, logIndex, cyclizeAble, linearInterpolation, gammaCorrection,
+                                splineInterpolationCalcMode, splineInterpolationResultMode, interpolationType);
+                        break;
+                    case 15:
+                        initColorConfig(mode, Integer.valueOf(colors[12]), Integer.valueOf(colors[13]),
+                                Integer.valueOf(colors[14], 16), byParts, logIndex, cyclizeAble,
+                                linearInterpolation, gammaCorrection, splineInterpolationCalcMode,
+                                splineInterpolationResultMode, interpolationType);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Illegal Configuration String");
                 }
                 break;
             case SHADE_PALETTE:
-                initColorConfig(mode, Integer.valueOf(colors[11]), Integer.valueOf(colors[12]), Integer.valueOf(colors[13], 16), 0xff000000, byParts, logIndex, cyclizeAble);
+                initColorConfig(mode, Integer.valueOf(colors[12]), Integer.valueOf(colors[13]),
+                        Integer.valueOf(colors[14], 16), 0xff000000, byParts, logIndex, cyclizeAble,
+                        linearInterpolation, gammaCorrection, splineInterpolationCalcMode,
+                        splineInterpolationResultMode, interpolationType);
                 break;
-            case SMOOTH_PALETTE_LINEAR:
-            case SMOOTH_PALETTE_SPLINE:
-                initColorConfig(mode, Integer.valueOf(colors[11]), byParts, logIndex, cyclizeAble);
-                setColor_density(Integer.valueOf(colors[12]));
-                @NotNull String[] controls = split(colors[13], ";");
+            case SMOOTH_PALETTE:
+                initColorConfig(mode, Integer.valueOf(colors[12]), byParts, logIndex, cyclizeAble,
+                        linearInterpolation, gammaCorrection, splineInterpolationCalcMode,
+                        splineInterpolationResultMode, interpolationType);
+                setColor_density(Integer.valueOf(colors[13]));
+                @NotNull String[] controls = split(colors[14], ";");
                 @NotNull int[] control_colors = new int[controls.length];
                 @NotNull double[] control_points = new double[controls.length];
                 for (int i = 0; i < controls.length; i++) {
@@ -682,11 +836,7 @@ public final class Colorizer implements Serializable {
                     control_colors[i] = Integer.valueOf(control[0]);
                     control_points[i] = Double.valueOf(control[1]);
                 }
-                if (palette_type == Colors.PALETTE.SMOOTH_PALETTE_SPLINE) {
-                    createSmoothPalette(control_colors, control_points, true);
-                } else {
-                    createSmoothPalette(control_colors, control_points, false);
-                }
+                createSmoothPalette(control_colors, control_points);
                 setPalette_type(Colors.PALETTE.CUSTOM_PALETTE);
                 break;
             default:
@@ -695,7 +845,7 @@ public final class Colorizer implements Serializable {
     }
     @Override
     public String toString() {
-        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + "," + logIndex + ";" + modifierEnabled + "," + periodicity + "," + phase_shift + "," + multiplier_threshold + "," + scale + "," + weight;
+        String representation = palette_type + "," + mode + "," + byParts + "," + exponentialSmoothing + ";" + linearInterpolation + ";" + smoothing_base + "," + logIndex + ";" + modifierEnabled + "," + periodicity + "," + phase_shift + "," + multiplier_threshold + "," + scale + "," + weight + "," + gammaCorrection + ";" + splineInterpolationCalcMode + ";" + splineInterpolationResultMode + ";" + interpolationType;
         switch (palette_type) {
             case RANDOM_PALETTE:
                 representation += "," + num_colors + "," + color_density;

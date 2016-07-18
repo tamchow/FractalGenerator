@@ -33,6 +33,15 @@ final class FunctionTerm extends Derivable {
     FunctionTerm(String variable, String variableCode, String oldvariablecode, @NotNull String[][] varconst) {
         init(variable, variableCode, oldvariablecode, varconst);
     }
+    FunctionTerm(FunctionTerm other) {
+        this(other.getZ_value(), other.getVariableCode(), other.getOldvariablecode(), other.getConsts());
+        function = other.function;
+        constant = other.constant;
+        exponent = other.exponent;
+        coefficient = new Polynomial(other.coefficient);
+        argument = new Polynomial(other.argument);
+        polynomial = other.polynomial;
+    }
     static boolean isSpecialFunctionTerm(@NotNull String function) {
         return getUsedFunctionTermIndex(function) != -1;
     }

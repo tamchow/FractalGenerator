@@ -1,6 +1,5 @@
 package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.color.Colorizer;
-import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.DataFromString;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.helpers.annotations.NotNull;
@@ -40,12 +39,14 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, String oldvariablecode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
         initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, oldvariablecode, tolerance, color, switch_rate, trap_point, linetrap, skew);
     }
+    /**
+     * Sets up an unusable {@link ComplexFractalInitParams}.
+     * <b>Do not</b> use as-is.
+     */
     public ComplexFractalInitParams() {
-        @NotNull String func = "z ^ 2 + c";
-        @NotNull String[][] consts = {{"c", "-0.8,+0.156i"}};
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.CURVATURE_AVERAGE_ABS_SPLINE, 19, 16, 0, true, false);
-        cfg.setPalette(new int[]{Colorizer.toRGB(66, 30, 15), Colorizer.toRGB(25, 7, 26), Colorizer.toRGB(9, 1, 47), Colorizer.toRGB(4, 4, 73), Colorizer.toRGB(0, 7, 100), Colorizer.toRGB(12, 44, 138), Colorizer.toRGB(24, 82, 177), Colorizer.toRGB(57, 125, 209), Colorizer.toRGB(134, 181, 229), Colorizer.toRGB(211, 236, 248), Colorizer.toRGB(241, 233, 191), Colorizer.toRGB(248, 201, 95), Colorizer.toRGB(255, 170, 0), Colorizer.toRGB(204, 128, 0), Colorizer.toRGB(153, 87, 0), Colorizer.toRGB(106, 52, 3)}, false);
-        initParams(1921, 1081, 10, 0, 540, ComplexFractalGenerator.Mode.JULIA, func, consts, "z", "z_p", 1e-5, cfg, 0, Complex.ZERO, null, 0);
+        @NotNull String[][] consts = {{null, null}};
+        @NotNull Colorizer cfg = new Colorizer();
+        initParams(0, 0, 0, 0, 0, null, null, consts, null, null, 0, cfg, 0, null, null, 0);
     }
     @NotNull
     public Colorizer getColor() {
