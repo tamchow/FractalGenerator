@@ -1,7 +1,6 @@
 package in.tamchow.fractal.color;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
-import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.math.complex.Complex;
 
 import java.io.Serializable;
@@ -13,6 +12,8 @@ import static in.tamchow.fractal.math.complex.ComplexOperations.principallog;
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 /**
  * Holds colour configuration for  custom palettes
  */
@@ -156,8 +157,9 @@ public final class Colorizer implements Serializable {
     }
     private static double correctBias(double bias) {
         bias = isNaN(bias) ? 0.0 : (isInfinite(bias) ? 1.0 : bias);
-        bias = (bias < 0.0) ? -bias : bias;
-        return (abs(bias - 1) <= MathUtils.ULP) ? bias - (long) bias : bias;
+        //bias = (bias < 0.0) ? -bias : bias;
+        //return (abs(bias - 1) <= MathUtils.ULP) ? bias - (long) bias : bias;
+        return bias;
     }
     public static int linearInterpolated(int fromcolor, int tocolor, double bias, int byParts, boolean gammaCorrection) {
         bias = correctBias(bias);
@@ -608,7 +610,7 @@ public final class Colorizer implements Serializable {
         palette = new int[num_colors];
         @NotNull int[] controls = new int[control_points.length];
         int color_density_backup = color_density;
-        color_density = num_colors;
+        color_density = calculateColorDensity();
         for (int i = 0; i < controls.length && i < control_points.length; i++) {
             controls[i] = createIndex(control_points[i], 0, 1);
         }
@@ -630,12 +632,8 @@ public final class Colorizer implements Serializable {
                 cnext++;
                 continue;
             }
-            if (modifierEnabled) {
-                int c_p = (c == 0) ? controls.length - 1 : c - 1, c_n = (cnext == controls.length - 1) ? 0 : cnext + 1;
-                palette[i] = splineInterpolated(controls[c], controls[cnext], controls[c_p], controls[c_n], ((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]));
-            } else {
-                palette[i] = linearInterpolated(control_colors[c], control_colors[cnext], ((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]), getByParts(), gammaCorrection);
-            }
+            double bias = clamp(((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]), 0.0, 1.0);
+            palette[i] = interpolated(control_colors[c], control_colors[cnext], bias, byParts, !modifierEnabled, gammaCorrection);
         }
         if (isCyclize()) {
             cyclizePalette();
@@ -836,8 +834,8 @@ public final class Colorizer implements Serializable {
                     control_colors[i] = Integer.valueOf(control[0]);
                     control_points[i] = Double.valueOf(control[1]);
                 }
-                createSmoothPalette(control_colors, control_points);
                 setPalette_type(Colors.PALETTE.CUSTOM_PALETTE);
+                createSmoothPalette(control_colors, control_points);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported palette type");

@@ -2,7 +2,7 @@ package in.tamchow.fractal.fractals.complex;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;

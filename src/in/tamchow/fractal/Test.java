@@ -1,19 +1,17 @@
 package in.tamchow.fractal;
 import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
-import in.tamchow.fractal.config.BatchContainer;
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalInitParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalRunParams;
-import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
-import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
+import in.tamchow.fractal.math.matrix.Matrix;
 import in.tamchow.fractal.platform_tools.DesktopProgressPublisher;
 import in.tamchow.fractal.platform_tools.ImageConverter;
 
@@ -30,13 +28,13 @@ public class Test {
                 magnet2 = "((z^3+3*(c-1)*z+(c-1)*(c-2))/(3*(z^2)+3*(c-2)*z+(c-1)*(c-2)+1))^2";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"},
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}};
-        int resx = 1920, resy = 1080, iter = 16, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
+        int resx = 1001, resy = 1001, iter = 2048, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
         @Nullable double[] percentiles = null;
         @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.MANDELBROT;
-        double escrad = 1E10, tolerance = 1e-15, zoom = 10, zoompow = 0, baseprec = -1;
+        double escrad = 2, tolerance = 1e-15, zoom = 1, baseprec = -1;
         @Nullable String linetrap = null;
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.EPSILON_CROSS, 4, 250000, 0, true, false, false, false, true, false, 0);
+        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.HISTOGRAM, -1, 2500, 0, true, false, false, false, true, false, 0);
         func = func2;
         //cfg.setModifierEnabled(true);
         //cfg.setMultiplier_threshold(1E-6);
@@ -45,18 +43,24 @@ public class Test {
         //cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575});
         //cfg.setPalette(new int[]{Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.BLUE}, false);
         //cfg.setPalette(new int[]{Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.CYAN, 0xff7fffd4, 0xffffa07a}, false);
-        //cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.CYAN, 0xff7fffd4, 0xffffa07a}, new double[]{0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84, 0.96});
-        cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE}, new double[]{0.2, 0.4, 0.6, 0.8});
-        cfg.setColor_density(-1);//let there be the proper color_density!
+        cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.CYAN, 0xff7fffd4, 0xffffa07a}, new double[]{0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84, 0.96});
+        //cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE}, new double[]{0.2, 0.4, 0.6, 0.8});
+        /*BufferedImage img=ImageConverter.toImage(ColorDebugger.createDebugImage(cfg.getPalette()));
+        try{
+            ImageIO.write(img,"png",new File(new File(".").getAbsoluteFile().getAbsolutePath()+"/ColorDebug.png"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        System.exit(1);*/
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = new Complex(1);
         int x_t = 4, y_t = 2, xppp = 10, yppp = 10;
         double skew = 0 * Math.PI;
         boolean def = (args.length == 0);
-        @Nullable BatchContainer<ComplexFractalParams> fccfg = new BatchContainer<>();
+        @Nullable ComplexFractalParams jgenParams = null;
         if (!def) {
             try {
-                fccfg = ConfigReader.getComplexFractalConfigFromFile(new File(args[0]));
+                jgenParams = ConfigReader.getComplexParamFromFile(new File(args[0]));
             } catch (Exception e) {
                 x_t = Integer.valueOf(args[0]);
                 y_t = Integer.valueOf(args[1]);
@@ -65,28 +69,27 @@ public class Test {
         }
         long inittime = System.currentTimeMillis();
         @Nullable ComplexFractalGenerator jgen;
-        @Nullable ComplexFractalParams jgenParams = null;
         if (def) {
-            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, zoompow, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null, x_t, y_t);
+            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null, x_t, y_t);
             jgenParams.initParams.skew = skew;
             if (constant != null) {
                 jgenParams.runParams = new ComplexFractalRunParams(iter, escrad, constant);
             } else {
                 jgenParams.runParams = new ComplexFractalRunParams(iter, escrad);
             }
-            jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
-        } else {
-            jgen = new ComplexFractalGenerator(fccfg.firstItem(), new DesktopProgressPublisher());
         }
-        //jgen.zoom(1255, 540, 1);
-        //jgen.zoom(1390, 800, 1);
-        //jgen.zoom(1650, 450, 1);
-        //jgen.zoom(1310, 560, 1);
-        //jgen.zoom(1375, 695, 1);
-        //jgen.zoom(new Complex(0.27969303810093984, -0.00838423653868096), 12);
+        jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
+        //jgen.zoom(new Matrix(new double[][]{{-2.0, -1.25}, {1.5, 1.25}}));
+        jgen.zoom(new Matrix(new double[][]{{-0.74877, 0.065053}, {-0.74872, 0.065103}}));
+        //jgen.zoom(1255, 540, 10);
+        //jgen.zoom(1230, 290, 10);
+        //jgen.zoom(1650, 450, 10);
+        //jgen.zoom(1100, 790, 10);
+        //jgen.zoom(1375, 695, 10);
+        //jgen.zoom(new Complex(0.27969303810093984, -0.00838423653868096), 1E12);
         boolean anti = false, clamp = true;
-        ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(resx, resy, x_t, y_t, switch_rate, xppp, yppp, max_hit_threshold, iterations, zoom, zoompow, baseprec, escrad, tolerance, skew, func, variableCode, consts, fracmode, anti, clamp, percentiles);
-        ComplexBrotFractalGenerator cbgen = new ComplexBrotFractalGenerator(cbparams, new DesktopProgressPublisher());
+        //ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(resx, resy, x_t, y_t, switch_rate, xppp, yppp, max_hit_threshold, iterations, zoom, zoompow, baseprec, escrad, tolerance, skew, func, variableCode, consts, fracmode, anti, clamp, percentiles);
+        //ComplexBrotFractalGenerator cbgen = new ComplexBrotFractalGenerator(cbparams, new DesktopProgressPublisher());
         long starttime = System.currentTimeMillis();
         System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
         /*@NotNull ThreadedComplexBrotFractalGenerator cbthreaded = new ThreadedComplexBrotFractalGenerator(cbgen);

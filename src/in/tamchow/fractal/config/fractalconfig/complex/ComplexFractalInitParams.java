@@ -21,23 +21,23 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public String[][] consts;
     public int width, height, switch_rate;
     public ComplexFractalGenerator.Mode fractal_mode;
-    public double tolerance, zoom, zoom_factor, base_precision, skew;
+    public double tolerance, zoom, base_precision, skew;
     public Complex trap_point;
     public Colorizer color;
     public ComplexFractalInitParams(@NotNull ComplexFractalInitParams initParams) {
-        initParams(initParams.width, initParams.height, initParams.zoom, initParams.zoom_factor, initParams.base_precision, initParams.fractal_mode, initParams.function, initParams.consts, initParams.variableCode, initParams.oldvariablecode, initParams.tolerance, initParams.getColor(), initParams.switch_rate, initParams.trap_point, initParams.linetrap, initParams.skew);
+        initParams(initParams.width, initParams.height, initParams.zoom, initParams.base_precision, initParams.fractal_mode, initParams.function, initParams.consts, initParams.variableCode, initParams.oldvariablecode, initParams.tolerance, initParams.getColor(), initParams.switch_rate, initParams.trap_point, initParams.linetrap, initParams.skew);
     }
-    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, null, 0);
+    public ComplexFractalInitParams(int width, int height, double zoom, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point) {
+        initParams(width, height, zoom, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, null, 0);
     }
-    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, 0);
+    public ComplexFractalInitParams(int width, int height, double zoom, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap) {
+        initParams(width, height, zoom, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, 0);
     }
-    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, skew);
+    public ComplexFractalInitParams(int width, int height, double zoom, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
+        initParams(width, height, zoom, base_precision, fractal_mode, function, consts, variableCode, variableCode + "_p", tolerance, color, switch_rate, trap_point, linetrap, skew);
     }
-    public ComplexFractalInitParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, String oldvariablecode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
-        initParams(width, height, zoom, zoom_factor, base_precision, fractal_mode, function, consts, variableCode, oldvariablecode, tolerance, color, switch_rate, trap_point, linetrap, skew);
+    public ComplexFractalInitParams(int width, int height, double zoom, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, String oldvariablecode, double tolerance, @NotNull Colorizer color, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
+        initParams(width, height, zoom, base_precision, fractal_mode, function, consts, variableCode, oldvariablecode, tolerance, color, switch_rate, trap_point, linetrap, skew);
     }
     /**
      * Sets up an unusable {@link ComplexFractalInitParams}.
@@ -46,7 +46,7 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public ComplexFractalInitParams() {
         @NotNull String[][] consts = {{null, null}};
         @NotNull Colorizer cfg = new Colorizer();
-        initParams(0, 0, 0, 0, 0, null, null, consts, null, null, 0, cfg, 0, null, null, 0);
+        initParams(0, 0, 0, 0, null, null, consts, null, null, 0, cfg, 0, null, null, 0);
     }
     @NotNull
     public Colorizer getColor() {
@@ -55,11 +55,10 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     public void setColor(@NotNull Colorizer color) {
         this.color = new Colorizer(color);
     }
-    private void initParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, String oldvariablecode, double tolerance, @NotNull Colorizer colors, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
+    private void initParams(int width, int height, double zoom, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, String oldvariablecode, double tolerance, @NotNull Colorizer colors, int switch_rate, @NotNull Complex trap_point, String linetrap, double skew) {
         this.width = width;
         this.height = height;
         this.zoom = zoom;
-        this.zoom_factor = zoom_factor;
         this.base_precision = base_precision;
         this.skew = skew;
         this.fractal_mode = fractal_mode;
@@ -88,8 +87,8 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
     }
     @Override
     public String toString() {
-        String representation = INIT + "%n%d%n%d%n%f%n%f%n%f%n%s%n%s%n%s%n%s%n" + OLD_VARIABLE_CODE + "%s$n%f%n%s%n" + SWITCH_RATE + "%d%n" + TRAP_POINT + "%s%n";
-        representation = String.format(representation, width, height, zoom, zoom_factor,
+        String representation = INIT + "%n%d%n%d%n%f%n%f%n%s%n%s%n%s%n%s%n" + OLD_VARIABLE_CODE + "%s$n%f%n%s%n" + SWITCH_RATE + "%d%n" + TRAP_POINT + "%s%n";
+        representation = String.format(representation, width, height, zoom,
                 base_precision, fractal_mode, function, constantsToString(), variableCode,
                 oldvariablecode, tolerance, color, switch_rate, trap_point);
         if (linetrap != null) {
@@ -142,25 +141,22 @@ public class ComplexFractalInitParams implements Serializable, DataFromString {
         this.switch_rate = switch_rate;
     }
     public void fromString(@NotNull String[] params) {
-        @NotNull String[] con = StringManipulator.split(params[9], ";");
+        @NotNull String[] con = StringManipulator.split(params[8], ";");
         @NotNull String[][] consts = new String[con.length][2];
         for (int i = 0; i < consts.length; i++) {
             consts[i] = StringManipulator.split(con[i], ":");
         }
-        @NotNull String[] colorcfg = StringManipulator.split(params[10], ",");
+        @NotNull String[] colorcfg = StringManipulator.split(params[9], ",");
         @NotNull Colorizer colorConfig = new Colorizer();
         colorConfig.fromString(colorcfg);
-        if (params.length == 13) {
-            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), Double.valueOf(params[4]), ComplexFractalGenerator.Mode.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), colorConfig, 0, Double.valueOf(params[12]));
-        } else {
-            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), Double.valueOf(params[4]), ComplexFractalGenerator.Mode.valueOf(params[5]), params[6], consts, params[7], Double.valueOf(params[8]), colorConfig, 0, Double.valueOf(params[12]));
+        if (params.length == 12) {
+            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Double.valueOf(params[2]), Double.valueOf(params[3]), ComplexFractalGenerator.Mode.valueOf(params[4]), params[5], consts, params[6], Double.valueOf(params[7]), colorConfig, 0, Double.valueOf(params[11]));
         }
     }
-    private void initParams(int width, int height, double zoom, double zoom_factor, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer colors, int switch_rate, double skew) {
+    private void initParams(int width, int height, double zoom, double base_precision, ComplexFractalGenerator.Mode fractal_mode, String function, @NotNull String[][] consts, String variableCode, double tolerance, @NotNull Colorizer colors, int switch_rate, double skew) {
         this.width = width;
         this.height = height;
         this.zoom = zoom;
-        this.zoom_factor = zoom_factor;
         this.base_precision = base_precision;
         this.fractal_mode = fractal_mode;
         this.function = function;

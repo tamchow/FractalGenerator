@@ -2,7 +2,7 @@ package in.tamchow.fractal.config.fractalconfig.complex;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.Strings;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;

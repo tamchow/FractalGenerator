@@ -1,8 +1,11 @@
 package in.tamchow.fractal.helpers.math;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
+import in.tamchow.fractal.helpers.strings.StringManipulator;
 import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
+
+import java.util.ArrayList;
 
 import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
 /**
@@ -12,30 +15,46 @@ public final class MathUtils {
     public static final double ULP = 10E-15;
     private MathUtils() {
     }
-    public static String MDAtoString(Object[][] items) {
-        String representation = "[";
-        for (Object[] subitems : items) {
-            for (Object item : subitems) {
-                representation += String.valueOf(item) + ",";
-            }
-            representation = representation.substring(0, representation.length() - 1);//trims trailing ','
-            representation += "],\n[";
+    public static <T> String MDAtoString(T[][] items) {
+        ArrayList<String> rows = new ArrayList<>(items.length);
+        for (T[] item : items) {
+            rows.add(StringManipulator.join(item, "[", ",", "]"));
         }
-        return representation.trim().substring(0, representation.length() - 3);//trims trailing stuff
+        return StringManipulator.join(rows, "[", ",\n", "]");
     }
     public static String intMDAtoString(int[][] items) {
-        String representation = "[";
-        for (int[] subitems : items) {
-            for (int item : subitems) {
-                representation += String.valueOf(item) + ",";
-            }
-            representation = representation.substring(0, representation.length() - 1);//trims trailing ','
-            representation += "],\n[";
+        return MDAtoString(box(items));
+    }
+    public static Integer[] box(int[] items) {
+        Integer[] boxedItems = new Integer[items.length];
+        for (int i = 0; i < boxedItems.length; ++i) {
+            boxedItems[i] = items[i];
         }
-        return representation.trim().substring(0, representation.length() - 3);//trims trailing stuff
+        return boxedItems;
+    }
+    public static Integer[][] box(int[][] items) {
+        Integer[][] boxedItems = new Integer[items.length][items[0].length];
+        for (int i = 0; i < boxedItems.length; ++i) {
+            boxedItems[i] = box(items[i]);
+        }
+        return boxedItems;
     }
     public static int boundsProtected(int ptr, int size) {
         return (ptr < 0) ? Math.abs(size + ptr) % size : ((ptr >= size) ? (ptr % size) : ptr);
+    }
+    public static int min(int... vals) {
+        int min = vals[0];
+        for (int val : vals) {
+            min = (val < min) ? val : min;
+        }
+        return min;
+    }
+    public static int max(int... vals) {
+        int max = vals[0];
+        for (int val : vals) {
+            max = (val > max) ? val : max;
+        }
+        return max;
     }
     /**
      * @param array the array to splice
@@ -104,6 +123,9 @@ public final class MathUtils {
     public static int normalized(int y, int x, int width, int height) {
         @NotNull int[] yx = imageBounds(y, x, width, height);
         return yx[0] * width + yx[1];
+    }
+    public static double clamp(double val, double min, double max) {
+        return (val < min) ? min : ((val > max) ? max : val);
     }
     @NotNull
     public static void intDDAAdd(@NotNull int[][] from, int[][] to) {

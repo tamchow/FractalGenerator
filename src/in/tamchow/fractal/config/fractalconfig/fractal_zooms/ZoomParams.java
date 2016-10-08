@@ -11,12 +11,13 @@ import java.io.Serializable;
 public class ZoomParams implements Serializable {
     public int centre_x, centre_y;
     @Nullable
-    public Matrix centre;
+    public Matrix centre, bounds;
     public double level;
     public ZoomParams(@NotNull ZoomParams old) {
         centre_x = old.centre_x;
         centre_y = old.centre_y;
         level = old.level;
+        bounds = (old.bounds == null) ? null : new Matrix(old.bounds);
         centre = (old.centre == null) ? null : new Matrix(old.centre);
     }
     public ZoomParams(int centre_x, int centre_y, double level) {
@@ -24,15 +25,23 @@ public class ZoomParams implements Serializable {
         this.centre_y = centre_y;
         this.level = level;
         this.centre = null;
+        this.bounds = null;
     }
-    public ZoomParams(@NotNull Matrix centre, double level) {
-        this.centre = new Matrix(centre);
+    public ZoomParams(@NotNull Matrix points, double level) {
+        centre = new Matrix(points);
+        bounds = null;
         this.level = level;
+    }
+    public ZoomParams(@NotNull Matrix points) {
+        bounds = new Matrix(points);
+        centre = null;
     }
     @NotNull
     public static ZoomParams fromString(@NotNull String params) {
         @NotNull String[] parts = StringManipulator.split(params, " ");
-        if (parts.length == 2) {
+        if (parts.length == 1) {
+            return new ZoomParams(new Matrix(parts[0]));
+        } else if (parts.length == 2) {
             return new ZoomParams(new Matrix(parts[0]), Double.valueOf(parts[1]));
         }
         return new ZoomParams(Integer.valueOf(parts[0]), Integer.valueOf(parts[1]), Double.valueOf(parts[2]));
@@ -40,10 +49,12 @@ public class ZoomParams implements Serializable {
     @NotNull
     @Override
     public String toString() {
-        if (centre == null) {
-            return centre_x + " " + centre_y + " " + level;
+        if (centre == null && bounds != null) {
+            return bounds.toString();
+        } else if (centre != null && bounds == null) {
+            return centre + " " + level;
         }
-        return centre + " " + level;
+        return centre_x + " " + centre_y + " " + level;
     }
     @Override
     public boolean equals(Object other) {

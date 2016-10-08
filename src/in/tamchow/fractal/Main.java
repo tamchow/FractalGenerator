@@ -4,18 +4,18 @@ import in.tamchow.fractal.config.BatchContainer;
 import in.tamchow.fractal.config.ConfigReader;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
-import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
+import in.tamchow.fractal.config.fractalconfig.complex.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageParams;
 import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.IFS.ThreadedIFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
-import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
-import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerator;
+import in.tamchow.fractal.fractals.complex.complexbrot.ComplexBrotFractalGenerator;
+import in.tamchow.fractal.fractals.complex.complexbrot.ThreadedComplexBrotFractalGenerator;
 import in.tamchow.fractal.fractals.l_system.LSFractalGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.Animation;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.misc.RC4Utility.EncryptDecryptFile;
@@ -78,12 +78,16 @@ public class Main {
                     if (args.length == 1) {
                         System.err.println("No output directory specified for batch mode");
                         System.exit(3);
-                    } else if (args.length == 2 && args[1].equalsIgnoreCase("-v")) {
-                        ImageDisplay.show(ConfigReader.getComplexFractalConfigFromFile(input), "Fractal");
+                    }
+                    if (args.length > 1 && args[0].equalsIgnoreCase("-v")) {
+                        BatchContainer<ComplexFractalParams> cfconfiglist = new BatchContainer<>();
+                        for (int i = 1; i < args.length; ++i) {
+                            cfconfiglist.addItem(ConfigReader.getComplexParamFromFile(new File(args[i])));
+                        }
+                        ImageDisplay.show(cfconfiglist, "Fractal");
                     } else {
-                        @Nullable BatchContainer<ComplexFractalParams> cfg = ConfigReader.getComplexFractalConfigFromFile(input);
-                        for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
-                            ComplexFractalParams params = cfg.getItem(i);
+                        for (int i = 1; i < args.length; i++) {
+                            ComplexFractalParams params = ConfigReader.getComplexParamFromFile(new File(args[i]));
                             @NotNull ComplexFractalGenerator generator = new ComplexFractalGenerator(params, new DesktopProgressPublisher());
                             @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(generator);
                             threaded.generate();
@@ -118,19 +122,17 @@ public class Main {
                     if (args.length == 1) {
                         System.err.println("No output directory specified for batch mode");
                         System.exit(3);
-                    } else {
-                        @Nullable BatchContainer<ComplexBrotFractalParams> cfg = ConfigReader.getComplexBrotFractalConfigFromFile(input);
-                        for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
-                            ComplexBrotFractalParams params = cfg.getItem(i);
-                            @NotNull ComplexBrotFractalGenerator generator = new ComplexBrotFractalGenerator(params, new DesktopProgressPublisher());
-                            @NotNull ThreadedComplexBrotFractalGenerator threaded = new ThreadedComplexBrotFractalGenerator(generator);
-                            threaded.generate();
-                            @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
-                            if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
-                            } else {
-                                ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
-                            }
+                    }
+                    for (int i = 1; i < args.length; i++) {
+                        ComplexBrotFractalParams params = ConfigReader.getComplexBrotParamFromFile(new File(args[i]));
+                        @NotNull ComplexBrotFractalGenerator generator = new ComplexBrotFractalGenerator(params, new DesktopProgressPublisher());
+                        @NotNull ThreadedComplexBrotFractalGenerator threaded = new ThreadedComplexBrotFractalGenerator(generator);
+                        threaded.generate();
+                        @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
+                        if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
+                            ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
+                        } else {
+                            ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                         }
                     }
                 } else if (ConfigReader.isFileIFSFractalConfig(input)) {
@@ -138,9 +140,8 @@ public class Main {
                         System.err.println("No output directory specified");
                         System.exit(3);
                     }
-                    @Nullable BatchContainer<IFSFractalParams> cfg = ConfigReader.getIFSFractalConfigFromFile(input);
-                    for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
-                        IFSFractalParams params = cfg.getItem(i);
+                    for (int i = 1; i < args.length; i++) {
+                        IFSFractalParams params = ConfigReader.getIFSParamFromFile(new File(args[i]));
                         @NotNull IFSGenerator generator = new IFSGenerator(params, new DesktopProgressPublisher());
                         @NotNull ThreadedIFSGenerator threaded = new ThreadedIFSGenerator(generator);
                         threaded.generate();
@@ -173,9 +174,8 @@ public class Main {
                         System.err.println("No output directory specified");
                         System.exit(3);
                     }
-                    @Nullable BatchContainer<LSFractalParams> cfg = ConfigReader.getLSFractalConfigFromFile(input);
-                    for (int i = 0; i < (cfg != null ? cfg.size() : 0); i++) {
-                        LSFractalParams params = cfg.getItem(i);
+                    for (int i = 1; i < args.length; i++) {
+                        LSFractalParams params = ConfigReader.getLSParamFromFile(new File(args[i]));
                         @NotNull LSFractalGenerator generator = new LSFractalGenerator(params, new DesktopProgressPublisher());
                         if (params.getFps() > 0) {
                             @NotNull Animation frames = generator.drawStatesAsAnimation();
@@ -205,7 +205,7 @@ public class Main {
                     }
                 }
             } catch (IOException ioe) {
-                System.out.println("I/O Error: " + ioe.getMessage());
+                System.err.println("I/O Error: " + ioe.getMessage());
             }
         }
     }

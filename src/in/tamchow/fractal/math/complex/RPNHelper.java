@@ -19,11 +19,7 @@ public final class RPNHelper {
             throw new UnsupportedOperationException("Blank");
         }
         @NotNull FixedStack<String> tks = new FixedStack<>(tokens.length);
-        //tks.initStack(tokens);
         tks.pushN(tokens);
-        /*for(String token:tokens){
-            tks.push(token);
-        }*/
         return evaluateRPN(tks);
     }
     public static Complex evaluateInfix(@NotNull String[] infix) {

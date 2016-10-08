@@ -106,6 +106,10 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
         return new String(buffer, 0, size);
     }
     @NotNull
+    public CharBuffer append(@NotNull Object obj) {
+        return append(obj.toString());
+    }
+    @NotNull
     public CharBuffer append(@NotNull CharSequence csq) {
         //size = calculateSize();
         int csq_length = csq.length(), end = size + csq_length;

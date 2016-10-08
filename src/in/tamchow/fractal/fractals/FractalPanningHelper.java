@@ -3,10 +3,10 @@ import in.tamchow.fractal.fractals.IFS.IFSGenerator;
 import in.tamchow.fractal.fractals.IFS.ThreadedIFSGenerator;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
-import in.tamchow.fractal.fractals.complexbrot.ComplexBrotFractalGenerator;
-import in.tamchow.fractal.fractals.complexbrot.ThreadedComplexBrotFractalGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.Pannable;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.fractals.complex.complexbrot.ComplexBrotFractalGenerator;
+import in.tamchow.fractal.fractals.complex.complexbrot.ThreadedComplexBrotFractalGenerator;
+import in.tamchow.fractal.graphics.containers.Pannable;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Helper class for on-demand panning of various {@link Pannable} types.

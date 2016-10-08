@@ -117,6 +117,7 @@ public class BrainSext {
             for (int i = 0; i < data.length() && i < size; i++) {
                 operand[i] = data.charAt(i);
             }
+            code = code.substring(0, code.indexOf('\\') - 1);
         }
         outer:
         for (int i = 0; i < code.length(); ) {

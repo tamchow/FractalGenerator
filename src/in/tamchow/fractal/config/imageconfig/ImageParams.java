@@ -1,7 +1,7 @@
 package in.tamchow.fractal.config.imageconfig;
 import in.tamchow.fractal.config.Config;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
+import in.tamchow.fractal.graphics.transition.TransitionType;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import static in.tamchow.fractal.config.Strings.BLOCKS;
@@ -13,7 +13,7 @@ import static in.tamchow.fractal.config.Strings.CONFIG_SEPARATOR;
  */
 public class ImageParams extends Config {
     private PixelContainer image;
-    private TransitionTypes transition;
+    private TransitionType transition;
     private int transtime;
     {
         setName(BLOCKS.IMAGE);
@@ -26,26 +26,26 @@ public class ImageParams extends Config {
         initParams(old.transtime, old.transition);
         this.image = new PixelContainer(old.image);
     }
-    public ImageParams(int width, int height, String path, int transtime, int fps, int wait, @NotNull PixelContainer image, TransitionTypes transition) {
+    public ImageParams(int width, int height, String path, int transtime, int fps, int wait, @NotNull PixelContainer image, TransitionType transition) {
         super(height, width, wait, fps, path);
         initParams(transtime, transition);
         this.image = new PixelContainer(image);
     }
-    public ImageParams(int width, int height, String path, int transtime, int fps, int wait, TransitionTypes transition) {
+    public ImageParams(int width, int height, String path, int transtime, int fps, int wait, TransitionType transition) {
         super(height, width, wait, fps, path);
         initParams(transtime, transition);
         this.image = new PixelContainer(path);
     }
     public ImageParams(int width, int height, String path, int transtime, int fps, int wait, @NotNull PixelContainer image) {
-        this(width, height, path, transtime, fps, wait, image, TransitionTypes.NONE);
+        this(width, height, path, transtime, fps, wait, image, TransitionType.NONE);
     }
     public ImageParams(int width, int height, int transtime, int fps, int wait, String path) {
-        this(width, height, path, transtime, fps, wait, TransitionTypes.NONE);
+        this(width, height, path, transtime, fps, wait, TransitionType.NONE);
     }
     public PixelContainer getImage() {
         return image;
     }
-    public TransitionTypes getTransition() {
+    public TransitionType getTransition() {
         return transition;
     }
     public int getTranstime() {
@@ -57,7 +57,7 @@ public class ImageParams extends Config {
     public boolean customDimensions() {
         return height <= 0 || width <= 0;
     }
-    private void initParams(int transtime, TransitionTypes transition) {
+    private void initParams(int transtime, TransitionType transition) {
         setTranstime(transtime);
         this.transition = transition;
     }
@@ -70,7 +70,7 @@ public class ImageParams extends Config {
     }
     public void fromString(String[] params) {
         super.fromString(params);
-        initParams(Integer.valueOf(params[5]), TransitionTypes.valueOf(params[6]));
+        initParams(Integer.valueOf(params[5]), TransitionType.valueOf(params[6]));
         this.image = new PixelContainer(path);
     }
 }

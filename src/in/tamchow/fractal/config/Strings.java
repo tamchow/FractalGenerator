@@ -9,7 +9,7 @@ public class Strings {
     public static class DECLARATIONS {
         public static final String SWITCH_RATE = "Switch_Mode_Rate:", NEWTON_CONSTANT = "Newton_constant:", POSTPROCESSING = "Postprocessing:",
                 DIMENSIONS = "Dimensions:", OLD_VARIABLE_CODE = "Old_variable_code:", THREADS = "Threads:", FRAMESKIP = "Frameskip:",
-                TRAP_POINT = "Trap_point:", TRAP_LINE = "Trap_line:";
+                TRAP_POINT = "Trap_point:", TRAP_LINE = "Trap_line:", USE_LOG_SCALING = "Use_log_scaling:";
         private DECLARATIONS() {
         }
     }

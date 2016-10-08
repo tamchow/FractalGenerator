@@ -4,9 +4,9 @@ import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
 import in.tamchow.fractal.fractals.PixelFractalGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.Animation;
-import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.containers.LinearizedPixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.math.complex.FunctionEvaluator;
 import in.tamchow.fractal.math.matrix.Matrix;
@@ -31,7 +31,7 @@ public final class IFSGenerator extends PixelFractalGenerator {
     private IFSFractalParams params;
     private Matrix centre_offset, point;
     private int center_x, center_y;
-    private double zoom, zoom_factor, base_precision, scale;
+    private double zoom, base_precision, scale;
     private int depth;
     private boolean completion, silencer;
     private Animation animation;
@@ -104,7 +104,6 @@ public final class IFSGenerator extends PixelFractalGenerator {
         resetCentre();
         setDepth(params.getDepth());
         setZoom(params.getZoom());
-        setZoom_factor(params.getZoomlevel());
         setBase_precision(params.getBase_precision());
         if (initial == null) {
             initial = fromCoordinates(Math.round((float) Math.random() * getWidth()), Math.round((float) Math.random() * getHeight()));
@@ -120,11 +119,34 @@ public final class IFSGenerator extends PixelFractalGenerator {
     }
     @Override
     public void zoom(@NotNull ZoomParams zoom) {
-        if (zoom.centre == null) {
+        if (zoom.centre == null && zoom.bounds == null) {
             zoom(zoom.centre_x, zoom.centre_y, zoom.level, false, true);
-        } else {
+        } else if (zoom.bounds == null) {
             zoom(zoom.centre, zoom.level, false, true);
+        } else {
+            zoom(zoom.bounds, false, true);
         }
+    }
+    public void zoom(Matrix bounds) {
+        zoom(bounds, false, true);
+    }
+    public void zoom(Matrix bounds, boolean write, boolean additive) {
+        if (write) {
+            params.zoomConfig.addZoom(new ZoomParams(bounds));
+        }
+        double xs = bounds.get(0, 0), ys = bounds.get(0, 1), xe = bounds.get(1, 0), ye = bounds.get(1, 1);
+        double xr = Math.abs(xe - xs), yr = Math.abs(ye - ys);
+        @NotNull Matrix topLeftCurrent = fromCoordinates(0, 0),
+                bottomRightCurrent = fromCoordinates(getImageWidth() - 1, getImageHeight() - 1);
+        double xsc = topLeftCurrent.get(0, 0), ysc = topLeftCurrent.get(1, 0),
+                xec = bottomRightCurrent.get(0, 0), yec = bottomRightCurrent.get(1, 0);
+        double xrc = Math.abs(xec - xsc), yrc = Math.abs(yec - ysc);
+        double xscale = xrc / xr, yscale = yrc / yr;
+        setScale(scale * Math.min(xscale, yscale));
+        setCentre_offset(new Matrix(new double[][]{{xs + (xr / 2)}, {ys + (yr / 2)}}));
+        double newzoom = scale / base_precision;
+        setZoom((additive) ? newzoom : newzoom / zoom);
+        populatePoints();
     }
     public void zoom(@NotNull Matrix centre_offset, double level) {
         zoom(centre_offset, level, true, true);
@@ -134,12 +156,14 @@ public final class IFSGenerator extends PixelFractalGenerator {
             params.zoomConfig.addZoom(new ZoomParams(centre_offset, level));
         }
         setCentre_offset(centre_offset);
-        setZoom_factor((additive) ? zoom_factor + level : level);
-        setScale(base_precision * Math.pow(zoom, zoom_factor));
+        setZoom((additive) ? zoom * level : level);
+        setScale(base_precision * zoom);
+        populatePoints();
     }
     public void zoom(int cx, int cy, int level) {
         zoom(cx, cy, level, true, true);
     }
+    @Override
     public void zoom(int cx, int cy, double level, boolean write, boolean additive) {
         if (write) {
             params.zoomConfig.addZoom(new ZoomParams(cx, cy, level));
@@ -147,8 +171,9 @@ public final class IFSGenerator extends PixelFractalGenerator {
         cx = boundsProtected(cx, plane.getWidth());
         cy = boundsProtected(cy, plane.getHeight());
         setCentre_offset(fromCoordinates(cx, cy));
-        setZoom_factor((additive) ? zoom_factor + level : level);
-        setScale(base_precision * Math.pow(zoom, zoom_factor));
+        setZoom((additive) ? zoom * level : level);
+        setScale(base_precision * zoom);
+        populatePoints();
     }
     @NotNull
     public Matrix fromCoordinates(int x, int y) {
@@ -192,12 +217,6 @@ public final class IFSGenerator extends PixelFractalGenerator {
         } else {
             this.base_precision = base_precision;
         }
-    }
-    public double getZoom_factor() {
-        return zoom_factor;
-    }
-    public void setZoom_factor(double zoom_factor) {
-        this.zoom_factor = zoom_factor;
     }
     public double getZoom() {
         return zoom;
@@ -343,7 +362,7 @@ public final class IFSGenerator extends PixelFractalGenerator {
     }
     @Override
     public void pan(int x_dist, int y_dist) {
-        zoom(center_x + x_dist, center_y + y_dist, zoom_factor, false, false);
+        zoom(center_x + x_dist, center_y + y_dist, zoom, false, false);
     }
     public double[][] getWeightDistribution() {
         return weightDistribution;

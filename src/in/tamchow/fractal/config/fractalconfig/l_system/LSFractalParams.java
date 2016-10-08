@@ -1,7 +1,7 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.Strings;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 

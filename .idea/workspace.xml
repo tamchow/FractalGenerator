@@ -9,35 +9,574 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Customization for interpolation, text-to-image support, miscellaneous fixes">
+    <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="Project restructuring, miscellaneous bugfixes, Range-Zoom">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/ComplexBrotFractalParams.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/class-use/ComplexBrotFractalParams.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/package-frame.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/package-summary.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/package-tree.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/package-use.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/ComplexBrotFractalGenerator.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/PartComplexBrotFractalData.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/ThreadedComplexBrotFractalGenerator.SlaveRunner.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/ThreadedComplexBrotFractalGenerator.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/class-use/ComplexBrotFractalGenerator.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/class-use/PartComplexBrotFractalData.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/class-use/ThreadedComplexBrotFractalGenerator.SlaveRunner.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/class-use/ThreadedComplexBrotFractalGenerator.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/package-frame.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/package-summary.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/package-tree.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/complexbrot/package-use.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/Animation.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/LinearizedPixelContainer.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/Pannable.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/PixelContainer.PostProcessMode.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/PixelContainer.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/Zoomable.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/class-use/Animation.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/class-use/LinearizedPixelContainer.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/class-use/Pannable.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/class-use/PixelContainer.PostProcessMode.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/class-use/PixelContainer.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/class-use/Zoomable.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/package-frame.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/package-summary.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/package-tree.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/containers/package-use.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/DrawingUtilities.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/Turtle.TurtleCommand.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/Turtle.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/class-use/DrawingUtilities.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/class-use/Turtle.TurtleCommand.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/class-use/Turtle.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/package-frame.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/package-summary.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/package-tree.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/painting/package-use.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/Transition.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/TransitionType.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/class-use/Transition.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/class-use/TransitionType.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/package-frame.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/package-summary.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/package-tree.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/transition/package-use.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/util/ColorDebugger.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/util/class-use/ColorDebugger.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/util/package-frame.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/util/package-summary.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/util/package-tree.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphics/util/package-use.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/util/ColorDebugger.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator$SlaveRunner.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/Animation.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/Pannable.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer$PostProcessMode.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/Zoomable.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/graphics/Turtle$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/graphics/Turtle$TurtleCommand.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/graphics/Turtle.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/transition/Transition$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/transition/Transition.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Test.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Test.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colorizer$1.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colorizer$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colorizer.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colorizer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$BASE_COLORS.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$BASE_COLORS.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$MODE.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$MODE.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$PALETTE.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$PALETTE.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$RGBCOMPONENTS.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$RGBCOMPONENTS.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/ConfigReader.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/ConfigReader.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Strings$DECLARATIONS.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Strings$DECLARATIONS.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/imageconfig/ImageParams.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/imageconfig/ImageParams.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/FractalPanningHelper.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/FractalPanningHelper.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/IFSGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/IFSGenerator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/PartIFSData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/PartIFSData.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator$SlaveRunner.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator$SlaveRunner.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/PixelFractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/PixelFractalGenerator.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$1.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$Mode.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$Mode.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/PartComplexFractalData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/PartComplexFractalData.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator$SlaveRunner.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator$SlaveRunner.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer$PostProcessMode.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer$PostProcessMode.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSFractalGenerator$1.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSFractalGenerator$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils$FactorData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils$FactorData.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/CharBuffer.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/CharBuffer.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper$Associativity.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper$Associativity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper$Operator.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper$Operator.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/matrix/Matrix.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/matrix/Matrix.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Function.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Function.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/FunctionTerm$FunctionTermData.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/FunctionTerm$FunctionTermData.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/FunctionTerm.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/FunctionTerm.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Operable.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Operable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Polynomial$Term.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Polynomial$Term.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Polynomial.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Polynomial.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/BrainSext.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/BrainSext.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageConverter.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageConverter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" afterPath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" afterPath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-frame.html" afterPath="$PROJECT_DIR$/docs/allclasses-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-noframe.html" afterPath="$PROJECT_DIR$/docs/allclasses-noframe.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/constant-values.html" afterPath="$PROJECT_DIR$/docs/constant-values.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/deprecated-list.html" afterPath="$PROJECT_DIR$/docs/deprecated-list.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/help-doc.html" afterPath="$PROJECT_DIR$/docs/help-doc.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/Main.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/Main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/Test.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/Test.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/class-use/Main.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/class-use/Main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/class-use/Test.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/class-use/Test.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colorizer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colorizer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.BASE_COLORS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.BASE_COLORS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.MODE.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.MODE.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.PALETTE.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.PALETTE.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.RGBCOMPONENTS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.RGBCOMPONENTS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/HSL.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/HSL.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colorizer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colorizer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.BASE_COLORS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.BASE_COLORS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.MODE.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.MODE.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.PALETTE.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.PALETTE.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.RGBCOMPONENTS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.RGBCOMPONENTS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/Colors.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/HSL.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/class-use/HSL.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/color/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/BatchContainer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/BatchContainer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Config.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Config.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/ConfigReader.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/ConfigReader.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/ConfigWriter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/ConfigWriter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/DataFromString.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/DataFromString.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Publisher.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Publisher.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Strings.BLOCKS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Strings.BLOCKS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Strings.DECLARATIONS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Strings.DECLARATIONS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Strings.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/Strings.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/BatchContainer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/BatchContainer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Config.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Config.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/ConfigReader.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/ConfigReader.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/ConfigWriter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/ConfigWriter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/DataFromString.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/DataFromString.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Publisher.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Publisher.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Strings.BLOCKS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Strings.BLOCKS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Strings.DECLARATIONS.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Strings.DECLARATIONS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Strings.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/class-use/Strings.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/class-use/IFSFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/class-use/IFSFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/IFS/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/class-use/ComplexFractalInitParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/class-use/ComplexFractalInitParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/class-use/ComplexFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/class-use/ComplexFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/class-use/ComplexFractalRunParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/class-use/ComplexFractalRunParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complex/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalConfig.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalConfig.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/class-use/ComplexBrotFractalConfig.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/class-use/ComplexBrotFractalConfig.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/class-use/ComplexBrotFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/class-use/ComplexBrotFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/complexbrot/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/class-use/ZoomConfig.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/class-use/ZoomConfig.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/class-use/ZoomParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/class-use/ZoomParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/fractal_zooms/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.TransformRule.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.TransformRule.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/class-use/LSFractalParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/class-use/LSFractalParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/class-use/UnitGrammar.TransformRule.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/class-use/UnitGrammar.TransformRule.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/class-use/UnitGrammar.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/class-use/UnitGrammar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/fractalconfig/l_system/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/ImageConfig.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/ImageConfig.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/ImageParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/ImageParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/class-use/ImageParams.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/class-use/ImageParams.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/imageconfig/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/config/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/FractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/FractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/FractalPanningHelper.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/FractalPanningHelper.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/IFSGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/IFSGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/PartIFSData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/PartIFSData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/IFSGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/IFSGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/PartIFSData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/PartIFSData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/ThreadedIFSGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/ThreadedIFSGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/ThreadedIFSGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/class-use/ThreadedIFSGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/IFS/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/PixelFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/PixelFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/ThreadedGenerator.Lock.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/ThreadedGenerator.Lock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/ThreadedGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/ThreadedGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/ThreadedGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/ThreadedGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/FractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/FractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/FractalPanningHelper.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/FractalPanningHelper.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/PixelFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/PixelFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/ThreadedGenerator.Lock.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/ThreadedGenerator.Lock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/ThreadedGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/ThreadedGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/ThreadedGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/class-use/ThreadedGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.Mode.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.Mode.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/PartComplexFractalData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/PartComplexFractalData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ComplexFractalGenerator.Mode.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ComplexFractalGenerator.Mode.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ComplexFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ComplexFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/PartComplexFractalData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/PartComplexFractalData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ThreadedComplexFractalGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ThreadedComplexFractalGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ThreadedComplexFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/class-use/ThreadedComplexFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complex/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/ComplexBrotFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/ComplexBrotFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/PartComplexBrotFractalData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/PartComplexBrotFractalData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/ThreadedComplexBrotFractalGenerator.SlaveRunner.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/ThreadedComplexBrotFractalGenerator.SlaveRunner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/ThreadedComplexBrotFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/class-use/ThreadedComplexBrotFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/complexbrot/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/LSGrammarException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/LSGrammarException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/class-use/LSFractalGenerator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/class-use/LSFractalGenerator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/class-use/LSGrammarException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/class-use/LSGrammarException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/l_system/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/fractals/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/Animation.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/Animation.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/Pannable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/Pannable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.PostProcessMode.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.PostProcessMode.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/Zoomable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/Zoomable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/Animation.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/Animation.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/LinearizedPixelContainer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/LinearizedPixelContainer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/Pannable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/Pannable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/PixelContainer.PostProcessMode.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/PixelContainer.PostProcessMode.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/PixelContainer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/PixelContainer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/Zoomable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/class-use/Zoomable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/containers/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/Turtle.TurtleCommand.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/Turtle.TurtleCommand.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/Turtle.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/Turtle.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/class-use/DrawingUtilities.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/class-use/DrawingUtilities.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/class-use/Turtle.TurtleCommand.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/class-use/Turtle.TurtleCommand.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/class-use/Turtle.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/class-use/Turtle.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/graphics/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/Transition.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/Transition.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/TransitionTypes.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/TransitionTypes.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/class-use/Transition.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/class-use/Transition.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/class-use/TransitionTypes.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/class-use/TransitionTypes.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/graphicsutilities/transition/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/NotNull.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/NotNull.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/Nullable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/Nullable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/class-use/NotNull.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/class-use/NotNull.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/class-use/Nullable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/class-use/Nullable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/annotations/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/BaseConverter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/BaseConverter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/MathUtils.FactorData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/MathUtils.FactorData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/MathUtils.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/MathUtils.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/MersenneTwister.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/MersenneTwister.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/BaseConverter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/BaseConverter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/MathUtils.FactorData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/MathUtils.FactorData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/MathUtils.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/MathUtils.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/MersenneTwister.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/class-use/MersenneTwister.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/math/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/Stack.StackIterator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/Stack.StackIterator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/Stack.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/Stack.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/StackOverflowException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/StackOverflowException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/class-use/Stack.StackIterator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/class-use/Stack.StackIterator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/class-use/Stack.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/class-use/Stack.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/class-use/StackOverflowException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/class-use/StackOverflowException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/FixedStack.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/FixedStack.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/FixedStackOverflowException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/FixedStackOverflowException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/class-use/FixedStack.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/class-use/FixedStack.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/class-use/FixedStackOverflowException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/class-use/FixedStackOverflowException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/impls/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/stack/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/CharBuffer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/CharBuffer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/StringManipulator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/StringManipulator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/class-use/CharBuffer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/class-use/CharBuffer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/class-use/ResizableCharBuffer.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/class-use/ResizableCharBuffer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/class-use/StringManipulator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/class-use/StringManipulator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/helpers/strings/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/Comparator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/Comparator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/class-use/Comparator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/class-use/Comparator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/Complex.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/Complex.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/ComplexComparator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/ComplexComparator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/ComplexOperations.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/ComplexOperations.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/FunctionEvaluator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/FunctionEvaluator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/RPNHelper.Associativity.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/RPNHelper.Associativity.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/RPNHelper.Operator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/RPNHelper.Operator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/RPNHelper.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/RPNHelper.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/Complex.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/Complex.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/ComplexComparator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/ComplexComparator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/ComplexOperations.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/ComplexOperations.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/FunctionEvaluator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/FunctionEvaluator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/RPNHelper.Associativity.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/RPNHelper.Associativity.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/RPNHelper.Operator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/RPNHelper.Operator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/RPNHelper.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/class-use/RPNHelper.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/complex/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/Matrix.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/Matrix.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/MatrixOperations.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/MatrixOperations.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/class-use/Matrix.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/class-use/Matrix.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/class-use/MatrixOperations.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/class-use/MatrixOperations.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/matrix/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Derivable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Derivable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Function.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Function.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/FunctionTerm.FunctionTermData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/FunctionTerm.FunctionTermData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/FunctionTerm.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/FunctionTerm.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Operable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Operable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Polynomial.Term.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Polynomial.Term.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Polynomial.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/Polynomial.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Derivable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Derivable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Function.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Function.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/FunctionTerm.FunctionTermData.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/FunctionTerm.FunctionTermData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/FunctionTerm.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/FunctionTerm.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Operable.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Operable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Polynomial.Term.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Polynomial.Term.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Polynomial.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/class-use/Polynomial.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/math/symbolics/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/RC4.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/RC4.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/class-use/EncryptDecryptFile.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/class-use/EncryptDecryptFile.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/class-use/RC4.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/class-use/RC4.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/RC4Utility/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/BF2Java.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/BF2Java.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/BrainSext.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/BrainSext.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/HaltError.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/HaltError.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/class-use/HaltError.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/class-use/HaltError.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/class-use/UnmatchedLiteralException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/class-use/UnmatchedLiteralException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/class-use/UnrecognizedLiteralException.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/class-use/UnrecognizedLiteralException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/bserrors/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/class-use/BF2Java.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/class-use/BF2Java.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/class-use/BrainSext.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/class-use/BrainSext.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/bs/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/EvilStuff.Lock.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/EvilStuff.Lock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/EvilStuff.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/EvilStuff.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/class-use/EvilStuff.Lock.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/class-use/EvilStuff.Lock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/class-use/EvilStuff.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/class-use/EvilStuff.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/RPNHelper.Precedence.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/RPNHelper.Precedence.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/RPNHelper.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/RPNHelper.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/UnpredictableAdder.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/UnpredictableAdder.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/UnpredictableCalculator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/UnpredictableCalculator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/RPNHelper.Precedence.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/RPNHelper.Precedence.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/RPNHelper.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/RPNHelper.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/UnpredictableAdder.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/UnpredictableAdder.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/UnpredictableCalculator.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/class-use/UnpredictableCalculator.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/evilstuff/users/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/DoughNut.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/DoughNut.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/MathStuff.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/MathStuff.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/class-use/DoughNut.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/class-use/DoughNut.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/class-use/MathStuff.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/class-use/MathStuff.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/mathstuff/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/PrimeCounter.Lock.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/PrimeCounter.Lock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/PrimeCounter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/PrimeCounter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/class-use/PrimeCounter.Lock.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/class-use/PrimeCounter.Lock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/class-use/PrimeCounter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/class-use/PrimeCounter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/misc/primes/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/ImageConverter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/ImageConverter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/ImageDisplay.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/ImageDisplay.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/class-use/DesktopProgressPublisher.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/class-use/DesktopProgressPublisher.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/class-use/ImageConverter.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/class-use/ImageConverter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/class-use/ImageDisplay.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/class-use/ImageDisplay.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-frame.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-summary.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-tree.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-use.html" afterPath="$PROJECT_DIR$/docs/in/tamchow/fractal/platform_tools/package-use.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-1.html" afterPath="$PROJECT_DIR$/docs/index-files/index-1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-10.html" afterPath="$PROJECT_DIR$/docs/index-files/index-10.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-11.html" afterPath="$PROJECT_DIR$/docs/index-files/index-11.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-12.html" afterPath="$PROJECT_DIR$/docs/index-files/index-12.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-13.html" afterPath="$PROJECT_DIR$/docs/index-files/index-13.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-14.html" afterPath="$PROJECT_DIR$/docs/index-files/index-14.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-15.html" afterPath="$PROJECT_DIR$/docs/index-files/index-15.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-16.html" afterPath="$PROJECT_DIR$/docs/index-files/index-16.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-17.html" afterPath="$PROJECT_DIR$/docs/index-files/index-17.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-18.html" afterPath="$PROJECT_DIR$/docs/index-files/index-18.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-19.html" afterPath="$PROJECT_DIR$/docs/index-files/index-19.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-2.html" afterPath="$PROJECT_DIR$/docs/index-files/index-2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-20.html" afterPath="$PROJECT_DIR$/docs/index-files/index-20.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-21.html" afterPath="$PROJECT_DIR$/docs/index-files/index-21.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-22.html" afterPath="$PROJECT_DIR$/docs/index-files/index-22.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-23.html" afterPath="$PROJECT_DIR$/docs/index-files/index-23.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-24.html" afterPath="$PROJECT_DIR$/docs/index-files/index-24.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-25.html" afterPath="$PROJECT_DIR$/docs/index-files/index-25.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-26.html" afterPath="$PROJECT_DIR$/docs/index-files/index-26.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-27.html" afterPath="$PROJECT_DIR$/docs/index-files/index-27.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-3.html" afterPath="$PROJECT_DIR$/docs/index-files/index-3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-4.html" afterPath="$PROJECT_DIR$/docs/index-files/index-4.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-5.html" afterPath="$PROJECT_DIR$/docs/index-files/index-5.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-6.html" afterPath="$PROJECT_DIR$/docs/index-files/index-6.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-7.html" afterPath="$PROJECT_DIR$/docs/index-files/index-7.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-8.html" afterPath="$PROJECT_DIR$/docs/index-files/index-8.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-9.html" afterPath="$PROJECT_DIR$/docs/index-files/index-9.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index.html" afterPath="$PROJECT_DIR$/docs/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-frame.html" afterPath="$PROJECT_DIR$/docs/overview-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-summary.html" afterPath="$PROJECT_DIR$/docs/overview-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-tree.html" afterPath="$PROJECT_DIR$/docs/overview-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/package-list" afterPath="$PROJECT_DIR$/docs/package-list" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/serialized-form.html" afterPath="$PROJECT_DIR$/docs/serialized-form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Strings.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/Strings.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalPanningHelper.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalPanningHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/PartIFSData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/PartIFSData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/PartComplexFractalData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/PartComplexFractalData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/RPNHelper.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/RPNHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Operable.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Operable.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/ComplexBrotFractalParams.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/complexbrot/ComplexBrotFractalGenerator.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/PartComplexBrotFractalData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/complexbrot/PartComplexBrotFractalData.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ThreadedComplexBrotFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/complexbrot/ThreadedComplexBrotFractalGenerator.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Animation.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/Animation.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/LinearizedPixelContainer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Pannable.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/Pannable.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/PixelContainer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Zoomable.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/Zoomable.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/painting/DrawingUtilities.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/Turtle.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/painting/Turtle.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/transition/Transition.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/transition/Transition.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/transition/TransitionTypes.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/transition/TransitionType.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,7 +589,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="D:\Programming\Projects\FractalGenerator" />
   </component>
@@ -70,8 +608,8 @@
       <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="99" column="120" selection-start-line="99" selection-start-column="120" selection-end-line="99" selection-end-column="120" />
+            <state relative-caret-position="255">
+              <caret line="94" column="79" selection-start-line="94" selection-start-column="79" selection-end-line="94" selection-end-column="79" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -124,56 +662,56 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/Strings.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/Zoomable.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/BatchContainer.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageDisplay.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/mathstuff/MathStuff.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/BaseConverter.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/stack/StackOverflowException.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/HaltError.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigWriter.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/ThreadedGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/mathstuff/DoughNut.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" />
         <option value="$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.MODE.html" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Derivable.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" />
         <option value="$PROJECT_DIR$/.idea/description.html" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Operable.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java" />
-        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/RPNHelper.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/BatchContainer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/transition/TransitionTypes.java" />
+        <option value="$PROJECT_DIR$/docs/allclasses-frame.html" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Operable.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/Strings.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complexbrot/ComplexBrotFractalParams.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalBase.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ColorDebugger.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/util/ColorDebugger.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/complexbrot/ComplexBrotFractalGenerator.java" />
+        <option value="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java" />
         <option value="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
       </list>
     </option>
@@ -253,9 +791,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -368,8 +906,13 @@
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
       <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="GAPID_DISABLE_PCS" value="false" />
+      </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
       <method />
@@ -388,8 +931,13 @@
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
       <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="GAPID_DISABLE_PCS" value="false" />
+      </Profilers>
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -482,6 +1030,9 @@
       <environmetVariables />
       <method />
     </configuration>
+    <configuration default="true" type="Cold Fusion runner description" factoryName="Cold Fusion" custom_browser="" web_path="">
+      <method />
+    </configuration>
     <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="myFilePath" />
@@ -499,42 +1050,6 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="CucumberRunConfigurationType" factoryName="Cucumber">
-      <predefined_log_file id="RUBY_CUCUMBER" enabled="true" />
-      <module name="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
-      <envs />
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
-      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*.feature" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_TAGS_FILTER" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_NAME_FILTER" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="CUCUMBER_ARGS" VALUE="--color -r features" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="VERBOSE_OPTION" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="CUCUMBER_RUNNER_PATH" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_RUNNER" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SETTINGS_VERSION" VALUE="2" />
-      <method />
-    </configuration>
-    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
-      <method />
-    </configuration>
-    <configuration default="true" type="DartTestRunConfigurationType" factoryName="Dart Test">
       <method />
     </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -629,37 +1144,6 @@
       <setting name="launchBrowser" value="false" />
       <setting name="depsClasspath" value="false" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JRubyCucumberRunConfigurationType" factoryName="JRuby Cucumber">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" value="-Dforce.jruby.jit=true -Djruby.debug.fullTrace=true" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*.feature" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_TAGS_FILTER" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_NAME_FILTER" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="CUCUMBER_ARGS" VALUE="--color -r features" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="VERBOSE_OPTION" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="CUCUMBER_RUNNER_PATH" VALUE="" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_RUNNER" VALUE="false" />
-      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SETTINGS_VERSION" VALUE="2" />
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -806,36 +1290,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="ScalaTestRunConfiguration" factoryName="ScalaTest">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <setting name="path" value="" />
-      <setting name="package" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workingDirectory" value="" />
-      <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="" />
-      <setting name="testKind" value="Class" />
-      <setting name="showProgressMessages" value="true" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="Specs2RunConfiguration" factoryName="Specs2">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <setting name="path" value="" />
-      <setting name="package" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workingDirectory" value="" />
-      <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="" />
-      <setting name="testKind" value="Class" />
-      <setting name="showProgressMessages" value="true" />
-      <envs />
-      <method />
-    </configuration>
     <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -896,29 +1350,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest">
-      <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />
-      <module name="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
-      <envs />
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
-      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_OPTIONS" VALUE="" />
       <method />
     </configuration>
     <configuration default="true" type="TheRRunConfigurationType" factoryName="R">
@@ -1086,21 +1517,6 @@
       <option name="params" value="" />
       <option name="USE_PARAM" value="false" />
       <option name="USE_KEYWORD" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="uTestRunConfiguration" factoryName="utest">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <setting name="path" value="" />
-      <setting name="package" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workingDirectory" value="" />
-      <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="" />
-      <setting name="testKind" value="Class" />
-      <setting name="showProgressMessages" value="true" />
-      <envs />
       <method />
     </configuration>
     <configuration default="false" name="Production/Release" type="Application" factoryName="Application">
@@ -1553,6 +1969,18 @@
       <workItem from="1468391263414" duration="8676000" />
       <workItem from="1468851583220" duration="14560000" />
       <workItem from="1468869547356" duration="245000" />
+      <workItem from="1469540153447" duration="1799000" />
+      <workItem from="1472409033206" duration="2661000" />
+      <workItem from="1473769104674" duration="935000" />
+      <workItem from="1475301001071" duration="5194000" />
+      <workItem from="1475327769858" duration="2880000" />
+      <workItem from="1475330867652" duration="14000" />
+      <workItem from="1475335692690" duration="1120000" />
+      <workItem from="1475337479331" duration="117000" />
+      <workItem from="1475338497393" duration="2533000" />
+      <workItem from="1475341263512" duration="9679000" />
+      <workItem from="1475512694204" duration="19811000" />
+      <workItem from="1475908970909" duration="492000" />
     </task>
     <task id="LOCAL-00215" summary="Sequential Brot&#10;Documentation updates">
       <created>1461147580651</created>
@@ -1901,7 +2329,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1289807000" />
+    <option name="totallyTimeSpent" value="1337042000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1914,35 +2342,38 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3535188" sideWeight="0.515885" order="12" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3502455" sideWeight="0.51891077" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.32980332" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Script Monkey" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Cabal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="AdbCommander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="14" side_tool="true" content_ui="tabs" />
-      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3251634" sideWeight="0.4969743" order="17" side_tool="false" content_ui="tabs" />
+      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.4969743" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Packages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dilbert" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55973816" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.32980332" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27760968" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.24962178" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44680852" sideWeight="0.4969743" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="SvgViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3502455" sideWeight="0.48108926" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31862745" sideWeight="0.4969743" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="GhcMod" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.3289689" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3207262" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29198185" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Puzzle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.3289689" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Scrappy" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.3289689" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="The R Graphics" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="CafeBabe" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32911393" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3207856" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1951,16 +2382,14 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.3289689" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Aquarium" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" x="465" y="58" width="436" height="611" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.66939443" sideWeight="0.4969743" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Armory" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="20" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31914893" sideWeight="0.4969743" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39770868" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3502455" sideWeight="0.48411497" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="ClassHound" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="21" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="19" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3207856" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2028,7 +2457,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Image Scaling Improvement in ImageDisplay" />
     <MESSAGE value="Threading Improvement in ImageDisplay" />
     <MESSAGE value="Added miscellaneous BFk compiler. Documentation not updated." />
     <MESSAGE value="Updated miscellaneous BFk compiler. Documentation updated." />
@@ -2053,7 +2481,8 @@
     <MESSAGE value="Rank order, coloring improved, brot fractal count filtering added, new image interpolation modes" />
     <MESSAGE value="Fixes to spline interpolation, text-to-image writing and histogram coloring" />
     <MESSAGE value="Customization for interpolation, text-to-image support, miscellaneous fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Customization for interpolation, text-to-image support, miscellaneous fixes" />
+    <MESSAGE value="Project restructuring, miscellaneous bugfixes, Range-Zoom" />
+    <option name="LAST_COMMIT_MESSAGE" value="Project restructuring, miscellaneous bugfixes, Range-Zoom" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -2072,271 +2501,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="21" column="34" selection-start-line="21" selection-start-column="34" selection-end-line="21" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/ThreadedGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="29" column="9" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2184">
-          <caret line="35" column="62" selection-start-line="35" selection-start-column="45" selection-end-line="35" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1063">
-          <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/mathstuff/DoughNut.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="7" column="55" selection-start-line="7" selection-start-column="55" selection-end-line="7" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Term.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/security/AccessController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="886" column="0" selection-start-line="886" selection-start-column="0" selection-end-line="886" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/SecurityManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="548" column="44" selection-start-line="548" selection-start-column="44" selection-end-line="548" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/ClassLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="435" column="0" selection-start-line="435" selection-start-column="0" selection-end-line="435" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/in/tamchow/fractal/color/Colors.MODE.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="228" column="117" selection-start-line="228" selection-start-column="117" selection-end-line="228" selection-end-column="117" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="55" column="51" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/Deprecated.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="43" column="18" selection-start-line="43" selection-start-column="18" selection-end-line="43" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/net/URLClassLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="380" column="0" selection-start-line="380" selection-start-column="0" selection-end-line="380" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/jre/lib/rt.jar!/sun/launcher/LauncherHelper.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="361" column="0" selection-start-line="361" selection-start-column="0" selection-end-line="361" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="11" column="50" selection-start-line="11" selection-start-column="50" selection-end-line="11" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Derivable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="10" column="58" selection-start-line="10" selection-start-column="58" selection-end-line="10" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BF2Java.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4454">
-          <caret line="255" column="69" selection-start-line="255" selection-start-column="69" selection-end-line="255" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="203" column="73" selection-start-line="203" selection-start-column="73" selection-end-line="203" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="50" selection-start-line="19" selection-start-column="50" selection-end-line="19" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complexbrot/ComplexBrotFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="441" column="5" selection-start-line="441" selection-start-column="5" selection-end-line="441" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/description.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="186" column="7" selection-start-line="0" selection-start-column="0" selection-end-line="186" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="36" column="22" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/awt/image/ColorModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="1582" column="26" selection-start-line="1582" selection-start-column="26" selection-end-line="1582" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/awt/image/DataBufferInt.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="228" column="11" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/jre/lib/rt.jar!/sun/awt/image/SunWritableRaster.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="53" column="65" selection-start-line="53" selection-start-column="65" selection-end-line="53" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/awt/image/Raster.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-16978">
-          <caret line="721" column="33" selection-start-line="721" selection-start-column="33" selection-end-line="721" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/awt/image/DirectColorModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1013" column="40" selection-start-line="1013" selection-start-column="40" selection-end-line="1013" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/awt/image/BufferedImage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="330" column="56" selection-start-line="330" selection-start-column="56" selection-end-line="330" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/util/Arrays.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="1245" column="27" selection-start-line="1245" selection-start-column="27" selection-end-line="1245" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/util/ComparableTimSort.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="549">
           <caret line="86" column="6" selection-start-line="86" selection-start-column="6" selection-end-line="86" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Operable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="53" column="18" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="41" column="50" selection-start-line="41" selection-start-column="50" selection-end-line="41" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="121" column="38" selection-start-line="121" selection-start-column="38" selection-end-line="121" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -2347,95 +2515,395 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="153" column="67" selection-start-line="153" selection-start-column="67" selection-end-line="153" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/graphics/DrawingUtilities.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphics/painting/DrawingUtilities.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="71" selection-start-line="9" selection-start-column="71" selection-end-line="9" selection-end-column="71" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/LinearizedPixelContainer.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="114" column="118" selection-start-line="114" selection-start-column="118" selection-end-line="114" selection-end-column="118" />
-          <folding />
+        <state relative-caret-position="-239">
+          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/Complex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="323" column="57" selection-start-line="323" selection-start-column="57" selection-end-line="323" selection-end-column="57" />
-          <folding>
-            <element signature="e#7024#7025#0" expanded="true" />
-            <element signature="e#7052#7053#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-196">
+          <caret line="8" column="163" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphicsutilities/containers/PixelContainer.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2348">
-          <caret line="234" column="113" selection-start-line="234" selection-start-column="113" selection-end-line="234" selection-end-column="113" />
-          <folding />
+        <state relative-caret-position="-199">
+          <caret line="55" column="51" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/RPNHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="71" column="32" selection-start-line="71" selection-start-column="32" selection-end-line="71" selection-end-column="32" />
-          <folding />
+        <state relative-caret-position="-510">
+          <caret line="45" column="25" selection-start-line="45" selection-start-column="25" selection-end-line="45" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/primes/PrimeCounter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3200">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/mathstuff/DoughNut.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1293">
+          <caret line="7" column="55" selection-start-line="7" selection-start-column="55" selection-end-line="7" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/mathstuff/MathStuff.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-216">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/misc/bs/BrainSext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="119" column="61" selection-start-line="119" selection-start-column="61" selection-end-line="119" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/BatchContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphics/transition/TransitionType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/allclasses-frame.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="109" column="61" selection-start-line="109" selection-start-column="61" selection-end-line="109" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/imageconfig/ImageParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/base_package.uml">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>JAVA</ID>
+          <OriginalElement>in.tamchow.fractal</OriginalElement>
+          <nodes>
+            <node x="" y="">in.tamchow.fractal.math</node>
+            <node x="" y="">in.tamchow.fractal.Test</node>
+            <node x="" y="">in.tamchow.fractal.config</node>
+            <node x="" y="">in.tamchow.fractal.misc</node>
+            <node x="" y="">in.tamchow.fractal.helpers</node>
+            <node x="" y="">in.tamchow.fractal.fractals</node>
+            <node x="" y="">in.tamchow.fractal.platform_tools</node>
+            <node x="" y="">in.tamchow.fractal.color</node>
+            <node x="" y="">in.tamchow.fractal.Main</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="202.0" y="210.0" />
+          <SelectedNodes />
+          <Categories>
+            <Category>Fields</Category>
+            <Category>Inner Classes</Category>
+            <Category>Constructors</Category>
+            <Category>Properties</Category>
+            <Category>Methods</Category>
+          </Categories>
+          <SCOPE>All</SCOPE>
+          <VISIBILITY>private</VISIBILITY>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="180" column="88" selection-start-line="180" selection-start-column="88" selection-end-line="180" selection-end-column="88" />
+        <state relative-caret-position="373">
+          <caret line="207" column="69" selection-start-line="207" selection-start-column="69" selection-end-line="207" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Fractal.png" />
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="143" column="65" selection-start-line="143" selection-start-column="65" selection-end-line="143" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalPanningHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1174">
+          <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/matrix/Matrix.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="21" column="11" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="1695" column="48" selection-start-line="1695" selection-start-column="48" selection-end-line="1695" selection-end-column="48" />
+        <state relative-caret-position="302">
+          <caret line="52" column="36" selection-start-line="52" selection-start-column="36" selection-end-line="52" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/FractalGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="99" column="120" selection-start-line="99" selection-start-column="120" selection-end-line="99" selection-end-column="120" />
+        <state relative-caret-position="85">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/Zoomable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/lang/StrictMath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="508" column="32" selection-start-line="508" selection-start-column="32" selection-end-line="508" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/FunctionEvaluator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="279" column="0" selection-start-line="279" selection-start-column="0" selection-end-line="279" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/CharBuffer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="109" column="38" selection-start-line="109" selection-start-column="38" selection-end-line="109" selection-end-column="38" />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3680#3681#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/FunctionTerm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1263">
+          <caret line="127" column="27" selection-start-line="127" selection-start-column="27" selection-end-line="127" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Polynomial.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-854">
+          <caret line="121" column="38" selection-start-line="121" selection-start-column="38" selection-end-line="121" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Function.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/symbolics/Operable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3265">
+          <caret line="137" column="46" selection-start-line="137" selection-start-column="30" selection-end-line="137" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/strings/StringManipulator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1474">
+          <caret line="153" column="67" selection-start-line="153" selection-start-column="54" selection-end-line="153" selection-end-column="175" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/Strings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="11" column="84" selection-start-line="11" selection-start-column="84" selection-end-line="11" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
+          <folding>
+            <element signature="e#905#906#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/ComplexBrotFractalParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="68" column="40" selection-start-line="68" selection-start-column="40" selection-end-line="68" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/config/ConfigReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="183" column="82" selection-start-line="183" selection-start-column="82" selection-end-line="183" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalBase.java" />
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/LinearizedPixelContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="114" column="118" selection-start-line="114" selection-start-column="118" selection-end-line="114" selection-end-column="118" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/PixelContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="68" column="33" selection-start-line="68" selection-start-column="33" selection-end-line="68" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="127" column="41" selection-start-line="127" selection-start-column="41" selection-end-line="127" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/graphics/util/ColorDebugger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="71">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/platform_tools/ImageConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-469">
+          <caret line="71" column="32" selection-start-line="71" selection-start-column="32" selection-end-line="71" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="43" column="11" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
+        <state relative-caret-position="123">
+          <caret line="635" column="130" selection-start-line="635" selection-start-column="130" selection-end-line="635" selection-end-column="130" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/PixelFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="16" column="79" selection-start-line="16" selection-start-column="79" selection-end-line="16" selection-end-column="79" />
+          <folding>
+            <element signature="e#713#714#0" expanded="true" />
+            <element signature="e#799#800#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/complexbrot/ComplexBrotFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="384" column="22" selection-start-line="384" selection-start-column="22" selection-end-line="384" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/IFS/IFSGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="145" column="84" selection-start-line="145" selection-start-column="84" selection-end-line="145" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="1793" column="16" selection-start-line="1793" selection-start-column="16" selection-end-line="1793" selection-end-column="16" />
+          <folding>
+            <element signature="e#100206#100207#0" expanded="true" />
+            <element signature="e#100246#100247#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="94" column="79" selection-start-line="94" selection-start-column="79" selection-end-line="94" selection-end-column="79" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

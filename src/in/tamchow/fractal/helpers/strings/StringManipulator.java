@@ -1,12 +1,33 @@
 package in.tamchow.fractal.helpers.strings;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.List;
 /**
  * Miscellaneous: String manipulating utility methods.
  */
 public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';
     private StringManipulator() {
+    }
+    public static <T> String join(final T[] items, String prefix, String suffix, String joiner) {
+        return join(Arrays.asList(items), prefix, suffix, joiner);
+    }
+    public static <T> String join(final List<T> items, String prefix, String suffix, String joiner) {
+        final int length = items.size();
+        ResizableCharBuffer buffer = new ResizableCharBuffer(prefix.length() + suffix.length() + length *
+                (joiner.length() + items.get(0).toString().length()));
+        buffer.append(prefix);
+        for (int i = 0; i < length; ++i) {
+            T item = items.get(i);
+            if (i == length - 1) {
+                buffer.append(item);
+            } else {
+                buffer.append(item).append(joiner);
+            }
+        }
+        return buffer.append(suffix).toString();
     }
     public static String createRepeat(char item, int repeats) {
         return createRepeat("" + item, repeats);
@@ -28,12 +49,14 @@ public final class StringManipulator {
         return ctr;
     }
     @NotNull
-    public static String doCyclicShift(@NotNull String input) {
+    public static String doCyclicShift(@NotNull String input, int positions) {
         @NotNull char[] processor = input.toCharArray();
-        for (int i = 1; i < processor.length; i++) {
-            char tmp = processor[i];
-            processor[i] = processor[0];
-            processor[0] = tmp;
+        while (positions-- > 0) {
+            for (int i = 1; i++ < processor.length; ) {
+                char tmp = processor[i];
+                processor[i] = processor[0];
+                processor[0] = tmp;
+            }
         }
         return new String(processor);
     }
@@ -42,6 +65,12 @@ public final class StringManipulator {
         long one = num % 10;
         long other = num / 10;
         return (long) (one * Math.pow(10, digits)) + other;
+    }
+    public static long doCyclicShift(long num, int positions) {
+        while (positions-- > 0) {
+            num = doCyclicShift(num);
+        }
+        return num;
     }
     public static int indexOfBackwards(@NotNull String search, int startindex, char tosearch) {
         for (int i = startindex; i > 0; i--) {

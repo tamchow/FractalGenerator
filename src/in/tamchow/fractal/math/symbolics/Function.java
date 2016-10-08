@@ -1,7 +1,8 @@
 package in.tamchow.fractal.math.symbolics;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
-import in.tamchow.fractal.helpers.strings.StringManipulator;
+
+import static in.tamchow.fractal.helpers.strings.StringManipulator.split;
 /**
  * Holds a transcendental function chain
  */
@@ -34,10 +35,10 @@ public final class Function extends Operable<Function, FunctionTerm> {
     @NotNull
     public Function fromString(@NotNull String function, boolean deepEvaluate) {
         if (deepEvaluate) {
-            String[] divisors = StringManipulator.split(function, "|/|");
+            String[] divisors = split(function, "|/|");
             Function[] dividing = new Function[divisors.length];
             for (int i = 0; i < divisors.length; ++i) {
-                String[] multipliers = StringManipulator.split(divisors[i], "|*|");
+                String[] multipliers = split(divisors[i], "|*|");
                 Function[] multiplying = new Function[multipliers.length];
                 for (int j = 0; j < multipliers.length; ++j) {
                     multiplying[j] = new Function(null, variableCode, oldvariablecode, consts).fromString(multipliers[j], false);
@@ -55,7 +56,7 @@ public final class Function extends Operable<Function, FunctionTerm> {
             init(divided);
             return this;
         }
-        @NotNull String[] tokens = StringManipulator.split(function, "|");
+        @NotNull String[] tokens = split(function, "|");
         terms.ensureCapacity(tokens.length);
         signs.ensureCapacity(tokens.length + 1);
         for (@NotNull String token : tokens) {

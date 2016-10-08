@@ -32,7 +32,7 @@ public class Config implements Serializable, DataFromString {
         return fps;
     }
     public void setFps(int fps) {
-        this.fps = fps < 0 ? 0 : fps;
+        this.fps = (fps < 0) ? 0 : fps;
     }
     public String getPath() {
         return path;

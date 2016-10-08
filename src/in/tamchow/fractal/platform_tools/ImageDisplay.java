@@ -7,9 +7,9 @@ import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageParams;
 import in.tamchow.fractal.fractals.complex.ComplexFractalGenerator;
 import in.tamchow.fractal.fractals.complex.ThreadedComplexFractalGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.Animation;
-import in.tamchow.fractal.graphicsutilities.transition.Transition;
-import in.tamchow.fractal.graphicsutilities.transition.TransitionTypes;
+import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.transition.Transition;
+import in.tamchow.fractal.graphics.transition.TransitionType;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -231,7 +231,7 @@ public class ImageDisplay extends JPanel implements Runnable, KeyListener, Mouse
     public void run() {
         for (int i = ctr; i < img.length; ) {
             if (!fractal_mode) {
-                if (((ImageParams) workConfig.getItem(i)).getTransition() == TransitionTypes.NONE) {
+                if (((ImageParams) workConfig.getItem(i)).getTransition() == TransitionType.NONE) {
                     todraw = img[i];
                     paint(this.getGraphics());
                     if (!running) {

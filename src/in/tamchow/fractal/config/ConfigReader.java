@@ -1,11 +1,11 @@
 package in.tamchow.fractal.config;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.complex.ComplexFractalParams;
-import in.tamchow.fractal.config.fractalconfig.complexbrot.ComplexBrotFractalParams;
+import in.tamchow.fractal.config.fractalconfig.complex.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.imageconfig.ImageParams;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
@@ -66,56 +66,19 @@ public class ConfigReader {
         }
         return imageConfig;
     }
-    public static BatchContainer<ComplexFractalParams> getComplexFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
-        List<String> lines = prepareBatchLines(cfgfile);
-        if (!lines.get(0).equals(COMPLEX)) {
-            return null;
-        }
-        lines.remove(0);
-        @NotNull BatchContainer<ComplexFractalParams> complexFractalConfig = new BatchContainer<>();
-        for (String line : lines) {
-            complexFractalConfig.addItem(getComplexParamFromFile(new File(line)));
-        }
-        return complexFractalConfig;
-    }
     @NotNull
-    private static ComplexFractalParams getComplexParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
-        @NotNull Scanner in = new Scanner(paramfile);
-        @NotNull ArrayList<String> lines = new ArrayList<>();
+    public static ComplexFractalParams getComplexParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
+        @NotNull ArrayList<String> lines = new ArrayList<>(prepareBatchLines(paramfile)), linesBk = new ArrayList<>(lines);
         @Nullable String thread_data = null, post_process_mode = null, switch_rate = null, trap_point = null, trap_line = null, oldvariablecode = null;
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            if (line.startsWith(THREADS)) {
-                thread_data = line.substring(THREADS.length()).trim();
-                continue;
-            }
-            if (line.startsWith(SWITCH_RATE)) {
-                switch_rate = line.substring(SWITCH_RATE.length()).trim();
-                continue;
-            }
-            if (line.startsWith(POSTPROCESSING)) {
-                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
-                continue;
-            }
-            if (line.startsWith(TRAP_POINT)) {
-                trap_point = line.substring(TRAP_POINT.length()).trim();
-                continue;
-            }
-            if (line.startsWith(TRAP_LINE)) {
-                trap_line = line.substring(TRAP_LINE.length()).trim();
-                continue;
-            }
-            if (line.startsWith(OLD_VARIABLE_CODE)) {
-                oldvariablecode = line.substring(OLD_VARIABLE_CODE.length()).trim();
-                continue;
-            }
-            if (!line.startsWith(COMMENT)) {
-                if (line.contains(COMMENT)) {
-                    line = line.substring(0, line.indexOf(COMMENT)).trim();
-                }
-                lines.add(line);
-            }
+        for (String line : lines) {
+            thread_data = processCommand(linesBk, line, THREADS);
+            switch_rate = processCommand(linesBk, line, SWITCH_RATE);
+            post_process_mode = processCommand(linesBk, line, POSTPROCESSING);
+            trap_point = processCommand(linesBk, line, TRAP_POINT);
+            trap_line = processCommand(linesBk, line, TRAP_LINE);
+            oldvariablecode = processCommand(linesBk, line, OLD_VARIABLE_CODE);
         }
+        lines = linesBk;
         @Nullable List<String> zooms = null;
         if (lines.indexOf(ZOOMS) >= 0) {
             zooms = lines.subList(lines.indexOf(ZOOMS) + 1, lines.indexOf(ENDZOOMS));
@@ -149,42 +112,16 @@ public class ConfigReader {
         complexFractalParams.setPath(paramfile.getAbsolutePath());
         return complexFractalParams;
     }
-    public static BatchContainer<IFSFractalParams> getIFSFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
-        List<String> lines = prepareBatchLines(cfgfile);
-        if (!lines.get(0).equals(IFS)) {
-            return null;
-        }
-        lines.remove(0);
-        @NotNull BatchContainer<IFSFractalParams> ifsFractalConfig = new BatchContainer<>();
-        for (String line : lines) {
-            ifsFractalConfig.addItem(getIFSParamFromFile(new File(line)));
-        }
-        return ifsFractalConfig;
-    }
     @NotNull
-    private static IFSFractalParams getIFSParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
-        @NotNull Scanner in = new Scanner(paramfile);
-        @NotNull ArrayList<String> lines = new ArrayList<>();
+    public static IFSFractalParams getIFSParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
+        @NotNull ArrayList<String> lines = new ArrayList<>(prepareBatchLines(paramfile)), linesBk = new ArrayList<>(lines);
         @Nullable String frameskip = null, post_process_mode = null, threads = null;
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            if (line.startsWith(FRAMESKIP)) {
-                frameskip = line.substring(FRAMESKIP.length()).trim();
-            }
-            if (line.startsWith(THREADS)) {
-                threads = line.substring(THREADS.length()).trim();
-            }
-            if (line.startsWith(POSTPROCESSING)) {
-                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
-                continue;
-            }
-            if (!line.startsWith(COMMENT)) {
-                if (line.contains(COMMENT)) {
-                    line = line.substring(0, line.indexOf(COMMENT)).trim();
-                }
-                lines.add(line);
-            }
+        for (String line : lines) {
+            threads = processCommand(linesBk, line, THREADS);
+            post_process_mode = processCommand(linesBk, line, POSTPROCESSING);
+            frameskip = processCommand(linesBk, line, FRAMESKIP);
         }
+        lines = linesBk;
         @Nullable List<String> zooms = null;
         if (lines.indexOf(ZOOMS) >= 0) {
             zooms = lines.subList(lines.indexOf(ZOOMS) + 1, lines.indexOf(ENDZOOMS));
@@ -206,51 +143,19 @@ public class ConfigReader {
         ifsFractalParams.setPath(paramfile.getAbsolutePath());
         return ifsFractalParams;
     }
-    public static BatchContainer<ComplexBrotFractalParams> getComplexBrotFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
-        List<String> lines = prepareBatchLines(cfgfile);
-        if (!lines.get(0).equals(COMPLEXBROT)) {
-            return null;
-        }
-        lines.remove(0);
-        @NotNull BatchContainer<ComplexBrotFractalParams> complexBrotFractalConfig = new BatchContainer<>();
-        for (String line : lines) {
-            complexBrotFractalConfig.addItem(getComplexBrotParamFromFile(new File(line)));
-        }
-        return complexBrotFractalConfig;
-    }
     @NotNull
-    private static ComplexBrotFractalParams getComplexBrotParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
-        @NotNull Scanner in = new Scanner(paramfile);
-        @NotNull ArrayList<String> lines = new ArrayList<>();
-        @Nullable String constant = null, threads = null, post_process_mode = null, oldvariablecode = null, switch_rate = null;
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            if (line.startsWith(THREADS)) {
-                threads = line.substring(THREADS.length()).trim();
-            }
-            if (line.startsWith(POSTPROCESSING)) {
-                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
-                continue;
-            }
-            if (line.startsWith(NEWTON_CONSTANT)) {
-                constant = line.substring(NEWTON_CONSTANT.length()).trim();
-                continue;
-            }
-            if (line.startsWith(OLD_VARIABLE_CODE)) {
-                oldvariablecode = line.substring(OLD_VARIABLE_CODE.length()).trim();
-                continue;
-            }
-            if (line.startsWith(SWITCH_RATE)) {
-                switch_rate = line.substring(SWITCH_RATE.length()).trim();
-                continue;
-            }
-            if (!line.startsWith(COMMENT)) {
-                if (line.contains(COMMENT)) {
-                    line = line.substring(0, line.indexOf(COMMENT)).trim();
-                }
-                lines.add(line);
-            }
+    public static ComplexBrotFractalParams getComplexBrotParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
+        @NotNull ArrayList<String> lines = new ArrayList<>(prepareBatchLines(paramfile)), linesBk = new ArrayList<>(lines);
+        @Nullable String constant = null, threads = null, post_process_mode = null, oldvariablecode = null, switch_rate = null, logscaling = null;
+        for (String line : lines) {
+            threads = processCommand(linesBk, line, THREADS);
+            switch_rate = processCommand(linesBk, line, SWITCH_RATE);
+            post_process_mode = processCommand(linesBk, line, POSTPROCESSING);
+            constant = processCommand(linesBk, line, NEWTON_CONSTANT);
+            oldvariablecode = processCommand(linesBk, line, OLD_VARIABLE_CODE);
+            logscaling = processCommand(linesBk, line, USE_LOG_SCALING);
         }
+        lines = linesBk;
         @Nullable List<String> zooms = null;
         if (lines.indexOf(ZOOMS) >= 0) {
             zooms = lines.subList(lines.indexOf(ZOOMS) + 1, lines.indexOf(ENDZOOMS));
@@ -275,45 +180,34 @@ public class ConfigReader {
         if (oldvariablecode != null) {
             complexBrotFractalParams.setOldVariableCode(oldvariablecode);
         }
+        if (logscaling != null) {
+            complexBrotFractalParams.setLogScaling(Boolean.parseBoolean(logscaling));
+        }
         complexBrotFractalParams.setPath(paramfile.getAbsolutePath());
         return complexBrotFractalParams;
     }
-    public static BatchContainer<LSFractalParams> getLSFractalConfigFromFile(@NotNull File cfgfile) throws FileNotFoundException {
-        List<String> lines = prepareBatchLines(cfgfile);
-        if (!lines.get(0).equals(LS)) {
-            return null;
-        }
-        lines.remove(0);
-        @NotNull BatchContainer<LSFractalParams> lsFractalConfig = new BatchContainer<>();
-        for (String line : lines) {
-            lsFractalConfig.addItem(getLSParamFromFile(new File(line)));
-        }
-        return lsFractalConfig;
-    }
     @NotNull
-    private static LSFractalParams getLSParamFromFile(@NotNull File file) throws FileNotFoundException {
-        @NotNull Scanner in = new Scanner(file);
-        @NotNull ArrayList<String> lines = new ArrayList<>();
+    public static LSFractalParams getLSParamFromFile(@NotNull File paramfile) throws FileNotFoundException {
+        @NotNull ArrayList<String> lines = new ArrayList<>(prepareBatchLines(paramfile)), linesBk = new ArrayList<>(lines);
         @Nullable String post_process_mode = null;
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            if (line.startsWith(POSTPROCESSING)) {
-                post_process_mode = line.substring(POSTPROCESSING.length()).trim();
-                continue;
-            }
-            if (!line.startsWith(COMMENT)) {
-                if (line.contains(COMMENT)) {
-                    line = line.substring(0, line.indexOf(COMMENT)).trim();
-                }
-                lines.add(line);
-            }
+        for (String line : lines) {
+            post_process_mode = processCommand(linesBk, line, POSTPROCESSING);
         }
+        lines = linesBk;
         @NotNull LSFractalParams lsFractalParams = new LSFractalParams();
         lsFractalParams.fromString(lines.toArray(new String[lines.size()]));
         if (post_process_mode != null) {
             lsFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
-        lsFractalParams.setPath(file.getAbsolutePath());
+        lsFractalParams.setPath(paramfile.getAbsolutePath());
         return lsFractalParams;
+    }
+    private static String processCommand(List<String> ins, String in, String command) {
+        String result = null;
+        if (in.startsWith(command)) {
+            result = in.substring(command.length()).trim();
+            ins.remove(in);
+        }
+        return result;
     }
 }

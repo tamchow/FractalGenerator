@@ -2,7 +2,7 @@ package in.tamchow.fractal.config.fractalconfig.IFS;
 import in.tamchow.fractal.config.Config;
 import in.tamchow.fractal.config.Strings;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.math.MathUtils;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
@@ -22,8 +22,8 @@ public class IFSFractalParams extends Config {
     private String[] yfunctions, xfunctions;
     private double[] weights;
     private int[] colors;
-    private int depth, fps, frameskip, threads;
-    private double zoom, zoomlevel, base_precision, skew;
+    private int depth, frameskip, threads;
+    private double zoom, base_precision, skew;
     {
         setName(Strings.BLOCKS.IFS);
     }
@@ -85,16 +85,15 @@ public class IFSFractalParams extends Config {
         setHeight(Integer.valueOf(input[2]));
         setBase_precision(Double.valueOf(input[3]));
         setZoom(Double.valueOf(input[4]));
-        setZoomlevel(Double.valueOf(input[5]));
-        setDepth(Integer.valueOf(input[6]));
-        setFps(Integer.valueOf(input[7]));
-        setSkew(Double.valueOf(input[8]));
+        setDepth(Integer.valueOf(input[5]));
+        setFps(Integer.valueOf(input[6]));
+        setSkew(Double.valueOf(input[7]));
         if (isIfsMode()) {
-            xfunctions = new String[input.length - 9];
-            yfunctions = new String[input.length - 9];
-            colors = new int[input.length - 9];
-            weights = new double[input.length - 9];
-            for (int i = 9; i < input.length; i++) {
+            xfunctions = new String[input.length - 8];
+            yfunctions = new String[input.length - 8];
+            colors = new int[input.length - 8];
+            weights = new double[input.length - 8];
+            for (int i = 8; i < input.length; i++) {
                 @NotNull String[] parts = StringManipulator.split(input[i], " ");
                 xfunctions[i] = parts[0];
                 yfunctions[i] = parts[1];
@@ -102,11 +101,11 @@ public class IFSFractalParams extends Config {
                 colors[i] = Integer.valueOf(parts[3], 16);
             }
         } else {
-            transforms = new Matrix[input.length - 9];
-            translators = new Matrix[input.length - 9];
-            colors = new int[input.length - 9];
-            weights = new double[input.length - 9];
-            for (int i = 9; i < input.length; i++) {
+            transforms = new Matrix[input.length - 8];
+            translators = new Matrix[input.length - 8];
+            colors = new int[input.length - 8];
+            weights = new double[input.length - 8];
+            for (int i = 8; i < input.length; i++) {
                 @NotNull String[] parts = StringManipulator.split(input[i], " ");
                 transforms[i] = new Matrix(parts[0]);
                 translators[i] = new Matrix(parts[1]);
@@ -231,7 +230,7 @@ public class IFSFractalParams extends Config {
         @NotNull String representation = THREADS + threads + "\n" +
                 ((frameskip >= 0) ? FRAMESKIP + frameskip + "\n" : "");
         representation += (postProcessMode != null) ? POSTPROCESSING + postProcessMode + "\n" : "";
-        representation += ifsMode + ((ifsMode) ? ":" + createCodeString() : "") + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + zoomlevel + "\n" + depth + "\n" + fps + "\n" + skew;
+        representation += ifsMode + ((ifsMode) ? ":" + createCodeString() : "") + "\n" + width + "\n" + height + "\n" + base_precision + "\n" + zoom + "\n" + depth + "\n" + fps + "\n" + skew;
         if (ifsMode) {
             for (int i = 0; i < weights.length; i++) {
                 representation += "\n" + xfunctions[i] + " " + yfunctions[i] + " " + weights[i] + " " + colors[i];
@@ -257,12 +256,6 @@ public class IFSFractalParams extends Config {
     }
     public void setZoom(double zoom) {
         this.zoom = zoom;
-    }
-    public double getZoomlevel() {
-        return zoomlevel;
-    }
-    public void setZoomlevel(double zoomlevel) {
-        this.zoomlevel = zoomlevel;
     }
     public double getBase_precision() {
         return base_precision;

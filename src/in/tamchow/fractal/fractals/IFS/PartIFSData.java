@@ -1,6 +1,6 @@
 package in.tamchow.fractal.fractals.IFS;
-import in.tamchow.fractal.graphicsutilities.containers.Animation;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Part of an IFS fractal's image data

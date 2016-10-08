@@ -1,8 +1,8 @@
 package in.tamchow.fractal.fractals;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomConfig;
-import in.tamchow.fractal.graphicsutilities.containers.Pannable;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import in.tamchow.fractal.graphicsutilities.containers.Zoomable;
+import in.tamchow.fractal.graphics.containers.Pannable;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.Zoomable;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import static java.lang.Math.abs;
@@ -14,7 +14,7 @@ public abstract class PixelFractalGenerator extends FractalGenerator implements 
     protected PixelFractalGenerator() {
     }
     public double calculateBasePrecision() {
-        return ((getImageHeight() >= getImageWidth()) ? getImageWidth() / 2 : getImageHeight() / 2);
+        return calculateBasePrecision(0, getImageWidth(), 0, getImageHeight());
     }
     public double calculateBasePrecision(double xstart, double xend, double ystart, double yend) {
         return min(getImageWidth() / (abs(abs(xend) + abs(xstart))), getImageHeight() / (abs(abs(yend) + abs(ystart))));

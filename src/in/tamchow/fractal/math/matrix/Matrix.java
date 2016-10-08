@@ -17,9 +17,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
         initMatrix(old.getNumRows(), old.getNumColumns(), old.getMatrixData());
     }
     public Matrix(int rows, int columns) {
-        setNumRows(rows);
-        setNumColumns(columns);
-        matrixData = new double[this.rows][this.columns];
+        initMatrix(rows, columns, new double[rows][columns]);
     }
     public Matrix(String matrix) {
         matrix = matrix.substring(1, matrix.length() - 1);//trim leading and trailing square brackets
@@ -48,19 +46,13 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     @NotNull
     public static Matrix identityMatrix(int order) {
-        int rows = Math.round((float) Math.sqrt(order));
-        //Note: For an identity matrix, rows=columns, so we reuse `rows` as `columns`
-        @NotNull Matrix matrix = new Matrix(rows, rows);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < rows; j++) {
-                if (i == j) {
-                    matrix.set(i, j, 1);
-                } else {
-                    matrix.set(i, j, 0);
-                }
+        double[][] data = new double[order][order];
+        for (int i = 0; i < order; ++i) {
+            for (int j = 0; j < order; ++j) {
+                data[i][j] = (i == j) ? 1 : 0;
             }
         }
-        return matrix;
+        return new Matrix(data);
     }
     @Override
     public Object clone() {
@@ -78,26 +70,27 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     public int getNumRows() {
         return rows;
     }
-    public void setNumRows(int rows) {
+    private void setNumRows(int rows) {
         this.rows = rows;
     }
     public int getNumColumns() {
         return columns;
     }
-    public void setNumColumns(int columns) {
+    private void setNumColumns(int columns) {
         this.columns = columns;
     }
     public double[][] getMatrixData() {
         return matrixData;
     }
-    public void setMatrixData(@NotNull double[][] matrixData) {
+    private void setMatrixData(@NotNull double[][] matrixData) {
         this.matrixData = new double[matrixData.length][matrixData[0].length];
         for (int i = 0; i < matrixData.length; i++) {
             System.arraycopy(matrixData[i], 0, this.matrixData[i], 0, matrixData[i].length);
         }
     }
-    public synchronized void set(int i, int j, double value) {
+    public Matrix set(int i, int j, double value) {
         matrixData[i][j] = value;
+        return this;
     }
     @NotNull
     public Matrix transpose() {
@@ -114,7 +107,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     @NotNull
     public Matrix createSubMatrix(int excluding_row, int excluding_col) {
-        @NotNull Matrix mat = new Matrix(getNumRows() - 1, getNumColumns() - 1);
+        double[][] data = new double[getNumRows() - 1][getNumColumns() - 1];
         int r = -1;
         for (int i = 0; i < getNumRows(); i++) {
             if (i == excluding_row) continue;
@@ -122,10 +115,10 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
             int c = -1;
             for (int j = 0; j < getNumColumns(); j++) {
                 if (j == excluding_col) continue;
-                mat.set(r, ++c, get(i, j));
+                data[r][++c] = get(i, j);
             }
         }
-        return mat;
+        return new Matrix(data);
     }
     public int size() {
         return rows * columns;
@@ -158,13 +151,13 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
     }
     @NotNull
     public Matrix cofactor() {
-        @NotNull Matrix mat = new Matrix(getNumRows(), getNumColumns());
-        for (int i = 0; i < getNumRows(); i++) {
-            for (int j = 0; j < getNumColumns(); j++) {
-                mat.set(i, j, changeSign(i) * changeSign(j) * determinant(createSubMatrix(i, j)));
+        double[][] data = new double[getNumRows()][getNumColumns()];
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                data[i][j] = changeSign(i) * changeSign(j) * determinant(createSubMatrix(i, j));
             }
         }
-        return mat;
+        return new Matrix(data);
     }
     @Override
     public boolean equals(@Nullable Object that) {

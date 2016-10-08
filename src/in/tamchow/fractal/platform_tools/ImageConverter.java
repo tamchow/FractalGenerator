@@ -1,6 +1,6 @@
 package in.tamchow.fractal.platform_tools;
-import in.tamchow.fractal.graphicsutilities.containers.Animation;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
 
@@ -78,7 +78,7 @@ public class ImageConverter {
         @NotNull Graphics2D graphics = buf.createGraphics();
         graphics.setBackground(new Color(backColor));
         graphics.setColor(new Color(penColor));
-        //graphics.setStroke(new BasicStroke(fontSize));
+        //painting.setStroke(new BasicStroke(fontSize));
         graphics.setFont(new Font(fontName, fontStyle, fontSize));
         FontMetrics fontMetrics = graphics.getFontMetrics();
         @NotNull String[] lines = StringManipulator.split(text, "\n");
@@ -94,10 +94,10 @@ public class ImageConverter {
             graphics = buf.createGraphics();
             graphics.setBackground(new Color(backColor));
             graphics.setColor(new Color(penColor));
-            //graphics.setStroke(new BasicStroke(fontSize));
+            //painting.setStroke(new BasicStroke(fontSize));
             graphics.setFont(new Font(fontName, fontStyle, fontSize));
         }
-        //graphics.fillRect(0, 0, buf.getWidth(), buf.getHeight());
+        //painting.fillRect(0, 0, buf.getWidth(), buf.getHeight());
         graphics.clearRect(0, 0, buf.getWidth(), buf.getHeight());
         drawString(graphics, lines, x, y, spacing);
         graphics.dispose();

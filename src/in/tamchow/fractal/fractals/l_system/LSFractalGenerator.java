@@ -3,10 +3,10 @@ import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.l_system.LSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.l_system.UnitGrammar;
 import in.tamchow.fractal.fractals.FractalGenerator;
-import in.tamchow.fractal.graphicsutilities.containers.Animation;
-import in.tamchow.fractal.graphicsutilities.containers.LinearizedPixelContainer;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
-import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
+import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.containers.LinearizedPixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
+import in.tamchow.fractal.graphics.painting.Turtle;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.CharBuffer;
@@ -15,7 +15,7 @@ import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static in.tamchow.fractal.graphicsutilities.graphics.DrawingUtilities.fill;
+import static in.tamchow.fractal.graphics.painting.DrawingUtilities.fill;
 import static in.tamchow.fractal.helpers.math.MathUtils.boundsProtected;
 import static in.tamchow.fractal.helpers.math.MathUtils.weightedRandom;
 /**

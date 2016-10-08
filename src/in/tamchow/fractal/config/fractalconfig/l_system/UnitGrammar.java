@@ -1,5 +1,5 @@
 package in.tamchow.fractal.config.fractalconfig.l_system;
-import in.tamchow.fractal.graphicsutilities.graphics.Turtle;
+import in.tamchow.fractal.graphics.painting.Turtle;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
@@ -34,29 +34,29 @@ public class UnitGrammar implements Serializable {
          *
          * Codes:
          * Variant 1: A
-         * (Maps to {@link in.tamchow.fractal.graphicsutilities.graphics.Turtle.TurtleCommand#NO_OP},
+         * (Maps to {@link in.tamchow.fractal.graphics.painting.Turtle.TurtleCommand#NO_OP},
          * angle=0 rad,probability=1.0,transforms to A)
          *
          * Variant 2: A,DRAW_FORWARD
-         * (Maps to {@link in.tamchow.fractal.graphicsutilities.graphics.Turtle.TurtleCommand#DRAW_FORWARD},
+         * (Maps to {@link in.tamchow.fractal.graphics.painting.Turtle.TurtleCommand#DRAW_FORWARD},
          * angle=0 rad,probability=1.0 transforms to A)
          *
          * Variant 2: A,3.14
-         * (Maps to {@link in.tamchow.fractal.graphicsutilities.graphics.Turtle.TurtleCommand#NO_OP},
+         * (Maps to {@link in.tamchow.fractal.graphics.painting.Turtle.TurtleCommand#NO_OP},
          * angle=3.14 rad,probability=1.0 transforms to A)
          *
          *  Variant 3: A,DRAW_FORWARD,3.14
-         * (Maps to {@link in.tamchow.fractal.graphicsutilities.graphics.Turtle.TurtleCommand#DRAW_FORWARD},
+         * (Maps to {@link in.tamchow.fractal.graphics.painting.Turtle.TurtleCommand#DRAW_FORWARD},
          * angle=3.14 rad,probability=1.0 transforms to A)
          *
          * Variant 5: A=F or A=F:1.0
          * (or variant 2 or 3 or 4 to the left of '=')
-         * (Maps to {@link in.tamchow.fractal.graphicsutilities.graphics.Turtle.TurtleCommand#DRAW_FORWARD},
+         * (Maps to {@link in.tamchow.fractal.graphics.painting.Turtle.TurtleCommand#DRAW_FORWARD},
          * angle=0 rad,probability=1.0 transforms to F)
          *
          * Variant 6: A=F:0.5,C:0.5 (... in similar format)
          * (or variant 2 or 3 or 4 to the left of '=')
-         * (Maps to {@link in.tamchow.fractal.graphicsutilities.graphics.Turtle.TurtleCommand#DRAW_FORWARD},
+         * (Maps to {@link in.tamchow.fractal.graphics.painting.Turtle.TurtleCommand#DRAW_FORWARD},
          * angle=0 rad, probability=.5 transforms to F, probability =.5 transforms to C)
          *
          * Any other format may either throw exceptions at initialization or runtime or cause undefined behaviour.

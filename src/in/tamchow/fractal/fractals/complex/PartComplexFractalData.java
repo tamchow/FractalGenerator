@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.complex;
-import in.tamchow.fractal.graphicsutilities.containers.PixelContainer;
+import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 
 import java.io.Serializable;

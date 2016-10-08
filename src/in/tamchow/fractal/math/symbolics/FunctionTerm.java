@@ -124,8 +124,8 @@ final class FunctionTerm extends Derivable {
                 throw new IllegalArgumentException(UNSUPPORTED_DERIVATIVE_ORDER_MESSAGE);
         }
         @NotNull final String[][] REPLACEMENTS = {
-                {"evv", "(e- " + _2 + ")"},
-                {"ev", "(e- " + _1 + ")"},
+                {"evv", "(e-" + _2 + ")"},
+                {"ev", "(e-" + _1 + ")"},
                 {"e", "(" + exponent + ")"},
                 {"fvv", "(" + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative2.trim() + ")"},
                 {"fv", "(" + FUNCTION_DATA[getUsedFunctionTermIndex(function)].derivative1.trim() + ")"},

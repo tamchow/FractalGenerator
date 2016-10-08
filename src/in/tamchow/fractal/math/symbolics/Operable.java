@@ -250,21 +250,7 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
                         mDerivative2.add(multiplyListDerivative(unit));
                     }
                     CharBuffer repr2 = new ResizableCharBuffer();
-                    repr2.append("(");
-                    for (int i = 0; i < mDerivative2.size(); ++i) {
-                        repr2.append("(");
-                        for (int j = 0; j < mDerivative2.get(i).size(); ++j) {
-                            repr2.append("(").append(joinTerms(mDerivative2.get(i).get(j), "*", true)).append(")");
-                            if (j < mDerivative2.get(i).size() - 1) {
-                                repr2.append("+");
-                            }
-                        }
-                        repr2.append(")");
-                        if (i < mDerivative2.size() - 1) {
-                            repr2.append("+");
-                        }
-                    }
-                    repr2.append(")");
+                    organizeDerivative(mDerivative2, repr2);
                     String mDerived2 = replaceDerivatives(repr2.toString(), multipliers, 2);
                     if (denominators.isEmpty()) {
                         return mDerived2;
@@ -285,21 +271,7 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
                             dDerivative2.add(multiplyListDerivative(unit));
                         }
                         CharBuffer dRepr2 = new ResizableCharBuffer();
-                        dRepr2.append("(");
-                        for (int i = 0; i < dDerivative2.size(); ++i) {
-                            dRepr2.append("(");
-                            for (int j = 0; j < dDerivative2.get(i).size(); ++j) {
-                                dRepr2.append("(").append(joinTerms(dDerivative2.get(i).get(j), "*", true)).append(")");
-                                if (j < dDerivative2.get(i).size() - 1) {
-                                    dRepr2.append("+");
-                                }
-                            }
-                            dRepr2.append(")");
-                            if (i < dDerivative2.size() - 1) {
-                                dRepr2.append("+");
-                            }
-                        }
-                        dRepr2.append(")");
+                        organizeDerivative(dDerivative2, dRepr2);
                         String dDerived2 = replaceDerivatives(dRepr2.toString(), multipliers, 2);
                         final String[][] items = {
                                 {"$$u", mDerived2},
@@ -317,6 +289,23 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
             }
         }
         return derivativeBase(order);
+    }
+    private void organizeDerivative(List<List<List<String>>> mDerivative2, CharBuffer repr2) {
+        repr2.append("(");
+        for (int i = 0; i < mDerivative2.size(); ++i) {
+            repr2.append("(");
+            for (int j = 0; j < mDerivative2.get(i).size(); ++j) {
+                repr2.append("(").append(joinTerms(mDerivative2.get(i).get(j), "*", true)).append(")");
+                if (j < mDerivative2.get(i).size() - 1) {
+                    repr2.append("+");
+                }
+            }
+            repr2.append(")");
+            if (i < mDerivative2.size() - 1) {
+                repr2.append("+");
+            }
+        }
+        repr2.append(")");
     }
     private String replaceDerivatives(String toReplace, List<T> items, int order) {
         for (int i = 0; i < items.size(); ++i) {
@@ -357,7 +346,7 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
     public String toString() {
         return useEx() ? new ResizableCharBuffer().append("((").append(toStringBase()).append(joinTerms(multipliers, "*", false)).append(")/").append(itemString(denominators)).toString() : toStringBase();
     }
-    public String itemString(List<T> items) {
+    private String itemString(List<T> items) {
         return "(" + joinTerms(items, "*", true) + ")";
     }
     private <V> String joinTerms(List<V> terms, String joiner, boolean hasNoPreceding) {
