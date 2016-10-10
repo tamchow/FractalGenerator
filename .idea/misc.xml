@@ -76,5 +76,9 @@
     <scrapTab name="Scrap" />
     <imports />
   </component>
+  <component name="StateStore">
+    <option name="mTargetDirectory" value="Current Path" />
+    <option name="mFastbootTarget" value="boot" />
+  </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>

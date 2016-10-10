@@ -138,7 +138,7 @@ public final class Colorizer implements Serializable {
         return linearInterpolated(fromcolor, tocolor, ((double) value) / maxvalue, byParts, gammaCorrection);
     }
     private static int lerpInt(int val1, int val2, double bias) {
-        bias = correctBias(bias);
+        //bias = correctBias(bias);
         return Math.round((float) (val2 * bias + val1 * (1 - bias)));
     }
     public static int linearInterpolated(int color1, int color2, int color3, int value, int maxValue, int byparts, boolean gammaCorrection) {
@@ -157,9 +157,7 @@ public final class Colorizer implements Serializable {
     }
     private static double correctBias(double bias) {
         bias = isNaN(bias) ? 0.0 : (isInfinite(bias) ? 1.0 : bias);
-        //bias = (bias < 0.0) ? -bias : bias;
-        //return (abs(bias - 1) <= MathUtils.ULP) ? bias - (long) bias : bias;
-        return bias;
+        return clamp(bias, 0.0, 1.0);
     }
     public static int linearInterpolated(int fromcolor, int tocolor, double bias, int byParts, boolean gammaCorrection) {
         bias = correctBias(bias);
@@ -412,12 +410,7 @@ public final class Colorizer implements Serializable {
         if (logIndex) {
             return basicInterpolateIndex(indexOfColor(fromColor), indexOfColor(toColor), bias);
         } else {
-            if (fromColor > toColor) {
-                int tmpIndex = fromColor;
-                fromColor = toColor;
-                toColor = tmpIndex;
-            }
-            return getColor(fromColor + Math.round((float) (abs(toColor - fromColor) * bias)));
+            return basicInterpolateIndex(fromColor, toColor, bias);
         }
     }
     public int basicInterpolateIndex(int fromIndex, int toIndex, double bias) {
@@ -623,17 +616,30 @@ public final class Colorizer implements Serializable {
             }
         }
         c = 0;
-        for (int i = 0, cnext = c + 1; i < palette.length && c < controls.length; i++) {
-            if (c == controls.length - 1) {
+        double bias;
+        for (int i = 0, cnext = c + 1; i < palette.length; i++) {
+            int idx = i;
+            if (c == controls.length - 1 || cnext == controls.length) {
                 cnext = 0;
+                if (modifierEnabled) --c;
+            } else if (c == controls.length) {
+                c = 0;
+                cnext = controls.length - 1;
             }
-            if (i == controls[c]) {
-                c++;
-                cnext++;
-                continue;
+            if (i < controls[0]) {
+                idx += (palette.length - 1 - controls[controls.length - 1]);
+                bias = clamp(((double) abs(idx)) / abs((palette.length - 1 - controls[controls.length - 1]) + controls[0]), 0.0, 1.0);
+                palette[i] = interpolated(control_colors[control_colors.length - 1], control_colors[0], bias, byParts, true, gammaCorrection);
+            } else if (i == controls[c]) {
+                ++c;
+                ++cnext;
+            } else if (i > controls[controls.length - 1]) {
+                bias = clamp(((double) abs(idx - controls[controls.length - 1])) / abs((palette.length - 1 - controls[controls.length - 1]) + controls[0]), 0.0, 1.0);
+                palette[i] = interpolated(control_colors[0], control_colors[control_colors.length - 1], bias, byParts, true, gammaCorrection);
+            } else {
+                bias = clamp(((double) abs(idx - controls[c])) / abs(controls[cnext] - controls[c]), 0.0, 1.0);
+                palette[i] = interpolated(control_colors[c], control_colors[cnext], bias, byParts, true, gammaCorrection);
             }
-            double bias = clamp(((double) abs(i - controls[c])) / abs(controls[cnext] - controls[c]), 0.0, 1.0);
-            palette[i] = interpolated(control_colors[c], control_colors[cnext], bias, byParts, !modifierEnabled, gammaCorrection);
         }
         if (isCyclize()) {
             cyclizePalette();
@@ -666,6 +672,7 @@ public final class Colorizer implements Serializable {
         return -1;
     }
     public int interpolated(int index, double bias) {
+        bias = correctBias(bias);
         if (interpolationType == 0) {
             return interpolated(index, lerpInt(index, palette.length - 1, bias), bias);
         } else if (interpolationType > 0) {
@@ -674,6 +681,7 @@ public final class Colorizer implements Serializable {
         return interpolated(index, index + 1, bias);
     }
     public int splineInterpolated(int index1, int index2, double bias) {
+        bias = correctBias(bias);
         int index3, index4;
         if (index1 > index2) {
             if (splineInterpolationCalcMode) {
@@ -701,7 +709,8 @@ public final class Colorizer implements Serializable {
         return splineInterpolated(index1, index1, index3, index4, bias);
     }
     public int splineInterpolated(int index, int indexMin, int indexMax, double bias) {
-        int otherIdx = round((float) (bias - (long) bias) * (indexMax + indexMin));
+        bias = correctBias(bias);
+        int otherIdx = round((float) bias * (indexMax + indexMin));
         return splineInterpolated(indexMin, index, otherIdx, indexMax, bias);
     }
     public int splineInterpolated(int index1, int index2, int index3, int index4, double bias) {
