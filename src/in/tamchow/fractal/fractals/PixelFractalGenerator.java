@@ -14,7 +14,7 @@ public abstract class PixelFractalGenerator extends FractalGenerator implements 
     protected PixelFractalGenerator() {
     }
     public double calculateBasePrecision() {
-        return calculateBasePrecision(0, getImageWidth(), 0, getImageHeight());
+        return min(getImageHeight() / 2, getImageWidth() / 2);
     }
     public double calculateBasePrecision(double xstart, double xend, double ystart, double yend) {
         return min(getImageWidth() / (abs(abs(xend) + abs(xstart))), getImageHeight() / (abs(abs(yend) + abs(ystart))));

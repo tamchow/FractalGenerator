@@ -161,9 +161,9 @@ public final class Colorizer implements Serializable {
     }
     public static int linearInterpolated(int fromcolor, int tocolor, double bias, int byParts, boolean gammaCorrection) {
         bias = correctBias(bias);
-        if (tocolor < fromcolor) {
+        /*if (tocolor < fromcolor) {
             bias = 1 - bias;
-        }
+        }*/
         if (byParts == 0) {
             int fr = Colors.rgbToLinear(separateARGB(fromcolor, Colors.RGBCOMPONENTS.RED), gammaCorrection);
             int fg = Colors.rgbToLinear(separateARGB(fromcolor, Colors.RGBCOMPONENTS.GREEN), gammaCorrection);
@@ -194,10 +194,10 @@ public final class Colorizer implements Serializable {
     }
     public static int splineInterpolated(int color1, int color2, int color3, int color4, double bias, int byParts, boolean gammaCorrection) {
         bias = correctBias(bias);
-        double h0 = 0.5 * ((bias * bias) * (bias - 1)),
-                h1 = 0.5 * (bias * (1 + 4 * bias - 3 * (bias * bias))),
+        double h0 = 0.5 * (-(bias * bias) + (bias * bias * bias)),
+                h1 = 0.5 * (bias + 4 * (bias * bias) - 3 * (bias * bias * bias)),
                 h2 = 0.5 * (2 - 5 * (bias * bias) + 3 * (bias * bias * bias)),
-                h3 = 0.5 * (bias * (2 * bias - (bias * bias) - 1));
+                h3 = 0.5 * (-bias + 2 * (bias * bias) - (bias * bias * bias));
         if (byParts == 0) {
             int r1, r2, r3, r4, g1, g2, g3, g4, b1, b2, b3, b4;
             r1 = Colors.rgbToLinear(separateARGB(color1, Colors.RGBCOMPONENTS.RED), gammaCorrection);
@@ -608,38 +608,18 @@ public final class Colorizer implements Serializable {
             controls[i] = createIndex(control_points[i], 0, 1);
         }
         color_density = color_density_backup;
-        int c = 0;
-        for (int i = 0; i < palette.length && c < controls.length; i++) {
-            if (i == controls[c]) {
-                palette[i] = control_colors[c];
-                c++;
+        final double diff = abs(palette.length - controls[controls.length - 1]), dist = diff + controls[0];
+        for (int c = 0; c < controls.length - 1; ++c) {
+            for (int i = controls[c], ctr = 0; i <= controls[c + 1]; ++i, ++ctr) {
+                double bias = ((double) ctr / abs(controls[c + 1] - controls[c]));
+                palette[i] = interpolated(control_colors[c], control_colors[c + 1], bias, byParts, true, gammaCorrection);
             }
         }
-        c = 0;
-        double bias;
-        for (int i = 0, cnext = c + 1; i < palette.length; i++) {
-            int idx = i;
-            if (c == controls.length - 1 || cnext == controls.length) {
-                cnext = 0;
-                if (modifierEnabled) --c;
-            } else if (c == controls.length) {
-                c = 0;
-                cnext = controls.length - 1;
-            }
-            if (i < controls[0]) {
-                idx += (palette.length - 1 - controls[controls.length - 1]);
-                bias = clamp(((double) abs(idx)) / abs((palette.length - 1 - controls[controls.length - 1]) + controls[0]), 0.0, 1.0);
-                palette[i] = interpolated(control_colors[control_colors.length - 1], control_colors[0], bias, byParts, true, gammaCorrection);
-            } else if (i == controls[c]) {
-                ++c;
-                ++cnext;
-            } else if (i > controls[controls.length - 1]) {
-                bias = clamp(((double) abs(idx - controls[controls.length - 1])) / abs((palette.length - 1 - controls[controls.length - 1]) + controls[0]), 0.0, 1.0);
-                palette[i] = interpolated(control_colors[0], control_colors[control_colors.length - 1], bias, byParts, true, gammaCorrection);
-            } else {
-                bias = clamp(((double) abs(idx - controls[c])) / abs(controls[cnext] - controls[c]), 0.0, 1.0);
-                palette[i] = interpolated(control_colors[c], control_colors[cnext], bias, byParts, true, gammaCorrection);
-            }
+        for (int i = 0; i <= controls[0]; ++i) {
+            palette[i] = interpolated(control_colors[controls.length - 1], control_colors[0], (i + diff) / dist, byParts, true, gammaCorrection);
+        }
+        for (int i = controls[controls.length - 1], ctr = 0; i < palette.length; ++i, ++ctr) {
+            palette[i] = interpolated(control_colors[controls.length - 1], control_colors[0], ctr / dist, byParts, true, gammaCorrection);
         }
         if (isCyclize()) {
             cyclizePalette();
