@@ -11,16 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="New coloring modes - cumulative distance and angle">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colorizer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/color/Colors.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/PartComplexFractalData.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/PartComplexFractalData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/LinearizedPixelContainer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/LinearizedPixelContainer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/PixelContainer.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/graphics/containers/PixelContainer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/helpers/math/MathUtils.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1429,14 +1419,7 @@
       <workItem from="1476189946947" duration="804000" />
       <workItem from="1476191007336" duration="223000" />
       <workItem from="1476191265820" duration="387000" />
-      <workItem from="1476249272196" duration="16245000" />
-    </task>
-    <task id="LOCAL-00217" summary="Sequential Brot&#10;Documentation updates">
-      <created>1461158144540</created>
-      <option name="number" value="00217" />
-      <option name="presentableId" value="LOCAL-00217" />
-      <option name="project" value="LOCAL" />
-      <updated>1461158144541</updated>
+      <workItem from="1476249272196" duration="16416000" />
     </task>
     <task id="LOCAL-00218" summary="Sequential Brot&#10;Documentation updates">
       <created>1461158492124</created>
@@ -1774,11 +1757,18 @@
       <option name="project" value="LOCAL" />
       <updated>1476191213544</updated>
     </task>
-    <option name="localTasksCounter" value="266" />
+    <task id="LOCAL-00266" summary="New coloring modes - cumulative distance and angle">
+      <created>1476269233931</created>
+      <option name="number" value="00266" />
+      <option name="presentableId" value="LOCAL-00266" />
+      <option name="project" value="LOCAL" />
+      <updated>1476269233932</updated>
+    </task>
+    <option name="localTasksCounter" value="267" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1365270000" />
+    <option name="totallyTimeSpent" value="1365441000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1791,7 +1781,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3502455" sideWeight="0.51891077" order="12" side_tool="true" content_ui="tabs" />
@@ -1801,7 +1791,7 @@
       <window_info id="Script Monkey" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Cabal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="AdbCommander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="14" side_tool="true" content_ui="tabs" />
-      <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32405892" sideWeight="0.4969743" order="17" side_tool="false" content_ui="tabs" />
+      <window_info id="Statistic" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32405892" sideWeight="0.4969743" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Packages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dilbert" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55973816" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.32980332" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
@@ -1814,7 +1804,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31914893" sideWeight="0.4969743" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3502455" sideWeight="0.48108926" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3502455" sideWeight="0.48108926" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31862745" sideWeight="0.4969743" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="IntelliGuard" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
@@ -1907,7 +1897,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Added miscellaneous BFk compiler. Documentation not updated." />
     <MESSAGE value="Updated miscellaneous BFk compiler. Documentation updated." />
     <MESSAGE value="Updated CharBuffer" />
     <MESSAGE value="Added clone()" />
@@ -1932,7 +1921,8 @@
     <MESSAGE value="Customization for interpolation, text-to-image support, miscellaneous fixes" />
     <MESSAGE value="Project restructuring, miscellaneous bugfixes, Range-Zoom" />
     <MESSAGE value="Smooth palette creation bugfixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Smooth palette creation bugfixes" />
+    <MESSAGE value="New coloring modes - cumulative distance and angle" />
+    <option name="LAST_COMMIT_MESSAGE" value="New coloring modes - cumulative distance and angle" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -2334,7 +2324,7 @@
         <state relative-caret-position="142">
           <caret line="162" column="107" selection-start-line="162" selection-start-column="107" selection-end-line="162" selection-end-column="107" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
