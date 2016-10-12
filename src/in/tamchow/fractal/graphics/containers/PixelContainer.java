@@ -113,7 +113,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return pixdata[row];
     }
     @NotNull
-    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean gammaCorrection) {
+    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean linearInterpolation, boolean gammaCorrection) {
         @NotNull PixelContainer processed = new PixelContainer(this);
         if (mode == PostProcessMode.NONE) {
             return processed;
@@ -132,7 +132,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((average + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEAN:
-                        processed.setPixel(i, j, Colorizer.linearInterpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, gammaCorrection));
+                        processed.setPixel(i, j, Colorizer.interpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, linearInterpolation, gammaCorrection));
                         break;
                     case MEDIAN:
                         processed.setPixel(i, j, median);
@@ -141,10 +141,10 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((median + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEDIAN:
-                        processed.setPixel(i, j, Colorizer.linearInterpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, gammaCorrection));
+                        processed.setPixel(i, j, Colorizer.interpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, linearInterpolation, gammaCorrection));
                         break;
                     case INTERPOLATED:
-                        processed.setPixel(i, j, Colorizer.linearInterpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, gammaCorrection));
+                        processed.setPixel(i, j, Colorizer.interpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, linearInterpolation, gammaCorrection));
                         break;
                     case NEGATIVE:
                         processed.setPixel(i, j, Colorizer.packARGB(

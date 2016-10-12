@@ -50,7 +50,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     protected ComplexFractalParams params;
     protected double zoom, base_precision, scale, tolerance, a, b, c;
     int[][] escapedata;
-    double[][] normalized_escapes;
+    double[][] normalized_escapes, miscellaneous;
     private PixelContainer argand;
     private int center_x, center_y, lastConstantIdx, stripe_density, switch_rate;
     private Mode mode;
@@ -110,6 +110,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         }
         return new int[]{start_x, end_x, start_y, end_y};
     }
+    public static Complex[] getBoundary_elements() {
+        return boundary_elements;
+    }
     public boolean isNonPercentileBasedRankOrder() {
         return nonPercentileBasedRankOrder;
     }
@@ -129,6 +132,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         setMaxiter(getImageHeight() * argand.getWidth());
         escapedata = new int[getImageHeight()][getImageWidth()];
         normalized_escapes = new double[getImageHeight()][getImageWidth()];
+        miscellaneous = new double[getImageHeight()][getImageWidth()];
         setVariableCode(variableCode);
         setZoom(zoom);
         setFunction(function);
@@ -140,10 +144,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         setTolerance(tolerance);
         setColor(color);
         lastConstant = new Complex(-1, 0);
-        if ((this.color.getMode() == STRIPE_AVERAGE)
-                || ((!this.color.isExponentialSmoothing()) &&
-                (this.color.isLogIndex() &&
-                        (!(mode == Mode.BUDDHABROT || mode == Mode.MANDELBROT || mode == Mode.RUDY || mode == Mode.RUDYBROT))))) {
+        if ((this.color.getMode() == STRIPE_AVERAGE) || ((!this.color.isExponentialSmoothing()) &&
+                (this.color.isLogIndex() && (!isAnyOf(mode, Mode.BUDDHABROT, Mode.MANDELBROT, Mode.RUDY, Mode.RUDYBROT))))) {
             setStripe_density(this.color.getColor_density());
             this.color.setColor_density(-1);
         } else {
@@ -396,6 +398,26 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 }
             }
         }
+        if (isAnyOf(color.getMode(), CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
+            colorizeWRTDistanceOrAngle();
+        }
+    }
+    public double[][] getMiscellaneous() {
+        return miscellaneous;
+    }
+    void colorizeWRTDistanceOrAngle() {
+        double maxValue = 0;
+        for (int i = 0; i < getImageHeight(); ++i) {
+            for (int j = 0; j < getImageWidth(); ++j) {
+                maxValue = miscellaneous[i][j] > maxValue ? miscellaneous[i][j] : maxValue;
+            }
+        }
+        for (int i = 0; i < getImageHeight(); ++i) {
+            for (int j = 0; j < getImageWidth(); ++j) {
+                argand.setPixel(i, j, color.interpolated(color.getColor(
+                        color.createIndex(abs(miscellaneous[i][j] / maxValue), 0, 1)), normalized_escapes[i][j]));
+            }
+        }
     }
     private void secantGenerate(int start_x, int end_x, int start_y, int end_y, int iterations) {
         @NotNull Stack<Complex> last = new FixedStack<>(iterations + 1);
@@ -403,7 +425,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         @NotNull FunctionEvaluator fe = new FunctionEvaluator(Complex.ZERO.toString(), variableCode, consts, oldvariablecode);
         @NotNull String functionderiv = "";
         @Nullable Complex degree = null;
-        if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+        if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
             @NotNull Function func = new Function(null, variableCode, oldvariablecode, consts).fromString(function);
             function = func.toString();
             functionderiv = func.firstDerivative();
@@ -437,18 +459,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     fed.setZ_value(zd.toString());
                     fed.setOldvalue(ztmpd2.toString());
                 }
                 last.push(z);
                 lastd.push(zd);
                 double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd, ubnd;
-                if (color.getMode() == TRIANGLE_AREA_INEQUALITY ||
-                        color.getMode() == STRIPE_AVERAGE ||
-                        color.getMode() == CURVATURE_AVERAGE_NOABS ||
-                        color.getMode() == CURVATURE_AVERAGE_ABS ||
-                        color.getMode() == DOMAIN_COLORING_FAUX) {
+                if (isAnyOf(color.getMode(), TRIANGLE_AREA_INEQUALITY, STRIPE_AVERAGE, CURVATURE_AVERAGE_NOABS,
+                        CURVATURE_AVERAGE_ABS, DOMAIN_COLORING_FAUX, CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -476,7 +495,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                                     multiply(a,
                                             subtract(z, zold)),
                                     subtract(a, b)));
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         Complex e = fed.evaluate(functionderiv, false);
                         fed.setZ_value(ztmpd2.toString());
                         Complex d = fed.evaluate(functionderiv, false);
@@ -499,6 +518,14 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     } else if (color.getMode() == EPSILON_CROSS) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
+                    } else if (color.getMode() == CUMULATIVE_ANGLE) {
+                        mindist += (ztmp.arg() - z.arg());
+                    } else if (color.getMode() == CUMULATIVE_DISTANCE) {
+                        mindist += (ztmp.modulus() - z.modulus());
+                    } else if (color.getMode() == CUMULATIVE_ANGLE) {
+                        mindist += (ztmp.arg() - z.arg());
+                    } else if (color.getMode() == CUMULATIVE_DISTANCE) {
+                        mindist += (ztmp.modulus() - z.modulus());
                     } else if (color.getMode() == GAUSSIAN_INT_DISTANCE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
@@ -540,7 +567,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS || color.getMode() == CURVATURE_AVERAGE_ABS) {
+                    } else if (isAnyOf(color.getMode(), CURVATURE_AVERAGE_ABS, CURVATURE_AVERAGE_NOABS)) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
@@ -555,7 +582,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     maxdist = (Math.max(distance, maxdist));
                     if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
-                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
+                        if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS)) {
                             synchronized (roots) {
                                 if (indexOfRoot(ztmp) == -1) {
                                     roots.add(ztmp);
@@ -569,7 +596,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
                     fe.setOldvalue(zold.toString());
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(ztmpd.toString());
                         lastd.pop();
@@ -585,10 +612,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     ctr++;
                     maxModulus = z.modulus() > maxModulus ? z.modulus() : maxModulus;
                 }
-                if (color.getMode() == HISTOGRAM || color.getMode() == RANK_ORDER) {
+                if (isAnyOf(color.getMode(), HISTOGRAM, RANK_ORDER)) {
                     histogram[c]++;
                 }
-                if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) && roots.size() == 0) {
+                if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = divide(principallog(argand_map[i][j]), principallog(z)).modulus();
@@ -602,7 +629,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                 }
                 pass[0] = new Complex(z);
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     pass[1] = new Complex(zd);
                     pass[2] = new Complex(centre_offset);
                 }
@@ -741,11 +768,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 double s = 0, mindist = escape_radius, maxdist = mindist, lbnd, ubnd;
-                if (color.getMode() == TRIANGLE_AREA_INEQUALITY ||
-                        color.getMode() == STRIPE_AVERAGE ||
-                        color.getMode() == CURVATURE_AVERAGE_NOABS ||
-                        color.getMode() == CURVATURE_AVERAGE_ABS ||
-                        color.getMode() == DOMAIN_COLORING_FAUX) {
+                if (isAnyOf(color.getMode(), TRIANGLE_AREA_INEQUALITY, STRIPE_AVERAGE, CURVATURE_AVERAGE_NOABS,
+                        CURVATURE_AVERAGE_ABS, DOMAIN_COLORING_FAUX, CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -755,7 +779,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
                 fe.setConstdec(consts);
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     fed.setZ_value(zd.toString());
                     fed.setOldvalue(ztmpd2.toString());
                     fed.setConstdec(consts);
@@ -795,7 +819,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     last.push(z);
                     Complex ztmp = fe.evaluate(function, false);
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         zd = fed.evaluate(functionderiv, false);
                     }
                     last.push(ztmp);
@@ -816,6 +840,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     } else if (color.getMode() == EPSILON_CROSS) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
+                    } else if (color.getMode() == CUMULATIVE_ANGLE) {
+                        mindist += (ztmp.arg() - z.arg());
+                    } else if (color.getMode() == CUMULATIVE_DISTANCE) {
+                        mindist += (ztmp.modulus() - z.modulus());
                     } else if (color.getMode() == GAUSSIAN_INT_DISTANCE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
@@ -857,7 +885,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS || color.getMode() == CURVATURE_AVERAGE_ABS) {
+                    } else if (isAnyOf(color.getMode(), CURVATURE_AVERAGE_ABS, CURVATURE_AVERAGE_NOABS)) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
@@ -880,7 +908,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         fed.setZ_value(zd.toString());
                         lastd.pop();
                         ztmpd2 = (lastd.size() > 0) ? lastd.peek() : ztmpd2;
@@ -894,7 +922,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     ctr++;
                 }
-                if (color.getMode() == HISTOGRAM || color.getMode() == RANK_ORDER) {
+                if (isAnyOf(color.getMode(), HISTOGRAM, RANK_ORDER)) {
                     histogram[c]++;
                 }
                 @NotNull Complex[] pass = new Complex[3];
@@ -906,7 +934,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         pass[m] = m == 0 ? Complex.ZERO : pass[m - 1];
                     }
                 }
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     pass[1] = new Complex(zd);
                     pass[2] = argand_map[i][j];
                 }
@@ -917,7 +945,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     normalized_escapes[i][j] = getNormalized(c, iterations, pass, escape_radius);
                 }
                 int colortmp = getColorTmp(iterations, i, j, escape_radius, mindist, maxdist, c, pass);
-                if (mode == Mode.BUDDHABROT || mode == Mode.RUDYBROT) {
+                if (isAnyOf(mode, Mode.BUDDHABROT, Mode.RUDYBROT)) {
                     argand.setPixel(toCoordinates(z)[1], toCoordinates(z)[0], argand.getPixel(toCoordinates(z)[1], toCoordinates(z)[0]) + colortmp);
                 } else {
                     argand.setPixel(i, j, colortmp);
@@ -934,7 +962,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         function = func.toString();
         degree = func.getDegree();
         functionderiv = func.firstDerivative();
-        if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+        if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
             functionderiv2 = func.secondDerivative();
         }
         /*if (Function.isSpecialFunction(function)) {
@@ -969,7 +997,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         long ctr = 0;
         Complex toadd = Complex.ZERO;
         @NotNull Complex lastConstantBackup = new Complex(getLastConstant());
-        if (mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT) {
+        if (isAnyOf(mode, Mode.JULIA_NOVA, Mode.JULIA_NOVABROT)) {
             toadd = new Complex(getLastConstant());
         }
         function = correctPadding(function, FunctionEvaluator.OPERATIONS);
@@ -979,11 +1007,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int i = start_y; i < end_y; i++) {
             for (int j = start_x; j < end_x; j++) {
                 double s = 0, maxModulus = 0, mindist = 1E10, maxdist = mindist, lbnd, ubnd;
-                if (color.getMode() == TRIANGLE_AREA_INEQUALITY ||
-                        color.getMode() == STRIPE_AVERAGE ||
-                        color.getMode() == CURVATURE_AVERAGE_NOABS ||
-                        color.getMode() == CURVATURE_AVERAGE_ABS ||
-                        color.getMode() == DOMAIN_COLORING_FAUX) {
+                if (isAnyOf(color.getMode(), TRIANGLE_AREA_INEQUALITY, STRIPE_AVERAGE, CURVATURE_AVERAGE_NOABS,
+                        CURVATURE_AVERAGE_ABS, DOMAIN_COLORING_FAUX, CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
                     mindist = 0;
                     maxdist = mindist;
                 }
@@ -992,11 +1017,11 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 int c = 0;
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
-                if (mode == Mode.MANDELBROT_NOVA || mode == Mode.MANDELBROT_NOVABROT) {
+                if (isAnyOf(mode, Mode.MANDELBROT_NOVA, Mode.MANDELBROT_NOVABROT)) {
                     toadd = argand_map[i][j];
                     z = Complex.ZERO;
                 }
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     fed.setZ_value(zd.toString());
                     fed.setOldvalue(ztmpd2.toString());
                 }
@@ -1007,7 +1032,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         return;
                     }
                     checkAndDoPause();
-                    if (mode == Mode.MANDELBROT_NOVA || mode == Mode.MANDELBROT_NOVABROT) {
+                    if (isAnyOf(mode, Mode.MANDELBROT_NOVA, Mode.MANDELBROT_NOVABROT)) {
                         if (mandelbrotToJulia) {
                             if (c % switch_rate == 0) {
                                 useJulia = (!useJulia);
@@ -1019,7 +1044,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                             }
                         }
                     }
-                    if (mode == Mode.JULIA_NOVA || mode == Mode.JULIA_NOVABROT) {
+                    if (isAnyOf(mode, Mode.JULIA_NOVA, Mode.JULIA_NOVABROT)) {
                         if (juliaToMandelbrot) {
                             if (c % switch_rate == 0) {
                                 useMandelbrot = (!useMandelbrot);
@@ -1046,14 +1071,14 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     if (constant != null) {
                         ztmp = add(subtract(z, multiply(constant, divide(fe.evaluate(function, false), fe.evaluate(functionderiv, false)))), toadd);
                         ztmpd = null;
-                        if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                        if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                             ztmpd = add(subtract(zd, multiply(constant, divide(fed.evaluate(functionderiv, false), fed.evaluate(functionderiv2, false)))), toadd);
                         }
                     } else {
                         ztmp = add(subtract(z, divide(fe.evaluate(function, false),
                                 fe.evaluate(functionderiv, false))), toadd);
                         ztmpd = null;
-                        if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                        if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                             ztmpd = add(subtract(zd, divide(fed.evaluate(functionderiv, false),
                                     fed.evaluate(functionderiv2, false))), toadd);
                         }
@@ -1076,6 +1101,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     } else if (color.getMode() == EPSILON_CROSS) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
+                    } else if (color.getMode() == CUMULATIVE_ANGLE) {
+                        mindist += (ztmp.arg() - z.arg());
+                    } else if (color.getMode() == CUMULATIVE_DISTANCE) {
+                        mindist += (ztmp.modulus() - z.modulus());
                     } else if (color.getMode() == GAUSSIAN_INT_DISTANCE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
@@ -1132,7 +1161,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     maxdist = (Math.max(distance, maxdist));
                     if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
-                        if (color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
+                        if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS)) {
                             synchronized (roots) {
                                 if (indexOfRoot(ztmp) == -1) {
                                     roots.add(ztmp);
@@ -1144,7 +1173,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         zd = new Complex(ztmpd);
                         fed.setZ_value(zd.toString());
                         lastd.pop();
@@ -1160,10 +1189,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     ctr++;
                     maxModulus = z.modulus() > maxModulus ? z.modulus() : maxModulus;
                 }
-                if (color.getMode() == HISTOGRAM || color.getMode() == RANK_ORDER) {
+                if (isAnyOf(color.getMode(), HISTOGRAM, RANK_ORDER)) {
                     histogram[c]++;
                 }
-                if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_MODULUS || color.getMode() == NEWTON_NORMALIZED_ITERATIONS) && roots.size() == 0) {
+                if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = divide(principallog(argand_map[i][j]), principallog(z)).modulus();
@@ -1177,7 +1206,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                 }
                 pass[0] = new Complex(z);
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     pass[1] = new Complex(zd);
                     pass[2] = new Complex(centre_offset);
                 }
@@ -1191,7 +1220,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     normalized_escapes[i][j] = c + abs((log(tolerance) - log(d0)) / (log(d1) - log(d0)));
                 }
                 int colortmp = getColorTmp(iterations, i, j, maxModulus, mindist, maxdist, c, pass);
-                if (mode == Mode.NEWTONBROT || mode == Mode.JULIA_NOVABROT || mode == Mode.MANDELBROT_NOVABROT) {
+                if (isAnyOf(mode, Mode.NEWTONBROT, Mode.MANDELBROT_NOVABROT, Mode.JULIA_NOVABROT)) {
                     argand.setPixel(toCoordinates(z)[1], toCoordinates(z)[0], argand.getPixel(toCoordinates(z)[1], toCoordinates(z)[0]) + colortmp);
                 } else {
                     argand.setPixel(i, j, colortmp);
@@ -1217,6 +1246,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             case LINE_TRAP_AVG:
                 colortmp = getColor(i, j, c, pass, (mindist + maxdist) / 2, iterations);
                 break;
+            case CUMULATIVE_ANGLE:
+            case CUMULATIVE_DISTANCE:
+                miscellaneous[i][j] = mindist;
             case EPSILON_CROSS:
             case GAUSSIAN_INT_DISTANCE:
                 colortmp = getColor(i, j, c, pass, mindist, iterations);
@@ -1276,17 +1308,14 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 Complex z = argand_map[i][j], zd = Complex.ONE, ztmp2 = Complex.ZERO, ztmpd2 = Complex.ZERO, z2 = Complex.ZERO;
                 double s = 0, mindist = escape_radius, maxdist = mindist, lbnd, ubnd;
                 int c = 0x0;
-                if (color.getMode() == TRIANGLE_AREA_INEQUALITY ||
-                        color.getMode() == STRIPE_AVERAGE ||
-                        color.getMode() == CURVATURE_AVERAGE_NOABS ||
-                        color.getMode() == CURVATURE_AVERAGE_ABS ||
-                        color.getMode() == DOMAIN_COLORING_FAUX) {
+                if (isAnyOf(color.getMode(), TRIANGLE_AREA_INEQUALITY, STRIPE_AVERAGE, CURVATURE_AVERAGE_NOABS,
+                        CURVATURE_AVERAGE_ABS, DOMAIN_COLORING_FAUX, CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
                     mindist = 0;
                     maxdist = mindist;
                 }
                 fe.setZ_value(z.toString());
                 fe.setOldvalue(ztmp2.toString());
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     fed.setZ_value(zd.toString());
                     fed.setOldvalue(ztmpd2.toString());
                 }
@@ -1324,7 +1353,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     last.push(z);
                     Complex ztmp = fe.evaluate(function, false);
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         zd = fed.evaluate(functionderiv, false);
                     }
                     last.push(ztmp);
@@ -1345,6 +1374,10 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     } else if (color.getMode() == EPSILON_CROSS) {
                         distance = Math.min(abs(ztmp.real()), abs(ztmp.imaginary()));
                         mindist = (Math.min(distance, mindist));
+                    } else if (color.getMode() == CUMULATIVE_ANGLE) {
+                        mindist += (ztmp.arg() - z.arg());
+                    } else if (color.getMode() == CUMULATIVE_DISTANCE) {
+                        mindist += (ztmp.modulus() - z.modulus());
                     } else if (color.getMode() == GAUSSIAN_INT_DISTANCE) {
                         /*long gx = round(ztmp.real() * trap_point.modulus());
                         long gy = round(ztmp.imaginary() * trap_point.modulus());
@@ -1386,7 +1419,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         double value = (zMod - lbnd) / (ubnd - lbnd);
                         //mindist+= (isNaN(value)||isInfinite(value))?zMod-(long)zMod:value;
                         mindist += (isNaN(value)) ? 0 : ((isInfinite(value)) ? 1 : value);
-                    } else if (color.getMode() == CURVATURE_AVERAGE_NOABS || color.getMode() == CURVATURE_AVERAGE_ABS) {
+                    } else if (isAnyOf(color.getMode(), CURVATURE_AVERAGE_ABS, CURVATURE_AVERAGE_NOABS)) {
                         if (ztmp2.equals(Complex.ZERO) && z2.equals(Complex.ZERO)) {
                             mindist += PI / 2;
                         } else {
@@ -1409,7 +1442,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     z = new Complex(ztmp);
                     fe.setZ_value(z.toString());
-                    if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                    if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                         fed.setZ_value(zd.toString());
                         lastd.pop();
                         ztmpd2 = (lastd.size() > 0) ? lastd.peek() : ztmpd2;
@@ -1423,7 +1456,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     ctr++;
                 }
-                if (color.getMode() == HISTOGRAM || color.getMode() == RANK_ORDER) {
+                if (isAnyOf(color.getMode(), HISTOGRAM, RANK_ORDER)) {
                     histogram[c]++;
                 }
                 @NotNull Complex[] pass = new Complex[3];
@@ -1435,7 +1468,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         pass[m] = m == 0 ? Complex.ZERO : pass[m - 1];
                     }
                 }
-                if (color.getMode() == DISTANCE_ESTIMATION_GRAYSCALE || color.getMode() == DISTANCE_ESTIMATION_COLOR || color.getMode() == DISTANCE_ESTIMATION_2C_OR_BW) {
+                if (isAnyOf(color.getMode(), DISTANCE_ESTIMATION_2C_OR_BW, DISTANCE_ESTIMATION_COLOR, DISTANCE_ESTIMATION_GRAYSCALE)) {
                     pass[1] = new Complex(zd);
                     pass[2] = new Complex(centre_offset);
                 }
@@ -1468,14 +1501,14 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             } else {
                 renormalized = val + 1 + (log(log(abs(escape)) / log(z.modulus())) / log(degree));
                 // renormalized = val - (log(log(z.modulus() / log(escape))) / log(degree));
-                if (renormalized - (long) renormalized == 0) {
+                /*if (renormalized - (long) renormalized == 0) {
                     renormalized += ((double) val / iterations);
-                }
+                }*/
             }
         } else {
             renormalized = val + (0.5 + 0.5 * (sin(z.arg()) * stripe_density));
         }
-        return color.getFractionalCount(val, isNaN(renormalized) ? 0 : (isInfinite(renormalized) ? 1 : renormalized));
+        return color.getFractionalCount(val, (isNaN(renormalized) ? 0 : (isInfinite(renormalized) ? 1 : renormalized)) / iterations);
     }
     public int[] getHistogram() {
         return histogram;
@@ -1595,6 +1628,8 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 break;
             case HISTOGRAM:
             case RANK_ORDER:
+            case CUMULATIVE_ANGLE:
+            case CUMULATIVE_DISTANCE:
             case ASCII_ART_NUMERIC:
             case ASCII_ART_CHARACTER:
                 colortmp = 0xff000000;//Don't need to deal with this here, it's post-calculated

@@ -108,9 +108,9 @@ public class Main {
                             } else {
                                 if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
                                     ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(
-                                            params.getPostProcessMode(),
-                                            generator.getNormalized_escapes(),
+                                            params.getPostProcessMode(), generator.getNormalized_escapes(),
                                             generator.getColor().getByParts(),
+                                            generator.getColor().isLinearInterpolation(),
                                             generator.getColor().isGammaCorrection())), "png", outputFile);
                                 } else {
                                     ImageIO.write(ImageConverter.toImage(generator.getArgand()), "png", outputFile);
@@ -130,7 +130,7 @@ public class Main {
                         threaded.generate();
                         @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                         if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                            ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
+                            ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, true, false)), "png", outputFile);
                         } else {
                             ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                         }
@@ -155,7 +155,7 @@ public class Main {
                             for (int j = 0; j < frames.getNumFrames(); j++) {
                                 @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + "/Frame_" + j + ".png");
                                 if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                    ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
+                                    ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, true, false)), "png", outputFile);
                                 } else {
                                     ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                                 }
@@ -163,7 +163,7 @@ public class Main {
                         } else {
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getPlane().getPostProcessed(params.getPostProcessMode(), null, 0, true, false)), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getPlane()), "png", outputFile);
                             }
@@ -187,7 +187,7 @@ public class Main {
                             for (int j = 0; j < frames.getNumFrames(); j++) {
                                 @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + "/Frame_" + j + ".png");
                                 if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                    ImageIO.write(ImageConverter.toImage(frames.getFrame(j).getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
+                                    ImageIO.write(ImageConverter.toImage(frames.getFrame(j).getPostProcessed(params.getPostProcessMode(), null, 0, true, false)), "png", outputFile);
                                 } else {
                                     ImageIO.write(ImageConverter.toImage(frames.getFrame(j)), "png", outputFile);
                                 }
@@ -197,7 +197,7 @@ public class Main {
                             generator.drawState(generator.getParams().getDepth() - 1);
                             @NotNull File outputFile = new File(args[1] + "/Fractal_" + i + ".png");
                             if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
-                                ImageIO.write(ImageConverter.toImage(generator.getCanvas().getPostProcessed(params.getPostProcessMode(), null, 0, false)), "png", outputFile);
+                                ImageIO.write(ImageConverter.toImage(generator.getCanvas().getPostProcessed(params.getPostProcessMode(), null, 0, true, false)), "png", outputFile);
                             } else {
                                 ImageIO.write(ImageConverter.toImage(generator.getCanvas()), "png", outputFile);
                             }

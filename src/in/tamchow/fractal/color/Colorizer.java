@@ -287,7 +287,8 @@ public final class Colorizer implements Serializable {
         return splineInterpolated(fromIndex, toIndex, bias);
     }
     public double getFractionalCount(int count, double fraction) {
-        return scale * (count + weight * fraction);
+        double u = scale * (count + weight * fraction * num_colors);
+        return u - (long) u;
     }
     public double getScale() {
         return scale;

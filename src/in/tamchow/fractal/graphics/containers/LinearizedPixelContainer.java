@@ -111,7 +111,7 @@ public final class LinearizedPixelContainer extends PixelContainer implements Se
     }
     @NotNull
     @Override
-    public LinearizedPixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean gammaCorrection) {
-        return new LinearizedPixelContainer(toPixelContainer().getPostProcessed(mode, biases, byParts, gammaCorrection));
+    public LinearizedPixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean linearInterpolation, boolean gammaCorrection) {
+        return new LinearizedPixelContainer(toPixelContainer().getPostProcessed(mode, biases, byParts, linearInterpolation, gammaCorrection));
     }
 }

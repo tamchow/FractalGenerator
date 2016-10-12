@@ -7,6 +7,7 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.math.complex.Complex;
 
+import static in.tamchow.fractal.color.Colors.MODE.*;
 import static in.tamchow.fractal.helpers.math.MathUtils.*;
 /**
  * Multithreading for the fractal generator
@@ -76,18 +77,18 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
     public void finalizeGeneration() {
         @NotNull int[] histogram = new int[(int) iterations + 1];
         int total = 0;
-        if (master.color.getMode() == Colors.MODE.HISTOGRAM || master.color.getMode() == Colors.MODE.RANK_ORDER) {
+        if (isAnyOf(master.getColor().getMode(), HISTOGRAM, RANK_ORDER)) {
             for (@NotNull PartComplexFractalData partImage : buffer) {
                 for (int i = 0; i < histogram.length; i++) {
                     histogram[i] += partImage.histogram[i];
                 }
             }
-        }
-        for (int i = 0; i < iterations; i++) {
-            total += histogram[i];
-        }
-        if (master.color.getMode() == Colors.MODE.RANK_ORDER) {
-            System.arraycopy(rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
+            for (int i = 0; i < iterations; i++) {
+                total += histogram[i];
+            }
+            if (master.color.getMode() == RANK_ORDER) {
+                System.arraycopy(rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
+            }
         }
         //double scaling = master.base_precision * Math.pow(master.zoom, master.zoom_factor);
         for (@Nullable PartComplexFractalData partImage : buffer) {
@@ -98,18 +99,21 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                 for (int j = partImage.startx; j < partImage.endx; j++) {
                     master.escapedata[i][j] = partImage.escapedata[i][j];
                     master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
-                    double normalized_count = master.normalized_escapes[i][j];
-                    int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
-                    if (pj < 0) {
-                        pi = (i == 0) ? i : i - 1;
-                        pj = master.escapedata[pi].length - 1;
+                    if (isAnyOf(master.getColor().getMode(), CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
+                        master.miscellaneous[i][j] = partImage.miscellaneous[i][j];
                     }
-                    if (nj >= master.escapedata[i].length) {
-                        ni = (i == master.escapedata.length - 1) ? i : i + 1;
-                        nj = 0;
-                    }
-                    int ep = master.escapedata[pi][pj], en = master.escapedata[ni][nj], e = master.escapedata[i][j];
-                    if (master.color.getMode() == Colors.MODE.HISTOGRAM || master.color.getMode() == Colors.MODE.RANK_ORDER) {
+                    if (isAnyOf(master.getColor().getMode(), HISTOGRAM, RANK_ORDER)) {
+                        double normalized_count = master.normalized_escapes[i][j];
+                        int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
+                        if (pj < 0) {
+                            pi = (i == 0) ? i : i - 1;
+                            pj = master.escapedata[pi].length - 1;
+                        }
+                        if (nj >= master.escapedata[i].length) {
+                            ni = (i == master.escapedata.length - 1) ? i : i + 1;
+                            nj = 0;
+                        }
+                        int ep = master.escapedata[pi][pj], en = master.escapedata[ni][nj], e = master.escapedata[i][j];
                         if (master.color.getMode() == Colors.MODE.RANK_ORDER) {
                             int idxp = master.color.createIndex(percentileOf(ep, histogram), 0, 1);
                             int idx = master.color.createIndex(percentileOf(e, histogram), 0, 1);
@@ -156,11 +160,15 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                             }
                         }
                         master.getArgand().setPixel(i, j, colortmp);
-                    } else {
-                        master.getArgand().setPixel(i, j, partImage.pixelContainer.getPixel(i, j));
+                    } else if (!isAnyOf(master.getColor().getMode(), CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
+                        master.getArgand().setPixel(i, j,
+                                partImage.pixelContainer.getPixel(i, j));
                     }
                 }
             }
+        }
+        if (isAnyOf(master.getColor().getMode(), CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
+            master.colorizeWRTDistanceOrAngle();
         }
     }
     @Override
@@ -193,8 +201,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
         }
         @Override
         public void onCompletion() {
-            if (copyOfMaster.color.getMode() == Colors.MODE.HISTOGRAM || copyOfMaster.color.getMode() == Colors.MODE.RANK_ORDER) {
+            if (isAnyOf(copyOfMaster.getColor().getMode(), Colors.MODE.HISTOGRAM, Colors.MODE.RANK_ORDER)) {
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
+            } else if (isAnyOf(copyOfMaster.getColor().getMode(), Colors.MODE.CUMULATIVE_DISTANCE, Colors.MODE.CUMULATIVE_ANGLE)) {
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getMiscellaneous(), startx, endx, starty, endy);
             } else {
                 buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new PixelContainer(copyOfMaster.getArgand()), startx, endx, starty, endy);
             }

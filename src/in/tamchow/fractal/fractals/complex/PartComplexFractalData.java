@@ -9,7 +9,7 @@ import java.io.Serializable;
 public final class PartComplexFractalData implements Serializable {
     PixelContainer pixelContainer;
     int[][] escapedata;
-    double[][] normalized_escapes;
+    double[][] normalized_escapes, miscellaneous;
     int[] histogram;
     int startx, endx, starty, endy;
     public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, @NotNull PixelContainer pixelContainer, int startx, int endx, int starty, int endy) {
@@ -19,6 +19,17 @@ public final class PartComplexFractalData implements Serializable {
         this.endy = endy;
         initData(escapedata, normalized_escapes);
         this.pixelContainer = new PixelContainer(pixelContainer);
+    }
+    public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, @NotNull double[][] miscellaneous, int startx, int endx, int starty, int endy) {
+        this.startx = startx;
+        this.endx = endx;
+        this.starty = starty;
+        this.endy = endy;
+        initData(escapedata, normalized_escapes);
+        this.miscellaneous = new double[miscellaneous.length][miscellaneous[0].length];
+        for (int i = 0; i < miscellaneous.length; i++) {
+            System.arraycopy(miscellaneous[i], 0, this.miscellaneous[i], 0, this.miscellaneous[i].length);
+        }
     }
     public PartComplexFractalData(@NotNull int[][] escapedata, @NotNull double[][] normalized_escapes, @NotNull int[] histogram, int startx, int endx, int starty, int endy) {
         this.startx = startx;

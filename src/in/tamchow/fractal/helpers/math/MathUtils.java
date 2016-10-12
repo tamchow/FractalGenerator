@@ -124,6 +124,12 @@ public final class MathUtils {
         @NotNull int[] yx = imageBounds(y, x, width, height);
         return yx[0] * width + yx[1];
     }
+    public static <T> boolean isAnyOf(T item, T... options) {
+        for (T option : options) {
+            if (item.equals(option)) return true;
+        }
+        return false;
+    }
     public static double clamp(double val, double min, double max) {
         return (val < min) ? min : ((val > max) ? max : val);
     }
