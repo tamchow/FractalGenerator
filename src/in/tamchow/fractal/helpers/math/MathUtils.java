@@ -6,6 +6,8 @@ import in.tamchow.fractal.math.complex.Complex;
 import in.tamchow.fractal.math.matrix.Matrix;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Function;
 
 import static in.tamchow.fractal.math.matrix.MatrixOperations.*;
 /**
@@ -124,11 +126,119 @@ public final class MathUtils {
         @NotNull int[] yx = imageBounds(y, x, width, height);
         return yx[0] * width + yx[1];
     }
+    @SafeVarargs
     public static <T> boolean isAnyOf(T item, T... options) {
         for (T option : options) {
             if (item.equals(option)) return true;
         }
         return false;
+    }
+    public static Function<Double, Double> createInterpolant(final double[] xs, final double[] ys, ExtrapolationType extrapolationType) {
+        int length = xs.length;
+        if (length != ys.length) {
+            throw new IllegalArgumentException(
+                    String.format("length of xs (%d) must be equal to length of ys (%d)", length, ys.length));
+        } else if (length == 0) {
+            return x -> 0.0;
+        } else if (length == 1) {
+            return x -> ys[0];
+        } else {
+            Integer[] indices = new Integer[length];
+            for (int i = 0; i < length; i++) {
+                indices[i] = i;
+            }
+            Arrays.sort(indices, (a, b) -> xs[a] < xs[b] ? -1 : 1);
+            double[] newXs = new double[xs.length], newYs = new double[ys.length];
+            for (int i = 0; i < length; i++) {
+                newXs[i] = xs[indices[i]];
+                newYs[i] = ys[indices[i]];
+            }
+            // Get consecutive differences and slopes
+            double[] dxs = new double[length - 1], ms = new double[length - 1];
+            for (int i = 0; i < length - 1; i++) {
+                double dx = newXs[i + 1] - newXs[i], dy = newYs[i + 1] - newYs[i];
+                dxs[i] = dx;
+                ms[i] = dy / dx;
+            }
+            // Get degree-1 coefficients
+            double[] c1s = new double[dxs.length + 1];
+            c1s[0] = ms[0];
+            for (int i = 0; i < dxs.length - 1; i++) {
+                double m = ms[i], mNext = ms[i + 1];
+                if (m * mNext <= 0) {
+                    c1s[i + 1] = 0;
+                } else {
+                    double dx_ = dxs[i], dxNext = dxs[i + 1], common = dx_ + dxNext;
+                    c1s[i + 1] = (3 * common / ((common + dxNext) / m + (common + dx_) / mNext));
+                }
+            }
+            c1s[c1s.length - 1] = (ms[ms.length - 1]);
+            // Get degree-2 and degree-3 coefficients
+            double[] c2s = new double[c1s.length - 1], c3s = new double[c1s.length - 1];
+            for (int i = 0; i < c1s.length - 1; i++) {
+                double c1 = c1s[i], m_ = ms[i], invDx = 1 / dxs[i], common_ = c1 + c1s[i + 1] - m_ - m_;
+                c2s[i] = (m_ - c1 - common_) * invDx;
+                c3s[i] = common_ * invDx * invDx;
+            }
+            // Return interpolant function
+            Function<Double, Double> interpolant = (x) -> {
+                // The rightmost point in the dataset should give an exact result
+                int i = newXs.length - 1;
+                if (x == newXs[i]) {
+                    return newYs[i];
+                }
+                // Search for the interval x is in, returning the corresponding y if x is one of the original newXs
+                int low = 0, mid, high = c3s.length - 1;
+                while (low <= high) {
+                    mid = low + ((high - low) / 2);
+                    double xHere = newXs[mid];
+                    if (xHere < x) {
+                        low = mid + 1;
+                    } else if (xHere > x) {
+                        high = mid - 1;
+                    } else {
+                        return newYs[mid];
+                    }
+                }
+                i = Math.max(0, high);
+                // Interpolate
+                double diff = x - newXs[i], diffSq = diff * diff;
+                return newYs[i] + c1s[i] * diff + c2s[i] * diffSq + c3s[i] * diff * diffSq;
+            };
+            final double xMin = arrayMinOrMax(newXs, false), xMax = arrayMinOrMax(newXs, true),
+                    yMin = arrayMinOrMax(newYs, false), yMax = arrayMinOrMax(newYs, true);
+            return (x) -> {
+                if (x >= xMin && x <= xMax) {
+                    return interpolant.apply(x);
+                } else {
+                    switch (extrapolationType) {
+                        case NONE:
+                            return interpolant.apply(x);
+                        case LINEAR:
+                            return yMin + (x - xMin) / (xMax - xMin) * yMax;
+                        case CONSTANT:
+                            return (x < xMin) ? yMin : yMax;
+                        default:
+                            return Double.NaN;
+                    }
+                }
+            };
+        }
+    }
+    public static double arrayMinOrMax(final double[] in, final boolean max) {
+        double minOrMax = in[0];
+        for (double val : in) {
+            if (max) {
+                if (minOrMax < val) {
+                    minOrMax = val;
+                }
+            } else {
+                if (minOrMax > val) {
+                    minOrMax = val;
+                }
+            }
+        }
+        return minOrMax;
     }
     public static double clamp(double val, double min, double max) {
         return (val < min) ? min : ((val > max) ? max : val);
@@ -378,6 +488,9 @@ public final class MathUtils {
         }// recursively sort the 2 subparts
         if (low < j) quickSort(arr, low, j);
         if (high > i) quickSort(arr, i, high);
+    }
+    public enum ExtrapolationType {
+        LINEAR, CONSTANT, NONE
     }
     private static class FactorData {
         int a, b, sum;

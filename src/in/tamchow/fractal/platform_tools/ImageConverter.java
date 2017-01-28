@@ -1,5 +1,6 @@
 package in.tamchow.fractal.platform_tools;
 import in.tamchow.fractal.graphics.containers.Animation;
+import in.tamchow.fractal.graphics.containers.LinearizedPixelContainer;
 import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.strings.StringManipulator;
@@ -26,14 +27,7 @@ public class ImageConverter {
     @NotNull
     public static BufferedImage toImage(@NotNull PixelContainer img, int startx, int starty, int endx, int endy) {
         @NotNull BufferedImage buf = new BufferedImage(endx - startx, endy - starty, BufferedImage.TYPE_INT_ARGB);
-        for (int i = 0; i < buf.getHeight(); ++i) {
-            for (int j = 0; j < buf.getWidth(); ++j) {
-                if ((j + startx) > endx || (i + starty) > endy) {
-                    break;
-                }
-                buf.setRGB(j, i, img.getPixel(starty + i, startx + j));
-            }
-        }
+        buf.setRGB(startx, starty, buf.getWidth(), buf.getHeight(), img.getPixels(), 0, buf.getWidth());
         return buf;
     }
     @NotNull
@@ -52,12 +46,8 @@ public class ImageConverter {
     public static PixelContainer toPixelContainer(Image img, int startx, int starty, int endx, int endy) {
         @NotNull BufferedImage buf = new BufferedImage(endx - startx, endy - starty, BufferedImage.TYPE_INT_ARGB);
         buf.getGraphics().drawImage(img, 0, 0, buf.getWidth(), buf.getHeight(), startx, starty, endx, endy, null);
-        @NotNull PixelContainer pixelContainer = new PixelContainer(buf.getWidth(), buf.getHeight());
-        for (int i = 0; i < pixelContainer.getHeight(); ++i) {
-            for (int j = 0; j < pixelContainer.getWidth(); ++j) {
-                pixelContainer.setPixel(i, j, buf.getRGB(j, i));
-            }
-        }
+        @NotNull PixelContainer pixelContainer = new LinearizedPixelContainer(buf.getWidth(), buf.getHeight());
+        pixelContainer.setPixdata(buf.getRGB(0, 0, buf.getWidth(), buf.getHeight(), null, 0, buf.getWidth()), buf.getWidth());
         return pixelContainer;
     }
     @NotNull

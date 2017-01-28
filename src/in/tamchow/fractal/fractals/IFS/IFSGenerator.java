@@ -1,5 +1,6 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
@@ -341,7 +342,7 @@ public final class IFSGenerator extends PixelFractalGenerator {
                     Colorizer.interpolated(
                             plane.getPixel(coord[1], coord[0]), params.getColors()[index],
                             /*Use default (proper) linear interpolation*/
-                            params.getWeights()[index], 0, true, false));
+                            params.getWeights()[index], 0, InterpolationType.LINEAR, false));
             weightDistribution[coord[1]][coord[0]] = params.getWeights()[index];
         }
         @NotNull Matrix point = modifyPoint(this.point, index);

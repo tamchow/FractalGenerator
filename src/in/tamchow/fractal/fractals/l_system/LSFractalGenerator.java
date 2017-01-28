@@ -74,20 +74,6 @@ public class LSFractalGenerator extends FractalGenerator {
                         //Use context-free behaviour
                         builder.append(getDefaultTransformation(evolutions));
                     }
-                    /*UnitGrammar.TransformRule evolution = evolutions.transformRules[getTransformRuleIndex(evolutions)];
-                    if (evolution.isContextSensitive()) {
-                        if ((evolution.left == null || evolution.left.equals(leftSymbol)) &&
-                                (evolution.right == null || evolution.right.equals(rightSymbol))) {
-                            //Match - use the transformation code
-                            builder.append(evolution.transformTo);
-                        }else {
-                            //Not Match - use identity transformation
-                            builder.append(builder.append(evolutions.code));
-                        }
-                    } else {
-                        builder.append(evolution.transformTo);
-                    }
-                    generations[k] = StringManipulator.replace(generations[i], toEvolve, evolution.transformTo);*/
                 }
                 generations[k] = builder.toString();
                 publishprogress(i + 1);
@@ -109,7 +95,7 @@ public class LSFractalGenerator extends FractalGenerator {
                 rules.add(evolution);
             }
         }
-        if (rules.size() > 0) {
+        if (!rules.isEmpty()) {
             return evolutions.transformRules[getTransformRuleIndex(
                     rules.toArray(new UnitGrammar.TransformRule[rules.size()]), evolutions)];
         }
@@ -119,11 +105,8 @@ public class LSFractalGenerator extends FractalGenerator {
         int index;
         if (evolutions.length == 0) {
             throw new LSGrammarException("Malformed Transformation Rule.");
-        } else if (evolutions.length == 1 && evolutions[0].isDeterministic()) {
+        } else if (evolutions.length == 1) {
             index = 0;
-        } else if (evolutions.length == 1 && (!evolutions[0].isDeterministic())) {
-            index = 0;
-            //throw new LSGrammarException("Malformed Transformation Rule.");
         } else {
             index = boundsProtected(weightedRandom(grammar.getWeights()), evolutions.length);
         }

@@ -1,13 +1,14 @@
 package in.tamchow.fractal.graphics.painting;
 import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
+import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.graphics.containers.PixelContainer;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * Line Drawing Utilities for {@link in.tamchow.fractal.graphics.containers.PixelContainer}
  *
  * @see in.tamchow.fractal.graphics.containers.PixelContainer
- * @see Colorizer#interpolated(int, int, double, int, boolean, boolean)
+ * @see Colorizer#interpolated(int, int, double, int, InterpolationType, boolean)
  * @see in.tamchow.fractal.color.Colors.BASE_COLORS
  */
 public final class DrawingUtilities {
@@ -21,7 +22,8 @@ public final class DrawingUtilities {
      * @param to_y ending abscissa
      * @param color line pixel color
      */
-    public static void drawLine(@NotNull PixelContainer canvas, double from_x, double from_y, double to_x, double to_y, int color) {
+    public static void drawLine(@NotNull PixelContainer canvas, double from_x, double from_y,
+                                double to_x, double to_y, int color) {
         boolean steep = Math.abs(to_y - from_y) > Math.abs(to_x - from_x);
         if (steep) {
             double t = from_x;
@@ -83,7 +85,8 @@ public final class DrawingUtilities {
     }
     private static void plot(@NotNull PixelContainer canvas, int color, double x, double y, double brightness) {
         canvas.setPixel(Math.round((float) y), Math.round((float) x),
-                Colorizer.interpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0, true, false));
+                Colorizer.interpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0, InterpolationType.LINEAR,
+                        false));
     }
     private static double fpart(double x) {
         return x - Math.floor(x);
@@ -174,10 +177,12 @@ public final class DrawingUtilities {
      * @param thickness the thickness of the border
      * @param color line pixel color
      */
-    public static void drawRect(@NotNull PixelContainer canvas, int startx, int starty, int endx, int endy, int thickness, int color) {
+    public static void drawRect(@NotNull PixelContainer canvas, int startx, int starty,
+                                int endx, int endy, int thickness, int color) {
         int oldcolor = canvas.getPixel((endy - starty) / 2, (endx - startx) / 2);
         fillRect(canvas, startx, starty, endx, endy, color);
-        fillRect(canvas, startx + thickness, starty + thickness, endx - thickness, endy - thickness, oldcolor);
+        fillRect(canvas, startx + thickness, starty + thickness,
+                endx - thickness, endy - thickness, oldcolor);
     }
     /**
      * Color-filled rectangle

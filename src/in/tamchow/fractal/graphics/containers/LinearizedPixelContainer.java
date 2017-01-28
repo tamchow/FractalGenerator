@@ -1,4 +1,5 @@
 package in.tamchow.fractal.graphics.containers;
+import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.math.MathUtils;
 
@@ -111,7 +112,7 @@ public final class LinearizedPixelContainer extends PixelContainer implements Se
     }
     @NotNull
     @Override
-    public LinearizedPixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean linearInterpolation, boolean gammaCorrection) {
-        return new LinearizedPixelContainer(toPixelContainer().getPostProcessed(mode, biases, byParts, linearInterpolation, gammaCorrection));
+    public LinearizedPixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, InterpolationType interpolationType, boolean gammaCorrection) {
+        return new LinearizedPixelContainer(toPixelContainer().getPostProcessed(mode, biases, byParts, interpolationType, gammaCorrection));
     }
 }

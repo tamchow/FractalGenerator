@@ -178,7 +178,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             colorIfMore = color.getPalette()[0];
             colorIfLess = color.getPalette()[1];
         }
-        if ((color.getMode() == NEWTON_CLASSIC || color.getMode() == NEWTON_NORMALIZED_ITERATIONS || color.getMode() == NEWTON_NORMALIZED_MODULUS) && (color.getByParts() < 0)) {
+        if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_MODULUS) && (color.getByParts() < 0)) {
             newtonTinting = true;
             color.setByParts(0);
         }
@@ -359,18 +359,25 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                             idxn = color.createIndex(((double) indexOf(histogram, en)) / iterations, 0, 1);
                         }
                         int idxMin = (idxp < idxn) ? idxp : idxn, idxMax = (idxp > idxn) ? idxp : idxn;
-                        if (color.isLinearInterpolation()) {
-                            colortmp = color.interpolated(idxp, idx, idxn, normalized_count - (long) normalized_count);
-                        } else {
-                            if (color.isModifierEnabled()) {
-                                colortmp = color.interpolated(idx, idxMin, idxMax, normalized_count - (long) normalized_count);
-                            } else {
-                                if (color.isLogIndex()) {
-                                    colortmp = color.interpolated(idxMin, idx, normalized_count - (long) normalized_count);
+                        switch (color.getInterpolationType()) {
+                            case LINEAR:
+                                colortmp = color.interpolated(idxp, idx, idxn, normalized_count - (long) normalized_count);
+                                break;
+                            case CATMULL_ROM_SPLINE: {
+                                if (color.isModifierEnabled()) {
+                                    colortmp = color.interpolated(idx, idxMin, idxMax, normalized_count - (long) normalized_count);
                                 } else {
-                                    colortmp = color.interpolated(idx, idxMax, normalized_count - (long) normalized_count);
+                                    if (color.isLogIndex()) {
+                                        colortmp = color.interpolated(idxMin, idx, normalized_count - (long) normalized_count);
+                                    } else {
+                                        colortmp = color.interpolated(idx, idxMax, normalized_count - (long) normalized_count);
+                                    }
                                 }
                             }
+                            break;
+                            default:
+                                //TODO: Implement properly
+                                colortmp = Integer.MIN_VALUE;
                         }
                     } else {
                         double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
@@ -383,15 +390,21 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                         for (int k = 0; k < ep; k += 1) {
                             hue3 += ((double) histogram[k]) / total;
                         }
-                        if (color.isLinearInterpolation()) {
-                            colortmp = color.interpolated(color.createIndex(hue2, 0, 1), color.createIndex(hue, 0, 1), color.createIndex(hue3, 0, 1), normalized_count - (long) normalized_count);
-                        } else {
-                            int idxp = color.createIndex(hue3, 0, 1), idxn = color.createIndex(hue2, 0, 1);
-                            if (color.isModifierEnabled()) {
-                                colortmp = color.interpolated(color.createIndex(hue, 0, 1), Math.max(idxp, idxn), normalized_count - (long) normalized_count);
-                            } else {
-                                colortmp = color.interpolated(Math.min(idxp, idxn), color.createIndex(hue, 0, 1), normalized_count - (long) normalized_count);
-                            }
+                        switch (color.getInterpolationType()) {
+                            case LINEAR:
+                                colortmp = color.interpolated(color.createIndex(hue2, 0, 1), color.createIndex(hue, 0, 1), color.createIndex(hue3, 0, 1), normalized_count - (long) normalized_count);
+                                break;
+                            case CATMULL_ROM_SPLINE:
+                                int idxp = color.createIndex(hue3, 0, 1), idxn = color.createIndex(hue2, 0, 1);
+                                if (color.isModifierEnabled()) {
+                                    colortmp = color.interpolated(color.createIndex(hue, 0, 1), Math.max(idxp, idxn), normalized_count - (long) normalized_count);
+                                } else {
+                                    colortmp = color.interpolated(Math.min(idxp, idxn), color.createIndex(hue, 0, 1), normalized_count - (long) normalized_count);
+                                }
+                                break;
+                            default:
+                                //TODO: Implement properly
+                                colortmp = Integer.MIN_VALUE;
                         }
                     }
                     argand.setPixel(i, j, colortmp);
@@ -416,6 +429,15 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
             for (int j = 0; j < getImageWidth(); ++j) {
                 argand.setPixel(i, j, color.interpolated(color.getColor(
                         color.createIndex(abs(miscellaneous[i][j] / maxValue), 0, 1)), normalized_escapes[i][j]));
+            }
+        }
+    }
+    private void addRoot(Complex ztmp) {
+        if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_MODULUS)) {
+            synchronized (roots) {
+                if (indexOfRoot(ztmp) == -1) {
+                    roots.add(ztmp);
+                }
             }
         }
     }
@@ -582,13 +604,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     maxdist = (Math.max(distance, maxdist));
                     if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
-                        if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS)) {
-                            synchronized (roots) {
-                                if (indexOfRoot(ztmp) == -1) {
-                                    roots.add(ztmp);
-                                }
-                            }
-                        }
+                        addRoot(ztmp);
                         //c = iterations;
                         break;
                     }
@@ -615,7 +631,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 if (isAnyOf(color.getMode(), HISTOGRAM, RANK_ORDER)) {
                     histogram[c]++;
                 }
-                if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS) && roots.size() == 0) {
+                if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_MODULUS) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = divide(principallog(argand_map[i][j]), principallog(z)).modulus();
@@ -1161,13 +1177,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     }
                     maxdist = (Math.max(distance, maxdist));
                     if (fe.evaluate(function, ztmp).modulus() <= tolerance || distance(z, ztmp) <= tolerance) {
-                        if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS)) {
-                            synchronized (roots) {
-                                if (indexOfRoot(ztmp) == -1) {
-                                    roots.add(ztmp);
-                                }
-                            }
-                        }
+                        addRoot(ztmp);
                         //c = iterations;
                         break;
                     }
@@ -1192,7 +1202,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 if (isAnyOf(color.getMode(), HISTOGRAM, RANK_ORDER)) {
                     histogram[c]++;
                 }
-                if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_ITERATIONS, NEWTON_NORMALIZED_MODULUS) && roots.size() == 0) {
+                if (isAnyOf(color.getMode(), NEWTON_CLASSIC, NEWTON_NORMALIZED_MODULUS) && roots.size() == 0) {
                     throw new UnsupportedOperationException("Could not find a root in given iteration limit. Try a higher iteration limit.");
                 }
                 //double root_reached = divide(principallog(argand_map[i][j]), principallog(z)).modulus();
@@ -1523,7 +1533,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         if (iterations <= 0) {
             throw new IllegalArgumentException("Illegal maximum iteration count : " + iterations);
         }
-        int colortmp, colortmp1, color1, color2, color3, index;
+        int colortmp, colortmp1, color1, color2, color3, index = 0, density = color.getColor_density();
         double renormalized, lbnd = 0.0, ubnd = 1.0, calc, scaling = base_precision * zoom, smoothcount;
         renormalized = normalized_escapes[i][j];
         smoothcount = renormalized;
@@ -1635,60 +1645,24 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                 colortmp = 0xff000000;//Don't need to deal with this here, it's post-calculated
                 break;
             case NEWTON_NORMALIZED_MODULUS:
-            case NEWTON_NORMALIZED_ITERATIONS:
+                if (color.isLogIndex()) {
+                    density = Math.round((float) realData);
+                } else {
+                    density *= Math.round((float) val / iterations);
+                }
             case NEWTON_CLASSIC:
-                if (color.isModifierEnabled()) {
-                    int color_density_backup = color.getColor_density();
-                    if (color.getMode() == NEWTON_NORMALIZED_ITERATIONS) {
-                        color.changeColorDensity(Math.round(((float) val / iterations) * color_density_backup));
-                    } else if (color.getMode() == NEWTON_NORMALIZED_MODULUS) {
-                        color.changeColorDensity(Math.round((float) realData));
-                    }
-                    index = color.createIndexSimple(closestRootIndex(last[0]), 0, roots.size());
-                    int preTintColor = color.getColor(index);
+                index = color.createIndexSimple(closestRootIndex(last[0]), 0.0, roots.size(), density);
+                int preTintColor = color.getColor(index);
+                if (newtonTinting) {
                     color1 = color.getTint(preTintColor, ((double) val / iterations));
                     color2 = color.getTint(preTintColor, ((double) nextVal / iterations));
                     color3 = color.getTint(preTintColor, ((double) previousVal / iterations));
-                    colortmp = color.interpolated(color1, color2, color3, interpolation);
-                    color.setColor_density(color_density_backup);
                 } else {
-                    if (color.getMode() == Colors.MODE.NEWTON_NORMALIZED_MODULUS) {
-                        if (newtonTinting) {
-                            color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) realData)) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) previousVal / iterations));
-                        } else {
-                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) realData)) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) previousVal / iterations));
-                        }
-                        colortmp = color.interpolated(color1, color2, color3, interpolation);
-                    } else if (color.getMode() == Colors.MODE.NEWTON_NORMALIZED_ITERATIONS) {
-                        if (newtonTinting) {
-                            color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) realData)) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) previousVal / iterations));
-                        } else {
-                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) realData)) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * (int) realData) % color.getNum_colors()), ((double) previousVal / iterations));
-                        }
-                        colortmp = color.interpolated(color1, color2, color3, interpolation);
-                    } else if (color.getMode() == Colors.MODE.NEWTON_CLASSIC) {
-                        if (newtonTinting) {
-                            color1 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density())) % color.getNum_colors(), ((double) nextVal / iterations));
-                            color3 = color.getTint(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
-                        } else {
-                            color1 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) val / iterations));
-                            color2 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) nextVal / iterations));
-                            color3 = color.getShade(color.getColor((closestRootIndex(last[0]) * color.getColor_density()) % color.getNum_colors()), ((double) previousVal / iterations));
-                        }
-                        colortmp = color.interpolated(color1, color2, color3, interpolation);
-                    } else {
-                        colortmp = 0xff000000;
-                    }
+                    color1 = color.getShade(preTintColor, ((double) val / iterations));
+                    color2 = color.getShade(preTintColor, ((double) nextVal / iterations));
+                    color3 = color.getShade(preTintColor, ((double) previousVal / iterations));
                 }
+                colortmp = color.interpolatedColor(color1, color2, color3, interpolation);
                 break;
             case CURVATURE_AVERAGE_NOABS:
             case CURVATURE_AVERAGE_ABS:

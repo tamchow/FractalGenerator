@@ -2,6 +2,7 @@ package in.tamchow.fractal.graphics.containers;
 import in.tamchow.fractal.color.Colorizer;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
+import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 import in.tamchow.fractal.helpers.math.MathUtils;
@@ -113,7 +114,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return pixdata[row];
     }
     @NotNull
-    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, boolean linearInterpolation, boolean gammaCorrection) {
+    public PixelContainer getPostProcessed(@NotNull PostProcessMode mode, double[][] biases, int byParts, InterpolationType interpolationType, boolean gammaCorrection) {
         @NotNull PixelContainer processed = new PixelContainer(this);
         if (mode == PostProcessMode.NONE) {
             return processed;
@@ -132,7 +133,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((average + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEAN:
-                        processed.setPixel(i, j, Colorizer.interpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, linearInterpolation, gammaCorrection));
+                        processed.setPixel(i, j, Colorizer.interpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
                         break;
                     case MEDIAN:
                         processed.setPixel(i, j, median);
@@ -141,10 +142,10 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((median + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEDIAN:
-                        processed.setPixel(i, j, Colorizer.interpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, linearInterpolation, gammaCorrection));
+                        processed.setPixel(i, j, Colorizer.interpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
                         break;
                     case INTERPOLATED:
-                        processed.setPixel(i, j, Colorizer.interpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, linearInterpolation, gammaCorrection));
+                        processed.setPixel(i, j, Colorizer.interpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
                         break;
                     case NEGATIVE:
                         processed.setPixel(i, j, Colorizer.packARGB(
@@ -161,6 +162,46 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
             }
         }
         return processed;
+    }
+    public PixelContainer toHeightMap() {
+        return toHeightMap(255);
+    }
+    public PixelContainer toHeightMap(double scale) {
+        return toHeightMap(getWidth(), getHeight(), scale);
+    }
+    public PixelContainer toHeightMap(int numXTiles, int numYTiles) {
+        return toHeightMap(numXTiles, numYTiles, 255);
+    }
+    public PixelContainer toHeightMap(int numXTiles, int numYTiles, double scale) {
+        int[][] tileHeights = new int[numYTiles + 1][numXTiles + 1];
+        for (int y = 0; y < tileHeights.length; ++y) {
+            for (int x = 0; x < tileHeights[y].length; ++x) {
+                int pixelXPos = (int) Math.ceil(x * ((double) getWidth() - 1) / numXTiles);
+                int pixelYPos = (int) Math.ceil(y * ((double) getHeight() - 1) / numYTiles);
+                // Get the channels for the given pixel
+                int red = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.RED);
+                int green = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.GREEN);
+                int blue = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.BLUE);
+                double alpha = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.ALPHA);
+                // Note that we divide by `alpha` to get the height
+                // If we always use fully opaque images, alpha will be the maximum possible value
+                // This allows us to handle 8bit, 16bit, or Nbit images
+                // Values are based on ratios. We don't care about the images bit depth
+                int heightAtThisPosition = (byte) (scale * (red + green + blue) / 3.0 / alpha);
+                tileHeights[y][x] = Colorizer.toGray(heightAtThisPosition);
+            }
+        }
+        return new PixelContainer(tileHeights);
+    }
+    public HeightFieldLoc[] generateHeightField() {
+        HeightFieldLoc[] heightFieldLocs = new HeightFieldLoc[getHeight() * getWidth()];
+        for (int i = 0; i < getHeight(); ++i) {
+            for (int j = 0; j < getWidth(); ++j) {
+                heightFieldLocs[i * getWidth() + j] = new HeightFieldLoc(i, j,
+                        Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED) / 255.0);
+            }
+        }
+        return heightFieldLocs;
     }
     public void setSize(int height, int width) {
         @NotNull int[][] tmp = new int[pixdata.length][pixdata[0].length];
@@ -232,7 +273,8 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0, true, false));
+                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0,
+                                InterpolationType.LINEAR, false));
                     }
                 }
             } else {
@@ -242,7 +284,8 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0, true, false));
+                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0,
+                                InterpolationType.LINEAR, false));
                     }
                 }
             }
@@ -386,4 +429,34 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         return toString().hashCode();
     }
     public enum PostProcessMode {MEAN, MEDIAN, WEIGHTED_MEAN, WEIGHTED_MEDIAN, INTERPOLATED_MEAN, INTERPOLATED_MEDIAN, INTERPOLATED, NEGATIVE, NONE, TEXT_TO_IMAGE}
+    public final class HeightFieldLoc {
+        public final int x, y;
+        public final double height;
+        public HeightFieldLoc(int x, int y, double height) {
+            this.x = x;
+            this.y = y;
+            this.height = height;
+        }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            HeightFieldLoc that = (HeightFieldLoc) o;
+            return x == that.x && y == that.y && Double.compare(that.height, height) == 0;
+        }
+        @Override
+        public int hashCode() {
+            int result;
+            long temp;
+            result = x;
+            result = 31 * result + y;
+            temp = Double.doubleToLongBits(height);
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            return result;
+        }
+        @Override
+        public String toString() {
+            return String.format("%d,%d,%f", x, y, height);
+        }
+    }
 }

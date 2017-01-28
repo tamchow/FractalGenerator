@@ -124,18 +124,29 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                                 idxn = master.color.createIndex(((double) indexOf(histogram, en)) / iterations, 0, 1);
                             }
                             int idxMin = Math.min(idxn, idxp), idxMax = Math.max(idxn, idxp);
-                            if (master.color.isLinearInterpolation()) {
-                                colortmp = master.color.interpolated(idxp, idx, idxn, normalized_count - (long) normalized_count);
-                            } else {
-                                if (master.color.isModifierEnabled()) {
-                                    colortmp = master.color.interpolated(idx, idxMin, idxMax, normalized_count - (long) normalized_count);
-                                } else {
-                                    if (master.color.isLogIndex()) {
-                                        colortmp = master.color.interpolated(idxMin, idx, normalized_count - (long) normalized_count);
+                            switch (master.color.getInterpolationType()) {
+                                case LINEAR:
+                                    colortmp = master.color.interpolated(idxp, idx, idxn,
+                                            normalized_count - (long) normalized_count);
+                                    break;
+                                case CATMULL_ROM_SPLINE: {
+                                    if (master.color.isModifierEnabled()) {
+                                        colortmp = master.color.interpolated(idx, idxMin, idxMax,
+                                                normalized_count - (long) normalized_count);
                                     } else {
-                                        colortmp = master.color.interpolated(idx, idxMax, normalized_count - (long) normalized_count);
+                                        if (master.color.isLogIndex()) {
+                                            colortmp = master.color.interpolated(idxMin, idx,
+                                                    normalized_count - (long) normalized_count);
+                                        } else {
+                                            colortmp = master.color.interpolated(idx, idxMax,
+                                                    normalized_count - (long) normalized_count);
+                                        }
                                     }
                                 }
+                                break;
+                                default:
+                                    //TODO: Implement properly
+                                    colortmp = Integer.MIN_VALUE;
                             }
                         } else {
                             double hue = 0.0, hue2 = 0.0, hue3 = 0.0;
@@ -148,15 +159,25 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                             for (int k = 0; k < ep; k += 1) {
                                 hue3 += ((double) histogram[k]) / total;
                             }
-                            if (master.color.isLinearInterpolation()) {
-                                colortmp = master.color.interpolated(master.color.createIndex(hue2, 0, 1), master.color.createIndex(hue, 0, 1), master.color.createIndex(hue3, 0, 1), normalized_count - (long) normalized_count);
-                            } else {
-                                int idxp = master.color.createIndex(hue3, 0, 1), idxn = master.color.createIndex(hue2, 0, 1);
-                                if (master.color.isModifierEnabled()) {
-                                    colortmp = master.color.interpolated(master.color.createIndex(hue, 0, 1), Math.max(idxp, idxn), normalized_count - (long) normalized_count);
-                                } else {
-                                    colortmp = master.color.interpolated(Math.min(idxp, idxn), master.color.createIndex(hue, 0, 1), normalized_count - (long) normalized_count);
-                                }
+                            switch (master.color.getInterpolationType()) {
+                                case LINEAR:
+                                    colortmp = master.color.interpolated(master.color.createIndex(hue2, 0, 1),
+                                            master.color.createIndex(hue, 0, 1),
+                                            master.color.createIndex(hue3, 0, 1), normalized_count - (long) normalized_count);
+                                    break;
+                                case CATMULL_ROM_SPLINE:
+                                    int idxp = master.color.createIndex(hue3, 0, 1), idxn = master.color.createIndex(hue2, 0, 1);
+                                    if (master.color.isModifierEnabled()) {
+                                        colortmp = master.color.interpolated(master.color.createIndex(hue, 0, 1), Math.max(idxp, idxn),
+                                                normalized_count - (long) normalized_count);
+                                    } else {
+                                        colortmp = master.color.interpolated(Math.min(idxp, idxn), master.color.createIndex(hue, 0, 1),
+                                                normalized_count - (long) normalized_count);
+                                    }
+                                    break;
+                                default:
+                                    //TODO: Implement properly
+                                    colortmp = Integer.MIN_VALUE;
                             }
                         }
                         master.getArgand().setPixel(i, j, colortmp);

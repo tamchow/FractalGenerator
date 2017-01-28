@@ -57,9 +57,13 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
         return consts;
     }
     public void setConsts(@NotNull String[][] constdec) {
-        consts = new String[constdec.length][constdec[0].length];
-        for (int i = 0; i < this.consts.length; i++) {
-            System.arraycopy(constdec[i], 0, consts[i], 0, consts[i].length);
+        if (constdec != null) {
+            consts = new String[constdec.length][constdec[0].length];
+            for (int i = 0; i < this.consts.length; i++) {
+                System.arraycopy(constdec[i], 0, consts[i], 0, consts[i].length);
+            }
+        } else {
+            consts = null;
         }
     }
     public String getZ_value() {
@@ -176,7 +180,7 @@ public abstract class Operable<T extends Operable<T, E>, E extends Derivable> ex
     protected String toStringBase() {
         @NotNull ResizableCharBuffer function = new ResizableCharBuffer(terms.size() * STRING_PREFIX_SIZE * terms.get(0).toString().length());
         for (int i = 0, j = 0; i < terms.size() && j < signs.size(); i++, j++) {
-            function.append(" " + signs.get(j) + " " + terms.get(i));
+            function.append(signs.get(j) + terms.get(i));
         }
         return process(function.toString()).trim();
     }
