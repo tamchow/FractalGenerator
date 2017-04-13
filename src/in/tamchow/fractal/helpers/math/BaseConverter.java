@@ -198,6 +198,7 @@ public final class BaseConverter {
             throw new IllegalArgumentException(String.format(negativeBaseErrorMessage, from_base, to_base));
         }
         updateLookup(Math.max(from_base, to_base));
+        //Note - This is in fact incorrect behavior, but this is a stopgap to not crash on decimal input
         if (inputNumber.contains(".")) {
             return changeBase(inputNumber.substring(0, inputNumber.indexOf(".")), from_base, to_base, substituteNumerics)/*Integer part*/ + "." +
                     changeBase(inputNumber.substring(inputNumber.indexOf(".") + 1, inputNumber.length()), from_base, to_base, substituteNumerics)/*Fractional part*/;
