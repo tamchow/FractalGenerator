@@ -1,5 +1,11 @@
 package in.tamchow.fractal.helpers.math;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 /**
  * Converts a number in digit representation from one base to another
  * Not guaranteed to work with bases above 65,451 (more characters than which the lookup can use for substituting digits)
@@ -8,10 +14,12 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * @version 1.2
  */
 public final class BaseConverter {
+    private static final Pattern ZEROS = Pattern.compile("^[0]+$"), SPACES = Pattern.compile("\\s+");
     private static final int RESTRICTED_CHARS_COUNT = 84, MAX_LOOKUP_LENGTH = Character.MAX_VALUE - RESTRICTED_CHARS_COUNT;
     private static final String negativeBaseErrorMessage = "Negative or zero base values are illegal - supplied bases were %d & %d.", invalidInputNumberErrorMessage = "The supplied number (%s) for base conversion is invalid.", tooLargeBaseForLookupErrorMessage = "Not enough available characters for substitution. Number of available characters is %d , minimum required number is %d";
     @NotNull
     private static String lookup = "0123456789ABCDEFGHIJKLMNOPQRSTWXYZabcdefghijklmnopqrstwxyz+/=,?!;:\"'^`~|\\@#$%&*_<>(){}";
+    private static int lastUsedCharIndex = 0;
     private BaseConverter() {
     }
     private static void updateLookup(int base) {
@@ -23,12 +31,13 @@ public final class BaseConverter {
         int charsToAdd = base - lookup.length();
         @NotNull char[] extras = new char[charsToAdd];
         if (charsToAdd > 0) {
-            for (int i = 0; i < Character.MAX_VALUE && charsToAdd > 0; ++i) {
+            for (int i = lastUsedCharIndex; i < Character.MAX_VALUE && charsToAdd > 0; ++i) {
                 if ((!lookup.contains("" + (char) i)) &&
                         (!Character.isISOControl((char) i)) &&
                         (!Character.isWhitespace((char) i)) &&
                         ((char) i != '.') && (char) i != '-') {
                     extras[extras.length - charsToAdd] = (char) i;
+                    lastUsedCharIndex = i;
                     --charsToAdd;
                 }
             }
@@ -41,7 +50,7 @@ public final class BaseConverter {
     public static long convertToNumber(@NotNull String inputNumber, int from_base) {
         return convertToNumber(inputNumber, from_base, true);
     }
-    private static boolean isNegative(@NotNull String number) {
+    public static boolean isNegative(@NotNull String number) {
         return number.startsWith("-");
     }
     public static long convertToNumber(@NotNull String inputNumber, int from_base, boolean checkIfNegative) {
@@ -163,17 +172,17 @@ public final class BaseConverter {
     }
     @NotNull
     public static String changeBase(@NotNull String inputNumber, double from_base, double to_base) {
-        @NotNull String new_number = "";
+
         boolean isNegative = false;
         if (inputNumber.startsWith("-")) {
             isNegative = true;
             inputNumber = inputNumber.substring(1, inputNumber.length());
         }
-        @NotNull double[] digits = changeBase(parseStringsToDoubles(inputNumber.split("\\s+")), from_base, to_base);
-        for (int i = digits.length - 1; i >= 0; --i) {
-            new_number += digits[i] + " ";
-        }
-        new_number = new_number.trim();
+        DoubleStream digits = Arrays.stream(changeBase(parseStringsToDoubles(inputNumber.split("\\s+")), from_base, to_base));
+        String new_number = digits
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(" "))
+                .trim();
         return isNegative ? "-" + new_number : new_number;
     }
     @NotNull
@@ -198,28 +207,17 @@ public final class BaseConverter {
             throw new IllegalArgumentException(String.format(invalidInputNumberErrorMessage, copyOfInput));
         }
         //special handling for 0 to avoid undefined behaviour and other bugs
-        if (inputNumber.matches("^[0]+$")) {//check for any number of only 0s in the input
+        if (ZEROS.matcher(inputNumber).find()) {//check for any number of only 0s in the input
             return (isNegative) ? "-" + lookup.charAt(0) : lookup.charAt(0) + "";//I could simply return "0", but this looks less hardcoded
         }
-        String new_number = "";
-        int[] digits;
-        if (inputNumber.matches("\\s+")) {
-            //presence of whitespaces imply the number is in numeric digit format
-            digits = createDigits(convertToNumber(parseStringsToIntegers(inputNumber.split("\\s+")), from_base), to_base);
-        } else {
-            digits = createDigits(convertToNumber(inputNumber, from_base, false), to_base);
-        }
-        if (substituteNumerics) {
-            //use character representation for digits
-            for (int i = digits.length - 1; i >= 0; --i) {
-                new_number += lookup.charAt(digits[i]);
-            }
-        } else {
-            //use numeric representations for digits, separate using space
-            for (int i = digits.length - 1; i >= 0; --i) {
-                new_number += digits[i] + " ";
-            }
-        }
-        return (isNegative) ? "-" + new_number.trim() : new_number.trim();//indicate negative if necessary (+ sign indicates a digit!), no trailing whitespace
+        IntStream digits = Arrays.stream(SPACES.matcher(inputNumber).find() ?
+                //presence of whitespaces imply the number is in numeric digit format
+                createDigits(convertToNumber(parseStringsToIntegers(SPACES.split(inputNumber)), from_base), to_base) :
+                createDigits(convertToNumber(inputNumber, from_base, false), to_base));
+        String new_number = (substituteNumerics ? digits.map(digit -> lookup.charAt(digit)) : digits)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(" "))
+                .trim();
+        return (isNegative) ? "-" + new_number : new_number;//indicate negative if necessary (+ sign indicates a digit!), no trailing whitespace
     }
 }

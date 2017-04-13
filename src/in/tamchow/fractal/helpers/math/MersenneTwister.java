@@ -335,7 +335,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
      */
     public long nextLong(long min, long max) {
         long diff = Math.abs(max - min);
-        return nextLong(diff) + diff;
+        return nextLong(diff) + (min < max ? min : max);
     }
     /**
      * @param n the upper limit
@@ -360,7 +360,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
      */
     public double nextDouble(double min, double max) {
         double diff = Math.abs(max - min);
-        return nextDouble() * diff + (min > max ? min : max);
+        return nextDouble() * diff + (min < max ? min : max);
     }
     /**
      * @return a random {@code double} in the half-open range from [0.0,1.0).
@@ -438,7 +438,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
      */
     public float nextFloat(float min, float max) {
         float diff = Math.abs(max - min);
-        return nextFloat() * diff + (min > max ? min : max);
+        return nextFloat() * diff + (min < max ? min : max);
     }
     /**
      * @return a random {@code float} in the half-open range from [0.0f,1.0f).
@@ -482,7 +482,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
      */
     public int nextInt(int min, int max) {
         int diff = Math.abs(max - min);
-        return nextInt(diff) + diff;
+        return nextInt(diff) + (min < max ? min : max);
     }
     /**
      * @param n the upper limit

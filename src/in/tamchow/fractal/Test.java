@@ -31,25 +31,25 @@ public class Test {
                 magnet2 = "((z^3+3*(c-1)*z+(c-1)*(c-2))/(3*(z^2)+3*(c-2)*z+(c-1)*(c-2)+1))^2";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"},
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}, {"h", "-0.2013,+0.5638i"}, {"j", "1.4686,+1.265i"}};
-        int resx = 480, resy = 640, iter = 64, switch_rate = 0, num_points = 10000, max_hit_threshold = 10;
+        int resx = 2560, resy = 1440, iter = 32, switch_rate = 0, num_points = 10_000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
         @Nullable double[] percentiles = null;
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
-        double escrad = 10, tolerance = 1e-10, zoom = 1, baseprec = -1;
+        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
+        double escrad = 1e10, tolerance = 1e-10, zoom = 1, baseprec = -1;
         @Nullable String linetrap = null;
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.STRIPE_AVERAGE, 4, 16700000, 0, true,
+        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.EPSILON_CROSS, -1, 16_700_000, 0, true,
                 false, InterpolationType.MONOTONE_CUBIC_SPLINE, false, false,
                 false, -1);
-        //func = poly3;
+        func = func3;
         //cfg.setModifierEnabled(true);
         //cfg.setMultiplier_threshold(1E-6);
         //cfg.setExponentialSmoothing(false);
         //cfg.setLogIndex(false);
         //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
-        cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0), rgb(0, 7, 100)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575, 1.0});
+        //cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0), rgb(0, 7, 100)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575, 1.0});
         //cfg.setPalette(new int[]{Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.GREEN}, false);
         //cfg.setPalette(new int[]{Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW}, false);
-        //cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.CYAN, 0xff7fffd4, 0xffffa07a}, new double[]{0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84, 0.96});
+        cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.RED, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.CYAN, 0xff7fffd4, 0xffffa07a}, new double[]{0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84, 0.96});
         //cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.WHITE, Colors.BASE_COLORS.BLACK, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.CYAN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.WHITE}, new double[]{0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0});
         /*BufferedImage img = ImageConverter.toImage(ColorDebugger.createDebugImage(cfg.getPalette()));
         try {

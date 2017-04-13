@@ -197,7 +197,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         HeightFieldLoc[] heightFieldLocs = new HeightFieldLoc[getHeight() * getWidth()];
         for (int i = 0; i < getHeight(); ++i) {
             for (int j = 0; j < getWidth(); ++j) {
-                heightFieldLocs[i * getWidth() + j] = new HeightFieldLoc(i, j,
+                heightFieldLocs[i * getWidth() + j] = new HeightFieldLoc(j, i,
                         Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED) / 255.0);
             }
         }
