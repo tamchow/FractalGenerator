@@ -1,13 +1,44 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.math.MathUtils;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 /**
  * Represents a Complex Number as 2 doubles or in cis arg form. Provides utility FUNCTION_DATA.
  */
 public final class Complex extends Number implements Serializable, Comparable<Complex>, Cloneable {
     public static final Complex i = new Complex(0, 1), ZERO = new Complex(0, 0), ONE = new Complex(1, 0), E = new Complex(Math.E, 0), PI = new Complex(Math.PI, 0);
-    private static final String DECIMAL_REGEX = "^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$";
+    /**
+     * The uber-regex for all your complex-number needs! Comes with extensive error-checking!
+     */
+    private static final Pattern REGEX = Pattern.compile(
+            // Real mantissa
+            "^(?<real>(?:[+-]?(?:\\d*(?:\\.(?=\\d))?\\d+))" +
+                    // Exponent symbol
+                    "(?:(?:(?:(?<=\\d)[Ee])?" +
+                    // Real exponent
+                    "(?:[+-]?(?:\\d*(?:\\.(?=\\d))?\\d+)))(?<=\\d))?)" +
+                    // Grouping separator ","
+                    "(?:(?<=\\d),(?=\\d|[+-]|\\.)" +
+                    // Imaginary mantissa
+                    "(?<imaginary>(?:[+-]?(?:\\d*(?:\\.(?=\\d))?\\d+))" +
+                    // Exponent symbol
+                    "(?:(?:(?:(?<=\\d)[Ee])?" +
+                    // Imaginary Exponent
+                    "(?:[+-]?(?:\\d*(?:\\.(?=\\d))?\\d+)))" +
+                    // Iota (imaginary unit) symbol
+                    "(?<=\\d))?)i)?$|^" +
+                    // Pure imaginary number identifier (pure reals are handled by the above)
+                    // Imaginary mantissa
+                    "(?<pureImaginary>(?:[+-]?(?:\\d*(?:\\.(?=\\d))?\\d+))" +
+                    // Exponent symbol
+                    "(?:(?:(?:(?<=\\d)[Ee])?" +
+                    // Imaginary Exponent
+                    "(?:[+-]?(?:\\d*(?:\\.(?=\\d))?\\d+)))" +
+                    // Iota (imaginary unit) symbol
+                    "(?<=\\d))?)i$"
+    );
     private double a, b;
     public Complex(@NotNull Complex old) {
         this(old.real(), old.imaginary(), false);
@@ -35,7 +66,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         this(a, 0, false);
     }
     public Complex(@NotNull String complex) {
-        /** Not using explicit input validation for performance reasons.
+        /* Not using explicit input validation for performance reasons.
          if(!isInCorrectFormat(complex)){
          throw new NumberFormatException("Illegal Format for Input "+complex);
          }*/
@@ -45,7 +76,7 @@ public final class Complex extends Number implements Serializable, Comparable<Co
                 b = 0.0;
             } else if ((!complex.contains(",")) && complex.lastIndexOf("i") > 0) {
                 a = 0.0;
-                b = Double.parseDouble(complex.substring(0, complex.length()));
+                b = Double.parseDouble(complex.substring(0, complex.length() - 1));
             } else {
                 @NotNull String a = complex.substring(0, complex.indexOf(","));
                 @NotNull String ib = complex.substring(complex.indexOf(",") + 1, complex.lastIndexOf("i"));
@@ -94,22 +125,18 @@ public final class Complex extends Number implements Serializable, Comparable<Co
         return (a * a) + (b * b);
     }
     private boolean isInCorrectFormat(@NotNull String complex) {
-        if (complex.length() <= 0) return false;
-        if (complex.contains(",")) {
-            @NotNull String[] parts = complex.split(",");
-            return parts[0].matches(DECIMAL_REGEX) && parts[1].substring(0, parts[1].length() - 1)/*trim the 'i'*/.matches(DECIMAL_REGEX);
-        } else return complex.matches(DECIMAL_REGEX);
+        return REGEX.matcher(complex).matches();
     }
     @Override
     public int compareTo(@NotNull Complex complex) {
-        if (equals(complex)) {
-            return 0;
+        // Lexicographical comparison imposing partial order on the field of complex numbers
+        double realComparisonResult = real() - complex.real();
+        if (Math.abs(realComparisonResult) < MathUtils.ULP) {
+            double imaginaryComparisonResult = imaginary() - complex.imaginary();
+            return (Math.abs(imaginaryComparisonResult) < MathUtils.ULP) ? 0 : (imaginaryComparisonResult > 0 ? 1 : -1);
+        } else {
+            return (realComparisonResult > 0) ? 1 : -1;
         }
-        if (modulus() != complex.modulus()) {
-            return Math.round((float) (complex.modulus() - modulus()));
-        }
-        //Representation-based lexicographical comparison - makes not much mathematical sense
-        return toString().compareTo(complex.toString());
     }
     public double modulus() {
         return Math.sqrt(cabs());
@@ -120,7 +147,9 @@ public final class Complex extends Number implements Serializable, Comparable<Co
             return true;
         }
         if (complex instanceof Complex) {
-            if (((Complex) complex).real() == a && ((Complex) complex).imaginary() == b) {
+            Complex other = (Complex) complex;
+            // Fuzzy compare for floating point representation
+            if (Math.abs(other.real() - a) < MathUtils.ULP && Math.abs(other.imaginary() - b) < MathUtils.ULP) {
                 return true;
             }
         }

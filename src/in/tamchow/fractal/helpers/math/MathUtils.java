@@ -117,9 +117,13 @@ public final class MathUtils {
     }
     @NotNull
     public static int[] imageBounds(int y, int x, int width, int height) {
-        y += boundsProtected(x / width, height);
+        /*y += boundsProtected(x / width, height);
         x = boundsProtected(x, width);
-        y = boundsProtected(y, height);
+        y = boundsProtected(y, height);*/
+        if (y < 0) y = (-y) % height;
+        if (x < 0) x = (-x) % width;
+        if (y >= height) y = (height - 1) - (y % height);
+        if (x >= width) x = (width - 1) - (x % width);
         return new int[]{y, x};
     }
     public static int normalized(int y, int x, int width, int height) {

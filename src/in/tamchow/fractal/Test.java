@@ -31,16 +31,16 @@ public class Test {
                 magnet2 = "((z^3+3*(c-1)*z+(c-1)*(c-2))/(3*(z^2)+3*(c-2)*z+(c-1)*(c-2)+1))^2";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"},
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}, {"h", "-0.2013,+0.5638i"}, {"j", "1.4686,+1.265i"}};
-        int resx = 2560, resy = 1440, iter = 32, switch_rate = 0, num_points = 10_000, max_hit_threshold = 10;
+        int resx = 1280, resy = 720, iter = 32, switch_rate = 0, num_points = 10_000, max_hit_threshold = 10;
         @NotNull int[] iterations = {20};
         @Nullable double[] percentiles = null;
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
+        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.RUDY;
         double escrad = 1e10, tolerance = 1e-10, zoom = 1, baseprec = -1;
         @Nullable String linetrap = null;
         @NotNull Colorizer cfg = new Colorizer(Colors.MODE.EPSILON_CROSS, -1, 16_700_000, 0, true,
                 false, InterpolationType.MONOTONE_CUBIC_SPLINE, false, false,
                 false, -1);
-        func = func3;
+        //func = func3;
         //cfg.setModifierEnabled(true);
         //cfg.setMultiplier_threshold(1E-6);
         //cfg.setExponentialSmoothing(false);

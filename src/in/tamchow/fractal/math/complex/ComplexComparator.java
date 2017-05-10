@@ -25,10 +25,10 @@ public final class ComplexComparator {
         }
     }
     private static boolean lessThan(Complex a, Complex b) {
-        return (a.real() == b.real() ? a.imaginary() < b.imaginary() : a.real() < b.real());
+        return a.compareTo(b) < 0;
     }
     private static boolean equalTo(Complex a, Complex b) {
-        return a.real() == b.real() && a.imaginary() == b.imaginary();
+        return a.equals(b);
     }
     private static boolean lessThanOrEqualTo(Complex a, Complex b) {
         return lessThan(a, b) || equalTo(a, b);
