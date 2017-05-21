@@ -1,8 +1,14 @@
 package in.tamchow.fractal.math.complex;
 import in.tamchow.fractal.helpers.annotations.NotNull;
+import in.tamchow.fractal.helpers.strings.CharBuffer;
+import in.tamchow.fractal.helpers.strings.ResizableCharBuffer;
 import in.tamchow.fractal.math.Comparator;
 import in.tamchow.fractal.math.symbolics.Derivable;
 import in.tamchow.fractal.math.symbolics.Polynomial;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
 /**
@@ -10,11 +16,10 @@ import static in.tamchow.fractal.helpers.strings.StringManipulator.*;
  * making heavy use of string replacement;
  */
 public final class FunctionEvaluator {
-    public static final String[] OPERATIONS = {
-            "(", ")", "+", "-", "*", "/", "^", "exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth", "inv", "conj", "re", "im", "flip", "mod", "arg"
-    };
-    private static final String[] FUNCTIONS =
-            {"exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth"};
+    public static final Set<String> OPERATIONS = new HashSet<>(Arrays.asList(
+            "(", ")", "+", "-", "*", "/", "^", "exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth", "inv", "conj", "re", "im", "flip", "mod", "arg"));
+    private static final Set<String> FUNCTIONS = new HashSet<>(Arrays.asList(
+            "exp", "log", "log2", "sin", "sinh", "cosec", "cosech", "cos", "cosh", "sec", "sech", "tan", "tanh", "cot", "coth"));
     private String[][] constdec;
     private String z_value, oldvalue, variableCode, oldvariablecode;
     private boolean hasBeenSubstituted;
@@ -220,7 +225,7 @@ public final class FunctionEvaluator {
         subexpr = processConditional(subexpr);
         Complex ztmp;
         int flag = 0;
-        /**Disabled for performance reasons:
+        /*Disabled for performance reasons:
          if ((!isSymbolic) && hasNoFunctions(subexpr)) {
          ztmp = RPNHelper.evaluateInfix(split(subexpr, " "));
          } else {
@@ -435,7 +440,7 @@ public final class FunctionEvaluator {
     }
     private String substitute(@NotNull String expr, boolean isSymbolic) {
         @NotNull String[] mod = split(expr, " ");
-        @NotNull String sub = "";
+        @NotNull CharBuffer sub = new ResizableCharBuffer(expr.length() * z_value.length());
         for (int i = 0; i < mod.length; i++) {
             if (mod[i].equalsIgnoreCase(variableCode) && (!isSymbolic)) {
                 mod[i] = z_value;
@@ -446,9 +451,9 @@ public final class FunctionEvaluator {
             }
         }
         for (String aMod : mod) {
-            sub += aMod + " ";
+            sub.append(aMod).append(" ");
         }
-        return sub.trim();
+        return sub.toString().trim();
     }
     private String getConstant(String totry) {
         String val;

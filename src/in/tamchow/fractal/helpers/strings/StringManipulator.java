@@ -3,12 +3,15 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 /**
  * Miscellaneous: String manipulating utility methods.
  */
 public final class StringManipulator {
     public static final char BRACE_OPEN = '{', BRACE_CLOSE = '}', PARENTHESIS_OPEN = '(', PARENTHESIS_CLOSE = ')', SQUARE_OPEN = '[', SQUARE_CLOSE = ']';
+    private static final Set<String> ambiguousTokens = new HashSet<>(Arrays.asList("+", "-", ","));
     private StringManipulator() {
     }
     public static <T> String join(final T[] items, String prefix, String suffix, String joiner) {
@@ -230,11 +233,42 @@ public final class StringManipulator {
         return formatted;
     }
     @NotNull
-    public static String correctPadding(String in, String[] operations) {
-        for (String operation : operations) {
-            in = replace(in, operation, " " + operation + " ");
+    public static String correctPadding(String in, Set<String> operations) {
+        if (in.isEmpty()) {
+            return in;
         }
-        in = replace(in, "  ", " ");
+        for (String operation : operations) {
+            if (!ambiguousTokens.contains(operation)) {
+                in = replace(in, operation, " " + operation + " ");
+            }
+        }
+        CharBuffer paddingBuffer = new ResizableCharBuffer(in.length());
+        paddingBuffer.append(in.charAt(0));
+        for (int i = 1; i < in.length() - 1; ++i) {
+            if (ambiguousTokens.contains(in.charAt(i) + "")) {
+                if (in.charAt(i) == ',') {
+                    char prevChar = in.charAt(i - 1), nextChar = in.charAt(i + 1);
+                    if (!(prevChar == '.' || prevChar == '+' || prevChar == '-' || Character.isDigit(prevChar) &&
+                            nextChar == '.' || nextChar == '+' || nextChar == '-' || Character.isDigit(nextChar))) {
+                        paddingBuffer.append(" , ");
+                    } else {
+                        paddingBuffer.append(",");
+                    }
+                } else if (in.charAt(i) == '+' || in.charAt(i) == '-') {
+                    char prevChar = in.charAt(i - 1), nextChar = in.charAt(i + 1);
+                    if (!(prevChar == ',')) {
+                        paddingBuffer.append(" " + in.charAt(i) + " ");
+                    } else {
+                        paddingBuffer.append(in.charAt(i));
+                    }
+                } else {
+                    paddingBuffer.append(in.charAt(i));
+                }
+            } else {
+                paddingBuffer.append(in.charAt(i));
+            }
+        }
+        in = replace(paddingBuffer.append(in.charAt(in.length() - 1)).toString(), "  ", " ");
         return in.trim();
     }
     @NotNull
