@@ -10,24 +10,14 @@ public abstract class ThreadedGenerator implements Serializable {
     protected ThreadedGenerator() {
     }
     public abstract int countCompletedThreads();
-    public abstract boolean allComplete();
     public abstract void generate();
     public abstract void finalizeGeneration();
-    protected void wrapUp() throws InterruptedException {
-        synchronized (lock) {
-            while (!allComplete()) {
-                lock.wait(1000);
-            }
-            lock.notifyAll();
-            finalizeGeneration();
-        }
-        joinAll();
-    }
     public void joinAll() throws InterruptedException {
         if (threads != null) {
             for (SlaveRunner runner : threads) {
                 runner.join();
             }
+            finalizeGeneration();
         }
     }
     public void resume() throws InterruptedException {

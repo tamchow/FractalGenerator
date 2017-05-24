@@ -12,17 +12,19 @@ import java.io.Serializable;
 public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator implements Serializable {
     private ComplexBrotFractalGenerator master;
     private volatile PartComplexBrotFractalData[] data;
-    private int threads, nx, ny;
+    private int nx, ny;
     public ThreadedComplexBrotFractalGenerator(ComplexBrotFractalGenerator generator) {
         master = generator;
+        int threadCount = 0;
         if (master.isSequential()) {
             nx = master.getParams().getxThreads();
             ny = master.getParams().getyThreads();
-            threads = nx * ny;
+            threadCount = nx * ny;
         } else {
-            threads = master.getParams().getNum_threads();
+            threadCount = master.getParams().getNum_threads();
         }
-        data = new PartComplexBrotFractalData[threads];
+        threads = new ThreadedGenerator.SlaveRunner[threadCount];
+        data = new PartComplexBrotFractalData[threads.length];
     }
     @Override
     public int countCompletedThreads() {
@@ -32,21 +34,17 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         }
         return ctr;
     }
-    @Override
-    public boolean allComplete() {
-        return (countCompletedThreads() == threads);
-    }
     public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
-        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads; ++t) {
+        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads.length; ++t) {
             @NotNull int[] coords = ComplexFractalGenerator.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
-            @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
+            threads[t] = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads.length, idx);
             idx++;
-            runner.start();
+            threads[t].start();
         }
         try {
-            wrapUp();
+            joinAll();
         } catch (InterruptedException interrupted) {
             interrupted.printStackTrace();
         }
@@ -57,15 +55,15 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
                 generate(0, master.getImageWidth(), 0, master.getImageHeight());
             } else {
                 int idx = 0;
-                for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
-                    @NotNull int[] coords = master.start_end_coordinates(i, threads);
+                for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads.length; i++) {
+                    @NotNull int[] coords = master.start_end_coordinates(i, threads.length);
                     @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1]);
-                    master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
+                    master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads.length, idx);
                     idx++;
                     runner.start();
                 }
                 try {
-                    wrapUp();
+                    joinAll();
                 } catch (InterruptedException interrupted) {
                     interrupted.printStackTrace();
                 }
@@ -124,7 +122,7 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
         @Override
         public void onCompletion() {
             data[index] = new PartComplexBrotFractalData(copyOfMaster.getBases(), copyOfMaster.getDiscardedPointsCount());
-            float completion = ((float) countCompletedThreads() / threads) * 100.0f;
+            float completion = ((float) countCompletedThreads() / threads.length) * 100.0f;
             master.getProgressPublisher().publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }

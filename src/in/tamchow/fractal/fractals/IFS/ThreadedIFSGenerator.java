@@ -1,7 +1,6 @@
 package in.tamchow.fractal.fractals.IFS;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
 import in.tamchow.fractal.fractals.ThreadedGenerator;
-import in.tamchow.fractal.helpers.annotations.NotNull;
 import in.tamchow.fractal.helpers.annotations.Nullable;
 /**
  * Threaded IFS Fractal Generator
@@ -9,11 +8,10 @@ import in.tamchow.fractal.helpers.annotations.Nullable;
 public class ThreadedIFSGenerator extends ThreadedGenerator {
     private IFSGenerator master;
     private volatile PartIFSData[] data;
-    private int threads;
     public ThreadedIFSGenerator(IFSGenerator generator) {
         master = generator;
-        threads = master.getParams().getThreads();
-        data = new PartIFSData[threads];
+        threads = new ThreadedGenerator.SlaveRunner[master.getParams().getThreads()];
+        data = new PartIFSData[threads.length];
     }
     @Override
     public int countCompletedThreads() {
@@ -23,21 +21,17 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         }
         return ctr;
     }
-    @Override
-    public boolean allComplete() {
-        return (countCompletedThreads() == threads);
-    }
     public void generate() {
         if (master.getParams().useThreadedGenerator()) {
             int idx = 0;
-            for (int i = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; i < threads; i++) {
-                @NotNull SlaveRunner runner = new SlaveRunner(idx);
-                master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
+            for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads.length; ++t) {
+                threads[t] = new SlaveRunner(idx);
+                master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads.length, idx);
                 idx++;
-                runner.start();
+                threads[t].start();
             }
             try {
-                wrapUp();
+                joinAll();
             } catch (InterruptedException interrupted) {
                 interrupted.printStackTrace();
             }
@@ -63,9 +57,9 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             int iterations;
             copyOfMaster = new IFSGenerator(new IFSFractalParams(master.getParams()), master.getProgressPublisher());
             if (index == data.length - 1) {
-                iterations = copyOfMaster.getDepth() % threads;
+                iterations = copyOfMaster.getDepth() % threads.length;
             } else {
-                iterations = copyOfMaster.getDepth() / threads;
+                iterations = copyOfMaster.getDepth() / threads.length;
             }
             copyOfMaster.setDepth(iterations);
         }
@@ -85,7 +79,7 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
         @Override
         public void onCompletion() {
             data[index] = new PartIFSData(copyOfMaster.getPlane(), copyOfMaster.getAnimation(), copyOfMaster.getWeightDistribution());
-            float completion = ((float) countCompletedThreads() / threads) * 100.0f;
+            float completion = ((float) countCompletedThreads() / threads.length) * 100.0f;
             master.getProgressPublisher().publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);
         }
     }

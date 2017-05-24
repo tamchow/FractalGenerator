@@ -19,7 +19,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
     private double escape_radius;
     @Nullable
     private Complex constant;
-    private int nx, ny, threads;
+    private int nx, ny;
     public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
         this.master = master;
         this.iterations = iterations;
@@ -27,21 +27,15 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
         this.constant = constant;
         nx = x_threads;
         ny = y_threads;
-        threads = nx * ny;
-        buffer = new PartComplexFractalData[nx * ny];
+        threads = new ThreadedGenerator.SlaveRunner[nx * ny];
+        buffer = new PartComplexFractalData[threads.length];
     }
     public ThreadedComplexFractalGenerator(@NotNull ComplexFractalGenerator master) {
         this(master, master.getParams());
     }
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, @NotNull ComplexFractalParams config) {
-        this.master = master;
-        this.iterations = config.runParams.iterations;
-        this.escape_radius = config.runParams.escape_radius;
-        this.constant = config.runParams.constant;
-        nx = config.getX_threads();
-        ny = config.getY_threads();
-        threads = nx * ny;
-        buffer = new PartComplexFractalData[nx * ny];
+        this(config.getX_threads(), config.getY_threads(), master,
+                config.runParams.iterations, config.runParams.escape_radius, config.runParams.constant);
     }
     @Override
     public int countCompletedThreads() {
@@ -60,15 +54,15 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
     }
     public void generate(int startx, int endx, int starty, int endy) {
         int idx = 0;
-        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads; ++t) {
+        for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads.length; ++t) {
             @NotNull int[] coords = ComplexFractalGenerator.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
-            @NotNull SlaveRunner runner = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
-            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads, idx);
+            threads[t] = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
+            master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads.length, idx);
             idx++;
-            runner.start();
+            threads[t].start();
         }
         try {
-            wrapUp();
+            joinAll();
         } catch (InterruptedException interrupted) {
             interrupted.printStackTrace();
         }
@@ -145,7 +139,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                                 }
                                 break;
                                 default:
-                                    //TODO: Implement properly
+                                    // The other option is only applicable during palette generation, if it appears here, it's an error
                                     colortmp = Integer.MIN_VALUE;
                             }
                         } else {
@@ -176,7 +170,7 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                                     }
                                     break;
                                 default:
-                                    //TODO: Implement properly
+                                    // The other option is only applicable during palette generation, if it appears here, it's an error
                                     colortmp = Integer.MIN_VALUE;
                             }
                         }
@@ -191,10 +185,6 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
         if (isAnyOf(master.getColor().getMode(), CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
             master.colorizeWRTDistanceOrAngle();
         }
-    }
-    @Override
-    public boolean allComplete() {
-        return (countCompletedThreads() == (nx * ny));
     }
     class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         ComplexFractalGenerator copyOfMaster;
