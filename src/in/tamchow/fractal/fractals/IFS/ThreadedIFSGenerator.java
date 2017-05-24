@@ -49,9 +49,8 @@ public class ThreadedIFSGenerator extends ThreadedGenerator {
             master.getAnimation().addFrames(partIFSData.getPartAnimation());
         }
     }
-    class SlaveRunner extends ThreadedGenerator.SlaveRunner {
-        int index;
-        IFSGenerator copyOfMaster;
+    private class SlaveRunner extends ThreadedGenerator.SlaveRunner {
+        private IFSGenerator copyOfMaster;
         public SlaveRunner(int index) {
             super(index);
             int iterations;

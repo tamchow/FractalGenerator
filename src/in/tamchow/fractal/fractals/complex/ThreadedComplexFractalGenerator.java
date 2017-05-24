@@ -186,9 +186,9 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
             master.colorizeWRTDistanceOrAngle();
         }
     }
-    class SlaveRunner extends ThreadedGenerator.SlaveRunner {
-        ComplexFractalGenerator copyOfMaster;
-        int startx, starty, endx, endy;
+    private class SlaveRunner extends ThreadedGenerator.SlaveRunner {
+        private ComplexFractalGenerator copyOfMaster;
+        private int startx, starty, endx, endy;
         public SlaveRunner(int index, int startx, int endx, int starty, int endy) {
             super(index);
             this.startx = startx;

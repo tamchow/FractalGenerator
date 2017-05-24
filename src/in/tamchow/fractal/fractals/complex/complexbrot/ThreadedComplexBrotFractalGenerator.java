@@ -81,12 +81,11 @@ public class ThreadedComplexBrotFractalGenerator extends ThreadedGenerator imple
             for (int i = 0; i < master.bases.length; ++i) {
                 MathUtils.intDDAAdd(part.getBases()[i], master.bases[i]);
             }
-            //master.setDiscardedPoints(master.getDiscardedPointsCount()+part.getDiscardedPoints());
         }
         master.createImage();
     }
-    class SlaveRunner extends ThreadedGenerator.SlaveRunner {
-        ComplexBrotFractalGenerator copyOfMaster;
+    private class SlaveRunner extends ThreadedGenerator.SlaveRunner {
+        private ComplexBrotFractalGenerator copyOfMaster;
         private int start, end, startx, endx, starty, endy;
         public SlaveRunner(int index, int start, int end) {
             super(index);

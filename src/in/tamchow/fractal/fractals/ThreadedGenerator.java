@@ -4,7 +4,7 @@ import java.io.Serializable;
  * Abstract superclass for threaded fractal generator
  */
 public abstract class ThreadedGenerator implements Serializable {
-    protected final Object lock = new Lock();
+    private static final Object LOCK = new Object();
     protected volatile SlaveRunner[] threads;
     protected volatile int currentlyCompletedThreads;
     protected ThreadedGenerator() {
@@ -21,7 +21,7 @@ public abstract class ThreadedGenerator implements Serializable {
         }
     }
     public void resume() throws InterruptedException {
-        synchronized (lock) {
+        synchronized (LOCK) {
             for (SlaveRunner runner : threads) {
                 runner.resume();
             }
@@ -30,7 +30,7 @@ public abstract class ThreadedGenerator implements Serializable {
     }
     public void pause() throws InterruptedException {
         currentlyCompletedThreads = countCompletedThreads();
-        synchronized (lock) {
+        synchronized (LOCK) {
             for (SlaveRunner runner : threads) {
                 runner.pause();
             }
@@ -41,12 +41,10 @@ public abstract class ThreadedGenerator implements Serializable {
             }*/
         }
     }
-    private static final class Lock {
-    }
-    public abstract class SlaveRunner implements Runnable {
-        public Thread executor;
-        public int index;
-        public SlaveRunner(int index) {
+    protected abstract class SlaveRunner implements Runnable {
+        protected Thread executor;
+        protected int index;
+        protected SlaveRunner(int index) {
             this.index = index;
         }
         public void start() {
