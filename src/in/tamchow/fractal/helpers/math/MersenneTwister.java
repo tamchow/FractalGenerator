@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+
 /**
  * A PseudoRandom Number Generator (PRNG) based on the Mersenne Twister algorithm.
  * <br>
@@ -11,20 +12,20 @@ import java.io.Serializable;
  * Adapted from:
  * <a href="https://cs.gmu.edu/~sean/research/mersenne/MersenneTwisterFast.java">Sean Luke's Fast Mersenne Twister</a>
  * </p>
- *
- *
+ * <p>
+ * <p>
  * <ol>
  * <li>Methods are hard-inlined for speed as in the original.</li>
  * <li>Modern documentation comments are my contribution.</li>
  * <li>Ranged random methods are also my contribution</li>
  * </ol>
- *
+ * <p>
  * <h3>License</h3>
- *
+ * <p>
  * Copyright (c) 2003 by Sean Luke. <br>
  * Portions copyright (c) 1993 by Michael Lecuyer. <br>
  * All rights reserved. <br>
- *
+ * <p>
  * <p>Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * <ul>
@@ -52,7 +53,7 @@ import java.io.Serializable;
  * @author Sean Luke, Tamoghna Chowdhury
  * @version 23
  */
-public final class MersenneTwister implements Serializable, Cloneable {
+public final class MersenneTwister extends java.util.Random implements Serializable, Cloneable {
     /**
      * Serialization identifier constant
      */
@@ -98,12 +99,14 @@ public final class MersenneTwister implements Serializable, Cloneable {
      * Gaussian distribution indicator
      */
     private boolean __haveNextNextGaussian;
+
     /**
      * Constructor using the default seed.
      */
     public MersenneTwister() {
         this(System.currentTimeMillis());
     }
+
     /**
      * Constructor using a given seed.  Though you pass this seed in
      * as a long, it's best to make sure it's actually an integer.
@@ -114,6 +117,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
     public MersenneTwister(long seed) {
         setSeed(seed);
     }
+
     /**
      * Constructor using an array of integers as seed.
      * Your array must have a non-zero length.  Only the first 624 integers
@@ -126,6 +130,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
     public MersenneTwister(int[] array) {
         setSeed(array);
     }
+
     /**
      * We're overriding all internal data, to my knowledge, so this should be okay
      *
@@ -142,6 +147,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
             throw new InternalError();
         } // should never happen
     }
+
     /**
      * Returns true if this {@link MersenneTwister}'s current internal state is equal to another {@link MersenneTwister}.
      * That another is {@code other}.
@@ -169,6 +175,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
             if (mt[x] != other.mt[x]) return false;
         return true;
     }
+
     /**
      * Reads the entire state of the {@link MersenneTwister} RNG from the stream
      *
@@ -184,6 +191,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
         __nextNextGaussian = stream.readDouble();
         __haveNextNextGaussian = stream.readBoolean();
     }
+
     /**
      * Writes the entire state of the {@link MersenneTwister} RNG to the stream
      *
@@ -199,6 +207,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
         stream.writeDouble(__nextNextGaussian);
         stream.writeBoolean(__haveNextNextGaussian);
     }
+
     /**
      * Initialize the pseudo random number generator.  Don't
      * pass in a long that's bigger than an int (Mersenne Twister
@@ -206,6 +215,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
      *
      * @param seed the seed for this PRNG
      */
+    @Override
     public void setSeed(long seed) {
         // Due to a bug in java.util.Random clear up to 1.2, we're
         // doing our own Gaussian variable.
@@ -226,6 +236,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
             /* for >32 bit machines */
         }
     }
+
     /**
      * Sets the seed of the {@link MersenneTwister} using an array of integers.
      * Your array must have a non-zero length.  Only the first 624 integers
@@ -264,32 +275,39 @@ public final class MersenneTwister implements Serializable, Cloneable {
         }
         mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */
     }
+
     /**
      * @return a random integer  drawn uniformly from 0 to {@link Integer#MAX_VALUE}
      */
+    @Override
     public int nextInt() {
         return getOperated();
     }
+
     /**
      * @return a random {@code short} value  drawn uniformly from 0 to {@link Short#MAX_VALUE}
      */
     public short nextShort() {
         return (short) (getOperated() >>> 16);
     }
+
     /**
      * @return a random UTF-16 character as an {@code char} value drawn uniformly from {@code '\0'} to {@link Character#MAX_VALUE}
      */
     public char nextChar() {
         return (char) (getOperated() >>> 16);
     }
+
     /**
      * Simulates a fair coin toss.
      *
      * @return a {@code boolean} with equal probability of either {@code true} or {@code false}
      */
+    @Override
     public boolean nextBoolean() {
         return nextBoolean(0.5);
     }
+
     /**
      * This generates a coin flip with a probability {@code probability}
      * of returning {@code true}, else returning {@code false}.
@@ -305,29 +323,35 @@ public final class MersenneTwister implements Serializable, Cloneable {
         else if (probability == 1.0) return true;
         return ((((long) (getOperated() >>> 6)) << 27) + (getOperated() >>> 5)) / (double) (1L << 53) < probability;
     }
+
     /**
      * @return a random {@code byte} value drawn uniformly from 0 to {@link Byte#MAX_VALUE}
      */
     public byte nextByte() {
         return (byte) (getOperated() >>> 24);
     }
+
     /**
      * Fills the provided {@code byte[]}{@code bytes} with random byte values
      *
      * @param bytes the {@code byte[]} to fill with random bytes
      * @see MersenneTwister#nextByte()
      */
+    @Override
     public void nextBytes(byte[] bytes) {
         for (int x = 0; x < bytes.length; x++) {
             bytes[x] = nextByte();
         }
     }
+
     /**
      * @return a {@code long} drawn uniformly from 0 to {@link Long#MAX_VALUE}-1
      */
+    @Override
     public long nextLong() {
         return nextLong(Long.MAX_VALUE);
     }
+
     /**
      * @param min the lower limit
      * @param max the upper limit
@@ -337,6 +361,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
         long diff = Math.abs(max - min);
         return nextLong(diff) + (min < max ? min : max);
     }
+
     /**
      * @param n the upper limit
      * @return a {@code long} drawn uniformly from 0 to n-1.
@@ -353,6 +378,15 @@ public final class MersenneTwister implements Serializable, Cloneable {
         } while (bits - val + (n - 1) < 0);
         return val;
     }
+
+    /**
+     * @param max the upper limit
+     * @return random {@code double} in the range {@code 0} and {@code max}
+     */
+    public double nextDouble(double max) {
+        return nextDouble(0, max);
+    }
+
     /**
      * @param min the lower limit
      * @param max the upper limit
@@ -360,20 +394,23 @@ public final class MersenneTwister implements Serializable, Cloneable {
      */
     public double nextDouble(double min, double max) {
         double diff = Math.abs(max - min);
-        return nextDouble() * diff + (min < max ? min : max);
+        return nextDouble(true, true) * diff + (min < max ? min : max);
     }
+
     /**
      * @return a random {@code double} in the half-open range from [0.0,1.0).
      * Thus, 0.0 is a valid result, but 1.0 is not.
      */
+    @Override
     public double nextDouble() {
         int y = getOperated(), z = getOperated();
         /* derived from nextDouble documentation in jdk 1.2 docs, see top */
         return ((((long) (y >>> 6)) << 27) + (z >>> 5)) / (double) (1L << 53);
     }
+
     /**
      * Returns a double in the range from 0.0 to 1.0, possibly inclusive of 0.0 and 1.0 themselves.  Thus:
-     *
+     * <p>
      * <table border=0>
      * <tr><th>Expression</th><th>Interval</th></tr>
      * <tr><td>nextDouble(false, false)</td><td>(0.0, 1.0)</td></tr>
@@ -382,10 +419,10 @@ public final class MersenneTwister implements Serializable, Cloneable {
      * <tr><td>nextDouble(true, true)</td><td>[0.0, 1.0]</td></tr>
      * <caption>Table of intervals</caption>
      * </table>
-     *
+     * <p>
      * <p>This version preserves all possible random values in the double range.
      *
-     * @param includeOne whether to include 1.0d
+     * @param includeOne  whether to include 1.0d
      * @param includeZero whether to include 0.0d
      * @return an {@code double} in the range [0.0, 1.0], (0.0, 1.0), [0.0, 1.0) or (0.0,1.0] as above.
      */
@@ -399,6 +436,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
                 (!includeZero && d == 0.0));            // if we're not including zero, 0.0 is invalid
         return d;
     }
+
     /**
      * Clears the internal gaussian variable from the RNG.  You only need to do this
      * in the rare case that you need to guarantee that two RNGs have identical internal
@@ -409,6 +447,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
     public void clearGaussian() {
         __haveNextNextGaussian = false;
     }
+
     /**
      * @return a random {@code double value} in a Gaussian distribution
      */
@@ -431,6 +470,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
             return v1 * multiplier;
         }
     }
+
     /**
      * @param min the lower limit
      * @param max the upper limit
@@ -440,16 +480,19 @@ public final class MersenneTwister implements Serializable, Cloneable {
         float diff = Math.abs(max - min);
         return nextFloat() * diff + (min < max ? min : max);
     }
+
     /**
      * @return a random {@code float} in the half-open range from [0.0f,1.0f).
      * Thus 0.0f is a valid result but 1.0f is not.
      */
+    @Override
     public float nextFloat() {
         return (getOperated() >>> 8) / ((float) (1 << 24));
     }
+
     /**
      * Returns a float in the range from 0.0f to 1.0f, possibly inclusive of 0.0f and 1.0f themselves.  Thus:
-     *
+     * <p>
      * <table border=0>
      * <tr><th>Expression</th><th>Interval</th></tr>
      * <tr><td>nextFloat(false, false)</td><td>(0.0f, 1.0f)</td></tr>
@@ -458,10 +501,10 @@ public final class MersenneTwister implements Serializable, Cloneable {
      * <tr><td>nextFloat(true, true)</td><td>[0.0f, 1.0f]</td></tr>
      * <caption>Table of intervals</caption>
      * </table>
-     *
+     * <p>
      * <p>This version preserves all possible random values in the float range.
      *
-     * @param includeOne whether to include 1.0f
+     * @param includeOne  whether to include 1.0f
      * @param includeZero whether to include 0.0f
      * @return an {@code float} in the range [0.0, 1.0], (0.0, 1.0), [0.0, 1.0) or (0.0,1.0] as above.
      */
@@ -475,6 +518,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
                 (!includeZero && d == 0.0f));           // if we're not including zero, 0.0f is invalid
         return d;
     }
+
     /**
      * @param min the lower limit
      * @param max the upper limit
@@ -484,11 +528,13 @@ public final class MersenneTwister implements Serializable, Cloneable {
         int diff = Math.abs(max - min);
         return nextInt(diff) + (min < max ? min : max);
     }
+
     /**
      * @param n the upper limit
      * @return an integer drawn uniformly from 0 to n-1.
      * @throws IllegalArgumentException if {@code n} &lt; 0
      */
+    @Override
     public int nextInt(int n) {
         if (n <= 0)
             throw new IllegalArgumentException("n must be positive, got: " + n);
@@ -504,6 +550,7 @@ public final class MersenneTwister implements Serializable, Cloneable {
         } while (bits - val + (n - 1) < 0);
         return val;
     }
+
     private int getOperated() {
         int y;
         if (mti >= N)   // generate N words at one time
