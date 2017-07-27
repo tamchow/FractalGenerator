@@ -56,9 +56,9 @@ public final class Colors {
         private RGBCOMPONENTS() {
         }
     }
-    public static final class BASE_COLORS {
+    public static final class BaseColors {
         public static final int BLACK = 0xff000000, WHITE = 0xffffffff, RED = 0xffff0000, GREEN = 0xff00ff00, BLUE = 0xff0000ff, CYAN = 0xff00ffff, MAGENTA = 0xffff00ff, YELLOW = 0xffffff00;//opaque
-        private BASE_COLORS() {
+        private BaseColors() {
         }
     }
 }

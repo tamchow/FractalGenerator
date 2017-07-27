@@ -16,16 +16,16 @@ public final class HSL implements Serializable {
     @NotNull
     public static HSL fromString(@NotNull String hsl) {
         @NotNull String[] parts = StringManipulator.split(hsl, ",");
-        return new HSL(hueFromAngle(Double.valueOf(parts[0])), Double.valueOf(parts[1]), Double.valueOf(parts[2]));
+        return new HSL(hueFromAngle(Double.parseDouble(parts[0])), Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
     }
     public static double hueFromAngle(double radianMeasure) {
         return radianMeasure / (2 * Math.PI);
     }
     @NotNull
     public static HSL fromRGB(int color) {
-        int ri = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.RED),
-                gi = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
-                bi = Colorizer.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
+        int ri = ColorData.separateARGB(color, Colors.RGBCOMPONENTS.RED),
+                gi = ColorData.separateARGB(color, Colors.RGBCOMPONENTS.GREEN),
+                bi = ColorData.separateARGB(color, Colors.RGBCOMPONENTS.BLUE),
                 max = (ri > gi && ri > bi) ? ri : (gi > bi) ? gi : bi,
                 min = (ri < gi && ri < bi) ? ri : (gi < bi) ? gi : bi, c = max - min;
         double r = ri / 255.0, g = gi / 255.0, b = bi / 255.0, h, s, l = 0.5 * (max + min);
@@ -133,6 +133,6 @@ public final class HSL implements Serializable {
             b += Math.round((float) x * 255);
             g += 0;
         }
-        return Colorizer.toRGB(r, g, b);
+        return ColorData.toRGB(r, g, b);
     }
 }

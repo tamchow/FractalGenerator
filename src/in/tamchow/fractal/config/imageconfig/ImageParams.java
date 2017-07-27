@@ -70,7 +70,7 @@ public class ImageParams extends Config {
     }
     public void fromString(String[] params) {
         super.fromString(params);
-        initParams(Integer.valueOf(params[5]), TransitionType.valueOf(params[6]));
+        initParams(Integer.parseInt(params[5]), TransitionType.valueOf(params[6]));
         this.image = new PixelContainer(path);
     }
 }

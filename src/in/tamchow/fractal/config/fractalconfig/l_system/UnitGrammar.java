@@ -80,7 +80,7 @@ public class UnitGrammar implements Serializable {
             code = once[0];
             try {
                 command = Turtle.TurtleCommand.NO_OP;
-                angle = Double.valueOf(once[1]);
+                angle = Double.parseDouble(once[1]);
             } catch (NumberFormatException numberFormatException) {
                 command = Turtle.TurtleCommand.valueOf(once[1]);
                 angle = 0.0;
@@ -88,7 +88,7 @@ public class UnitGrammar implements Serializable {
         } else {
             code = once[0];
             command = Turtle.TurtleCommand.valueOf(once[1]);
-            angle = Double.valueOf(once[2]);
+            angle = Double.parseDouble(once[2]);
         }
     }
     public boolean isContextSensitive() {
@@ -158,7 +158,7 @@ public class UnitGrammar implements Serializable {
                     case 1:
                         try {
                             transformTo = code;
-                            probability = Math.abs(Double.valueOf(parts[0]));
+                            probability = Math.abs(Double.parseDouble(parts[0]));
                         } catch (NumberFormatException numberFormatException) {
                             transformTo = parts[0];
                             probability = 1.0;
@@ -173,12 +173,12 @@ public class UnitGrammar implements Serializable {
                             right = context[1].equals("?") ? null : context[1];
                         } else {
                             transformTo = parts[0];
-                            probability = Math.abs(Double.valueOf(parts[1]));
+                            probability = Math.abs(Double.parseDouble(parts[1]));
                         }
                         break;
                     case 3:
                         transformTo = parts[0];
-                        probability = Math.abs(Double.valueOf(parts[1]));
+                        probability = Math.abs(Double.parseDouble(parts[1]));
                         @NotNull String[] context = StringManipulator.split(parts[2], "<>");
                         left = context[0].equals("?") ? null : context[0];
                         right = context[1].equals("?") ? null : context[1];

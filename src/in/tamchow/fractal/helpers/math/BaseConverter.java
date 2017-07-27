@@ -122,7 +122,7 @@ public final class BaseConverter {
     private static int[] parseStringsToIntegers(@NotNull String[] data) {
         @NotNull int[] ints = new int[data.length];
         for (int i = 0; i < data.length; ++i) {
-            ints[i] = Integer.valueOf(data[i]);
+            ints[i] = Integer.parseInt(data[i]);
         }
         return ints;
     }
@@ -136,7 +136,7 @@ public final class BaseConverter {
     private static double[] parseStringsToDoubles(@NotNull String[] data) {
         @NotNull double[] ints = new double[data.length];
         for (int i = 0; i < data.length; ++i) {
-            ints[i] = Double.valueOf(data[i]);
+            ints[i] = Double.parseDouble(data[i]);
         }
         return ints;
     }

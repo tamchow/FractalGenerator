@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.IFS;
-import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.ColorData;
 import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.IFS.IFSFractalParams;
@@ -339,7 +339,7 @@ public final class IFSGenerator extends PixelFractalGenerator {
         @NotNull int[] coord = toCoordinates(point);
         if (render) {
             plane.setPixel(coord[1], coord[0],
-                    Colorizer.interpolated(
+                    ColorData.interpolated(
                             plane.getPixel(coord[1], coord[0]), params.getColors()[index],
                             /*Use default (proper) linear interpolation*/
                             params.getWeights()[index], 0, InterpolationType.LINEAR, false));

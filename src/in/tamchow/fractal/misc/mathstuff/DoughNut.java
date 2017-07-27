@@ -46,19 +46,19 @@ public class DoughNut {
     }
     public DoughNut(String info) {
         String[] parts = info.split("\\s+");
-        this.screen_width = Integer.valueOf(parts[0]);
-        this.screen_height = Integer.valueOf(parts[1]);
-        this.luminance_multiplier = Integer.valueOf(parts[2]);
-        this.theta_spacing = Double.valueOf(parts[3]);
-        this.phi_spacing = Double.valueOf(parts[4]);
-        this.R1 = Double.valueOf(parts[5]);
-        this.R2 = Double.valueOf(parts[6]);
-        this.K2 = Double.valueOf(parts[7]);
-        this.scale = Double.valueOf(parts[8]);
-        this.A_spacing = Double.valueOf(parts[9]);
-        this.B_spacing = Double.valueOf(parts[10]);
-        this.frames = Integer.valueOf(parts[11]);
-        this.sleep = Integer.valueOf(parts[12]);
+        this.screen_width = Integer.parseInt(parts[0]);
+        this.screen_height = Integer.parseInt(parts[1]);
+        this.luminance_multiplier = Integer.parseInt(parts[2]);
+        this.theta_spacing = Double.parseDouble(parts[3]);
+        this.phi_spacing = Double.parseDouble(parts[4]);
+        this.R1 = Double.parseDouble(parts[5]);
+        this.R2 = Double.parseDouble(parts[6]);
+        this.K2 = Double.parseDouble(parts[7]);
+        this.scale = Double.parseDouble(parts[8]);
+        this.A_spacing = Double.parseDouble(parts[9]);
+        this.B_spacing = Double.parseDouble(parts[10]);
+        this.frames = Integer.parseInt(parts[11]);
+        this.sleep = Integer.parseInt(parts[12]);
         this.ASCII_luminance_indices = parts[13].toCharArray();
         initK1();
     }

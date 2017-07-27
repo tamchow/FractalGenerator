@@ -1,5 +1,5 @@
 package in.tamchow.fractal.graphics.containers;
-import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.ColorData;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.HSL;
 import in.tamchow.fractal.color.InterpolationType;
@@ -133,7 +133,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((average + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEAN:
-                        processed.setPixel(i, j, Colorizer.interpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
+                        processed.setPixel(i, j, ColorData.interpolated(Math.round((float) average), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
                         break;
                     case MEDIAN:
                         processed.setPixel(i, j, median);
@@ -142,17 +142,17 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                         processed.setPixel(i, j, Math.round((float) ((median + getPixel(i, j)) / 2)));
                         break;
                     case INTERPOLATED_MEDIAN:
-                        processed.setPixel(i, j, Colorizer.interpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
+                        processed.setPixel(i, j, ColorData.interpolated(median, getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
                         break;
                     case INTERPOLATED:
-                        processed.setPixel(i, j, Colorizer.interpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
+                        processed.setPixel(i, j, ColorData.interpolated(getPixel(i, j - 1), getPixel(i, j), biases[i][j] - (long) biases[i][j], byParts, interpolationType, gammaCorrection));
                         break;
                     case NEGATIVE:
-                        processed.setPixel(i, j, Colorizer.packARGB(
-                                Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA),
-                                0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED),
-                                0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN),
-                                0xff - Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                        processed.setPixel(i, j, ColorData.packARGB(
+                                ColorData.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA),
+                                0xff - ColorData.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED),
+                                0xff - ColorData.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.GREEN),
+                                0xff - ColorData.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
                         break;
                     case NONE:
                         break;
@@ -179,16 +179,16 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 int pixelXPos = (int) Math.ceil(x * ((double) getWidth() - 1) / numXTiles);
                 int pixelYPos = (int) Math.ceil(y * ((double) getHeight() - 1) / numYTiles);
                 // Get the channels for the given pixel
-                int red = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.RED);
-                int green = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.GREEN);
-                int blue = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.BLUE);
-                double alpha = Colorizer.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.ALPHA);
+                int red = ColorData.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.RED);
+                int green = ColorData.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.GREEN);
+                int blue = ColorData.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.BLUE);
+                double alpha = ColorData.separateARGB(getPixel(pixelYPos, pixelXPos), Colors.RGBCOMPONENTS.ALPHA);
                 // Note that we divide by `alpha` to get the height
                 // If we always use fully opaque images, alpha will be the maximum possible value
                 // This allows us to handle 8bit, 16bit, or Nbit images
                 // Values are based on ratios. We don't care about the images bit depth
                 int heightAtThisPosition = (byte) (scale * (red + green + blue) / 3.0 / alpha);
-                tileHeights[y][x] = Colorizer.toGray(heightAtThisPosition);
+                tileHeights[y][x] = ColorData.toGray(heightAtThisPosition);
             }
         }
         return new PixelContainer(tileHeights);
@@ -198,7 +198,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         for (int i = 0; i < getHeight(); ++i) {
             for (int j = 0; j < getWidth(); ++j) {
                 heightFieldLocs[i * getWidth() + j] = new HeightFieldLoc(j, i,
-                        Colorizer.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED) / 255.0);
+                        ColorData.separateARGB(getPixel(i, j), Colors.RGBCOMPONENTS.RED) / 255.0);
             }
         }
         return heightFieldLocs;
@@ -273,7 +273,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0,
+                        setPixel(i, j, ColorData.interpolated(getPixel(i, j), toAdd.getPixel(i, j), 0.5, 0,
                                 InterpolationType.LINEAR, false));
                     }
                 }
@@ -284,7 +284,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
                 for (int i = 0; i < Math.min(getHeight(), toAdd.getHeight()); i++) {
                     for (int j = 0; j < Math.min(getWidth(), toAdd.getWidth()); j++) {
                         //median color between 2 extremes
-                        setPixel(i, j, Colorizer.interpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0,
+                        setPixel(i, j, ColorData.interpolated(getPixel(i, j), toAdd.getPixel(i, j), biases[i][j], 0,
                                 InterpolationType.LINEAR, false));
                     }
                 }
@@ -305,7 +305,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         @NotNull PixelContainer falseColored = new PixelContainer(nwidth, nheight);
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
-                falseColored.setPixel(i, j, Colorizer.toRGB(Colorizer.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Colorizer.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Colorizer.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                falseColored.setPixel(i, j, ColorData.toRGB(ColorData.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), ColorData.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), ColorData.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
             }
         }
         return falseColored;
@@ -317,7 +317,7 @@ public class PixelContainer implements Serializable, Pannable, Comparable<PixelC
         @NotNull PixelContainer falseColored = new PixelContainer(nwidth, nheight);
         for (int i = 0; i < falseColored.getHeight(); i++) {
             for (int j = 0; j < falseColored.getWidth(); j++) {
-                falseColored.setPixel(i, j, Colorizer.packARGB(Colorizer.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA), Colorizer.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), Colorizer.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), Colorizer.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
+                falseColored.setPixel(i, j, ColorData.packARGB(ColorData.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.ALPHA), ColorData.separateARGB(r.getPixel(i, j), Colors.RGBCOMPONENTS.RED), ColorData.separateARGB(g.getPixel(i, j), Colors.RGBCOMPONENTS.GREEN), ColorData.separateARGB(b.getPixel(i, j), Colors.RGBCOMPONENTS.BLUE)));
             }
         }
         return falseColored;

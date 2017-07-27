@@ -75,10 +75,10 @@ public class LSFractalParams extends Config implements Serializable {
         super.fromString(data[0].split(Strings.CONFIG_SEPARATOR));
         @NotNull String[] init = StringManipulator.split(data[1], ",");
         if (init.length >= 4) {
-            setDepth(Integer.valueOf(init[0]));
+            setDepth(Integer.parseInt(init[0]));
             setAxiom(init[1]);
-            setFore_color(Integer.valueOf(init[2], 16));
-            setBack_color(Integer.valueOf(init[3], 16));
+            setFore_color(Integer.parseInt(init[2], 16));
+            setBack_color(Integer.parseInt(init[3], 16));
             switch (init.length) {
                 case 4:
                     setInit_length(width);
@@ -86,16 +86,16 @@ public class LSFractalParams extends Config implements Serializable {
                     break;
                 case 5:
                     try {
-                        setInit_length(Integer.valueOf(init[4]));
+                        setInit_length(Integer.parseInt(init[4]));
                         setInit_angle(0.0);
                     } catch (NumberFormatException nfe) {
-                        setInit_angle(Double.valueOf(init[4]));
+                        setInit_angle(Double.parseDouble(init[4]));
                         setInit_length(width);
                     }
                     break;
                 case 6:
-                    setInit_length(Integer.valueOf(init[4]));
-                    setInit_angle(Double.valueOf(init[5]));
+                    setInit_length(Integer.parseInt(init[4]));
+                    setInit_angle(Double.parseDouble(init[5]));
                     break;
             }
         }

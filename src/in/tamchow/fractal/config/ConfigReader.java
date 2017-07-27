@@ -98,16 +98,16 @@ public class ConfigReader {
             complexFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));
         }
         if (switch_rate != null) {
-            complexFractalParams.initParams.setSwitch_rate(Integer.valueOf(switch_rate));
+            complexFractalParams.initParams.setSwitchRate(Integer.parseInt(switch_rate));
         }
         if (trap_point != null) {
-            complexFractalParams.initParams.setTrap_point(new Complex(trap_point));
+            complexFractalParams.initParams.setTrapPoint(new Complex(trap_point));
         }
         if (trap_line != null) {
-            complexFractalParams.initParams.setLinetrap(trap_line);
+            complexFractalParams.initParams.setLineTrap(trap_line);
         }
         if (oldvariablecode != null) {
-            complexFractalParams.initParams.setOldvariablecode(oldvariablecode);
+            complexFractalParams.initParams.setOldVariableCode(oldvariablecode);
         }
         complexFractalParams.setPath(paramfile.getAbsolutePath());
         return complexFractalParams;
@@ -132,10 +132,10 @@ public class ConfigReader {
             ifsFractalParams.setZoomConfig(ZoomConfig.fromString(zooms));
         }
         if (frameskip != null) {
-            ifsFractalParams.setFrameskip(Integer.valueOf(frameskip));
+            ifsFractalParams.setFrameskip(Integer.parseInt(frameskip));
         }
         if (threads != null) {
-            ifsFractalParams.setThreads(Integer.valueOf(threads));
+            ifsFractalParams.setThreads(Integer.parseInt(threads));
         }
         if (post_process_mode != null) {
             ifsFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
@@ -169,13 +169,13 @@ public class ConfigReader {
             complexBrotFractalParams.setNewton_constant(new Complex(constant));
         }
         if (threads != null) {
-            complexBrotFractalParams.setNum_threads(Integer.valueOf(threads));
+            complexBrotFractalParams.setNum_threads(Integer.parseInt(threads));
         }
         if (post_process_mode != null) {
             complexBrotFractalParams.setPostProcessMode(PixelContainer.PostProcessMode.valueOf(post_process_mode));
         }
         if (switch_rate != null) {
-            complexBrotFractalParams.setSwitch_rate(Integer.valueOf(switch_rate));
+            complexBrotFractalParams.setSwitch_rate(Integer.parseInt(switch_rate));
         }
         if (oldvariablecode != null) {
             complexBrotFractalParams.setOldVariableCode(oldvariablecode);

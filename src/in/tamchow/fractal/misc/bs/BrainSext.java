@@ -195,7 +195,7 @@ public class BrainSext {
                 case 'C':
                     operand[ptr] = (operand[ptr] + "").charAt(0);
                 case 'I':
-                    operand[ptr] = Integer.valueOf("" + (char) operand[ptr]);
+                    operand[ptr] = Integer.parseInt("" + (char) operand[ptr]);
                 case '@':
                     i = jumpIndex(i, false);
                     continue outer;

@@ -328,7 +328,7 @@ public class BF2Java {
             output = inputPath.substring(0, inputPath.lastIndexOf(".")) + ".java";
         }
         if (sIndex >= 0) {
-            size = Integer.valueOf(argList.get(sIndex + 1));
+            size = Integer.parseInt(argList.get(sIndex + 1));
         }
         if (oIndex >= 0) {
             output = argList.get(oIndex + 1);

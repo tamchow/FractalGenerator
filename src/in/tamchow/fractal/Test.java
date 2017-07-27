@@ -1,5 +1,5 @@
 package in.tamchow.fractal;
-import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.ColorData;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.config.ConfigReader;
@@ -20,6 +20,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import static in.tamchow.fractal.color.Colors.MODE.*;
+import static in.tamchow.fractal.color.InterpolationType.LINEAR;
+import static in.tamchow.fractal.color.InterpolationType.MONOTONE_CUBIC_SPLINE;
+import static in.tamchow.fractal.fractals.complex.ComplexFractalGenerator.*;
 /**
  * Test class, handles CMDLINE input.
  */
@@ -28,30 +33,33 @@ public class Test {
         @NotNull String func = "(z^3)+((d)*(z))+e", variableCode = "z", poly = "1:z:3,+,d:z:1,+,e",
                 poly2 = "1;tan;1:z:1;1", poly3 = "1:z:2,+,e", poly4 = "1:z:1;sin;1:z:2;1;-1", poly5 = "1:z:8,+,15:z:4,-,16",
                 func2 = "((z^2)/(1+(h*z)))+j", func3 = "z^2+e", magnet1 = "((z^2+c-1)/(2*z+c-2))^2",
-                magnet2 = "((z^3+3*(c-1)*z+(c-1)*(c-2))/(3*(z^2)+ 3*(c-2)*z+(c-1)*(c-2)+1))^2";
+                magnet2 = "((z^3+3*(c-1)*z+(c-1)*(c-2))/(3*(z^2)+ 3*(c-2)*z+(c-1)*(c-2)+1))^2",
+                experimental1 = "e^(-z)", experimental2 = "e^z", experimental3 = "exp(z)", experimental4 = "z^(-z)",
+                experimental5 = "z^z", experimental6 = "log(z)", experimental7 = "exp(z^3)", experimental8 = "exp(z^z)",
+                experimental9 = "exp(z^(-z))", experimental10 = "(-z)^(exp(z))";
         @NotNull String[][] consts = {{"c", "-0.1,+0.651i"}, {"d", "-0.7198,+0.9111i"}, {"e", "-0.8,+0.156i"},
                 {"f", "0.5,+0.25i"}, {"g", "1,+0.3i"}, {"h", "-0.2013,+0.5638i"}, {"j", "1.4686,+1.265i"}};
-        int resx = 1280, resy = 720, iter = 32, switch_rate = 0, num_points = 10_000, max_hit_threshold = 10;
+        int width = 640, height = 480, maxIterations = 32, switchRate = 0, numPoints = 10_000, maxHitThreshold = 10;
         @NotNull int[] iterations = {20};
         @Nullable double[] percentiles = null;
-        @NotNull ComplexFractalGenerator.Mode fracmode = ComplexFractalGenerator.Mode.JULIA;
-        double escrad = 1e10, tolerance = 1e-10, zoom = 1, baseprec = -1;
+        @NotNull Mode fractalMode = Mode.JULIA;
+        double escapeRadius = 1e10, tolerance = 1e-10, zoom = 0.25, basePrecision = -1;
         @Nullable String linetrap = null;
-        @NotNull Colorizer cfg = new Colorizer(Colors.MODE.EPSILON_CROSS, -1, 16_700_000, 0, true,
-                false, InterpolationType.MONOTONE_CUBIC_SPLINE, false, false,
+        @NotNull ColorData colorData = new ColorData(TRIANGLE_AREA_INEQUALITY, -1, 16_700_000, 0, true,
+                false, MONOTONE_CUBIC_SPLINE, false, false,
                 false, -1);
-        func = func3;
-        //cfg.setModifierEnabled(true);
-        //cfg.setMultiplier_threshold(1E-6);
-        //cfg.setExponentialSmoothing(false);
-        //cfg.setLogIndex(false);
-        //cfg.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
-        //cfg.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0), rgb(0, 7, 100)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575, 1.0});
-        //cfg.setPalette(new int[]{Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.GREEN}, false);
-        //cfg.setPalette(new int[]{Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW}, false);
-        cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.RED, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.CYAN, 0xff7fffd4, 0xffffa07a}, new double[]{0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84, 0.96});
-        //cfg.createSmoothPalette(new int[]{Colors.BASE_COLORS.WHITE, Colors.BASE_COLORS.BLACK, Colors.BASE_COLORS.RED, Colors.BASE_COLORS.YELLOW, Colors.BASE_COLORS.GREEN, Colors.BASE_COLORS.CYAN, Colors.BASE_COLORS.BLUE, Colors.BASE_COLORS.MAGENTA, Colors.BASE_COLORS.WHITE}, new double[]{0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0});
-        /*BufferedImage img = ImageConverter.toImage(ColorDebugger.createDebugImage(cfg.getPalette()));
+        func = experimental10;
+        //colorData.setModifierEnabled(true);
+        //colorData.setMultiplier_threshold(1E-6);
+        //colorData.setExponentialSmoothing(false);
+        //colorData.setLogIndex(false);
+        //colorData.setPalette(new int[]{rgb(66, 30, 15), rgb(25, 7, 26), rgb(9, 1, 47), rgb(4, 4, 73), rgb(0, 7, 100), rgb(12, 44, 138), rgb(24, 82, 177), rgb(57, 125, 209), rgb(134, 181, 229), rgb(211, 236, 248), rgb(241, 233, 191), rgb(248, 201, 95), rgb(255, 170, 0), rgb(204, 128, 0), rgb(153, 87, 0), rgb(106, 52, 3)}, false);
+        //colorData.createSmoothPalette(new int[]{rgb(0, 7, 100), rgb(32, 107, 203), rgb(237, 255, 255), rgb(255, 170, 0), rgb(0, 2, 0), rgb(0, 7, 100)}, new double[]{0.0, 0.16, 0.42, 0.6425, 0.8575, 1.0});
+        //colorData.setPalette(new int[]{Colors.BaseColors.YELLOW, Colors.BaseColors.BLUE, Colors.BaseColors.RED, Colors.BaseColors.GREEN}, false);
+        //colorData.setPalette(new int[]{Colors.BaseColors.GREEN, Colors.BaseColors.BLUE, Colors.BaseColors.RED, Colors.BaseColors.YELLOW}, false);
+        colorData.createSmoothPalette(new int[]{Colors.BaseColors.RED, Colors.BaseColors.BLUE, Colors.BaseColors.GREEN, Colors.BaseColors.YELLOW, Colors.BaseColors.MAGENTA, Colors.BaseColors.CYAN, 0xff7fffd4, 0xffffa07a}, new double[]{0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84, 0.96});
+        //colorData.createSmoothPalette(new int[]{Colors.BaseColors.WHITE, Colors.BaseColors.BLACK, Colors.BaseColors.RED, Colors.BaseColors.YELLOW, Colors.BaseColors.GREEN, Colors.BaseColors.CYAN, Colors.BaseColors.BLUE, Colors.BaseColors.MAGENTA, Colors.BaseColors.WHITE}, new double[]{0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0});
+        /*BufferedImage img = ImageConverter.toImage(ColorDebugger.createDebugImage(colorData.getPalette()));
         try {
             ImageIO.write(img, "png", new File(new File(".").getAbsoluteFile().getAbsolutePath() + "/ColorDebug.png"));
         } catch (IOException e) {
@@ -62,27 +70,27 @@ public class Test {
         @NotNull Complex trap = new Complex(1);
         int x_t = 2, y_t = 2, xppp = 10, yppp = 10;
         double skew = 0 * Math.PI;
-        boolean def = (args.length == 0);
+        boolean defined = (args.length == 0);
         @Nullable ComplexFractalParams jgenParams = null;
-        if (!def) {
+        if (!defined) {
             try {
                 jgenParams = ConfigReader.getComplexParamFromFile(new File(args[0]));
             } catch (Exception e) {
-                x_t = Integer.valueOf(args[0]);
-                y_t = Integer.valueOf(args[1]);
-                def = true;
+                x_t = Integer.parseInt(args[0]);
+                y_t = Integer.parseInt(args[1]);
+                defined = true;
             }
         }
-        long inittime = System.currentTimeMillis();
+        long initTime = System.currentTimeMillis();
         @Nullable ComplexFractalGenerator jgen;
-        if (def) {
-            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(resx, resy, zoom, baseprec, fracmode, func, consts, variableCode, tolerance, cfg, switch_rate, trap), null, x_t, y_t);
+        if (defined) {
+            jgenParams = new ComplexFractalParams(new ComplexFractalInitParams(width, height, zoom, basePrecision, fractalMode, func, consts, variableCode, tolerance, colorData, switchRate, trap), null, x_t, y_t);
             jgenParams.initParams.skew = skew;
             jgenParams.setPostProcessMode(PixelContainer.PostProcessMode.NONE);
             if (constant != null) {
-                jgenParams.runParams = new ComplexFractalRunParams(iter, escrad, constant);
+                jgenParams.runParams = new ComplexFractalRunParams(maxIterations, escapeRadius, constant);
             } else {
-                jgenParams.runParams = new ComplexFractalRunParams(iter, escrad);
+                jgenParams.runParams = new ComplexFractalRunParams(maxIterations, escapeRadius);
             }
         }
         jgen = new ComplexFractalGenerator(jgenParams, new DesktopProgressPublisher());
@@ -95,10 +103,10 @@ public class Test {
         //jgen.zoom(1375, 695, 10);
         //jgen.zoom(new Complex(0.27969303810093984, -0.00838423653868096), 1E12);
         boolean anti = false, clamp = true;
-        //ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(resx, resy, x_t, y_t, switch_rate, xppp, yppp, max_hit_threshold, iterations, zoom, zoompow, baseprec, escrad, tolerance, skew, func, variableCode, consts, fracmode, anti, clamp, percentiles);
+        //ComplexBrotFractalParams cbparams = new ComplexBrotFractalParams(width, height, x_t, y_t, switchRate, xppp, yppp, maxHitThreshold, iterations, zoom, zoompow, basePrecision, escapeRadius, tolerance, skew, func, variableCode, constants, fractalMode, anti, clamp, percentiles);
         //ComplexBrotFractalGenerator cbgen = new ComplexBrotFractalGenerator(cbparams, new DesktopProgressPublisher());
-        long starttime = System.currentTimeMillis();
-        System.out.println("Initiating fractal took:" + (starttime - inittime) + "ms");
+        long startTime = System.currentTimeMillis();
+        System.out.println("Initiating fractal took:" + (startTime - initTime) + "ms");
         /*@NotNull ThreadedComplexBrotFractalGenerator cbthreaded = new ThreadedComplexBrotFractalGenerator(cbgen);
         cbthreaded.generate();*/
         @NotNull ThreadedComplexFractalGenerator threaded = new ThreadedComplexFractalGenerator(jgen);
@@ -114,24 +122,24 @@ public class Test {
         }catch (IOException ignored){
             ignored.printStackTrace();
         }*/
-        long gentime = System.currentTimeMillis();
+        long generationTime = System.currentTimeMillis();
         //System.out.println(jgen.getRoots());
         //System.out.println(jgen.getColor().averageTint());
         System.out.println(jgen.averageIterations());
         PixelContainer image = jgen.getArgand().getPostProcessed(
                 jgenParams != null ? jgenParams.getPostProcessMode() : PixelContainer.PostProcessMode.NONE,
-                jgen.getNormalized_escapes(), jgen.getColor().getByParts(),
+                jgen.getNormalizedEscapes(), jgen.getColor().getByParts(),
                 jgen.getColor().getInterpolationType(), jgen.getColor().isGammaCorrection());
-        String csv = simpleArrayToString(image.toHeightMap().generateHeightField());
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(".").getAbsoluteFile().getAbsolutePath() + "/output.csv", false));
-            writer.write(csv);
-            writer.flush();
-            writer.close();
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
-        }
-        System.out.println("Generating fractal took:" + ((double) (gentime - starttime) / 60000) + "mins");
+//        String csv = simpleArrayToString(image.toHeightMap().generateHeightField());
+//        try {
+//            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(".").getAbsoluteFile().getAbsolutePath() + "/output.csv", false));
+//            writer.write(csv);
+//            writer.flush();
+//            writer.close();
+//        } catch (IOException ignored) {
+//            ignored.printStackTrace();
+//        }
+        System.out.println("Generating fractal took:" + ((double) (generationTime - startTime) / 60000) + "mins");
         @NotNull File pic = new File(new File(".").getAbsoluteFile().getAbsolutePath() + "/Fractal.png");
         try {
             ImageIO.write(ImageConverter.toImage(image), "png", pic);
@@ -140,11 +148,11 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        long endtime = System.currentTimeMillis();
-        System.out.println("Writing image took:" + (endtime - gentime) + "ms");
+        long endTime = System.currentTimeMillis();
+        System.out.println("Writing image took:" + (endTime - generationTime) + "ms");
     }
     static int rgb(int r, int g, int b) {
-        return Colorizer.toRGB(r, g, b);
+        return ColorData.toRGB(r, g, b);
     }
     private static String simpleArrayToString(Object[] array) {
         StringBuilder stringBuilder = new StringBuilder(array.length * array[0].toString().length());

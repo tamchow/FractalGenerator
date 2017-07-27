@@ -108,7 +108,7 @@ public class Main {
                                 } catch (IOException ignored) {
                                     ignored.printStackTrace();
                                 }
-                                if (params.postprocessMode == PixelContainer.PostProcessMode.TEXT_TO_IMAGE) {
+                                if (params.postProcessMode == PixelContainer.PostProcessMode.TEXT_TO_IMAGE) {
                                     ImageIO.write(ImageConverter.drawTextToImage(ascii, Font.MONOSPACED, Font.PLAIN,
                                             0xff000000, 0xffffffff, 10, 0, 0),
                                             "png", outputFile);
@@ -116,7 +116,7 @@ public class Main {
                             } else {
                                 if (params.getPostProcessMode() != PixelContainer.PostProcessMode.NONE) {
                                     ImageIO.write(ImageConverter.toImage(generator.getArgand().getPostProcessed(
-                                            params.getPostProcessMode(), generator.getNormalized_escapes(),
+                                            params.getPostProcessMode(), generator.getNormalizedEscapes(),
                                             generator.getColor().getByParts(),
                                             generator.getColor().getInterpolationType(),
                                             generator.getColor().isGammaCorrection())), "png", outputFile);

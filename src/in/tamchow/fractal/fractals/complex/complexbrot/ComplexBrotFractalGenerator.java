@@ -1,5 +1,5 @@
 package in.tamchow.fractal.fractals.complex.complexbrot;
-import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.ColorData;
 import in.tamchow.fractal.config.Publisher;
 import in.tamchow.fractal.config.fractalconfig.complex.complexbrot.ComplexBrotFractalParams;
 import in.tamchow.fractal.config.fractalconfig.fractal_zooms.ZoomParams;
@@ -265,10 +265,10 @@ public class ComplexBrotFractalGenerator extends PixelFractalGenerator {
             for (int k = 0; k < channels.length; k++) {
                 channels[k] = boundsProtected(round((float) (RANDOM.nextInt(256) * value)), 256);
             }
-            return Colorizer.packRGB(channels[0], channels[1], channels[2]);
+            return ColorData.packRGB(channels[0], channels[1], channels[2]);
         } else {
             int channel = boundsProtected(round((float) value * 255), 256);
-            return Colorizer.toGray(channel);
+            return ColorData.toGray(channel);
         }
     }
     private int getMaximum(@NotNull int[][] base, int percentileValue) {

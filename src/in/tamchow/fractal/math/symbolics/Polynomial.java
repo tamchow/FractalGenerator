@@ -224,7 +224,7 @@ public final class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         private void setCoefficient(String coefficient) {
             this.coefficient = coefficient;
             if (this.coefficient == null || this.coefficient.isEmpty()) {
-                setCoefficient(String.valueOf(1));
+                setCoefficient(_1);
             }
         }
         private String getExponent() {
@@ -237,7 +237,7 @@ public final class Polynomial extends Operable<Polynomial, Polynomial.Term> {
             } else {
                 setConstant(false);
                 try {
-                    if (Double.valueOf(this.exponent).equals(0.0)) {
+                    if (Double.parseDouble(this.exponent) == 0.0) {
                         makeConstant();
                     }
                 } catch (NumberFormatException ignored) {
@@ -252,11 +252,11 @@ public final class Polynomial extends Operable<Polynomial, Polynomial.Term> {
         }
         @NotNull
         private Term derivative() {
-            @NotNull Term deriv = new Term(_0);
+            @NotNull Term derivative = new Term(_0);
             if (!isConstant()) {
-                deriv = new Term("(" + this.coefficient + ")*(" + this.exponent + ")", "((" + this.exponent + ")-" + _1 + ")", this.variable);
+                derivative = new Term("(" + this.coefficient + ")*(" + this.exponent + ")", "((" + this.exponent + ")-" + _1 + ")", this.variable);
             }
-            return deriv;
+            return derivative;
         }
         boolean isConstant() {
             return constant;

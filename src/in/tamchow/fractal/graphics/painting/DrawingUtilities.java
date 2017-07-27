@@ -1,5 +1,5 @@
 package in.tamchow.fractal.graphics.painting;
-import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.ColorData;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.color.InterpolationType;
 import in.tamchow.fractal.graphics.containers.PixelContainer;
@@ -8,8 +8,8 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
  * Line Drawing Utilities for {@link in.tamchow.fractal.graphics.containers.PixelContainer}
  *
  * @see in.tamchow.fractal.graphics.containers.PixelContainer
- * @see Colorizer#interpolated(int, int, double, int, InterpolationType, boolean)
- * @see in.tamchow.fractal.color.Colors.BASE_COLORS
+ * @see ColorData#interpolated(int, int, double, int, InterpolationType, boolean)
+ * @see Colors.BaseColors
  */
 public final class DrawingUtilities {
     /**
@@ -85,7 +85,7 @@ public final class DrawingUtilities {
     }
     private static void plot(@NotNull PixelContainer canvas, int color, double x, double y, double brightness) {
         canvas.setPixel(Math.round((float) y), Math.round((float) x),
-                Colorizer.interpolated(color, Colors.BASE_COLORS.WHITE, brightness, 0, InterpolationType.LINEAR,
+                ColorData.interpolated(color, Colors.BaseColors.WHITE, brightness, 0, InterpolationType.LINEAR,
                         false));
     }
     private static double fpart(double x) {

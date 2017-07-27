@@ -1,57 +1,53 @@
 # FractalGenerator
-<html>
-For proper project documentation, refer <a href="http://tamchow.github.io/FractalGenerator/index.html">here</a>.
+For proper project documentation, refer [here](http://tamchow.github.io/FractalGenerator/index.html).
 
-A <b>Java</b> fractal generator (currently all input is handled through configuration files),
+A __Java__ fractal generator (currently all input is handled through configuration files),
 that implements display of custom functions, with constant declaration processing, in both Mandelbrot,Newton, Nova (both Julia and Mandelbrot  types), Secant and Julia modes.
 
 Newton Mode only supports simple polynomials with complex exponents and coefficients allowed, but the polynomial must be in a special format, which is documented in .idea/description.html or the Wiki Description page.
 
-There are 36 different colouring schemes, 15 have linear interpolation, 17 have Catmull-Rom Spline interpolation and 2 which directly render in grayscale for emphasis on inner regions. The final is distance estimation based grayscale or palette coloring, which is slow and has the same limitations as Newton mode as it uses the same mathematics (symbolic differentiation) backend.
+There are large number of coloring algorithms, each with its own parameters,
+accompanied by both linear and spline interpolation.
 
-Degrees of functions are auto-calculated for use in calculating the renormalized iteration count. The automatic degree calculation system has less issues with grouped operations, especially if considering division or multiplication in the equation. This calculation can be manually overriden after initializing the fractal generator with `setDegree(double)` of the `ComplexFractalGenerator` object in the `Test` class. This could be made more accesible once a GUI is made. Specifying a degree value in the configuration file will also override the calculation of the degree, which can be a complex value. Indexing of colours can be linear or logarithmic. Colors can be interpolated directly or via their R, G and B components.
+##Important Disclaimer
+This is a large, old project with me as the sole developer, 
+and has organically accrued quite a large amount of related and unrelated code. 
 
-The spline-interpolant methods are the standard ones of Triangle Area Inequality, Curvature Average and Stripe Average, as well as Histogram coloring and Color Distance Estimation,Orbit and Line Traps and Gaussian Distance and Epsilon Cross, by default.
+Be aware that most of the code on this project is totally untested except for logic verification - 
+I simply no longer have the time. I can only guarantee that `ComplexFractalGenerator` is reasonably tested,
+and that too only for the Mandelbrot, Julia and Newton modes.
 
-The linear interpolant methods have the 3 Newton fractal coloring modes, and the division and multiplication direct and normalized coloring modes, and linear versions of the spline-interpolant methods,excepting distance estimation and traps.
+Also be aware that accompanying documentation can very well be outdated.
 
-Resolution of the fractal is preferred to be in 2m+1x2n+1 format for proper symmetry.
+Finally, the code is objectively horrible and I apologize for that.
+I've since moved to Scala as my primary language, and am no longer going to maintain this.
+If you want to see better-written code, you're welcome to take a look at any of my Scala repos.
 
-<p>
-    NOTES:
-    
-    Multithreading -- Multithreading works, but it is extremely resource intensive, requiring about a 20x increase in
-    memory requirements for about a 10x speedup during generation (12 threads). Also, there might be OOM errors in very
-    intensive cases. I still encourage people to use multithreading, with up to 14 threads (7*2).
-              
-    Also,there is full support for zoom, but renders after zoom are slow for higher base precision values. As a thumb rule, for quadrupling total resolution, double base precision for best results.
-</p>
+__TL;DR - This is an Abandoned Project__
 
-<p>
-   There is also an included image viewer, which can also display fractals.
-    There is support for elementary image transitions from top,bottom,left and right.
-    
-    NOTE:
-    
-    Both are supported now in code but are untested.
-    
-    This has been implemented, and is integrated into the main program, with a fractal configuration file path being the only accepted argument.
-    
-    Image and Fractal display configuration files are a stickler for format, but do support inline comments with "#", as in .ini files.
-</p>
+##NOTES:
+Multithreading is on by default, and can be disabled by setting both `xThreads` and `yThreads` to 1.
+Otherwise, this program can and will run very slow, given its expression interpreter.
 
-<p>
-  I do not have much time for putting in documenting comments.
-      I'll put them in and update files as and when possible.
-</p>
+There is support for zoom, pan and rotate directly during image generation, but note that these can make execution slow.
 
-<p>
-Running:
+There is also an included image viewer, which can also display generated fractals, support for elementary image transitions from top, bottom, left and right.
+(see the wiki for more details on the options which enable this behaviour).
+ 
+This has been implemented, and is integrated into the main program, with a fractal configuration file path being the only accepted argument.
 
-Parameters are optional in test builds, but not in the release version. If you have a slow PC and it is defaulted to a FullHD or 4K render,
-be ready to wait upto an hour or more for output. I have an Asus K55VM and on this configuration with CMD I get 30 mins.
+The parser for image and Fractal display configuration files is a regular language parser, so it'll balk at any errors (with unpredictable results).
+However, inline comments beginning  with a `'#'` are supported, _a la_ Python/INI.
 
-This runs substantially faster through Idea itself (9.5 mins for me), no idea why. I use IntelliJ Idea 15.
+Do not expect documentation or comments - there are few, if any, and I don't have the time to put in more.
+
+##Running:
+Parameters are optional in test builds, but not in the release version. 
+If you have a slow PC and it is defaulted to a FullHD or 4K render,
+be ready to wait up to an hour or more for output.
+
+Note that by default the program runs in multithreaded mode utilizing 4 threads, 
+and complex fractals may take up to 4 or 5 minutes to render at 1920x1080 resolution.  
 
 You're welcome to use any part of this in any way you wish, but if you acknowledge me I'll be very grateful.
 
@@ -59,9 +55,7 @@ For further details, refer to the wiki.
 
 To run:
 
-<pre>java -jar FractalGenerator.jar [switches] [path-to-fractal-config-file] [options] [output-directory]</pre>
+    java -jar FractalGenerator.jar [switches] <path-to-fractal-config-file> [options] [output-directory]
 
 Or, you can just use the included `test.bat` file which is provided along with the `JAR`.
 Note that a `-test` or `-t` option without switches or other arguments will run the currently-configured test fractal which will be output as: `./Fractal.png` (i.e., as Fractal.png in the directory from which the JAR was launched).
-</p>
-</html>

@@ -16,17 +16,17 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
     private final ComplexFractalGenerator master;
     private volatile PartComplexFractalData[] buffer;
     private long iterations;
-    private double escape_radius;
+    private double escapeRadius;
     @Nullable
     private Complex constant;
     private int nx, ny;
-    public ThreadedComplexFractalGenerator(int x_threads, int y_threads, ComplexFractalGenerator master, int iterations, double escape_radius, Complex constant) {
+    public ThreadedComplexFractalGenerator(int xThreads, int yThreads, ComplexFractalGenerator master, int iterations, double escapeRadius, Complex constant) {
         this.master = master;
         this.iterations = iterations;
-        this.escape_radius = escape_radius;
+        this.escapeRadius = escapeRadius;
         this.constant = constant;
-        nx = x_threads;
-        ny = y_threads;
+        nx = xThreads;
+        ny = yThreads;
         threads = new ThreadedGenerator.SlaveRunner[nx * ny];
         buffer = new PartComplexFractalData[threads.length];
     }
@@ -34,8 +34,8 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
         this(master, master.getParams());
     }
     public ThreadedComplexFractalGenerator(ComplexFractalGenerator master, @NotNull ComplexFractalParams config) {
-        this(config.getX_threads(), config.getY_threads(), master,
-                config.runParams.iterations, config.runParams.escape_radius, config.runParams.constant);
+        this(config.getXThreads(), config.getYThreads(), master,
+                config.runParams.iterations, config.runParams.escapeRadius, config.runParams.constant);
     }
     @Override
     public int countCompletedThreads() {
@@ -52,10 +52,10 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
             master.generate();
         }
     }
-    public void generate(int startx, int endx, int starty, int endy) {
+    public void generate(int startX, int endX, int startY, int endY) {
         int idx = 0;
         for (int t = (currentlyCompletedThreads == 0) ? 0 : currentlyCompletedThreads + 1; t < threads.length; ++t) {
-            @NotNull int[] coords = ComplexFractalGenerator.start_end_coordinates(startx, endx, starty, endy, nx, t % nx, ny, t / nx);
+            @NotNull int[] coords = ComplexFractalGenerator.start_end_coordinates(startX, endX, startY, endY, nx, t % nx, ny, t / nx);
             threads[t] = new SlaveRunner(idx, coords[0], coords[1], coords[2], coords[3]);
             master.getProgressPublisher().publish("Initiated thread: " + (idx + 1), (float) idx / threads.length, idx);
             idx++;
@@ -84,30 +84,30 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
                 System.arraycopy(rankListFromHistogram(histogram), 0, histogram, 0, histogram.length);
             }
         }
-        //double scaling = master.base_precision * Math.pow(master.zoom, master.zoom_factor);
+        //double scaling = master.basePrecision * Math.pow(master.zoom, master.zoom_factor);
         for (@Nullable PartComplexFractalData partImage : buffer) {
             if (partImage == null) {
                 continue;
             }
             for (int i = partImage.starty; i < partImage.endy; i++) {
                 for (int j = partImage.startx; j < partImage.endx; j++) {
-                    master.escapedata[i][j] = partImage.escapedata[i][j];
-                    master.normalized_escapes[i][j] = partImage.normalized_escapes[i][j];
+                    master.orbitEscapeData[i][j] = partImage.escapedata[i][j];
+                    master.normalizedEscapes[i][j] = partImage.normalized_escapes[i][j];
                     if (isAnyOf(master.getColor().getMode(), CUMULATIVE_ANGLE, CUMULATIVE_DISTANCE)) {
                         master.miscellaneous[i][j] = partImage.miscellaneous[i][j];
                     }
                     if (isAnyOf(master.getColor().getMode(), HISTOGRAM, RANK_ORDER)) {
-                        double normalized_count = master.normalized_escapes[i][j];
+                        double normalized_count = master.normalizedEscapes[i][j];
                         int colortmp, pi = i, pj = j - 1, ni = i, nj = j + 1;
                         if (pj < 0) {
                             pi = (i == 0) ? i : i - 1;
-                            pj = master.escapedata[pi].length - 1;
+                            pj = master.orbitEscapeData[pi].length - 1;
                         }
-                        if (nj >= master.escapedata[i].length) {
-                            ni = (i == master.escapedata.length - 1) ? i : i + 1;
+                        if (nj >= master.orbitEscapeData[i].length) {
+                            ni = (i == master.orbitEscapeData.length - 1) ? i : i + 1;
                             nj = 0;
                         }
-                        int ep = master.escapedata[pi][pj], en = master.escapedata[ni][nj], e = master.escapedata[i][j];
+                        int ep = master.orbitEscapeData[pi][pj], en = master.orbitEscapeData[ni][nj], e = master.orbitEscapeData[i][j];
                         if (master.color.getMode() == Colors.MODE.RANK_ORDER) {
                             int idxp = master.color.createIndex(percentileOf(ep, histogram), 0, 1);
                             int idx = master.color.createIndex(percentileOf(e, histogram), 0, 1);
@@ -188,13 +188,13 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
     }
     private class SlaveRunner extends ThreadedGenerator.SlaveRunner {
         private ComplexFractalGenerator copyOfMaster;
-        private int startx, starty, endx, endy;
-        public SlaveRunner(int index, int startx, int endx, int starty, int endy) {
+        private int startX, startY, endX, endY;
+        public SlaveRunner(int index, int startX, int endX, int startY, int endY) {
             super(index);
-            this.startx = startx;
-            this.starty = starty;
-            this.endx = endx;
-            this.endy = endy;
+            this.startX = startX;
+            this.startY = startY;
+            this.endX = endX;
+            this.endY = endY;
             this.copyOfMaster = new ComplexFractalGenerator(new ComplexFractalParams(master.getParams()), master.getProgressPublisher());
         }
         @Override
@@ -207,17 +207,17 @@ public final class ThreadedComplexFractalGenerator extends ThreadedGenerator {
         }
         @Override
         public void generate() {
-            copyOfMaster.generate(startx, endx, starty, endy, (int) iterations, escape_radius, constant);
+            copyOfMaster.generate(startX, endX, startY, endY, (int) iterations, escapeRadius, constant);
             onCompletion();
         }
         @Override
         public void onCompletion() {
             if (isAnyOf(copyOfMaster.getColor().getMode(), Colors.MODE.HISTOGRAM, Colors.MODE.RANK_ORDER)) {
-                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getHistogram(), startx, endx, starty, endy);
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getOrbitEscapeData(), copyOfMaster.getNormalizedEscapes(), copyOfMaster.getHistogram(), startX, endX, startY, endY);
             } else if (isAnyOf(copyOfMaster.getColor().getMode(), Colors.MODE.CUMULATIVE_DISTANCE, Colors.MODE.CUMULATIVE_ANGLE)) {
-                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), copyOfMaster.getMiscellaneous(), startx, endx, starty, endy);
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getOrbitEscapeData(), copyOfMaster.getNormalizedEscapes(), copyOfMaster.getMiscellaneous(), startX, endX, startY, endY);
             } else {
-                buffer[index] = new PartComplexFractalData(copyOfMaster.getEscapedata(), copyOfMaster.getNormalized_escapes(), new PixelContainer(copyOfMaster.getArgand()), startx, endx, starty, endy);
+                buffer[index] = new PartComplexFractalData(copyOfMaster.getOrbitEscapeData(), copyOfMaster.getNormalizedEscapes(), new PixelContainer(copyOfMaster.getArgand()), startX, endX, startY, endY);
             }
             float completion = ((float) countCompletedThreads() / (nx * ny)) * 100.0f;
             master.progressPublisher.publish("Thread " + (index + 1) + " has completed, total completion = " + completion + "%", completion, index);

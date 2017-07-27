@@ -274,16 +274,16 @@ public class ComplexBrotFractalParams extends Config {
     @Override
     public void fromString(String[] data) {
         setNum_threads(1);
-        setSequential(Boolean.valueOf(data[0]));
-        setWidth(Integer.valueOf(data[1]));
-        setHeight(Integer.valueOf(data[2]));
+        setSequential(Boolean.parseBoolean(data[0]));
+        setWidth(Integer.parseInt(data[1]));
+        setHeight(Integer.parseInt(data[2]));
         setIterations(integersFromStrings(StringManipulator.split(data[3], ",")));
-        setBase_precision(Double.valueOf(data[4]));
-        setZoom(Double.valueOf(data[5]));
-        setEscape_radius(Double.valueOf(data[6]));
-        setTolerance(Double.valueOf(data[7]));
-        setSkew(Double.valueOf(data[8]));
-        setMaxHitThreshold(Integer.valueOf(data[9]));
+        setBase_precision(Double.parseDouble(data[4]));
+        setZoom(Double.parseDouble(data[5]));
+        setEscape_radius(Double.parseDouble(data[6]));
+        setTolerance(Double.parseDouble(data[7]));
+        setSkew(Double.parseDouble(data[8]));
+        setMaxHitThreshold(Integer.parseInt(data[9]));
         setFunction(data[10]);
         setVariableCode(data[11]);
         setMode(ComplexFractalGenerator.Mode.valueOf(data[12]));
@@ -293,23 +293,23 @@ public class ComplexBrotFractalParams extends Config {
             consts[i] = StringManipulator.split(con[i], ":");
         }
         setConstants(consts);
-        setAnti(Boolean.valueOf(data[14]));
-        setClamped(Boolean.valueOf(data[15]));
-        setSkidColoring(Boolean.valueOf(data[16]));
+        setAnti(Boolean.parseBoolean(data[14]));
+        setClamped(Boolean.parseBoolean(data[15]));
+        setSkidColoring(Boolean.parseBoolean(data[16]));
         setPercentiles(doublesFromStrings(StringManipulator.split(data[17], ",")));
         if (isSequential()) {
-            setxPointsPerPixel(Integer.valueOf(data[18]));
-            setyPointsPerPixel(Integer.valueOf(data[19]));
-            setxThreads(Integer.valueOf(data[20]));
-            setyThreads(Integer.valueOf(data[21]));
+            setxPointsPerPixel(Integer.parseInt(data[18]));
+            setyPointsPerPixel(Integer.parseInt(data[19]));
+            setxThreads(Integer.parseInt(data[20]));
+            setyThreads(Integer.parseInt(data[21]));
         } else {
-            setNum_points(Integer.valueOf(data[18]));
+            setNum_points(Integer.parseInt(data[18]));
         }
     }
     private double[] doublesFromStrings(@NotNull String[] strings) {
         @NotNull double[] doubles = new double[strings.length];
         for (int i = 0; i < doubles.length; ++i) {
-            doubles[i] = Double.valueOf(strings[i]);
+            doubles[i] = Double.parseDouble(strings[i]);
         }
         return doubles;
     }
@@ -331,7 +331,7 @@ public class ComplexBrotFractalParams extends Config {
     private int[] integersFromStrings(@NotNull String[] strings) {
         @NotNull int[] ints = new int[strings.length];
         for (int i = 0; i < ints.length; ++i) {
-            ints[i] = Integer.valueOf(strings[i]);
+            ints[i] = Integer.parseInt(strings[i]);
         }
         return ints;
     }

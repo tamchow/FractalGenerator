@@ -72,22 +72,22 @@ public class IFSFractalParams extends Config {
     public void fromString(@NotNull String[] input) {
         @NotNull String[] ifsData = StringManipulator.split(input[0], ":");
         if (ifsData.length == 1) {
-            setIfsMode(Boolean.valueOf(ifsData[0]));
+            setIfsMode(Boolean.parseBoolean(ifsData[0]));
         } else {
-            setIfsMode(Boolean.valueOf(ifsData[0]));
+            setIfsMode(Boolean.parseBoolean(ifsData[0]));
             setX_code(ifsData[1]);
             setY_code(ifsData[2]);
             setR_code(ifsData[3]);
             setT_code(ifsData[4]);
             setP_code(ifsData[5]);
         }
-        setWidth(Integer.valueOf(input[1]));
-        setHeight(Integer.valueOf(input[2]));
-        setBase_precision(Double.valueOf(input[3]));
-        setZoom(Double.valueOf(input[4]));
-        setDepth(Integer.valueOf(input[5]));
-        setFps(Integer.valueOf(input[6]));
-        setSkew(Double.valueOf(input[7]));
+        setWidth(Integer.parseInt(input[1]));
+        setHeight(Integer.parseInt(input[2]));
+        setBase_precision(Double.parseDouble(input[3]));
+        setZoom(Double.parseDouble(input[4]));
+        setDepth(Integer.parseInt(input[5]));
+        setFps(Integer.parseInt(input[6]));
+        setSkew(Double.parseDouble(input[7]));
         if (isIfsMode()) {
             xfunctions = new String[input.length - 8];
             yfunctions = new String[input.length - 8];
@@ -97,8 +97,8 @@ public class IFSFractalParams extends Config {
                 @NotNull String[] parts = StringManipulator.split(input[i], " ");
                 xfunctions[i] = parts[0];
                 yfunctions[i] = parts[1];
-                weights[i] = Double.valueOf(parts[2]);
-                colors[i] = Integer.valueOf(parts[3], 16);
+                weights[i] = Double.parseDouble(parts[2]);
+                colors[i] = Integer.parseInt(parts[3], 16);
             }
         } else {
             transforms = new Matrix[input.length - 8];
@@ -109,8 +109,8 @@ public class IFSFractalParams extends Config {
                 @NotNull String[] parts = StringManipulator.split(input[i], " ");
                 transforms[i] = new Matrix(parts[0]);
                 translators[i] = new Matrix(parts[1]);
-                weights[i] = Double.valueOf(parts[2]);
-                colors[i] = Integer.valueOf(parts[3], 16);
+                weights[i] = Double.parseDouble(parts[2]);
+                colors[i] = Integer.parseInt(parts[3], 16);
             }
         }
     }

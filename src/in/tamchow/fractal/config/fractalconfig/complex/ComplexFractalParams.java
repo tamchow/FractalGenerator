@@ -20,8 +20,8 @@ public class ComplexFractalParams extends Config {
     public ComplexFractalInitParams initParams;
     @NotNull
     public ZoomConfig zoomConfig = new ZoomConfig();
-    public PixelContainer.PostProcessMode postprocessMode;
-    private int x_threads, y_threads;
+    public PixelContainer.PostProcessMode postProcessMode;
+    private int xThreads, yThreads;
     {
         setName(Strings.BLOCKS.COMPLEX);
     }
@@ -32,11 +32,11 @@ public class ComplexFractalParams extends Config {
         initParams.setHeight(1);
         initParams.setWidth(1);
         setPostProcessMode(PixelContainer.PostProcessMode.NONE);
-        setX_threads(1);
-        setY_threads(1);
+        setXThreads(1);
+        setYThreads(1);
         setWait(0);
     }
-    public ComplexFractalParams(@Nullable ComplexFractalInitParams initParams, @Nullable ComplexFractalRunParams runParams, int x_threads, int y_threads) {
+    public ComplexFractalParams(@Nullable ComplexFractalInitParams initParams, @Nullable ComplexFractalRunParams runParams, int xThreads, int yThreads) {
         super();
         if (initParams != null) {
             this.initParams = new ComplexFractalInitParams(initParams);
@@ -53,8 +53,8 @@ public class ComplexFractalParams extends Config {
         setPostProcessMode(PixelContainer.PostProcessMode.NONE);
         setHeight(this.initParams.getHeight());
         setWidth(this.initParams.getWidth());
-        setX_threads(x_threads);
-        setY_threads(y_threads);
+        setXThreads(xThreads);
+        setYThreads(yThreads);
         setWait(0);
     }
     public ComplexFractalParams(@Nullable ComplexFractalInitParams initParams, @Nullable ComplexFractalRunParams runParams) {
@@ -72,15 +72,15 @@ public class ComplexFractalParams extends Config {
         }
         setPath("");
         setPostProcessMode(PixelContainer.PostProcessMode.NONE);
-        setX_threads(1);
-        setY_threads(1);
+        setXThreads(1);
+        setYThreads(1);
         setWait(0);
     }
     public ComplexFractalParams(@NotNull ComplexFractalParams params) {
         this.initParams = new ComplexFractalInitParams(params.initParams);
         this.runParams = new ComplexFractalRunParams(params.runParams);
-        setX_threads(params.getX_threads());
-        setY_threads(params.getY_threads());
+        setXThreads(params.getXThreads());
+        setYThreads(params.getYThreads());
         if (params.zoomConfig.hasZooms()) {
             this.zoomConfig = new ZoomConfig(params.zoomConfig);
         }
@@ -90,31 +90,31 @@ public class ComplexFractalParams extends Config {
         setPath(params.getPath());
         setWait(params.getWait());
     }
-    public int getX_threads() {
-        return x_threads;
+    public int getXThreads() {
+        return xThreads;
     }
-    public void setX_threads(int x_threads) {
-        this.x_threads = MathUtils.clamp(x_threads, 1, initParams.getWidth());
+    private void setXThreads(int x_threads) {
+        this.xThreads = MathUtils.clamp(x_threads, 1, initParams.getWidth());
     }
-    public int getY_threads() {
-        return y_threads;
+    public int getYThreads() {
+        return yThreads;
     }
-    public void setY_threads(int y_threads) {
-        this.y_threads = MathUtils.clamp(y_threads, 1, initParams.getHeight());
+    private void setYThreads(int y_threads) {
+        this.yThreads = MathUtils.clamp(y_threads, 1, initParams.getHeight());
     }
     public PixelContainer.PostProcessMode getPostProcessMode() {
-        return postprocessMode;
+        return postProcessMode;
     }
     public void setPostProcessMode(PixelContainer.PostProcessMode postProcessMode) {
-        this.postprocessMode = postProcessMode;
+        this.postProcessMode = postProcessMode;
     }
     public boolean useThreadedGenerator() {
-        return (getX_threads() * getY_threads() > 1);
+        return (getXThreads() * getYThreads() > 1);
     }
     public void threadDataFromString(@NotNull String data) {
         @NotNull String[] parts = StringManipulator.split(data, ",");
-        setX_threads(Integer.valueOf(parts[0]));
-        setY_threads(Integer.valueOf(parts[1]));
+        setXThreads(Integer.parseInt(parts[0]));
+        setYThreads(Integer.parseInt(parts[1]));
     }
     public void setZoomConfig(@NotNull ZoomConfig config) {
         zoomConfig = new ZoomConfig(config);
@@ -122,6 +122,6 @@ public class ComplexFractalParams extends Config {
     @NotNull
     @Override
     public String toString() {
-        return THREADS + x_threads + "," + y_threads + "\n" + POSTPROCESSING + postprocessMode + "\n" + ((zoomConfig != null) ? (zoomConfig + "\n") : "") + initParams + "\n" + runParams + "\n";
+        return THREADS + xThreads + "," + yThreads + "\n" + POSTPROCESSING + postProcessMode + "\n" + ((zoomConfig != null) ? (zoomConfig + "\n") : "") + initParams + "\n" + runParams + "\n";
     }
 }

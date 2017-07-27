@@ -28,7 +28,7 @@ public final class Matrix extends Number implements Serializable, Comparable<Mat
             //trim leading and trailing square brackets
             @NotNull String[] columns = StringManipulator.split(rows[i].substring(1, rows[i].length() - 1), ",");
             for (int j = 0; j < matrixData[i].length && j < columns.length; j++) {
-                matrixData[i][j] = Double.valueOf(columns[j]);
+                matrixData[i][j] = Double.parseDouble(columns[j]);
             }
         }
     }

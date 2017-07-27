@@ -69,10 +69,10 @@ public class Config implements Serializable, DataFromString {
     public void fromString(String[] config) {
         //setName(config[0]);
         setPath(config[0]);
-        setHeight(Integer.valueOf(config[1]));
-        setWidth(Integer.valueOf(config[2]));
-        setWait(Integer.valueOf(config[3]));
-        setFps(Integer.valueOf(config[4]));
+        setHeight(Integer.parseInt(config[1]));
+        setWidth(Integer.parseInt(config[2]));
+        setWait(Integer.parseInt(config[3]));
+        setFps(Integer.parseInt(config[4]));
     }
     @Override
     public String toString() {

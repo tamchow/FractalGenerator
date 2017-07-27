@@ -189,9 +189,9 @@ public final class StringManipulator {
             }
         }
         if (negative) {
-            return -Integer.valueOf(num);
+            return -Integer.parseInt(num);
         }
-        return Integer.valueOf(num);
+        return Integer.parseInt(num);
     }
     public static int nthIndexBackwards(@NotNull String s, char c, int idx, int n) {
         int ctr = 0;

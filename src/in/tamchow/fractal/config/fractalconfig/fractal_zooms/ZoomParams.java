@@ -42,9 +42,9 @@ public class ZoomParams implements Serializable {
         if (parts.length == 1) {
             return new ZoomParams(new Matrix(parts[0]));
         } else if (parts.length == 2) {
-            return new ZoomParams(new Matrix(parts[0]), Double.valueOf(parts[1]));
+            return new ZoomParams(new Matrix(parts[0]), Double.parseDouble(parts[1]));
         }
-        return new ZoomParams(Integer.valueOf(parts[0]), Integer.valueOf(parts[1]), Double.valueOf(parts[2]));
+        return new ZoomParams(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Double.parseDouble(parts[2]));
     }
     @NotNull
     @Override

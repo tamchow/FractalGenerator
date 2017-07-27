@@ -1,5 +1,5 @@
 package in.tamchow.fractal.graphics.transition;
-import in.tamchow.fractal.color.Colorizer;
+import in.tamchow.fractal.color.ColorData;
 import in.tamchow.fractal.color.Colors;
 import in.tamchow.fractal.graphics.containers.Animation;
 import in.tamchow.fractal.graphics.containers.PixelContainer;
@@ -139,10 +139,10 @@ public final class Transition {
                 for (int i = 0; i <= numframes; i++) {
                     for (int j = 0; j < img2.getHeight(); j++) {
                         for (int k = 0; k < img2.getWidth(); k++) {
-                            int r = (int) (Colorizer.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * ((double) i / numframes) + Colorizer.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * (1 - ((double) i / numframes)));
-                            int g = (int) (Colorizer.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * ((double) i / numframes) + Colorizer.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * (1 - ((double) i / numframes)));
-                            int b = (int) (Colorizer.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * ((double) i / numframes) + Colorizer.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * (1 - ((double) i / numframes)));
-                            tmp.setPixel(j, k, Colorizer.packRGB(r, g, b));
+                            int r = (int) (ColorData.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * ((double) i / numframes) + ColorData.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.RED) * (1 - ((double) i / numframes)));
+                            int g = (int) (ColorData.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * ((double) i / numframes) + ColorData.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.GREEN) * (1 - ((double) i / numframes)));
+                            int b = (int) (ColorData.separateARGB(img2.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * ((double) i / numframes) + ColorData.separateARGB(img1.getPixel(j, k), Colors.RGBCOMPONENTS.BLUE) * (1 - ((double) i / numframes)));
+                            tmp.setPixel(j, k, ColorData.packRGB(r, g, b));
                         }
                     }
                     frames.addFrame(tmp);

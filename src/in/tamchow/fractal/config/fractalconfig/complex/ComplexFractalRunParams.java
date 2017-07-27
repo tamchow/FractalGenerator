@@ -13,90 +13,88 @@ import static in.tamchow.fractal.config.Strings.BLOCKS.RUN;
  * Parameters for configuring the generation of a fractal
  */
 public class ComplexFractalRunParams implements Serializable, DataFromString {
-    public int start_x, end_x, start_y, end_y;
+    public int startX, endX, startY, endY;
     public int iterations;
-    public double escape_radius;
+    public double escapeRadius;
     @Nullable
     public Complex constant;
-    public boolean fully_configured;
+    public boolean fullyConfigured;
     public ComplexFractalRunParams(@NotNull ComplexFractalRunParams runParams) {
-        if (runParams.fully_configured) {
-            initParams(runParams.start_x, runParams.end_x, runParams.start_y, runParams.end_y, runParams.iterations, runParams.escape_radius, runParams.constant);
-            fully_configured = true;
+        if (runParams.fullyConfigured) {
+            initParams(runParams.startX, runParams.endX, runParams.startY, runParams.endY, runParams.iterations, runParams.escapeRadius, runParams.constant);
+            fullyConfigured = true;
         } else {
-            initParams(runParams.iterations, runParams.escape_radius, runParams.constant);
-            fully_configured = false;
+            initParams(runParams.iterations, runParams.escapeRadius, runParams.constant);
+            fullyConfigured = false;
         }
     }
-    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
-        initParams(start_x, end_x, start_y, end_y, iterations, escape_radius);
+    public ComplexFractalRunParams(int startX, int endX, int startY, int endY, int iterations, double escapeRadius) {
+        initParams(startX, endX, startY, endY, iterations, escapeRadius);
     }
-    public ComplexFractalRunParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, @NotNull Complex constant) {
-        initParams(start_x, end_x, start_y, end_y, iterations, escape_radius, constant);
+    public ComplexFractalRunParams(int startX, int endX, int startY, int endY, int iterations, double escapeRadius, @NotNull Complex constant) {
+        initParams(startX, endX, startY, endY, iterations, escapeRadius, constant);
     }
-    public ComplexFractalRunParams(int iterations, double escape_radius) {
-        initParams(iterations, escape_radius);
+    public ComplexFractalRunParams(int iterations, double escapeRadius) {
+        initParams(iterations, escapeRadius);
     }
-    public ComplexFractalRunParams(int iterations, double escape_radius, Complex constant) {
-        initParams(iterations, escape_radius, constant);
+    public ComplexFractalRunParams(int iterations, double escapeRadius, Complex constant) {
+        initParams(iterations, escapeRadius, constant);
     }
     public ComplexFractalRunParams() {
         initParams(128, 2.0);
     }
-    public void initParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius, @NotNull Complex constant) {
+    public void initParams(int startX, int endX, int startY, int endY, int iterations, double escapeRadius, @Nullable Complex constant) {
         setIterations(iterations);
-        this.start_x = start_x;
-        this.end_x = end_x;
-        this.start_y = start_y;
-        this.end_y = end_y;
-        this.escape_radius = escape_radius;
-        this.constant = new Complex(constant);
-        fully_configured = true;
+        this.startX = startX;
+        this.endX = endX;
+        this.startY = startY;
+        this.endY = endY;
+        this.escapeRadius = escapeRadius;
+        this.constant = constant;
+        fullyConfigured = true;
     }
-    public void initParams(int iterations, double escape_radius, @Nullable Complex constant) {
+    public void initParams(int iterations, double escapeRadius, @Nullable Complex constant) {
         setIterations(iterations);
-        this.escape_radius = escape_radius;
-        this.constant = (constant != null) ? new Complex(constant) : null;
-        fully_configured = false;
+        this.escapeRadius = escapeRadius;
+        this.constant = constant;
+        fullyConfigured = false;
     }
-    public void initParams(int start_x, int end_x, int start_y, int end_y, int iterations, double escape_radius) {
+    public void initParams(int startX, int endX, int startY, int endY, int iterations, double escapeRadius) {
+        initParams(startX, endX, startY, endY, iterations, escapeRadius, null);
+    }
+    public void initParams(int iterations, double escapeRadius) {
         setIterations(iterations);
-        this.start_x = start_x;
-        this.end_x = end_x;
-        this.start_y = start_y;
-        this.end_y = end_y;
-        this.escape_radius = escape_radius;
+        this.escapeRadius = escapeRadius;
         constant = null;
-        fully_configured = true;
-    }
-    public void initParams(int iterations, double escape_radius) {
-        setIterations(iterations);
-        this.escape_radius = escape_radius;
-        constant = null;
-        fully_configured = false;
+        fullyConfigured = false;
     }
     public void setIterations(int iterations) {
         this.iterations = MathUtils.clamp(iterations, 0, Integer.MAX_VALUE - 2);
     }
     @Override
     public String toString() {
-        if (fully_configured) {
-            return String.format(RUN + "%n%d%n%d%n%d%n%d%n%d%n%f%n%s%n" + ENDRUN, start_x, end_x, start_y, end_y, iterations, escape_radius, (constant == null) ? "" : constant);
+        if (fullyConfigured) {
+            return String.format(RUN + "%n%d%n%d%n%d%n%d%n%d%n%f%n%s%n" + ENDRUN, startX, endX, startY, endY, iterations, escapeRadius, (constant == null) ? "" : constant);
         }
-        return String.format(RUN + "%n%d%n%f%n%s%n" + ENDRUN, iterations, escape_radius, (constant == null) ? "" : constant);
+        return String.format(RUN + "%n%d%n%f%n%s%n" + ENDRUN, iterations, escapeRadius, (constant == null) ? "" : constant);
     }
     /**
-     * @param params: Pass in -1 for escape_radius in case of Newton Fractal Mode
+     * @param params: Pass in -1 for escapeRadius in case of Newton Fractal Mode
      */
     public void fromString(@NotNull String[] params) {
-        if (params.length == 6) {
-            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), Double.valueOf(params[5]));
-        } else if (params.length == 7) {
-            initParams(Integer.valueOf(params[0]), Integer.valueOf(params[1]), Integer.valueOf(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), Double.valueOf(params[5]), new Complex(params[6]));
-        } else if (params.length == 2) {
-            initParams(Integer.valueOf(params[0]), Double.valueOf(params[1]));
-        } else if (params.length == 3) {
-            initParams(Integer.valueOf(params[0]), Double.valueOf(params[1]), new Complex(params[2]));
+        switch (params.length) {
+            case 6:
+                initParams(Integer.parseInt(params[0]), Integer.parseInt(params[1]), Integer.parseInt(params[2]), Integer.parseInt(params[3]), Integer.parseInt(params[4]), Double.parseDouble(params[5]));
+                break;
+            case 7:
+                initParams(Integer.parseInt(params[0]), Integer.parseInt(params[1]), Integer.parseInt(params[2]), Integer.parseInt(params[3]), Integer.parseInt(params[4]), Double.parseDouble(params[5]), new Complex(params[6]));
+                break;
+            case 2:
+                initParams(Integer.parseInt(params[0]), Double.parseDouble(params[1]));
+                break;
+            case 3:
+                initParams(Integer.parseInt(params[0]), Double.parseDouble(params[1]), new Complex(params[2]));
+                break;
         }
     }
 }
