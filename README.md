@@ -9,7 +9,7 @@ Newton Mode only supports simple polynomials with complex exponents and coeffici
 There are large number of coloring algorithms, each with its own parameters,
 accompanied by both linear and spline interpolation.
 
-##Important Disclaimer
+## Important Disclaimer
 This is a large, old project with me as the sole developer, 
 and has organically accrued quite a large amount of related and unrelated code. 
 
@@ -25,7 +25,7 @@ If you want to see better-written code, you're welcome to take a look at any of 
 
 __TL;DR - This is an Abandoned Project__
 
-##NOTES:
+## NOTES:
 Multithreading is on by default, and can be disabled by setting both `xThreads` and `yThreads` to 1.
 Otherwise, this program can and will run very slow, given its expression interpreter.
 
@@ -41,7 +41,7 @@ However, inline comments beginning  with a `'#'` are supported, _a la_ Python/IN
 
 Do not expect documentation or comments - there are few, if any, and I don't have the time to put in more.
 
-##Running:
+## Running:
 Parameters are optional in test builds, but not in the release version. 
 If you have a slow PC and it is defaulted to a FullHD or 4K render,
 be ready to wait up to an hour or more for output.
