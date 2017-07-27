@@ -10,139 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/META-INF/MANIFEST.MF" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Main.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/Test.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$MODE.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$PALETTE.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors$RGBCOMPONENTS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/Colors.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/HSL.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/color/InterpolationType.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/BatchContainer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Config.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/ConfigReader.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/ConfigWriter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/DataFromString.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Publisher.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Strings$BLOCKS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Strings$DECLARATIONS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/Strings.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/IFS/IFSFractalParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalInitParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/ComplexFractalRunParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/complex/complexbrot/ComplexBrotFractalParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomConfig.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/fractal_zooms/ZoomParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/LSFractalParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar$TransformRule.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/fractalconfig/l_system/UnitGrammar.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/config/imageconfig/ImageParams.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/FractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/FractalPanningHelper.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/IFSGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/PartIFSData.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator$SlaveRunner.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/IFS/ThreadedIFSGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/PixelFractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/ThreadedGenerator$SlaveRunner.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/ThreadedGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator$Mode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/PartComplexFractalData.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator$SlaveRunner.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/ThreadedComplexFractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/complexbrot/ComplexBrotFractalGenerator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/complexbrot/ComplexBrotFractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/complexbrot/PartComplexBrotFractalData.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/complexbrot/ThreadedComplexBrotFractalGenerator$SlaveRunner.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/complex/complexbrot/ThreadedComplexBrotFractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSFractalGenerator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSFractalGenerator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/fractals/l_system/LSGrammarException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/Animation.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/LinearizedPixelContainer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/Pannable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/PixelContainer$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/PixelContainer$HeightFieldLoc.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/PixelContainer$PostProcessMode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/PixelContainer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/containers/Zoomable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/painting/DrawingUtilities.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/painting/Turtle$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/painting/Turtle$TurtleCommand.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/painting/Turtle.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/transition/Transition$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/transition/Transition.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/transition/TransitionType.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/graphics/util/ColorDebugger.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/annotations/NotNull.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/annotations/Nullable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/BaseConverter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils$ExtrapolationType.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils$FactorData.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MathUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/math/MersenneTwister.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/Stack$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/Stack$StackIterator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/Stack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/StackOverflowException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/impls/FixedStack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/stack/impls/FixedStackOverflowException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/CharBuffer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/ResizableCharBuffer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/helpers/strings/StringManipulator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/Comparator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/Complex.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/ComplexComparator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/ComplexComparator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/ComplexOperations.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/FunctionEvaluator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper$Associativity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper$Operator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/complex/RPNHelper.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/matrix/Matrix.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/matrix/MatrixOperations.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Derivable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Function.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/FunctionTerm$FunctionTermData.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/FunctionTerm.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Operable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Polynomial$Term.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/math/symbolics/Polynomial.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/RC4Utility/EncryptDecryptFile.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/RC4Utility/RC4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/BF2Java.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/BrainSext.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/bserrors/HaltError.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/bserrors/UnmatchedLiteralException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/bs/bserrors/UnrecognizedLiteralException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/EvilStuff$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/EvilStuff$Lock.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/EvilStuff.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/users/RPNHelper$Precedence.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/users/RPNHelper.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/users/UnpredictableAdder.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/evilstuff/users/UnpredictableCalculator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/mathstuff/DoughNut.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/mathstuff/MathStuff.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/primes/PrimeCounter$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/primes/PrimeCounter$Lock.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/misc/primes/PrimeCounter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/DesktopProgressPublisher.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageConverter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$1$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$2$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/FractalGenerator/in/tamchow/fractal/platform_tools/ImageDisplay.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/deployment/FractalGenerator.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/deployment/testrun.bat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/deployment/testrun_debug.bat" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FractalGenerator.iws" />
@@ -172,21 +39,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Test.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
+            <state relative-caret-position="16">
               <caret line="38" column="79" lean-forward="false" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="60" column="5" lean-forward="false" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -369,8 +226,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -393,8 +248,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1597,11 +1454,10 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34673914" sideWeight="0.47905478" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34673914" sideWeight="0.47905478" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31744313" sideWeight="0.4969743" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2249467" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3195652" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22707888" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1632,6 +1488,7 @@
       <window_info id="The R Graphics" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="CafeBabe" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32911393" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="22" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3195652" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -2074,7 +1931,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
           <caret line="254" column="36" lean-forward="false" selection-start-line="254" selection-start-column="36" selection-end-line="254" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2091,14 +1947,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/package-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/package-info.java" />
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/color/ColorData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2848">
@@ -2117,43 +1966,34 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="128">
             <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore" />
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="200">
             <caret line="46" column="20" lean-forward="false" selection-start-line="46" selection-start-column="20" selection-end-line="46" selection-end-column="20" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="38" column="79" lean-forward="false" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
+        <state relative-caret-position="397">
+          <caret line="60" column="5" lean-forward="false" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/.gitignore">
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="60" column="5" lean-forward="false" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
+        <state relative-caret-position="16">
+          <caret line="38" column="79" lean-forward="false" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
           <folding />
         </state>
       </provider>
