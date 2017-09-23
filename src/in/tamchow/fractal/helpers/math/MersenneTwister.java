@@ -8,25 +8,23 @@ import java.io.Serializable;
  * A PseudoRandom Number Generator (PRNG) based on the Mersenne Twister algorithm.
  * <br>
  * This does not guarantee concurrent usability of a single instance as no methods are synchronized.
- * <p>
+ * <br>
  * Adapted from:
  * <a href="https://cs.gmu.edu/~sean/research/mersenne/MersenneTwisterFast.java">Sean Luke's Fast Mersenne Twister</a>
- * </p>
- * <p>
- * <p>
+ * <br>
+ * <br>
+ * <br>
  * <ol>
- * <li>Methods are hard-inlined for speed as in the original.</li>
- * <li>Modern documentation comments are my contribution.</li>
- * <li>Ranged random methods are also my contribution</li>
+ * <li>Modern documentation comments and random-in-range methods Copyright &copy; 2016 by Tamoghna Chowdhury</li>
  * </ol>
- * <p>
+ * <br>
  * <h3>License</h3>
- * <p>
- * Copyright (c) 2003 by Sean Luke. <br>
- * Portions copyright (c) 1993 by Michael Lecuyer. <br>
+ * <br>
+ * Copyright &copy; 2003 by Sean Luke. <br>
+ * Portions copyright &copy; 1993 by Michael Lecuyer. <br>
  * All rights reserved. <br>
- * <p>
- * <p>Redistribution and use in source and binary forms, with or without
+ * <br>
+ * <br>Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * <ul>
  * <li> Redistributions of source code must retain the above copyright notice,
@@ -38,7 +36,7 @@ import java.io.Serializable;
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
  * </ul>
- * <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * <br>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNERS OR CONTRIBUTORS BE
@@ -410,7 +408,7 @@ public final class MersenneTwister extends java.util.Random implements Serializa
 
     /**
      * Returns a double in the range from 0.0 to 1.0, possibly inclusive of 0.0 and 1.0 themselves.  Thus:
-     * <p>
+     * <br>
      * <table border=0>
      * <tr><th>Expression</th><th>Interval</th></tr>
      * <tr><td>nextDouble(false, false)</td><td>(0.0, 1.0)</td></tr>
@@ -419,8 +417,8 @@ public final class MersenneTwister extends java.util.Random implements Serializa
      * <tr><td>nextDouble(true, true)</td><td>[0.0, 1.0]</td></tr>
      * <caption>Table of intervals</caption>
      * </table>
-     * <p>
-     * <p>This version preserves all possible random values in the double range.
+     * <br>
+     * <br>This version preserves all possible random values in the double range.
      *
      * @param includeOne  whether to include 1.0d
      * @param includeZero whether to include 0.0d
@@ -492,7 +490,7 @@ public final class MersenneTwister extends java.util.Random implements Serializa
 
     /**
      * Returns a float in the range from 0.0f to 1.0f, possibly inclusive of 0.0f and 1.0f themselves.  Thus:
-     * <p>
+     * <br>
      * <table border=0>
      * <tr><th>Expression</th><th>Interval</th></tr>
      * <tr><td>nextFloat(false, false)</td><td>(0.0f, 1.0f)</td></tr>
@@ -501,8 +499,8 @@ public final class MersenneTwister extends java.util.Random implements Serializa
      * <tr><td>nextFloat(true, true)</td><td>[0.0f, 1.0f]</td></tr>
      * <caption>Table of intervals</caption>
      * </table>
-     * <p>
-     * <p>This version preserves all possible random values in the float range.
+     * <br>
+     * <br>This version preserves all possible random values in the float range.
      *
      * @param includeOne  whether to include 1.0f
      * @param includeZero whether to include 0.0f

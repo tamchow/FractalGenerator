@@ -3,13 +3,19 @@ import in.tamchow.fractal.helpers.annotations.NotNull;
 /**
  * A resizeable version of {@link CharBuffer}
  */
+@SuppressWarnings("WeakerAccess")
 public final class ResizableCharBuffer extends CharBuffer {
-    public static final int RESIZE_FACTOR = 2;
+    private static final float RESIZE_FACTOR = 2.0f;
+    private float resizeFactor;
     public ResizableCharBuffer() {
         super();
     }
     public ResizableCharBuffer(int capacity) {
+        this(RESIZE_FACTOR, capacity);
+    }
+    public ResizableCharBuffer(float resizeFactor, int capacity) {
         super(capacity);
+        setResizeFactor(resizeFactor);
     }
     public ResizableCharBuffer(@NotNull String str) {
         super(str);
@@ -29,8 +35,14 @@ public final class ResizableCharBuffer extends CharBuffer {
     @Override
     public CharBuffer append(CharSequence csq) {
         if (size + csq.length() >= buffer.length) {
-            resize(buffer.length + (RESIZE_FACTOR * csq.length()));
+            resize(buffer.length + Math.round(resizeFactor * csq.length()));
         }
         return super.append(csq);
+    }
+    public float getResizeFactor() {
+        return resizeFactor;
+    }
+    public void setResizeFactor(final float resizeFactor) {
+        this.resizeFactor = resizeFactor;
     }
 }

@@ -29,13 +29,9 @@ import static in.tamchow.fractal.helpers.strings.StringManipulator.getRepeats;
  * @version 1.2
  */
 public class BF2Java {
-    private String startBlock = "{",
-            classHeader = "public class %s " + startBlock + "\n", endBlock = "}\n",
+    private static final String startBlock = "{",
             mainHeader = "public static void main(String[] args) " + startBlock + "\n",
-            initHeader = "private static %s[] mem = new %s[%d];\n",
             pointerHeader = "private static int ptr = 0;\n",
-            getter = "private static %s get() {\nreturn mem[bounds()];\n}\n",
-            setter = "private static void set(%s value) {\nmem[bounds()] = value;\n}\n",
             boundsProtect = "\tprivate static int bounds() {\n" +
                     "return (ptr < 0) ? Math.abs(mem.length + ptr) % mem.length : ((ptr >= mem.length) ? (ptr % mem.length) : ptr);\n}\n",
             addVal = "++mem[ptr];", subVal = "--mem[ptr];", addPtr = "++ptr;", subPtr = "--ptr;",
@@ -45,7 +41,11 @@ public class BF2Java {
             loopW = "while(get() != 0)" + startBlock,
             input = "mem[ptr] = (char) System.in.read();\n",
             output = "System.out.print((char) mem[ptr]);\n";
-    public BF2Java(String programName, int memorySize, String memoryType) {
+    private String classHeader = "public class %s " + startBlock + "\n", endBlock = "}\n",
+            initHeader = "private static %s[] mem = new %s[%d];\n",
+            getter = "private static %s get() {\nreturn mem[bounds()];\n}\n",
+            setter = "private static void set(%s value) {\nmem[bounds()] = value;\n}\n";
+    private BF2Java(String programName, int memorySize, String memoryType) {
         classHeader = String.format(classHeader, programName);
         initHeader = String.format(initHeader, memoryType, memoryType, memorySize);
         getter = String.format(getter, memoryType);
@@ -54,33 +54,33 @@ public class BF2Java {
     public static String compile(String programName, int memorySize, String memoryType, String BFProgram, boolean addComments) {
         BF2Java bf2j = new BF2Java(programName, memorySize, memoryType);
         CharBuffer builder = new ResizableCharBuffer();
-        builder.append(bf2j.classHeader).append(bf2j.initHeader).append(bf2j.pointerHeader).append(bf2j.mainHeader);
+        builder.append(bf2j.classHeader).append(bf2j.initHeader).append(pointerHeader).append(mainHeader);
         for (int i = 0; i < BFProgram.length(); ++i) {
             char current = BFProgram.charAt(i);
             switch (current) {
                 case '+':
-                    builder.append(bf2j.addVal);
+                    builder.append(addVal);
                     break;
                 case '-':
-                    builder.append(bf2j.subVal);
+                    builder.append(subVal);
                     break;
                 case '>':
-                    builder.append(bf2j.addPtr);
+                    builder.append(addPtr);
                     break;
                 case '<':
-                    builder.append(bf2j.subPtr);
+                    builder.append(subPtr);
                     break;
                 case '[':
-                    builder.append(bf2j.loop);
+                    builder.append(loop);
                     break;
                 case ']':
                     builder.append(bf2j.endBlock);
                     break;
                 case '.':
-                    builder.append(bf2j.output);
+                    builder.append(output);
                     break;
                 case ',':
-                    builder.append(bf2j.input);
+                    builder.append(input);
                     break;
                 default:
                     break;//spec says anything else is a comment, so ignore it
@@ -95,12 +95,17 @@ public class BF2Java {
         return builder.toString().trim();
     }
     public static String compileOptimize(String programName, int memorySize, String memoryType, String BFProgram, boolean addComments) {
-        if (BFProgram.indexOf('<') >= 0 && BFProgram.indexOf('>') >= 0 && BFProgram.indexOf('<') < BFProgram.indexOf('>')) {
+        if (BFProgram.indexOf('<') >= 0 &&
+                BFProgram.indexOf('>') >= 0 &&
+                BFProgram.indexOf('<') < BFProgram.indexOf('>')) {
             return compileWrapOptimize(programName, memorySize, memoryType, BFProgram, addComments);
         }
         BF2Java bf2j = new BF2Java(programName, memorySize, memoryType);
         CharBuffer builder = new ResizableCharBuffer();
-        builder.append(bf2j.classHeader).append(bf2j.initHeader).append(bf2j.pointerHeader).append(bf2j.mainHeader);
+        builder.append(bf2j.classHeader)
+                .append(bf2j.initHeader)
+                .append(pointerHeader)
+                .append(mainHeader);
         outer:
         for (int i = 0; i < BFProgram.length(); ) {
             char current = BFProgram.charAt(i);
@@ -109,9 +114,9 @@ public class BF2Java {
                 case '+':
                     count = getRepeats(BFProgram, i);
                     if (count == 1) {
-                        builder.append(bf2j.addVal);
+                        builder.append(addVal);
                     } else {
-                        builder.append(String.format(bf2j.addValOp, count));
+                        builder.append(String.format(addValOp, count));
                     }
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
@@ -123,9 +128,9 @@ public class BF2Java {
                 case '-':
                     count = getRepeats(BFProgram, i);
                     if (count == 1) {
-                        builder.append(bf2j.subVal);
+                        builder.append(subVal);
                     } else {
-                        builder.append(String.format(bf2j.subValOp, count));
+                        builder.append(String.format(subValOp, count));
                     }
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
@@ -137,9 +142,9 @@ public class BF2Java {
                 case '>':
                     count = getRepeats(BFProgram, i);
                     if (count == 1) {
-                        builder.append(bf2j.addPtr);
+                        builder.append(addPtr);
                     } else {
-                        builder.append(String.format(bf2j.addPtrOp, count));
+                        builder.append(String.format(addPtrOp, count));
                     }
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
@@ -151,9 +156,9 @@ public class BF2Java {
                 case '<':
                     count = getRepeats(BFProgram, i);
                     if (count == 1) {
-                        builder.append(bf2j.subPtr);
+                        builder.append(subPtr);
                     } else {
-                        builder.append(String.format(bf2j.subPtrOp, count));
+                        builder.append(String.format(subPtrOp, count));
                     }
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
@@ -163,7 +168,7 @@ public class BF2Java {
                     i += count;
                     continue outer;
                 case '[':
-                    builder.append(bf2j.loop);
+                    builder.append(loop);
                     if (addComments) {
                         builder.append("//").append(current).append("\n");
                     } else {
@@ -179,7 +184,7 @@ public class BF2Java {
                     }
                     break;
                 case '.':
-                    builder.append(bf2j.output);
+                    builder.append(output);
                     if (addComments) {
                         builder.subBuffer(0, builder.length() - 1).append("//").append(current).append("\n");
                     } else {
@@ -187,7 +192,7 @@ public class BF2Java {
                     }
                     break;
                 case ',':
-                    builder.append(bf2j.input);
+                    builder.append(input);
                     if (addComments) {
                         builder.append("//").append(current).append("\n");
                     } else {
@@ -205,7 +210,13 @@ public class BF2Java {
     public static String compileWrapOptimize(String programName, int memorySize, String memoryType, String BFProgram, boolean addComments) {
         BF2Java bf2j = new BF2Java(programName, memorySize, memoryType);
         CharBuffer builder = new ResizableCharBuffer();
-        builder.append(bf2j.classHeader).append(bf2j.initHeader).append(bf2j.pointerHeader).append(bf2j.getter).append(bf2j.setter).append(bf2j.boundsProtect).append(bf2j.mainHeader);
+        builder.append(bf2j.classHeader)
+                .append(bf2j.initHeader)
+                .append(pointerHeader)
+                .append(bf2j.getter)
+                .append(bf2j.setter)
+                .append(boundsProtect)
+                .append(mainHeader);
         outer:
         for (int i = 0; i < BFProgram.length(); ) {
             char current = BFProgram.charAt(i);
@@ -213,7 +224,7 @@ public class BF2Java {
             switch (current) {
                 case '+':
                     count = getRepeats(BFProgram, i);
-                    builder.append(String.format(bf2j.addValW, memoryType, count));
+                    builder.append(String.format(addValW, memoryType, count));
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
@@ -223,7 +234,7 @@ public class BF2Java {
                     continue outer;
                 case '-':
                     count = getRepeats(BFProgram, i);
-                    builder.append(String.format(bf2j.subValW, memoryType, count));
+                    builder.append(String.format(subValW, memoryType, count));
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
                     } else {
@@ -234,9 +245,9 @@ public class BF2Java {
                 case '>':
                     count = getRepeats(BFProgram, i);
                     if (count == 1) {
-                        builder.append(bf2j.addPtr);
+                        builder.append(addPtr);
                     } else {
-                        builder.append(String.format(bf2j.addPtrOp, count));
+                        builder.append(String.format(addPtrOp, count));
                     }
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
@@ -248,9 +259,9 @@ public class BF2Java {
                 case '<':
                     count = getRepeats(BFProgram, i);
                     if (count == 1) {
-                        builder.append(bf2j.subPtr);
+                        builder.append(subPtr);
                     } else {
-                        builder.append(String.format(bf2j.subPtrOp, count));
+                        builder.append(String.format(subPtrOp, count));
                     }
                     if (addComments) {
                         builder.append("//").append(createRepeat(current, count)).append("\n");
@@ -260,7 +271,7 @@ public class BF2Java {
                     i += count;
                     continue outer;
                 case '[':
-                    builder.append(bf2j.loopW);
+                    builder.append(loopW);
                     if (addComments) {
                         builder.append("//").append(current).append("\n");
                     } else {
@@ -276,7 +287,7 @@ public class BF2Java {
                     }
                     break;
                 case '.':
-                    builder.append(bf2j.output);
+                    builder.append(output);
                     if (addComments) {
                         builder.subBuffer(0, builder.length() - 1).append("//").append(current).append("\n");
                     } else {
@@ -284,7 +295,7 @@ public class BF2Java {
                     }
                     break;
                 case ',':
-                    builder.append(bf2j.input);
+                    builder.append(input);
                     if (addComments) {
                         builder.append("//").append(current).append("\n");
                     } else {

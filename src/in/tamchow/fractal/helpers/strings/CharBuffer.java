@@ -8,7 +8,8 @@ import java.io.Serializable;
  * Little-nonsense Character Buffer which is faster than StringBuilder.
  * Does not cache String representation for performance reasons.
  */
-public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Serializable, Cloneable {
+@SuppressWarnings("WeakerAccess")
+public class CharBuffer implements CharSequence, Comparable<CharSequence>, Serializable, Cloneable {
     public static final int DEFAULT_CAPACITY = 250;
     @NotNull
     protected char[] buffer;
@@ -153,7 +154,7 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
     public boolean equals(@Nullable Object o) {
         return o == this || (o != null && o instanceof CharBuffer && toString().equals(o.toString()));
     }
-    public boolean equalsIgnoreCase(@NotNull CharBuffer o) {
+    public boolean equalsIgnoreCase(@NotNull CharSequence o) {
         return toString().equalsIgnoreCase(o.toString());
     }
     @Override
@@ -161,21 +162,20 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
         return toString().hashCode();
     }
     @Override
-    public int compareTo(@NotNull CharBuffer o) {
+    public int compareTo(@NotNull CharSequence o) {
         return (equals(o)) ? 0 : toString().compareTo(o.toString());
     }
     @NotNull
     public CharBuffer trim() {
-        int len = buffer.length;
-        int st = 0;
-        char[] val = buffer;
-        while ((st < len) && (Character.isWhitespace(val[st]))) {
-            st++;
+        int endOffset = buffer.length;
+        int startOffset = 0;
+        while ((startOffset < endOffset) && (Character.isWhitespace(buffer[startOffset]))) {
+            startOffset++;
         }
-        while ((st < len) && (Character.isWhitespace(val[len - 1]))) {
-            len--;
+        while ((startOffset < endOffset) && (Character.isWhitespace(buffer[endOffset - 1]))) {
+            endOffset--;
         }
-        return ((st > 0) || (len < buffer.length)) ? subBuffer(st, len) : this;
+        return ((startOffset > 0) || (endOffset < buffer.length)) ? subBuffer(startOffset, endOffset) : this;
     }
     @NotNull
     public CharBuffer subBuffer(int beginIndex, int endIndex) {
@@ -185,22 +185,15 @@ public class CharBuffer implements CharSequence, Comparable<CharBuffer>, Seriali
         if (endIndex > buffer.length) {
             throw new StringIndexOutOfBoundsException(endIndex);
         }
-        int subLen = endIndex - beginIndex;
-        if (subLen < 0) {
-            throw new StringIndexOutOfBoundsException(subLen);
+        int subBufferLength = endIndex - beginIndex;
+        if (subBufferLength < 0) {
+            throw new StringIndexOutOfBoundsException(subBufferLength);
         }
         return ((beginIndex == 0) && (endIndex == buffer.length)) ? this
-                : new CharBuffer(buffer, beginIndex, subLen);
+                : new CharBuffer(buffer, beginIndex, subBufferLength);
     }
     @NotNull
     public CharBuffer subBuffer(int beginIndex) {
-        if (beginIndex < 0) {
-            throw new StringIndexOutOfBoundsException(beginIndex);
-        }
-        int subLen = buffer.length - beginIndex;
-        if (subLen < 0) {
-            throw new StringIndexOutOfBoundsException(subLen);
-        }
-        return (beginIndex == 0) ? this : new CharBuffer(buffer, beginIndex, subLen);
+        return subBuffer(beginIndex, buffer.length);
     }
 }
