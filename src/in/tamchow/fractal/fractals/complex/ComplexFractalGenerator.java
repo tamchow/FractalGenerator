@@ -722,7 +722,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
     }
     private void setLastConstant(@NotNull Complex value) {
         int constantIndex = getLastConstantIndex();
-        if(constantIndex >= 0) {
+        if (constantIndex >= 0) {
             constants[constantIndex][1] = value.toString();
         }
         lastConstant = new Complex(value);
@@ -1555,7 +1555,7 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
         for (int c = 0; c < last.length; ++c) {
             last[c] = (isNaN(last[c].cabs()) ? Complex.ZERO : (isInfinite(last[c].cabs()) ? Complex.ONE : last[c]));
         }
-        int nextVal = (val >= iterations) ? iterations : val, previousVal = (val == 0) ? 0 : val - 1;
+        int nextVal = (val >= iterations) ? iterations : val + 1, previousVal = (val == 0) ? 0 : val - 1;
         double interpolation = smoothcount - (long) smoothcount;
         values += val;
         valCount++;
