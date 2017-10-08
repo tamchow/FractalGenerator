@@ -33,8 +33,9 @@ public final class ComplexOperations {
         if (z1.equals(Complex.ZERO)) {
             return Complex.ZERO;
         }
-        double b1 = z2.real() * z1.arg() + 0.5 * z2.imaginary() * Math.log(z1.modulus() * z1.modulus());
-        double b2 = Math.pow(z1.modulus() * z1.modulus(), z2.real() / 2) * Math.exp(-z2.imaginary() * z1.arg());
+        double z1cabs = z1.cabs();
+        double b1 = z2.real() * z1.arg() + 0.5 * z2.imaginary() * Math.log(z1cabs);
+        double b2 = Math.pow(z1cabs, z2.real() / 2) * Math.exp(-z2.imaginary() * z1.arg());
         double a = b2 * Math.cos(b1);
         double b = b2 * Math.sin(b1);
         return new Complex(a, b);

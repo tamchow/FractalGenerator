@@ -1224,9 +1224,9 @@ public final class ComplexFractalGenerator extends PixelFractalGenerator {
                     pass[2] = new Complex(centreOffset);
                 }
                 orbitEscapeData[i][j] = c;
-                //Complex root = (roots.size() == 0) ? pass[1] : roots.get(closestRootIndex(pass[0]));
-                double d0 = distance_squared(pass[2], pass[1]);
-                double d1 = distance_squared(pass[1], pass[0]);
+                Complex root = (roots.size() == 0) ? pass[0] : roots.get(closestRootIndex(pass[0]));
+                double d0 = distance_squared(pass[1], root);
+                double d1 = distance_squared(pass[0], root);
                 if (color.isExponentialSmoothing()) {
                     normalizedEscapes[i][j] = s;
                 } else {
