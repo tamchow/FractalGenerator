@@ -10,10 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67787e62-279e-4e20-87bf-e89fb42a1e95" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Fractal.png" afterPath="$PROJECT_DIR$/Fractal.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java" afterPath="$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java" />
     </list>
     <ignored path="FractalGenerator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,7 +39,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Test.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/Test.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="88">
@@ -62,12 +59,40 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ComplexOperations.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ComplexOperations.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="592">
               <caret line="37" column="35" lean-forward="false" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
-              <folding />
+              <folding>
+                <element signature="e#795#813#0" expanded="true" />
+                <element signature="e#850#873#0" expanded="true" />
+                <element signature="e#883#906#0" expanded="true" />
+                <element signature="e#1526#1542#0" expanded="true" />
+                <element signature="e#1598#1634#0" expanded="true" />
+                <element signature="e#1660#1672#0" expanded="true" />
+                <element signature="e#1698#1710#0" expanded="true" />
+                <element signature="e#2598#2619#0" expanded="true" />
+                <element signature="e#2751#2785#0" expanded="true" />
+                <element signature="e#2788#2832#0" expanded="true" />
+                <element signature="e#2946#2981#0" expanded="true" />
+                <element signature="e#3324#3342#0" expanded="true" />
+                <element signature="e#3345#3369#0" expanded="true" />
+                <element signature="e#3371#3389#0" expanded="true" />
+                <element signature="e#3392#3416#0" expanded="true" />
+                <element signature="e#3523#3541#0" expanded="true" />
+                <element signature="e#3544#3568#0" expanded="true" />
+                <element signature="e#3571#3589#0" expanded="true" />
+                <element signature="e#3592#3616#0" expanded="true" />
+                <element signature="e#3966#3985#0" expanded="true" />
+                <element signature="e#3988#4011#0" expanded="true" />
+                <element signature="e#4013#4032#0" expanded="true" />
+                <element signature="e#4035#4058#0" expanded="true" />
+                <element signature="e#4166#4185#0" expanded="true" />
+                <element signature="e#4188#4211#0" expanded="true" />
+                <element signature="e#4213#4232#0" expanded="true" />
+                <element signature="e#4235#4258#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1479,19 +1504,11 @@
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="DrawableViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34777898" sideWeight="0.5209452" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34673914" sideWeight="0.47905478" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31744313" sideWeight="0.4969743" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23187633" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32391304" sideWeight="0.4969743" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="Tail" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="20" side_tool="false" content_ui="tabs" />
       <window_info id="Dilbert" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36956522" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1499,8 +1516,17 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30703625" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="19" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44673914" sideWeight="0.4969743" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3173913" sideWeight="0.4969743" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34673914" sideWeight="0.47905478" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31744313" sideWeight="0.4969743" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23187633" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1512,7 +1538,6 @@
       <window_info id="Aquarium" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" x="465" y="58" width="436" height="611" />
       <window_info id="Packages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="SvgViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3173913" sideWeight="0.4969743" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="91" y="91" width="1738" height="848" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39770868" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="IntelliGuard" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="21" side_tool="false" content_ui="tabs" />
@@ -1581,7 +1606,6 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="Add skid coloring to Brot fractals" />
     <MESSAGE value="Code reduction, miscellaneous fixes" />
     <MESSAGE value="Restructured Configuration Hierarchy, Generic Batch Containers" />
     <MESSAGE value="Added new misc package for maths stuff" />
@@ -1606,7 +1630,8 @@
     <MESSAGE value="Update MersenneTwister" />
     <MESSAGE value="Update Readme and License, Code refactoring, New formulae" />
     <MESSAGE value="Update Docs and internal APIs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update Docs and internal APIs" />
+    <MESSAGE value="Fix Newton Coloring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix Newton Coloring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1876,6 +1901,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2848">
           <caret line="45" column="35" lean-forward="false" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1954,14 +1980,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
-          <caret line="37" column="35" lean-forward="false" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/fractals/complex/ComplexFractalGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1666">
@@ -1975,6 +1993,42 @@
         <state relative-caret-position="88">
           <caret line="38" column="79" lean-forward="false" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/tamchow/fractal/math/complex/ComplexOperations.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="592">
+          <caret line="37" column="35" lean-forward="false" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
+          <folding>
+            <element signature="e#795#813#0" expanded="true" />
+            <element signature="e#850#873#0" expanded="true" />
+            <element signature="e#883#906#0" expanded="true" />
+            <element signature="e#1526#1542#0" expanded="true" />
+            <element signature="e#1598#1634#0" expanded="true" />
+            <element signature="e#1660#1672#0" expanded="true" />
+            <element signature="e#1698#1710#0" expanded="true" />
+            <element signature="e#2598#2619#0" expanded="true" />
+            <element signature="e#2751#2785#0" expanded="true" />
+            <element signature="e#2788#2832#0" expanded="true" />
+            <element signature="e#2946#2981#0" expanded="true" />
+            <element signature="e#3324#3342#0" expanded="true" />
+            <element signature="e#3345#3369#0" expanded="true" />
+            <element signature="e#3371#3389#0" expanded="true" />
+            <element signature="e#3392#3416#0" expanded="true" />
+            <element signature="e#3523#3541#0" expanded="true" />
+            <element signature="e#3544#3568#0" expanded="true" />
+            <element signature="e#3571#3589#0" expanded="true" />
+            <element signature="e#3592#3616#0" expanded="true" />
+            <element signature="e#3966#3985#0" expanded="true" />
+            <element signature="e#3988#4011#0" expanded="true" />
+            <element signature="e#4013#4032#0" expanded="true" />
+            <element signature="e#4035#4058#0" expanded="true" />
+            <element signature="e#4166#4185#0" expanded="true" />
+            <element signature="e#4188#4211#0" expanded="true" />
+            <element signature="e#4213#4232#0" expanded="true" />
+            <element signature="e#4235#4258#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
