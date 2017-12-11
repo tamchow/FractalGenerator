@@ -322,10 +322,6 @@ public final class StringManipulator {
     }
     @NotNull
     public static String[] split(@NotNull String what, @NotNull String at) {
-        if (what.isEmpty() || at.isEmpty()) {
-            //the length checks will throw the necessary NullPointerExceptions
-            throw new IllegalArgumentException("Empty String");
-        }
         if (what.isEmpty()) {
             return new String[]{""};
         }
