@@ -48,7 +48,7 @@ public class Test {
         @NotNull ColorData colorData = new ColorData(TRIANGLE_AREA_INEQUALITY, -1, 16_700_000, 0, true,
                 false, MONOTONE_CUBIC_SPLINE, false, false,
                 false, -1);
-        func = experimental10;
+        func = experimental4;
         //colorData.setModifierEnabled(true);
         //colorData.setMultiplier_threshold(1E-6);
         //colorData.setExponentialSmoothing(false);
@@ -68,7 +68,7 @@ public class Test {
         System.exit(1);*/
         @Nullable Complex constant = null;//new Complex("1.0,+0.0i");
         @NotNull Complex trap = new Complex(1);
-        int x_t = 2, y_t = 2, xppp = 10, yppp = 10;
+        int x_t = 2, y_t = 4, xppp = 10, yppp = 10;
         double skew = 0 * Math.PI;
         boolean defined = (args.length == 0);
         @Nullable ComplexFractalParams jgenParams = null;
